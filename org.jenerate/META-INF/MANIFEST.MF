@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-Name: Jenerate
+Bundle-SymbolicName: org.jenerate;singleton=true
+Bundle-Version: 1.0.0
+Bundle-ClassPath: jenerate.jar
+Bundle-Activator: org.jenerate.Commons4ePlugin
+Bundle-Vendor: Maxime Audrain
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.ui,
+ org.eclipse.jdt.core,
+ org.eclipse.jface.text,
+ org.eclipse.ui.workbench.texteditor
+Eclipse-AutoStart: true
