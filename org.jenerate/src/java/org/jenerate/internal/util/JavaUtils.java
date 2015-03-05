@@ -1,4 +1,4 @@
-//$Id$
+// $Id$
 package org.jenerate.internal.util;
 
 import java.util.ArrayList;
@@ -41,12 +41,10 @@ import org.eclipse.text.edits.TextEdit;
 import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.ui.preferences.PreferenceConstants;
 
-/*
- * This class contains some code from
- *      org.eclipse.jdt.internal.corext.codemanipulation.StubUtility
- *      org.eclipse.jdt.internal.corext.util.Strings
- */
 /**
+ * This class contains some code from org.eclipse.jdt.internal.corext.codemanipulation.StubUtility
+ * org.eclipse.jdt.internal.corext.util.Strings
+ * 
  * @author jiayun
  */
 public final class JavaUtils {
@@ -62,8 +60,7 @@ public final class JavaUtils {
         }
     }
 
-    public static boolean isDirectSubclassOfObject(final IType objectClass)
-            throws JavaModelException {
+    public static boolean isDirectSubclassOfObject(final IType objectClass) throws JavaModelException {
         String superclass = objectClass.getSuperclassName();
 
         if (superclass == null)
@@ -77,10 +74,8 @@ public final class JavaUtils {
     }
 
     /**
-     * Check if the method specified in the methodName and
-     * methodParameterTypeSignatures parameters is overridden and concrete in a
-     * subclass of the original declared class, and that subclass is a
-     * superclass of objectClass.
+     * Check if the method specified in the methodName and methodParameterTypeSignatures parameters is overridden and
+     * concrete in a subclass of the original declared class, and that subclass is a superclass of objectClass.
      * 
      * @param objectClass
      * @param methodName
@@ -89,10 +84,8 @@ public final class JavaUtils {
      * @return
      * @throws JavaModelException
      */
-    public static boolean isOverriddenInSuperclass(final IType objectClass,
-            final String methodName,
-            final String[] methodParameterTypeSignatures,
-            final String originalClassFullyQualifiedName)
+    public static boolean isOverriddenInSuperclass(final IType objectClass, final String methodName,
+            final String[] methodParameterTypeSignatures, final String originalClassFullyQualifiedName)
             throws JavaModelException {
         ITypeHierarchy typeHierarchy = objectClass.newSupertypeHierarchy(null);
         IType[] superclasses = typeHierarchy.getAllSuperclasses(objectClass);
@@ -101,12 +94,10 @@ public final class JavaUtils {
             return false;
 
         for (int i = 0; i < superclasses.length; i++) {
-            if (superclasses[i].getFullyQualifiedName().equals(
-                    originalClassFullyQualifiedName))
+            if (superclasses[i].getFullyQualifiedName().equals(originalClassFullyQualifiedName))
                 return false;
 
-            IMethod method = superclasses[i].getMethod(methodName,
-                    methodParameterTypeSignatures);
+            IMethod method = superclasses[i].getMethod(methodName, methodParameterTypeSignatures);
             if (method.exists()) {
                 if (Flags.isAbstract(method.getFlags()))
                     return false;
@@ -118,32 +109,24 @@ public final class JavaUtils {
         return false;
     }
 
-    public static boolean isEqualsOverriddenInSuperclass(final IType objectClass)
+    public static boolean isEqualsOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
+        return isOverriddenInSuperclass(objectClass, "equals", new String[] { "QObject;" }, "java.lang.Object");
+    }
+
+    public static boolean isHashCodeOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
+        return isOverriddenInSuperclass(objectClass, "hashCode", new String[0], "java.lang.Object");
+    }
+
+    public static boolean isToStringConcreteInSuperclass(final IType objectClass) throws JavaModelException {
+        return isOverriddenInSuperclass(objectClass, "toString", new String[0], null);
+    }
+
+    public static boolean isCompareToImplementedInSuperclass(final IType objectClass) throws JavaModelException {
+        return isOverriddenInSuperclass(objectClass, "compareTo", new String[] { "QObject;" }, null);
+    }
+
+    public static boolean isImplementedInSupertype(final IType objectClass, final String interfaceName)
             throws JavaModelException {
-        return isOverriddenInSuperclass(objectClass, "equals",
-                new String[] { "QObject;" }, "java.lang.Object");
-    }
-
-    public static boolean isHashCodeOverriddenInSuperclass(
-            final IType objectClass) throws JavaModelException {
-        return isOverriddenInSuperclass(objectClass, "hashCode", new String[0],
-                "java.lang.Object");
-    }
-
-    public static boolean isToStringConcreteInSuperclass(final IType objectClass)
-            throws JavaModelException {
-        return isOverriddenInSuperclass(objectClass, "toString", new String[0],
-                null);
-    }
-
-    public static boolean isCompareToImplementedInSuperclass(
-            final IType objectClass) throws JavaModelException {
-        return isOverriddenInSuperclass(objectClass, "compareTo",
-                new String[] { "QObject;" }, null);
-    }
-
-    public static boolean isImplementedInSupertype(final IType objectClass,
-            final String interfaceName) throws JavaModelException {
 
         String simpleName = getSimpleInterfaceName(interfaceName);
 
@@ -154,8 +137,7 @@ public final class JavaUtils {
                 IType in = interfaces[i];
                 IType[] types = typeHierarchy.getImplementingClasses(in);
                 for (int j = 0; j < types.length; j++) {
-                    if (!types[j].getFullyQualifiedName().equals(
-                            objectClass.getFullyQualifiedName())) {
+                    if (!types[j].getFullyQualifiedName().equals(objectClass.getFullyQualifiedName())) {
                         return true;
                     }
                 }
@@ -165,8 +147,7 @@ public final class JavaUtils {
         return false;
     }
 
-    public static boolean isImplementedOrExtendedInSupertype(
-            final IType objectClass, final String interfaceName)
+    public static boolean isImplementedOrExtendedInSupertype(final IType objectClass, final String interfaceName)
             throws JavaModelException {
 
         if (isImplementedInSupertype(objectClass, interfaceName))
@@ -181,8 +162,7 @@ public final class JavaUtils {
                 IType in = interfaces[i];
                 IType[] types = typeHierarchy.getExtendingInterfaces(in);
                 for (int j = 0; j < types.length; j++) {
-                    if (!types[j].getFullyQualifiedName().equals(
-                            objectClass.getFullyQualifiedName())) {
+                    if (!types[j].getFullyQualifiedName().equals(objectClass.getFullyQualifiedName())) {
                         return true;
                     }
                 }
@@ -192,9 +172,8 @@ public final class JavaUtils {
         return false;
     }
 
-    public static void addSuperInterface(final IType objectClass,
-            final String interfaceName) throws JavaModelException,
-            InvalidInputException, MalformedTreeException, BadLocationException {
+    public static void addSuperInterface(final IType objectClass, final String interfaceName)
+            throws JavaModelException, InvalidInputException, MalformedTreeException {
 
         if (isImplementedOrExtendedInSupertype(objectClass, interfaceName))
             return;
@@ -212,11 +191,9 @@ public final class JavaUtils {
         ICompilationUnit cu = objectClass.getCompilationUnit();
         IBuffer buffer = cu.getBuffer();
         char[] source = buffer.getCharacters();
-        IScanner scanner = ToolFactory
-                .createScanner(false, false, false, false);
+        IScanner scanner = ToolFactory.createScanner(false, false, false, false);
         scanner.setSource(source);
-        scanner.resetTo(objectClass.getNameRange().getOffset(),
-                source.length - 1);
+        scanner.resetTo(objectClass.getNameRange().getOffset(), source.length - 1);
 
         if (interfaces.length == 0) {
 
@@ -224,8 +201,7 @@ public final class JavaUtils {
                 int token = scanner.getNextToken();
                 if (token == ITerminalSymbols.TokenNameLBRACE) {
 
-                    buffer.replace(scanner.getCurrentTokenStartPosition(), 0,
-                            "implements " + interfaceName + " ");
+                    buffer.replace(scanner.getCurrentTokenStartPosition(), 0, "implements " + interfaceName + " ");
                     break;
                 }
             }
@@ -236,8 +212,7 @@ public final class JavaUtils {
             parser.setSource(cu);
             parser.setResolveBindings(true);
             CompilationUnit cuNode = (CompilationUnit) parser.createAST(null);
-            TypeDeclaration classNode = (TypeDeclaration) cuNode
-                    .findDeclaringNode(objectClass.getKey());
+            TypeDeclaration classNode = (TypeDeclaration) cuNode.findDeclaringNode(objectClass.getKey());
             List ifTypes = classNode.superInterfaceTypes();
             Type targetIf = null;
             for (int i = 0; i < ifTypes.size(); i++) {
@@ -247,8 +222,7 @@ public final class JavaUtils {
                 }
             }
 
-            buffer.replace(targetIf.getStartPosition(), targetIf.getLength(),
-                    interfaceName);
+            buffer.replace(targetIf.getStartPosition(), targetIf.getLength(), interfaceName);
 
         } else {
 
@@ -256,8 +230,7 @@ public final class JavaUtils {
                 int token = scanner.getNextToken();
                 if (token == ITerminalSymbols.TokenNameimplements) {
 
-                    buffer.replace(scanner.getCurrentTokenEndPosition() + 1, 0,
-                            " " + interfaceName + ",");
+                    buffer.replace(scanner.getCurrentTokenEndPosition() + 1, 0, " " + interfaceName + ",");
                     break;
                 }
             }
@@ -266,8 +239,7 @@ public final class JavaUtils {
 
     }
 
-    public static boolean areAllFinalFields(final IField[] fields)
-            throws JavaModelException {
+    public static boolean areAllFinalFields(final IField[] fields) throws JavaModelException {
         for (int i = 0; i < fields.length; i++) {
             if (!Flags.isFinal(fields[i].getFlags())) {
                 return false;
@@ -277,10 +249,9 @@ public final class JavaUtils {
         return true;
     }
 
-    public static IField[] getNonStaticNonCacheFields(final IType objectClass)
-            throws JavaModelException {
+    public static IField[] getNonStaticNonCacheFields(final IType objectClass) throws JavaModelException {
 
-        Set cacheFields = new HashSet();
+        Set<String> cacheFields = new HashSet<>();
         cacheFields.add(JeneratePlugin.getDefault().getPreferenceStore()
                 .getString(PreferenceConstants.HASHCODE_CACHING_FIELD));
         cacheFields.add(JeneratePlugin.getDefault().getPreferenceStore()
@@ -289,22 +260,21 @@ public final class JavaUtils {
         IField[] fields;
         fields = objectClass.getFields();
 
-        List result = new ArrayList();
+        List<IField> result = new ArrayList<>();
 
         for (int i = 0, size = fields.length; i < size; i++) {
-            if (!Flags.isStatic(fields[i].getFlags())
-                    && !cacheFields.contains(fields[i].getElementName())) {
+            if (!Flags.isStatic(fields[i].getFlags()) && !cacheFields.contains(fields[i].getElementName())) {
                 result.add(fields[i]);
             }
         }
 
-        return (IField[]) result.toArray(new IField[result.size()]);
+        return result.toArray(new IField[result.size()]);
     }
 
-    public static IField[] getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(
-            final IType objectClass) throws JavaModelException {
+    public static IField[] getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(final IType objectClass)
+            throws JavaModelException {
 
-        List result = new ArrayList();
+        List<IField> result = new ArrayList<>();
 
         ITypeHierarchy typeHierarchy = objectClass.newSupertypeHierarchy(null);
         IType[] superclasses = typeHierarchy.getAllSuperclasses(objectClass);
@@ -312,20 +282,16 @@ public final class JavaUtils {
         for (int i = 0; i < superclasses.length; i++) {
             IField[] fields = superclasses[i].getFields();
 
-            boolean samePackage = objectClass.getPackageFragment()
-                    .getElementName().equals(
-                            superclasses[i].getPackageFragment()
-                                    .getElementName());
+            boolean samePackage = objectClass.getPackageFragment().getElementName()
+                    .equals(superclasses[i].getPackageFragment().getElementName());
 
             for (int j = 0; j < fields.length; j++) {
 
-                if (!samePackage && !Flags.isPublic(fields[j].getFlags())
-                        && !Flags.isProtected(fields[j].getFlags())) {
+                if (!samePackage && !Flags.isPublic(fields[j].getFlags()) && !Flags.isProtected(fields[j].getFlags())) {
                     continue;
                 }
 
-                if (!Flags.isPrivate(fields[j].getFlags())
-                        && !Flags.isStatic(fields[j].getFlags())) {
+                if (!Flags.isPrivate(fields[j].getFlags()) && !Flags.isStatic(fields[j].getFlags())) {
                     result.add(fields[j]);
                 }
             }
@@ -333,7 +299,7 @@ public final class JavaUtils {
 
         result.addAll(Arrays.asList(getNonStaticNonCacheFields(objectClass)));
 
-        return (IField[]) result.toArray(new IField[result.size()]);
+        return result.toArray(new IField[result.size()]);
     }
 
     public static String generateFieldAccessor(final IField field, final boolean useGettersInsteadOfFields)
@@ -378,10 +344,8 @@ public final class JavaUtils {
     /**
      * Examines a string and returns the first line delimiter found.
      */
-    public static String getLineDelimiterUsed(IJavaElement elem)
-            throws JavaModelException {
-        ICompilationUnit cu = (ICompilationUnit) elem
-                .getAncestor(IJavaElement.COMPILATION_UNIT);
+    public static String getLineDelimiterUsed(IJavaElement elem) throws JavaModelException {
+        ICompilationUnit cu = (ICompilationUnit) elem.getAncestor(IJavaElement.COMPILATION_UNIT);
         if (cu != null && cu.exists()) {
             IBuffer buf = cu.getBuffer();
             int length = buf.getLength();
@@ -405,15 +369,12 @@ public final class JavaUtils {
     /**
      * Evaluates the indention used by a Java element. (in tabulators)
      */
-    public static int getIndentUsed(IJavaElement elem)
-            throws JavaModelException {
+    public static int getIndentUsed(IJavaElement elem) throws JavaModelException {
         if (elem instanceof ISourceReference) {
-            ICompilationUnit cu = (ICompilationUnit) elem
-                    .getAncestor(IJavaElement.COMPILATION_UNIT);
+            ICompilationUnit cu = (ICompilationUnit) elem.getAncestor(IJavaElement.COMPILATION_UNIT);
             if (cu != null) {
                 IBuffer buf = cu.getBuffer();
-                int offset = ((ISourceReference) elem).getSourceRange()
-                        .getOffset();
+                int offset = ((ISourceReference) elem).getSourceRange().getOffset();
                 int i = offset;
                 // find beginning of line
                 while (i > 0 && !isLineDelimiterChar(buf.getChar(i - 1))) {
@@ -427,8 +388,7 @@ public final class JavaUtils {
 
     private static int getTabWidth() {
         Preferences preferences = JavaCore.getPlugin().getPluginPreferences();
-        return preferences
-                .getInt(DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE);
+        return preferences.getInt(DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE);
     }
 
     /**
@@ -449,10 +409,8 @@ public final class JavaUtils {
     /**
      * Returns the indent of the given string.
      * 
-     * @param line
-     *            the text line
-     * @param tabWidth
-     *            the width of the '\t' character.
+     * @param line the text line
+     * @param tabWidth the width of the '\t' character.
      */
     private static int computeIndent(String line, int tabWidth) {
         int result = 0;
@@ -476,14 +434,13 @@ public final class JavaUtils {
         return result;
     }
 
-    public static String formatCode(final Shell parentShell,
-            final IType objectClass, String source) throws JavaModelException {
+    public static String formatCode(final Shell parentShell, final IType objectClass, String source)
+            throws JavaModelException {
         String lineDelim = getLineDelimiterUsed(objectClass);
         int indent = getIndentUsed(objectClass) + 1;
 
-        TextEdit textEdit = ToolFactory.createCodeFormatter(null).format(
-                CodeFormatter.K_CLASS_BODY_DECLARATIONS, source, 0,
-                source.length(), indent, lineDelim);
+        TextEdit textEdit = ToolFactory.createCodeFormatter(null).format(CodeFormatter.K_CLASS_BODY_DECLARATIONS,
+                source, 0, source.length(), indent, lineDelim);
 
         String formattedContent;
         if (textEdit != null) {
@@ -503,6 +460,6 @@ public final class JavaUtils {
     public static String UCFirst(final String string) {
         String firstChar = string.substring(0, 1);
         String remain = string.substring(1);
-        return firstChar.toUpperCase()+remain;
+        return firstChar.toUpperCase() + remain;
     }
 }

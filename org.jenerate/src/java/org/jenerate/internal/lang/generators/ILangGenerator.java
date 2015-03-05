@@ -1,9 +1,8 @@
-//$Id$
+// $Id$
 package org.jenerate.internal.lang.generators;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.swt.widgets.Shell;
-
 
 /**
  * @author jiayun

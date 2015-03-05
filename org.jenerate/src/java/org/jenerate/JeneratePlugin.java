@@ -1,4 +1,4 @@
-//$Id$
+// $Id$
 package org.jenerate;
 
 import java.util.MissingResourceException;
@@ -12,10 +12,10 @@ import org.osgi.framework.BundleContext;
  */
 public class JeneratePlugin extends AbstractUIPlugin {
 
-    //The shared instance.
+    // The shared instance.
     private static JeneratePlugin plugin;
 
-    //Resource bundle.
+    // Resource bundle.
     private ResourceBundle resourceBundle;
 
     /**
@@ -25,8 +25,7 @@ public class JeneratePlugin extends AbstractUIPlugin {
         super();
         plugin = this;
         try {
-            resourceBundle = ResourceBundle
-                    .getBundle("org.jenerate.JeneratePluginResources");
+            resourceBundle = ResourceBundle.getBundle("org.jenerate.JeneratePluginResources");
         } catch (MissingResourceException x) {
             resourceBundle = null;
         }
@@ -35,6 +34,7 @@ public class JeneratePlugin extends AbstractUIPlugin {
     /**
      * This method is called upon plug-in activation
      */
+    @Override
     public void start(BundleContext context) throws Exception {
         super.start(context);
     }
@@ -42,6 +42,7 @@ public class JeneratePlugin extends AbstractUIPlugin {
     /**
      * This method is called when the plug-in is stopped
      */
+    @Override
     public void stop(BundleContext context) throws Exception {
         super.stop(context);
     }
@@ -54,12 +55,10 @@ public class JeneratePlugin extends AbstractUIPlugin {
     }
 
     /**
-     * Returns the string from the plugin's resource bundle, or 'key' if not
-     * found.
+     * Returns the string from the plugin's resource bundle, or 'key' if not found.
      */
     public static String getResourceString(String key) {
-        ResourceBundle bundle = JeneratePlugin.getDefault()
-                .getResourceBundle();
+        ResourceBundle bundle = JeneratePlugin.getDefault().getResourceBundle();
         try {
             return (bundle != null) ? bundle.getString(key) : key;
         } catch (MissingResourceException e) {

@@ -1,4 +1,4 @@
-//$Id$
+// $Id$
 package org.jenerate.internal.lang.generators;
 
 import java.util.HashMap;
@@ -21,13 +21,12 @@ public final class LangGenerators {
     private static final Map<String, ILangGenerator> generators = new HashMap<>();
 
     static {
-        generators.put(COMPARETO_GENERATOR_KEY, CompareToGenerator
-                .getInstance());
+        generators.put(COMPARETO_GENERATOR_KEY, CompareToGenerator.getInstance());
         generators.put(EQUALS_HASHCODE_GENERATOR_KEY, EqualsHashCodeGenerator.getInstance());
         generators.put(TOSTRING_GENERATOR_KEY, ToStringGenerator.getInstance());
     }
 
     public static ILangGenerator getGenerator(String key) {
-        return (ILangGenerator) generators.get(key);
+        return generators.get(key);
     }
 }

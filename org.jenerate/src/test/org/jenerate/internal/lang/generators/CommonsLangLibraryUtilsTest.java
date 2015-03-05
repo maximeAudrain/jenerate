@@ -10,12 +10,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class CommonsLangLibraryUtilsTest {
 
-	@Mock
-	private Object mock;
-	
-	@Test
-	public void test() {
-		assertNotNull(mock);
-	}
+    @Mock
+    private Object mock;
+
+    @Test
+    public void test() {
+        assertNotNull(mock);
+    }
 
 }

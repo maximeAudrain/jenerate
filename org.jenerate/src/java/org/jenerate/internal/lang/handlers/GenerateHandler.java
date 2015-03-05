@@ -7,7 +7,6 @@ package org.jenerate.internal.lang.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.IHandler;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
@@ -33,28 +32,22 @@ import org.jenerate.internal.lang.generators.LangGenerators;
  */
 public class GenerateHandler extends AbstractHandler {
 
-    /**
-     * @see IHandler#execute(ExecutionEvent)
-     */
+    @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
         Shell parentShell = HandlerUtil.getActiveShell(event);
         IEditorPart editor = HandlerUtil.getActiveEditor(event);
         ISelection currentSelection = HandlerUtil.getCurrentSelection(event);
         IWorkingCopyManager manager = JavaUI.getWorkingCopyManager();
-        ICompilationUnit compilationUnit = manager.getWorkingCopy(editor
-                .getEditorInput());
-        generate(event.getCommand().getId(), currentSelection, compilationUnit,
-                parentShell);
+        ICompilationUnit compilationUnit = manager.getWorkingCopy(editor.getEditorInput());
+        generate(event.getCommand().getId(), currentSelection, compilationUnit, parentShell);
         return null;
     }
 
-    private void generate(String commandId, ISelection iSelection,
-            ICompilationUnit compilationUnit, Shell parentShell) {
+    private void generate(String commandId, ISelection iSelection, ICompilationUnit compilationUnit, Shell parentShell) {
         IType objectClass = null;
         try {
             ITextSelection selection = (ITextSelection) iSelection;
-            IJavaElement element = compilationUnit.getElementAt(selection
-                    .getOffset());
+            IJavaElement element = compilationUnit.getElementAt(selection.getOffset());
             if (element != null) {
                 objectClass = (IType) element.getAncestor(IJavaElement.TYPE);
             }
@@ -68,12 +61,10 @@ public class GenerateHandler extends AbstractHandler {
 
         try {
             if (objectClass == null || !objectClass.isClass()) {
-                MessageDialog
-                        .openInformation(parentShell, "Method Generation",
-                                "Cursor not in a class, or no class has the same name with the Java file.");
+                MessageDialog.openInformation(parentShell, "Method Generation",
+                        "Cursor not in a class, or no class has the same name with the Java file.");
             } else {
-                LangGenerators.getGenerator(commandId).generate(parentShell,
-                        objectClass);
+                LangGenerators.getGenerator(commandId).generate(parentShell, objectClass);
             }
         } catch (JavaModelException e) {
             MessageDialog.openError(parentShell, "Error", e.getMessage());

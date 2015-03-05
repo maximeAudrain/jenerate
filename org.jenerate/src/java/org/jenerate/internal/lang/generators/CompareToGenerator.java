@@ -1,4 +1,4 @@
-//$Id$
+// $Id$
 package org.jenerate.internal.lang.generators;
 
 import java.util.HashSet;
@@ -38,18 +38,12 @@ public final class CompareToGenerator implements ILangGenerator {
         return instance;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.jenerate.internal.lang.generators.ILangGenerator#generate(org.eclipse.swt.widgets.Shell,
-     *      org.eclipse.jdt.core.IType)
-     */
+    @Override
     public void generate(Shell parentShell, IType objectClass) {
 
         Set<IMethod> excludedMethods = new HashSet<>();
 
-        IMethod existingMethod = objectClass.getMethod("compareTo",
-                new String[] { "QObject;" });
+        IMethod existingMethod = objectClass.getMethod("compareTo", new String[] { "QObject;" });
 
         if (!existingMethod.exists()) {
             existingMethod = objectClass.getMethod("compareTo",
@@ -63,17 +57,14 @@ public final class CompareToGenerator implements ILangGenerator {
         try {
             IField[] fields;
             if (PreferenceUtils.getDisplayFieldsOfSuperclasses()) {
-                fields = JavaUtils
-                        .getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass);
+                fields = JavaUtils.getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass);
             } else {
                 fields = JavaUtils.getNonStaticNonCacheFields(objectClass);
             }
 
-            OrderableFieldDialog dialog = new OrderableFieldDialog(parentShell,
-                    "Generate CompareTo Method", objectClass, fields,
-                    excludedMethods, !(JavaUtils.isImplementedInSupertype(
-                            objectClass, "Comparable") && JavaUtils
-                            .isHashCodeOverriddenInSuperclass(objectClass)));
+            OrderableFieldDialog dialog = new OrderableFieldDialog(parentShell, "Generate CompareTo Method",
+                    objectClass, fields, excludedMethods, !(JavaUtils.isImplementedInSupertype(objectClass,
+                            "Comparable") && JavaUtils.isHashCodeOverriddenInSuperclass(objectClass)));
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
 
@@ -86,81 +77,65 @@ public final class CompareToGenerator implements ILangGenerator {
                 boolean appendSuper = dialog.getAppendSuper();
                 boolean generateComment = dialog.getGenerateComment();
 
-                generateCompareTo(parentShell, objectClass, checkedFields,
-                        insertPosition, appendSuper, generateComment);
+                generateCompareTo(parentShell, objectClass, checkedFields, insertPosition, appendSuper, generateComment);
             }
 
         } catch (CoreException e) {
-            MessageDialog.openError(parentShell, "Method Generation Failed", e
-                    .getMessage());
+            MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
         } catch (BadLocationException e) {
-            MessageDialog.openError(parentShell, "Method Generation Failed", e
-                    .getMessage());
+            MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
         }
 
     }
 
-    private void generateCompareTo(final Shell parentShell,
-            final IType objectClass, final IField[] checkedFields,
-            final IJavaElement insertPosition, final boolean appendSuper,
-            final boolean generateComment) throws PartInitException,
-            JavaModelException, MalformedTreeException, BadLocationException {
+    private void generateCompareTo(final Shell parentShell, final IType objectClass, final IField[] checkedFields,
+            final IJavaElement insertPosition, final boolean appendSuper, final boolean generateComment)
+            throws PartInitException, JavaModelException, MalformedTreeException, BadLocationException {
 
         ICompilationUnit cu = objectClass.getCompilationUnit();
         IEditorPart javaEditor = JavaUI.openInEditor(cu);
 
-        boolean implementedOrExtendedInSuperType = JavaUtils
-                .isImplementedOrExtendedInSupertype(objectClass, "Comparable");
+        boolean implementedOrExtendedInSuperType = JavaUtils.isImplementedOrExtendedInSupertype(objectClass,
+                "Comparable");
         boolean generify = PreferenceUtils.getGenerifyCompareTo()
-                && PreferenceUtils
-                        .isSourceLevelGreaterThanOrEqualTo5(objectClass
-                                .getJavaProject())
+                && PreferenceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject())
                 && !implementedOrExtendedInSuperType;
 
         if (!implementedOrExtendedInSuperType) {
             try {
                 if (generify) {
-                    JavaUtils.addSuperInterface(objectClass, "Comparable<"
-                            + objectClass.getElementName() + ">");
+                    JavaUtils.addSuperInterface(objectClass, "Comparable<" + objectClass.getElementName() + ">");
                 } else {
                     JavaUtils.addSuperInterface(objectClass, "Comparable");
                 }
             } catch (InvalidInputException e) {
                 MessageDialog.openError(parentShell, "Error",
-                        "Failed to add Comparable to implements clause:\n"
-                                + e.getMessage());
+                        "Failed to add Comparable to implements clause:\n" + e.getMessage());
             }
         }
 
-        String source = createMethod(objectClass, checkedFields, appendSuper,
-                generateComment, generify);
+        String source = createMethod(objectClass, checkedFields, appendSuper, generateComment, generify);
 
-        String formattedContent = JavaUtils.formatCode(parentShell,
-                objectClass, source);
+        String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 
-        objectClass.getCompilationUnit().createImport(
-                CommonsLangLibraryUtils.getCompareToBuilderLibrary(), null, null);
-        IMethod created = objectClass.createMethod(formattedContent,
-                insertPosition, true, null);
+        objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getCompareToBuilderLibrary(), null, null);
+        IMethod created = objectClass.createMethod(formattedContent, insertPosition, true, null);
 
         JavaUI.revealInEditor(javaEditor, (IJavaElement) created);
     }
 
-    private String createMethod(final IType objectClass,
-            final IField[] checkedFields, final boolean appendSuper,
+    private String createMethod(final IType objectClass, final IField[] checkedFields, final boolean appendSuper,
             final boolean generateComment, final boolean generify) {
 
         StringBuffer content = new StringBuffer();
         if (generateComment) {
             content.append("/* (non-Javadoc)\n");
-            content
-                    .append(" * @see java.lang.Comparable#compareTo(java.lang.Object)\n");
+            content.append(" * @see java.lang.Comparable#compareTo(java.lang.Object)\n");
             content.append(" */\n");
         }
         String other;
         if (generify) {
-            content.append("public int compareTo(final "
-                    + objectClass.getElementName() + " other) {\n");
+            content.append("public int compareTo(final " + objectClass.getElementName() + " other) {\n");
 
             other = "other";
         } else {

@@ -1,4 +1,4 @@
-//$Id$
+// $Id$
 package org.jenerate.internal.ui.dialogs;
 
 import java.util.Set;
@@ -19,11 +19,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-/*
- * This class contains some code from
- *      org.eclipse.ui.externaltools.internal.ui.BuilderPropertyPage
- */
 /**
+ * This class contains some code from org.eclipse.ui.externaltools.internal.ui.BuilderPropertyPage
+ * 
  * @author jiayun
  */
 public class OrderableFieldDialog extends FieldDialog {
@@ -32,26 +30,24 @@ public class OrderableFieldDialog extends FieldDialog {
 
     private Button downButton;
 
-    public OrderableFieldDialog(Shell parentShell, String dialogTitle,
-            IType objectClass, IField[] fields, Set<IMethod> excludedMethods)
-            throws JavaModelException {
-        this(parentShell, dialogTitle, objectClass, fields, excludedMethods,
-                false);
+    public OrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
+            Set<IMethod> excludedMethods) throws JavaModelException {
+        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, false);
     }
 
-    public OrderableFieldDialog(Shell parentShell, String dialogTitle,
-            IType objectClass, IField[] fields, Set<IMethod> excludedMethods,
-            boolean disableAppendSuper) throws JavaModelException {
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods,
-                disableAppendSuper);
+    public OrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
+            Set<IMethod> excludedMethods, boolean disableAppendSuper) throws JavaModelException {
+        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper);
     }
 
+    @Override
     public void create() {
         super.create();
 
         Table fieldTable = fieldViewer.getTable();
         fieldTable.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 handleTableSelectionChanged();
             }
@@ -74,6 +70,7 @@ public class OrderableFieldDialog extends FieldDialog {
         downButton.setEnabled(enableDown);
     }
 
+    @Override
     protected void addButtons(final Composite buttonComposite) {
         super.addButtons(buttonComposite);
 
@@ -83,6 +80,7 @@ public class OrderableFieldDialog extends FieldDialog {
         upButton.setEnabled(false);
         upButton.addListener(SWT.Selection, new Listener() {
 
+            @Override
             public void handleEvent(Event event) {
                 moveSelectionUp();
                 handleTableSelectionChanged();
@@ -96,6 +94,7 @@ public class OrderableFieldDialog extends FieldDialog {
         downButton.setEnabled(false);
         downButton.addListener(SWT.Selection, new Listener() {
 
+            @Override
             public void handleEvent(Event event) {
                 moveSelectionDown();
                 handleTableSelectionChanged();
