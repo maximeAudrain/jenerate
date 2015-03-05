@@ -2,7 +2,7 @@
 package org.jenerate.internal.ui.preferences;
 
 import org.eclipse.core.runtime.Preferences;
-import org.jenerate.Commons4ePlugin;
+import org.jenerate.JeneratePlugin;
 
 /**
  * @author jiayun
@@ -33,7 +33,7 @@ public class PreferenceConstants {
     public static final String USE_BLOCKS_IN_IF_STATEMENTS = "useBlocksInIfStatements";
 
     public static void initializeDefaultValues() {
-        Preferences preferences = Commons4ePlugin.getDefault()
+        Preferences preferences = JeneratePlugin.getDefault()
                 .getPluginPreferences();
         preferences.setDefault(USE_COMMONS_LANG3, false);
         preferences.setDefault(CACHE_HASHCODE, true);

@@ -38,7 +38,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
-import org.jenerate.Commons4ePlugin;
+import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.ui.preferences.PreferenceConstants;
 
 /*
@@ -281,9 +281,9 @@ public final class JavaUtils {
             throws JavaModelException {
 
         Set cacheFields = new HashSet();
-        cacheFields.add(Commons4ePlugin.getDefault().getPreferenceStore()
+        cacheFields.add(JeneratePlugin.getDefault().getPreferenceStore()
                 .getString(PreferenceConstants.HASHCODE_CACHING_FIELD));
-        cacheFields.add(Commons4ePlugin.getDefault().getPreferenceStore()
+        cacheFields.add(JeneratePlugin.getDefault().getPreferenceStore()
                 .getString(PreferenceConstants.TOSTRING_CACHING_FIELD));
 
         IField[] fields;

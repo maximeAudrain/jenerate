@@ -10,12 +10,12 @@ import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.jenerate.Commons4ePlugin;
+import org.jenerate.JeneratePlugin;
 
 /**
  * @author jiayun
  */
-public class Commons4eBasePreferencePage extends FieldEditorPreferencePage
+public class JenerateBasePreferencePage extends FieldEditorPreferencePage
         implements IWorkbenchPreferencePage {
 
     private BooleanFieldEditor useCommonsLang3;
@@ -38,9 +38,9 @@ public class Commons4eBasePreferencePage extends FieldEditorPreferencePage
     
     private BooleanFieldEditor useBlocksInIfStatements;
 
-    public Commons4eBasePreferencePage() {
+    public JenerateBasePreferencePage() {
         super(FieldEditorPreferencePage.GRID);
-        setPreferenceStore(Commons4ePlugin.getDefault().getPreferenceStore());
+        setPreferenceStore(JeneratePlugin.getDefault().getPreferenceStore());
     }
 
     /*

@@ -7,7 +7,7 @@ import org.jenerate.internal.ui.preferences.PreferenceConstants;
 /**
  * @author jiayun
  */
-public class Commons4ePreferenceInitializer extends
+public class JeneratePreferenceInitializer extends
         AbstractPreferenceInitializer {
 
     /*

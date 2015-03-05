@@ -16,21 +16,21 @@
         name="Generate CompareTo Method..."/>
   <command
         categoryId="org.eclipse.jdt.ui.category.source"
-        id="org.jenerate.lang.actions.Commons4ELangMenu"
-        name="Commons4E Lang">
+        id="org.jenerate.lang.actions.JenerateLangMenu"
+        name="Jenerate">
   </command>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="org.jenerate.internal.ui.preferences.Commons4eBasePreferencePage"
+            class="org.jenerate.internal.ui.preferences.JenerateBasePreferencePage"
             category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage"
-            name="Commons4E"
-            id="org.jenerate.ui.preferences.Commons4eBasePreferencePage"/>
+            name="Jenerate"
+            id="org.jenerate.ui.preferences.JenerateBasePreferencePage"/>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
-      <initializer class="org.jenerate.Commons4ePreferenceInitializer"/>
+      <initializer class="org.jenerate.JeneratePreferenceInitializer"/>
    </extension>
 	<extension point="org.eclipse.ui.bindings">
 		<key
@@ -51,7 +51,7 @@
         sequence="Alt+Shift+G C">
   </key>
   <key
-        commandId="org.jenerate.lang.actions.Commons4ELangMenu"
+        commandId="org.jenerate.lang.actions.JenerateMenu"
         contextId="org.eclipse.jdt.ui.javaEditorScope"
         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
         sequence="Alt+Shift+G">
@@ -92,9 +92,9 @@
           allPopups="false"
           locationURI="popup:org.eclipse.ui.popup.any?before=additions">
        <menu
-             commandId="org.jenerate.lang.actions.Commons4ELangMenu"
-             id="langMenu"
-             label="Commons4E Lang">
+             commandId="org.jenerate.lang.actions.JenerateMenu"
+             id="jenerateMenu"
+             label="Jenerate">
           <command
                 commandId="org.jenerate.lang.actions.GenerateEqualsHashCodeAction"
                 label="Generate Equals and HashCode..."

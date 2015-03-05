@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
-import org.jenerate.Commons4ePlugin;
+import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.PreferenceUtils;
@@ -59,7 +59,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.jiayun.commons4e.internal.lang.generators.ILangGenerator#generate(org.eclipse.swt.widgets.Shell,
+     * @see org.jenerate.internal.lang.generators.ILangGenerator#generate(org.eclipse.swt.widgets.Shell,
      *      org.eclipse.jdt.core.IType)
      */
     public void generate(Shell parentShell, IType objectClass) {
@@ -353,7 +353,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             super(parentShell, dialogTitle, objectClass, fields,
                     excludedMethods, disableAppendSuper);
 
-            IDialogSettings dialogSettings = Commons4ePlugin.getDefault()
+            IDialogSettings dialogSettings = JeneratePlugin.getDefault()
                     .getDialogSettings();
             equalsSettings = dialogSettings.getSection(EQUALS_SETTINGS_SECTION);
             if (equalsSettings == null) {
@@ -427,7 +427,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         /*
          * (non-Javadoc)
          * 
-         * @see org.jiayun.commons4e.internal.ui.dialogs.FieldDialog#createOptionComposite(org.eclipse.swt.widgets.Composite)
+         * @see org.jenerate.internal.ui.dialogs.FieldDialog#createOptionComposite(org.eclipse.swt.widgets.Composite)
          */
         protected Composite createOptionComposite(Composite composite) {
             Composite optionComposite = super.createOptionComposite(composite);

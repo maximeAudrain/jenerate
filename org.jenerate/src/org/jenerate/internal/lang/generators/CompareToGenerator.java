@@ -41,7 +41,7 @@ public final class CompareToGenerator implements ILangGenerator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.jiayun.commons4e.internal.lang.generators.ILangGenerator#generate(org.eclipse.swt.widgets.Shell,
+     * @see org.jenerate.internal.lang.generators.ILangGenerator#generate(org.eclipse.swt.widgets.Shell,
      *      org.eclipse.jdt.core.IType)
      */
     public void generate(Shell parentShell, IType objectClass) {

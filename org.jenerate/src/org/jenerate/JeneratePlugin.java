@@ -10,10 +10,10 @@ import org.osgi.framework.BundleContext;
 /**
  * The main plugin class to be used in the desktop.
  */
-public class Commons4ePlugin extends AbstractUIPlugin {
+public class JeneratePlugin extends AbstractUIPlugin {
 
     //The shared instance.
-    private static Commons4ePlugin plugin;
+    private static JeneratePlugin plugin;
 
     //Resource bundle.
     private ResourceBundle resourceBundle;
@@ -21,12 +21,12 @@ public class Commons4ePlugin extends AbstractUIPlugin {
     /**
      * The constructor.
      */
-    public Commons4ePlugin() {
+    public JeneratePlugin() {
         super();
         plugin = this;
         try {
             resourceBundle = ResourceBundle
-                    .getBundle("org.jenerate.Commons4ePluginResources");
+                    .getBundle("org.jenerate.JeneratePluginResources");
         } catch (MissingResourceException x) {
             resourceBundle = null;
         }
@@ -49,7 +49,7 @@ public class Commons4ePlugin extends AbstractUIPlugin {
     /**
      * Returns the shared instance.
      */
-    public static Commons4ePlugin getDefault() {
+    public static JeneratePlugin getDefault() {
         return plugin;
     }
 
@@ -58,7 +58,7 @@ public class Commons4ePlugin extends AbstractUIPlugin {
      * found.
      */
     public static String getResourceString(String key) {
-        ResourceBundle bundle = Commons4ePlugin.getDefault()
+        ResourceBundle bundle = JeneratePlugin.getDefault()
                 .getResourceBundle();
         try {
             return (bundle != null) ? bundle.getString(key) : key;

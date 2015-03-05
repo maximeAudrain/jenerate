@@ -34,7 +34,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.Commons4ePlugin;
+import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.PreferenceUtils;
 
@@ -114,7 +114,7 @@ public class FieldDialog extends Dialog {
 		this.fields = fields;
 		this.disableAppendSuper = disableAppendSuper;
 
-		IDialogSettings dialogSettings = Commons4ePlugin.getDefault()
+		IDialogSettings dialogSettings = JeneratePlugin.getDefault()
 				.getDialogSettings();
 		settings = dialogSettings.getSection(SETTINGS_SECTION);
 		if (settings == null) {
