@@ -64,7 +64,6 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage
         hashCodeField = new StringFieldEditor(
                 PreferenceConstants.HASHCODE_CACHING_FIELD,
                 "Hash&Code caching field", getFieldEditorParent());
-        // hashCodeField.setEmptyStringAllowed(false);
         addField(hashCodeField);
 
         cacheToString = new BooleanFieldEditor(
@@ -76,7 +75,6 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage
         toStringField = new StringFieldEditor(
                 PreferenceConstants.TOSTRING_CACHING_FIELD,
                 "To&String caching field", getFieldEditorParent());
-        // toStringField.setEmptyStringAllowed(false);
         addField(toStringField);
 
         addOverrideAnnotation = new BooleanFieldEditor(

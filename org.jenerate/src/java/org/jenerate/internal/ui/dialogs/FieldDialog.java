@@ -59,9 +59,9 @@ public class FieldDialog extends Dialog {
 
 	private IField[] checkedFields;
 
-	private List insertPositions;
+	private List<IJavaElement> insertPositions;
 
-	private List insertPositionLabels;
+	private List<String> insertPositionLabels;
 
 	private int currentPositionIndex;
 
@@ -89,7 +89,7 @@ public class FieldDialog extends Dialog {
 
 	public FieldDialog(final Shell parentShell, final String dialogTitle,
 			final IType objectClass, final IField[] fields,
-			final Set excludedMethods) throws JavaModelException {
+			final Set<IMethod> excludedMethods) throws JavaModelException {
 		this(parentShell, dialogTitle, objectClass, fields, excludedMethods,
 				false);
 	}
@@ -105,7 +105,7 @@ public class FieldDialog extends Dialog {
 	 */
 	public FieldDialog(final Shell parentShell, final String dialogTitle,
 			final IType objectClass, final IField[] fields,
-			final Set excludedMethods, final boolean disableAppendSuper)
+			final Set<IMethod> excludedMethods, final boolean disableAppendSuper)
 			throws JavaModelException {
 		super(parentShell);
 		setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.RESIZE);
@@ -135,15 +135,14 @@ public class FieldDialog extends Dialog {
 		generateComment = settings.getBoolean(SETTINGS_GENERATE_COMMENT);
 		useGettersInsteadOfFields = settings.getBoolean(SETTINGS_USE_GETTERS);
 
-		insertPositions = new ArrayList();
-		insertPositionLabels = new ArrayList();
+		insertPositions = new ArrayList<>();
+		insertPositionLabels = new ArrayList<>();
 
-		IJavaElement[] members = (IJavaElement[]) filterOutExcludedElements(
+		IJavaElement[] members = filterOutExcludedElements(
 				objectClass.getChildren(), excludedMethods).toArray(
 				new IJavaElement[0]);
-		IMethod[] methods = (IMethod[]) filterOutExcludedElements(
-				objectClass.getMethods(), excludedMethods).toArray(
-				new IMethod[0]);
+		IMethod[] methods = filterOutExcludedElements(objectClass.getMethods(),
+				excludedMethods).toArray(new IMethod[0]);
 
 		insertPositions.add(methods.length > 0 ? methods[0] : null); // first
 		insertPositions.add(null); // last
@@ -160,13 +159,13 @@ public class FieldDialog extends Dialog {
 		insertPositions.add(null);
 	}
 
-	private Collection filterOutExcludedElements(IJavaElement[] src,
-			Set excludedElements) {
+	private Collection<IJavaElement> filterOutExcludedElements(
+			IJavaElement[] src, Set<IMethod> excludedElements) {
 
 		if (excludedElements == null || excludedElements.size() == 0)
 			return Arrays.asList(src);
 
-		Collection result = new ArrayList();
+		Collection<IJavaElement> result = new ArrayList<>();
 		for (int i = 0, size = src.length; i < size; i++) {
 			if (!excludedElements.contains(src[i])) {
 				result.add(src[i]);
@@ -196,7 +195,7 @@ public class FieldDialog extends Dialog {
 	 * @see org.eclipse.jface.window.Window#close()
 	 */
 	public boolean close() {
-		List list = Arrays.asList(fieldViewer.getCheckedElements());
+		List<Object> list = Arrays.asList(fieldViewer.getCheckedElements());
 		checkedFields = (IField[]) list.toArray(new IField[list.size()]);
 
 		if (currentPositionIndex == 0 || currentPositionIndex == 1) {

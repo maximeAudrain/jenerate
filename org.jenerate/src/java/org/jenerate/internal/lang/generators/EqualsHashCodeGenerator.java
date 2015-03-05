@@ -68,7 +68,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
                 new String[] { "QObject;" });
         IMethod existingHashCode = objectClass.getMethod("hashCode",
                 new String[0]);
-        Set excludedMethods = new HashSet();
+        Set<IMethod> excludedMethods = new HashSet<>();
         if (existingEquals.exists()) {
             excludedMethods.add(existingEquals);
         }
@@ -347,7 +347,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
 
         public EqualsHashCodeDialog(final Shell parentShell,
                 final String dialogTitle, final IType objectClass,
-                final IField[] fields, final Set excludedMethods,
+                final IField[] fields, final Set<IMethod> excludedMethods,
                 final boolean disableAppendSuper) throws JavaModelException {
 
             super(parentShell, dialogTitle, objectClass, fields,

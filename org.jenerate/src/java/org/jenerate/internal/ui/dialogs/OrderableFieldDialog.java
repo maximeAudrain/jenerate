@@ -4,6 +4,7 @@ package org.jenerate.internal.ui.dialogs;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.SWT;
@@ -32,14 +33,14 @@ public class OrderableFieldDialog extends FieldDialog {
     private Button downButton;
 
     public OrderableFieldDialog(Shell parentShell, String dialogTitle,
-            IType objectClass, IField[] fields, Set excludedMethods)
+            IType objectClass, IField[] fields, Set<IMethod> excludedMethods)
             throws JavaModelException {
         this(parentShell, dialogTitle, objectClass, fields, excludedMethods,
                 false);
     }
 
     public OrderableFieldDialog(Shell parentShell, String dialogTitle,
-            IType objectClass, IField[] fields, Set excludedMethods,
+            IType objectClass, IField[] fields, Set<IMethod> excludedMethods,
             boolean disableAppendSuper) throws JavaModelException {
         super(parentShell, dialogTitle, objectClass, fields, excludedMethods,
                 disableAppendSuper);

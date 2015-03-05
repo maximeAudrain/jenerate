@@ -18,7 +18,7 @@ public final class LangGenerators {
 
     public static final String TOSTRING_GENERATOR_KEY = "org.jenerate.lang.actions.GenerateToStringAction";
 
-    private static final Map generators = new HashMap();
+    private static final Map<String, ILangGenerator> generators = new HashMap<>();
 
     static {
         generators.put(COMPARETO_GENERATOR_KEY, CompareToGenerator

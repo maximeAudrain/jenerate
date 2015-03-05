@@ -46,7 +46,7 @@ public final class CompareToGenerator implements ILangGenerator {
      */
     public void generate(Shell parentShell, IType objectClass) {
 
-        Set excludedMethods = new HashSet();
+        Set<IMethod> excludedMethods = new HashSet<>();
 
         IMethod existingMethod = objectClass.getMethod("compareTo",
                 new String[] { "QObject;" });
