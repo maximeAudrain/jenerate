@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
+import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.OrderableFieldDialog;
 import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.PreferenceUtils;
@@ -114,7 +115,8 @@ public final class CompareToGenerator implements ILangGenerator {
             }
         }
 
-        String source = createMethod(objectClass, checkedFields, appendSuper, generateComment, generify);
+        String source = MethodGenerations.createCompareToMethod(objectClass, checkedFields, appendSuper, generateComment,
+                generify);
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 
@@ -122,46 +124,6 @@ public final class CompareToGenerator implements ILangGenerator {
         IMethod created = objectClass.createMethod(formattedContent, insertPosition, true, null);
 
         JavaUI.revealInEditor(javaEditor, (IJavaElement) created);
-    }
-
-    private String createMethod(final IType objectClass, final IField[] checkedFields, final boolean appendSuper,
-            final boolean generateComment, final boolean generify) {
-
-        StringBuffer content = new StringBuffer();
-        if (generateComment) {
-            content.append("/* (non-Javadoc)\n");
-            content.append(" * @see java.lang.Comparable#compareTo(java.lang.Object)\n");
-            content.append(" */\n");
-        }
-        String other;
-        if (generify) {
-            content.append("public int compareTo(final " + objectClass.getElementName() + " other) {\n");
-
-            other = "other";
-        } else {
-            content.append("public int compareTo(final Object other) {\n");
-            content.append(objectClass.getElementName());
-            content.append(" castOther = (");
-            content.append(objectClass.getElementName());
-            content.append(") other;\n");
-
-            other = "castOther";
-        }
-        content.append("return new CompareToBuilder()");
-        if (appendSuper) {
-            content.append(".appendSuper(super.compareTo(other))");
-        }
-        for (int i = 0; i < checkedFields.length; i++) {
-            content.append(".append(");
-            content.append(checkedFields[i].getElementName());
-            content.append(", " + other + ".");
-            content.append(checkedFields[i].getElementName());
-            content.append(")");
-        }
-        content.append(".toComparison();\n");
-        content.append("}\n\n");
-
-        return content.toString();
     }
 
 }

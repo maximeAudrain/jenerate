@@ -12,19 +12,13 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaUI;
-import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
-import org.jenerate.JeneratePlugin;
-import org.jenerate.internal.ui.dialogs.OrderableFieldDialog;
+import org.jenerate.internal.lang.MethodGenerations;
+import org.jenerate.internal.ui.dialogs.ToStringDialog;
 import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.PreferenceUtils;
 
@@ -97,8 +91,8 @@ public final class ToStringGenerator implements ILangGenerator {
                 && PreferenceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
         String styleConstant = getStyleConstantAndAddImport(style, objectClass);
-        String source = createMethod(objectClass, checkedFields, appendSuper, generateComment, styleConstant,
-                isCacheable, addOverride, useGettersInsteadOfFields);
+        String source = MethodGenerations.createToStringMethod(objectClass, checkedFields, appendSuper, generateComment,
+                styleConstant, isCacheable, addOverride, useGettersInsteadOfFields);
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 
@@ -143,133 +137,6 @@ public final class ToStringGenerator implements ILangGenerator {
             }
         }
         return styleConstant;
-    }
-
-    private String createMethod(final IType objectClass, final IField[] checkedFields, final boolean appendSuper,
-            final boolean generateComment, final String styleConstant, final boolean isCacheable,
-            final boolean addOverride, final boolean useGettersInsteadOfFields) throws JavaModelException {
-
-        StringBuffer content = new StringBuffer();
-        if (generateComment) {
-            content.append("/* (non-Javadoc)\n");
-            content.append(" * @see java.lang.Object#toString()\n");
-            content.append(" */\n");
-        }
-        if (addOverride) {
-            content.append("@Override\n");
-        }
-        content.append("public String toString() {\n");
-        if (isCacheable) {
-            String cachingField = PreferenceUtils.getToStringCachingField();
-            content.append("if (" + cachingField + "== null) {\n");
-            content.append(cachingField + " = ");
-            content.append(createBuilderString(checkedFields, appendSuper, styleConstant, useGettersInsteadOfFields));
-            content.append("}\n");
-            content.append("return " + cachingField + ";\n");
-
-        } else {
-            content.append("return ");
-            content.append(createBuilderString(checkedFields, appendSuper, styleConstant, useGettersInsteadOfFields));
-        }
-        content.append("}\n\n");
-
-        return content.toString();
-    }
-
-    private String createBuilderString(final IField[] checkedFields, final boolean appendSuper,
-            final String styleConstant, final boolean useGettersInsteadOfFields) throws JavaModelException {
-        StringBuffer content = new StringBuffer();
-        if (styleConstant == null) {
-            content.append("new ToStringBuilder(this)");
-        } else {
-            content.append("new ToStringBuilder(this, ");
-            content.append(styleConstant);
-            content.append(")");
-        }
-        if (appendSuper) {
-            content.append(".appendSuper(super.toString())");
-        }
-        for (int i = 0; i < checkedFields.length; i++) {
-            content.append(".append(\"");
-            content.append(checkedFields[i].getElementName());
-            content.append("\", ");
-            content.append(JavaUtils.generateFieldAccessor(checkedFields[i], useGettersInsteadOfFields));
-            content.append(")");
-        }
-        content.append(".toString();\n");
-
-        return content.toString();
-    }
-
-    private static class ToStringDialog extends OrderableFieldDialog {
-
-        private Combo styleCombo;
-
-        private String toStringStyle;
-
-        private IDialogSettings settings;
-
-        private static final String SETTINGS_SECTION = "ToStringDialog";
-
-        private static final String SETTINGS_STYLE = "ToStringStyle";
-
-        public ToStringDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
-                final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper)
-                throws JavaModelException {
-
-            super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper);
-
-            IDialogSettings dialogSettings = JeneratePlugin.getDefault().getDialogSettings();
-            settings = dialogSettings.getSection(SETTINGS_SECTION);
-            if (settings == null) {
-                settings = dialogSettings.addNewSection(SETTINGS_SECTION);
-            }
-
-            toStringStyle = settings.get(SETTINGS_STYLE);
-            if (toStringStyle == null) {
-                toStringStyle = CommonsLangLibraryUtils.getToStringStyleLibraryDefaultStyle();
-            } else {
-                String[] splittedToStringStyle = toStringStyle.split("\\.");
-                String chosenStyle = splittedToStringStyle[splittedToStringStyle.length - 1];
-                toStringStyle = CommonsLangLibraryUtils.getToStringStyleLibrary() + CommonsLangLibraryUtils.DOT_STRING
-                        + chosenStyle;
-            }
-        }
-
-        @Override
-        public boolean close() {
-            toStringStyle = styleCombo.getText();
-            settings.put(SETTINGS_STYLE, toStringStyle);
-            return super.close();
-        }
-
-        @Override
-        protected Composite createOptionComposite(Composite composite) {
-            Composite optionComposite = super.createOptionComposite(composite);
-            addStyleChoices(optionComposite);
-            return optionComposite;
-        }
-
-        private Composite addStyleChoices(final Composite composite) {
-            Label label = new Label(composite, SWT.NONE);
-            label.setText("&ToString style:");
-
-            GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-            label.setLayoutData(data);
-
-            styleCombo = new Combo(composite, SWT.NONE);
-            styleCombo.setItems(CommonsLangLibraryUtils.createToStringStyles());
-            styleCombo.setText(toStringStyle);
-
-            data = new GridData(GridData.FILL_HORIZONTAL);
-            styleCombo.setLayoutData(data);
-
-            return composite;
-        }
-
-        public String getToStringStyle() {
-            return toStringStyle;
-        }
     }
 
 }
