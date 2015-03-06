@@ -13,15 +13,15 @@ Jenerate provides code generation for methods like:
 * toString()
 * compareTo()
 
-The generated methods will be based on apache commons-lang Builders. 
+The generated methods are using apache commons-lang[3] Builders. 
 
 A certain number of parameters can be customized in the Jenerate preference page in eclipe (Window > Preferences > Java > Jenerate).
 
 ## <a name="todo"/>Jenerate todo list
 
 * Test the plugin core code (code generation)
-* Provide additional libraries to generate the code with (Guava Objects and MoreObjects, etc...)
-* Extend the code generation to other common methods or needs.
+* Provide additional libraries to be used in the generated code (Guava Objects and MoreObjects, etc...)
+* Extend code generation to other common methods or needs.
 
 ## <a name="copyright"/>Copyright and contributions
 
