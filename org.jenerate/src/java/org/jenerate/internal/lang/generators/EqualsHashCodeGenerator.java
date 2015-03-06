@@ -38,9 +38,10 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
     @Override
     public void generate(Shell parentShell, IType objectClass) {
 
+        Set<IMethod> excludedMethods = new HashSet<>();
+        
         IMethod existingEquals = objectClass.getMethod("equals", new String[] { "QObject;" });
         IMethod existingHashCode = objectClass.getMethod("hashCode", new String[0]);
-        Set<IMethod> excludedMethods = new HashSet<>();
         if (existingEquals.exists()) {
             excludedMethods.add(existingEquals);
         }
@@ -126,8 +127,8 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         boolean addOverride = PreferenceUtils.getAddOverride()
                 && PreferenceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
-        String source = MethodGenerations.createHashCodeMethod(objectClass, checkedFields, appendSuper,
-                generateComment, imNumbers, isCacheable, addOverride, useGettersInsteadOfFields);
+        String source = MethodGenerations.createHashCodeMethod(checkedFields, appendSuper, generateComment,
+                imNumbers, isCacheable, addOverride, useGettersInsteadOfFields);
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 

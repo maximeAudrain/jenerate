@@ -8,7 +8,7 @@ import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.PreferenceUtils;
 
 /**
- * Generate the method strings
+ * Utility class that generates the method strings given certain parameters
  * 
  * @author maudrain
  */
@@ -106,9 +106,9 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String createHashCodeMethod(final IType objectClass, final IField[] checkedFields,
-            final boolean appendSuper, final boolean generateComment, final IInitMultNumbers imNumbers,
-            final boolean isCacheable, final boolean addOverride, final boolean useGettersInsteadOfFields)
+    public static String createHashCodeMethod(final IField[] checkedFields, final boolean appendSuper,
+            final boolean generateComment, final IInitMultNumbers imNumbers, final boolean isCacheable,
+            final boolean addOverride, final boolean useGettersInsteadOfFields)
             throws JavaModelException {
 
         StringBuffer content = new StringBuffer();
@@ -157,9 +157,9 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String createToStringMethod(final IType objectClass, final IField[] checkedFields,
-            final boolean appendSuper, final boolean generateComment, final String styleConstant,
-            final boolean isCacheable, final boolean addOverride, final boolean useGettersInsteadOfFields)
+    public static String createToStringMethod(final IField[] checkedFields, final boolean appendSuper,
+            final boolean generateComment, final String styleConstant, final String cachingField,
+            final boolean addOverride, final boolean useGettersInsteadOfFields)
             throws JavaModelException {
 
         StringBuffer content = new StringBuffer();
@@ -172,19 +172,18 @@ public final class MethodGenerations {
             content.append("@Override\n");
         }
         content.append("public String toString() {\n");
-        if (isCacheable) {
-            String cachingField = PreferenceUtils.getToStringCachingField();
+        if (cachingField.isEmpty()) {
+            content.append("return ");
+            content.append(createToStringBuilderString(checkedFields, appendSuper, styleConstant,
+                    useGettersInsteadOfFields));
+
+        } else {
             content.append("if (" + cachingField + "== null) {\n");
             content.append(cachingField + " = ");
             content.append(createToStringBuilderString(checkedFields, appendSuper, styleConstant,
                     useGettersInsteadOfFields));
             content.append("}\n");
             content.append("return " + cachingField + ";\n");
-
-        } else {
-            content.append("return ");
-            content.append(createToStringBuilderString(checkedFields, appendSuper, styleConstant,
-                    useGettersInsteadOfFields));
         }
         content.append("}\n\n");
 

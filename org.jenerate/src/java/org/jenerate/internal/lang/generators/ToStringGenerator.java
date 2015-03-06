@@ -23,6 +23,8 @@ import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.PreferenceUtils;
 
 /**
+ * XXX test caching field empty for toString
+ * 
  * @author jiayun
  */
 public final class ToStringGenerator implements ILangGenerator {
@@ -39,8 +41,10 @@ public final class ToStringGenerator implements ILangGenerator {
     @Override
     public void generate(Shell parentShell, IType objectClass) {
 
-        IMethod existingMethod = objectClass.getMethod("toString", new String[0]);
         Set<IMethod> excludedMethods = new HashSet<>();
+
+        IMethod existingMethod = objectClass.getMethod("toString", new String[0]);
+
         if (existingMethod.exists()) {
             excludedMethods.add(existingMethod);
         }
@@ -86,20 +90,23 @@ public final class ToStringGenerator implements ILangGenerator {
         IEditorPart javaEditor = JavaUI.openInEditor(cu);
 
         boolean isCacheable = PreferenceUtils.getCacheToString() && JavaUtils.areAllFinalFields(checkedFields);
+        String cachingField = "";
+        if (isCacheable) {
+            cachingField = PreferenceUtils.getToStringCachingField();
+        }
 
         boolean addOverride = PreferenceUtils.getAddOverride()
                 && PreferenceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
         String styleConstant = getStyleConstantAndAddImport(style, objectClass);
-        String source = MethodGenerations.createToStringMethod(objectClass, checkedFields, appendSuper, generateComment,
-                styleConstant, isCacheable, addOverride, useGettersInsteadOfFields);
+        String source = MethodGenerations.createToStringMethod(checkedFields, appendSuper, generateComment,
+                styleConstant, cachingField, addOverride, useGettersInsteadOfFields);
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 
         objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getToStringBuilderLibrary(), null, null);
         IMethod created = objectClass.createMethod(formattedContent, insertPosition, true, null);
 
-        String cachingField = PreferenceUtils.getToStringCachingField();
         IField field = objectClass.getField(cachingField);
         if (field.exists()) {
             field.delete(true, null);
