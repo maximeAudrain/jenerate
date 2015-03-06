@@ -63,12 +63,15 @@ public final class JavaUtils {
     public static boolean isDirectSubclassOfObject(final IType objectClass) throws JavaModelException {
         String superclass = objectClass.getSuperclassName();
 
-        if (superclass == null)
+        if (superclass == null) {
             return true;
-        if (superclass.equals("Object"))
+        }
+        if (superclass.equals("Object")) {
             return true;
-        if (superclass.equals("java.lang.Object"))
+        }
+        if (superclass.equals("java.lang.Object")) {
             return true;
+        }
 
         return false;
     }
@@ -306,17 +309,17 @@ public final class JavaUtils {
             throws JavaModelException {
         if (useGettersInsteadOfFields) {
             return generateGetter(field);
-        } else {
-            return field.getElementName();
         }
+        return field.getElementName();
+
     }
 
     public static String generateGetter(final IField field) throws JavaModelException {
         if (JavaUtils.isFieldABoolean(field)) {
             return "is" + JavaUtils.UCFirst(field.getElementName() + "()");
-        } else {
-            return "get" + JavaUtils.UCFirst(field.getElementName() + "()");
         }
+        return "get" + JavaUtils.UCFirst(field.getElementName() + "()");
+
     }
 
     public static boolean isFieldABoolean(final IField field) throws JavaModelException {

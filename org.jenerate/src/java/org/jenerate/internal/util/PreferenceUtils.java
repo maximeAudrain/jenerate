@@ -15,7 +15,6 @@ public final class PreferenceUtils {
     }
 
     public static boolean getUseCommonsLang3() {
-
         return JeneratePlugin.getDefault().getPluginPreferences().getBoolean(PreferenceConstants.USE_COMMONS_LANG3);
     }
 

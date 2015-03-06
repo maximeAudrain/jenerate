@@ -9,14 +9,13 @@ import java.util.Map;
  */
 public final class LangGenerators {
 
-    private LangGenerators() {
-    }
+    private static final String KEY_PREFIX = "org.jenerate.lang.actions.";
 
-    public static final String COMPARETO_GENERATOR_KEY = "org.jenerate.lang.actions.GenerateCompareToAction";
+    public static final String COMPARETO_GENERATOR_KEY = KEY_PREFIX + "GenerateCompareToAction";
 
-    public static final String EQUALS_HASHCODE_GENERATOR_KEY = "org.jenerate.lang.actions.GenerateEqualsHashCodeAction";
+    public static final String EQUALS_HASHCODE_GENERATOR_KEY = KEY_PREFIX + "GenerateEqualsHashCodeAction";
 
-    public static final String TOSTRING_GENERATOR_KEY = "org.jenerate.lang.actions.GenerateToStringAction";
+    public static final String TOSTRING_GENERATOR_KEY = KEY_PREFIX + "GenerateToStringAction";
 
     private static final Map<String, ILangGenerator> generators = new HashMap<>();
 
@@ -24,6 +23,9 @@ public final class LangGenerators {
         generators.put(COMPARETO_GENERATOR_KEY, CompareToGenerator.getInstance());
         generators.put(EQUALS_HASHCODE_GENERATOR_KEY, EqualsHashCodeGenerator.getInstance());
         generators.put(TOSTRING_GENERATOR_KEY, ToStringGenerator.getInstance());
+    }
+
+    private LangGenerators() {
     }
 
     public static ILangGenerator getGenerator(String key) {
