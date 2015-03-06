@@ -15,7 +15,7 @@ Jenerate provides code generation for methods like:
 
 The generated methods are using apache commons-lang[3] Builders. 
 
-A certain number of parameters can be customized in the Jenerate preference page in eclipe (Window > Preferences > Java > Jenerate).
+A certain number of parameters can be customized in the Jenerate preference page in eclipse (Window > Preferences > Java > Jenerate).
 
 ## <a name="todo"/>Jenerate todo list
 
