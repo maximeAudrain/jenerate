@@ -25,7 +25,7 @@ A certain number of parameters can be customized in the Jenerate preference page
 
 ## <a name="copyright"/>Copyright and contributions
 
-Jenerate is a fork of [commons4e](https://github.com/jiayun/commons4e). It was forked to make it alive again and respond to users demand for new functionalities. 
+Jenerate is a fork of [commons4e](https://github.com/jiayun/commons4e). It was forked to make it alive again and respond to users need for new functionalities. 
 
 Jenerate is under the EPL v1.0.
 
