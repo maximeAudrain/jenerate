@@ -123,19 +123,22 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             throws JavaModelException {
 
         boolean isCacheable = PreferenceUtils.getCacheHashCode() && JavaUtils.areAllFinalFields(checkedFields);
+        String cachingField = "";
+        if (isCacheable) {
+            cachingField = PreferenceUtils.getHashCodeCachingField();
+        }
 
         boolean addOverride = PreferenceUtils.getAddOverride()
                 && PreferenceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
         String source = MethodGenerations.createHashCodeMethod(checkedFields, appendSuper, generateComment,
-                imNumbers, isCacheable, addOverride, useGettersInsteadOfFields);
+                imNumbers, cachingField, addOverride, useGettersInsteadOfFields);
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 
         objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getHashCodeBuilderLibrary(), null, null);
         IJavaElement created = objectClass.createMethod(formattedContent, insertPosition, true, null);
 
-        String cachingField = PreferenceUtils.getHashCodeCachingField();
         IField field = objectClass.getField(cachingField);
         if (field.exists()) {
             field.delete(true, null);

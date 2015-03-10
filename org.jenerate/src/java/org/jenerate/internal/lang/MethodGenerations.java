@@ -5,7 +5,6 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.lang.generators.IInitMultNumbers;
 import org.jenerate.internal.util.JavaUtils;
-import org.jenerate.internal.util.PreferenceUtils;
 
 /**
  * Utility class that generates the method strings given certain parameters
@@ -107,7 +106,7 @@ public final class MethodGenerations {
     }
 
     public static String createHashCodeMethod(final IField[] checkedFields, final boolean appendSuper,
-            final boolean generateComment, final IInitMultNumbers imNumbers, final boolean isCacheable,
+            final boolean generateComment, final IInitMultNumbers imNumbers, final String cachingField,
             final boolean addOverride, final boolean useGettersInsteadOfFields)
             throws JavaModelException {
 
@@ -121,17 +120,15 @@ public final class MethodGenerations {
             content.append("@Override\n");
         }
         content.append("public int hashCode() {\n");
-        if (isCacheable) {
-            String cachingField = PreferenceUtils.getHashCodeCachingField();
+        if (cachingField.isEmpty()) {
+            content.append("return ");
+            content.append(createHashCodeBuilderString(checkedFields, appendSuper, imNumbers, useGettersInsteadOfFields));
+        } else {
             content.append("if (" + cachingField + "== 0) {\n");
             content.append(cachingField + " = ");
             content.append(createHashCodeBuilderString(checkedFields, appendSuper, imNumbers, useGettersInsteadOfFields));
             content.append("}\n");
             content.append("return " + cachingField + ";\n");
-
-        } else {
-            content.append("return ");
-            content.append(createHashCodeBuilderString(checkedFields, appendSuper, imNumbers, useGettersInsteadOfFields));
         }
         content.append("}\n\n");
 

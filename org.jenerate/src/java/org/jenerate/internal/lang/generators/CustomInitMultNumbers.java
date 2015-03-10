@@ -5,9 +5,8 @@ package org.jenerate.internal.lang.generators;
  */
 public class CustomInitMultNumbers implements IInitMultNumbers {
 
-    int initial;
-
-    int multiplier;
+    private int initial;
+    private int multiplier;
 
     @Override
     public void setNumbers(int initial, int multiplier) {
