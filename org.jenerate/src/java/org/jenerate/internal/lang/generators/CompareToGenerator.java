@@ -5,23 +5,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.compiler.InvalidInputException;
-import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.MalformedTreeException;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
+import org.jenerate.internal.data.impl.CompareToMethodGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.OrderableFieldDialog;
+import org.jenerate.internal.util.GenerationUtils;
 import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.PreferenceUtils;
 
@@ -83,18 +81,13 @@ public final class CompareToGenerator implements ILangGenerator {
 
         } catch (CoreException e) {
             MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
-        } catch (BadLocationException e) {
-            MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
         }
 
     }
 
     private void generateCompareTo(final Shell parentShell, final IType objectClass, final IField[] checkedFields,
             final IJavaElement insertPosition, final boolean appendSuper, final boolean generateComment)
-            throws PartInitException, JavaModelException, MalformedTreeException, BadLocationException {
-
-        ICompilationUnit cu = objectClass.getCompilationUnit();
-        IEditorPart javaEditor = JavaUI.openInEditor(cu);
+            throws PartInitException, JavaModelException, MalformedTreeException {
 
         boolean implementedOrExtendedInSuperType = JavaUtils.isImplementedOrExtendedInSupertype(objectClass,
                 "Comparable");
@@ -115,15 +108,15 @@ public final class CompareToGenerator implements ILangGenerator {
             }
         }
 
-        String source = MethodGenerations.createCompareToMethod(objectClass, checkedFields, appendSuper, generateComment,
-                generify);
+        String source = MethodGenerations.createCompareToMethod(new CompareToMethodGenerationData(checkedFields,
+                objectClass, appendSuper, generateComment, generify));
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 
         objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getCompareToBuilderLibrary(), null, null);
         IMethod created = objectClass.createMethod(formattedContent, insertPosition, true, null);
 
-        JavaUI.revealInEditor(javaEditor, (IJavaElement) created);
+        GenerationUtils.revealInEditor(objectClass, created);
     }
 
 }

@@ -5,20 +5,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
+import org.jenerate.internal.data.impl.ToStringMethodGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.ToStringDialog;
+import org.jenerate.internal.util.GenerationUtils;
 import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.PreferenceUtils;
 
@@ -86,9 +85,6 @@ public final class ToStringGenerator implements ILangGenerator {
             final IJavaElement insertPosition, final boolean appendSuper, final boolean generateComment,
             final String style, final boolean useGettersInsteadOfFields) throws PartInitException, JavaModelException {
 
-        ICompilationUnit cu = objectClass.getCompilationUnit();
-        IEditorPart javaEditor = JavaUI.openInEditor(cu);
-
         boolean isCacheable = PreferenceUtils.getCacheToString() && JavaUtils.areAllFinalFields(checkedFields);
         String cachingField = "";
         if (isCacheable) {
@@ -99,8 +95,7 @@ public final class ToStringGenerator implements ILangGenerator {
                 && PreferenceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
         String styleConstant = getStyleConstantAndAddImport(style, objectClass);
-        String source = MethodGenerations.createToStringMethod(checkedFields, appendSuper, generateComment,
-                styleConstant, cachingField, addOverride, useGettersInsteadOfFields);
+        String source = MethodGenerations.createToStringMethod(new ToStringMethodGenerationData(checkedFields, appendSuper, generateComment, styleConstant, cachingField, addOverride, useGettersInsteadOfFields));
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 
@@ -117,7 +112,7 @@ public final class ToStringGenerator implements ILangGenerator {
             objectClass.createField(formattedFieldSrc, created, true, null);
         }
 
-        JavaUI.revealInEditor(javaEditor, (IJavaElement) created);
+        GenerationUtils.revealInEditor(objectClass, created);
     }
 
     private String getStyleConstantAndAddImport(final String style, final IType objectClass) throws JavaModelException {

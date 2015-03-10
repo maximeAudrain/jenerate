@@ -5,23 +5,25 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorPart;
+import org.jenerate.internal.data.impl.EqualsMethodGenerationData;
+import org.jenerate.internal.data.impl.HashCodeMethodGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
+import org.jenerate.internal.util.GenerationUtils;
 import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.PreferenceUtils;
 
 /**
+ * XXX test caching field empty for hashCode
+ * 
  * @author jiayun
  */
 public final class EqualsHashCodeGenerator implements ILangGenerator {
@@ -39,7 +41,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
     public void generate(Shell parentShell, IType objectClass) {
 
         Set<IMethod> excludedMethods = new HashSet<>();
-        
+
         IMethod existingEquals = objectClass.getMethod("equals", new String[] { "QObject;" });
         IMethod existingHashCode = objectClass.getMethod("hashCode", new String[0]);
         if (existingEquals.exists()) {
@@ -87,9 +89,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
                 created = generateEquals(parentShell, objectClass, checkedFields, created, appendSuper,
                         generateComment, compareReferences, useGettersInsteadOfFields, useBlocksInIfStatements);
 
-                ICompilationUnit cu = objectClass.getCompilationUnit();
-                IEditorPart javaEditor = JavaUI.openInEditor(cu);
-                JavaUI.revealInEditor(javaEditor, created);
+                GenerationUtils.revealInEditor(objectClass, created);
             }
 
         } catch (CoreException e) {
@@ -106,15 +106,14 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         boolean addOverride = PreferenceUtils.getAddOverride()
                 && PreferenceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
-        String source = MethodGenerations.createEqualsMethod(objectClass, checkedFields, appendSuper, generateComment,
-                compareReferences, addOverride, useGettersInsteadOfFields, useBlocksInIfStatements);
+        String source = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields, objectClass,
+                appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
+                useBlocksInIfStatements));
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 
         objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getEqualsBuilderLibrary(), null, null);
-        IJavaElement created = objectClass.createMethod(formattedContent, insertPosition, true, null);
-
-        return created;
+        return objectClass.createMethod(formattedContent, insertPosition, true, null);
     }
 
     private IJavaElement generateHashCode(final Shell parentShell, final IType objectClass,
@@ -131,8 +130,8 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         boolean addOverride = PreferenceUtils.getAddOverride()
                 && PreferenceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
-        String source = MethodGenerations.createHashCodeMethod(checkedFields, appendSuper, generateComment,
-                imNumbers, cachingField, addOverride, useGettersInsteadOfFields);
+        String source = MethodGenerations.createHashCodeMethod(new HashCodeMethodGenerationData(checkedFields,
+                appendSuper, generateComment, imNumbers, cachingField, addOverride, useGettersInsteadOfFields));
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 

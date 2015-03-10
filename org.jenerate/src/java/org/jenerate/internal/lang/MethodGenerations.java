@@ -1,8 +1,11 @@
 package org.jenerate.internal.lang;
 
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.jenerate.internal.data.impl.CompareToMethodGenerationData;
+import org.jenerate.internal.data.impl.EqualsMethodGenerationData;
+import org.jenerate.internal.data.impl.HashCodeMethodGenerationData;
+import org.jenerate.internal.data.impl.ToStringMethodGenerationData;
 import org.jenerate.internal.lang.generators.IInitMultNumbers;
 import org.jenerate.internal.util.JavaUtils;
 
@@ -17,38 +20,39 @@ public final class MethodGenerations {
         /* Only static helper methods */
     }
 
-    public static String createCompareToMethod(IType objectClass, IField[] checkedFields, boolean appendSuper,
-            boolean generateComment, boolean generify) {
+    public static String createCompareToMethod(CompareToMethodGenerationData compareToMethodGenerationData) {
 
         StringBuffer content = new StringBuffer();
-        if (generateComment) {
+        if (compareToMethodGenerationData.isGenerateComment()) {
             content.append("/* (non-Javadoc)\n");
             content.append(" * @see java.lang.Comparable#compareTo(java.lang.Object)\n");
             content.append(" */\n");
         }
         String other;
-        if (generify) {
-            content.append("public int compareTo(final " + objectClass.getElementName() + " other) {\n");
+        String className = compareToMethodGenerationData.getObjectClass().getElementName();
+        if (compareToMethodGenerationData.isGenerify()) {
+            content.append("public int compareTo(final " + className + " other) {\n");
 
             other = "other";
         } else {
             content.append("public int compareTo(final Object other) {\n");
-            content.append(objectClass.getElementName());
+            content.append(className);
             content.append(" castOther = (");
-            content.append(objectClass.getElementName());
+            content.append(className);
             content.append(") other;\n");
 
             other = "castOther";
         }
         content.append("return new CompareToBuilder()");
-        if (appendSuper) {
+        if (compareToMethodGenerationData.isAppendSuper()) {
             content.append(".appendSuper(super.compareTo(other))");
         }
-        for (int i = 0; i < checkedFields.length; i++) {
+        for (int i = 0; i < compareToMethodGenerationData.getFields().length; i++) {
+            String fieldName = compareToMethodGenerationData.getFields()[i].getElementName();
             content.append(".append(");
-            content.append(checkedFields[i].getElementName());
+            content.append(fieldName);
             content.append(", " + other + ".");
-            content.append(checkedFields[i].getElementName());
+            content.append(fieldName);
             content.append(")");
         }
         content.append(".toComparison();\n");
@@ -57,46 +61,46 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String createEqualsMethod(final IType objectClass, final IField[] checkedFields,
-            final boolean appendSuper, final boolean generateComment, final boolean compareReferences,
-            final boolean addOverride, final boolean useGettersInsteadOfFields, final boolean useBlocksInIfStatements)
+    public static String createEqualsMethod(EqualsMethodGenerationData equalsMethodGenerationData)
             throws JavaModelException {
 
         StringBuffer content = new StringBuffer();
-        if (generateComment) {
+        if (equalsMethodGenerationData.isGenerateComment()) {
             content.append("/* (non-Javadoc)\n");
             content.append(" * @see java.lang.Object#equals(java.lang.Object)\n");
             content.append(" */\n");
         }
-        if (addOverride) {
+        if (equalsMethodGenerationData.isAddOverride()) {
             content.append("@Override\n");
         }
         content.append("public boolean equals(final Object other) {\n");
-        if (compareReferences) {
+        if (equalsMethodGenerationData.isCompareReferences()) {
             content.append("if (this == other)");
-            content.append(useBlocksInIfStatements ? "{\n" : "");
+            content.append(equalsMethodGenerationData.isUseBlocksInIfStatements() ? "{\n" : "");
             content.append(" return true;");
-            content.append(useBlocksInIfStatements ? "\n}\n" : "");
+            content.append(equalsMethodGenerationData.isUseBlocksInIfStatements() ? "\n}\n" : "");
         }
         content.append("if ( !(other instanceof ");
-        content.append(objectClass.getElementName());
+        content.append(equalsMethodGenerationData.getObjectClass().getElementName());
         content.append(") )");
-        content.append(useBlocksInIfStatements ? "{\n" : "");
+        content.append(equalsMethodGenerationData.isUseBlocksInIfStatements() ? "{\n" : "");
         content.append(" return false;");
-        content.append(useBlocksInIfStatements ? "\n}\n" : "");
-        content.append(objectClass.getElementName());
+        content.append(equalsMethodGenerationData.isUseBlocksInIfStatements() ? "\n}\n" : "");
+        content.append(equalsMethodGenerationData.getObjectClass().getElementName());
         content.append(" castOther = (");
-        content.append(objectClass.getElementName());
+        content.append(equalsMethodGenerationData.getObjectClass().getElementName());
         content.append(") other;\n");
         content.append("return new EqualsBuilder()");
-        if (appendSuper) {
+        if (equalsMethodGenerationData.isAppendSuper()) {
             content.append(".appendSuper(super.equals(other))");
         }
-        for (int i = 0; i < checkedFields.length; i++) {
+        for (int i = 0; i < equalsMethodGenerationData.getFields().length; i++) {
             content.append(".append(");
-            content.append(JavaUtils.generateFieldAccessor(checkedFields[i], useGettersInsteadOfFields));
+            String fieldName = JavaUtils.generateFieldAccessor(equalsMethodGenerationData.getFields()[i],
+                    equalsMethodGenerationData.isUseGettersInsteadOfFields());
+            content.append(fieldName);
             content.append(", castOther.");
-            content.append(JavaUtils.generateFieldAccessor(checkedFields[i], useGettersInsteadOfFields));
+            content.append(fieldName);
             content.append(")");
         }
         content.append(".isEquals();\n");
@@ -105,30 +109,33 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String createHashCodeMethod(final IField[] checkedFields, final boolean appendSuper,
-            final boolean generateComment, final IInitMultNumbers imNumbers, final String cachingField,
-            final boolean addOverride, final boolean useGettersInsteadOfFields)
+    public static String createHashCodeMethod(HashCodeMethodGenerationData hashCodeMethodGenerationData)
             throws JavaModelException {
 
         StringBuffer content = new StringBuffer();
-        if (generateComment) {
+        if (hashCodeMethodGenerationData.isGenerateComment()) {
             content.append("/* (non-Javadoc)\n");
             content.append(" * @see java.lang.Object#hashCode()\n");
             content.append(" */\n");
         }
-        if (addOverride) {
+        if (hashCodeMethodGenerationData.isAddOverride()) {
             content.append("@Override\n");
         }
         content.append("public int hashCode() {\n");
-        if (cachingField.isEmpty()) {
+
+        String hashCodeBuilderString = createHashCodeBuilderString(hashCodeMethodGenerationData.getFields(),
+                hashCodeMethodGenerationData.isAppendSuper(), hashCodeMethodGenerationData.getImNumbers(),
+                hashCodeMethodGenerationData.isUseGettersInsteadOfFields());
+
+        if (hashCodeMethodGenerationData.getCachingField().isEmpty()) {
             content.append("return ");
-            content.append(createHashCodeBuilderString(checkedFields, appendSuper, imNumbers, useGettersInsteadOfFields));
+            content.append(hashCodeBuilderString);
         } else {
-            content.append("if (" + cachingField + "== 0) {\n");
-            content.append(cachingField + " = ");
-            content.append(createHashCodeBuilderString(checkedFields, appendSuper, imNumbers, useGettersInsteadOfFields));
+            content.append("if (" + hashCodeMethodGenerationData.getCachingField() + "== 0) {\n");
+            content.append(hashCodeMethodGenerationData.getCachingField() + " = ");
+            content.append(hashCodeBuilderString);
             content.append("}\n");
-            content.append("return " + cachingField + ";\n");
+            content.append("return " + hashCodeMethodGenerationData.getCachingField() + ";\n");
         }
         content.append("}\n\n");
 
@@ -154,33 +161,33 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String createToStringMethod(final IField[] checkedFields, final boolean appendSuper,
-            final boolean generateComment, final String styleConstant, final String cachingField,
-            final boolean addOverride, final boolean useGettersInsteadOfFields)
+    public static String createToStringMethod(ToStringMethodGenerationData toStringMethodGenerationData)
             throws JavaModelException {
 
         StringBuffer content = new StringBuffer();
-        if (generateComment) {
+        if (toStringMethodGenerationData.isGenerateComment()) {
             content.append("/* (non-Javadoc)\n");
             content.append(" * @see java.lang.Object#toString()\n");
             content.append(" */\n");
         }
-        if (addOverride) {
+        if (toStringMethodGenerationData.isAddOverride()) {
             content.append("@Override\n");
         }
         content.append("public String toString() {\n");
-        if (cachingField.isEmpty()) {
+        String toStringBuilderString = createToStringBuilderString(toStringMethodGenerationData.getFields(),
+                toStringMethodGenerationData.isAppendSuper(), toStringMethodGenerationData.getStyleConstant(),
+                toStringMethodGenerationData.isUseGettersInsteadOfFields());
+        
+        if (toStringMethodGenerationData.getCachingField().isEmpty()) {
             content.append("return ");
-            content.append(createToStringBuilderString(checkedFields, appendSuper, styleConstant,
-                    useGettersInsteadOfFields));
+            content.append(toStringBuilderString);
 
         } else {
-            content.append("if (" + cachingField + "== null) {\n");
-            content.append(cachingField + " = ");
-            content.append(createToStringBuilderString(checkedFields, appendSuper, styleConstant,
-                    useGettersInsteadOfFields));
+            content.append("if (" + toStringMethodGenerationData.getCachingField() + "== null) {\n");
+            content.append(toStringMethodGenerationData.getCachingField() + " = ");
+            content.append(toStringBuilderString);
             content.append("}\n");
-            content.append("return " + cachingField + ";\n");
+            content.append("return " + toStringMethodGenerationData.getCachingField() + ";\n");
         }
         content.append("}\n\n");
 
