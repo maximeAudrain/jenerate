@@ -31,6 +31,7 @@ import org.jenerate.internal.lang.generators.CustomInitMultNumbers;
 import org.jenerate.internal.lang.generators.DefaultInitMultNumbers;
 import org.jenerate.internal.lang.generators.IInitMultNumbers;
 import org.jenerate.internal.lang.generators.RandomInitMultNumbers;
+import org.jenerate.internal.ui.preferences.PreferencesManager;
 
 /**
  * @author jiayun
@@ -71,10 +72,10 @@ public class EqualsHashCodeDialog extends FieldDialog {
     private IDialogSettings hashCodeSettings;
 
     public EqualsHashCodeDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
-            final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper)
-            throws JavaModelException {
+            final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper,
+            PreferencesManager preferencesManager) throws JavaModelException {
 
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper);
+        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager);
 
         IDialogSettings dialogSettings = JeneratePlugin.getDefault().getDialogSettings();
         equalsSettings = dialogSettings.getSection(EQUALS_SETTINGS_SECTION);

@@ -15,6 +15,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.lang.generators.CommonsLangLibraryUtils;
+import org.jenerate.internal.ui.preferences.JeneratePreference;
+import org.jenerate.internal.ui.preferences.PreferencesManager;
 
 /**
  * @author jiayun
@@ -32,10 +34,10 @@ public class ToStringDialog extends OrderableFieldDialog {
     private static final String SETTINGS_STYLE = "ToStringStyle";
 
     public ToStringDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
-            final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper)
-            throws JavaModelException {
+            final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper,
+            PreferencesManager preferencesManager) throws JavaModelException {
 
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper);
+        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager);
 
         IDialogSettings dialogSettings = JeneratePlugin.getDefault().getDialogSettings();
         settings = dialogSettings.getSection(SETTINGS_SECTION);
@@ -45,12 +47,15 @@ public class ToStringDialog extends OrderableFieldDialog {
 
         toStringStyle = settings.get(SETTINGS_STYLE);
         if (toStringStyle == null) {
-            toStringStyle = CommonsLangLibraryUtils.getToStringStyleLibraryDefaultStyle();
+            toStringStyle = CommonsLangLibraryUtils
+                    .getToStringStyleLibraryDefaultStyle((Boolean) getPreferencesManager().getCurrentPreferenceValue(
+                            JeneratePreference.USE_COMMONS_LANG3));
         } else {
             String[] splittedToStringStyle = toStringStyle.split("\\.");
             String chosenStyle = splittedToStringStyle[splittedToStringStyle.length - 1];
-            toStringStyle = CommonsLangLibraryUtils.getToStringStyleLibrary() + CommonsLangLibraryUtils.DOT_STRING
-                    + chosenStyle;
+            toStringStyle = CommonsLangLibraryUtils.getToStringStyleLibrary((Boolean) getPreferencesManager()
+                    .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3))
+                    + CommonsLangLibraryUtils.DOT_STRING + chosenStyle;
         }
     }
 
@@ -76,7 +81,8 @@ public class ToStringDialog extends OrderableFieldDialog {
         label.setLayoutData(data);
 
         styleCombo = new Combo(composite, SWT.NONE);
-        styleCombo.setItems(CommonsLangLibraryUtils.createToStringStyles());
+        styleCombo.setItems(CommonsLangLibraryUtils.createToStringStyles((Boolean) getPreferencesManager()
+                .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)));
         styleCombo.setText(toStringStyle);
 
         data = new GridData(GridData.FILL_HORIZONTAL);

@@ -1,6 +1,9 @@
 // $Id$
 package org.jenerate.internal.ui.preferences;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -17,25 +20,7 @@ import org.jenerate.JeneratePlugin;
  */
 public class JenerateBasePreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-    private BooleanFieldEditor useCommonsLang3;
-
-    private BooleanFieldEditor cacheHashCode;
-
-    private StringFieldEditor hashCodeField;
-
-    private BooleanFieldEditor cacheToString;
-
-    private StringFieldEditor toStringField;
-
-    private BooleanFieldEditor addOverrideAnnotation;
-
-    private BooleanFieldEditor generifyCompareTo;
-
-    private BooleanFieldEditor displayFieldsOfSuperclasses;
-
-    private BooleanFieldEditor useGettersInsteadOfFields;
-
-    private BooleanFieldEditor useBlocksInIfStatements;
+    private final Map<JeneratePreference, FieldEditor> fieldEditors = new HashMap<>();
 
     public JenerateBasePreferencePage() {
         super(FieldEditorPreferencePage.GRID);
@@ -44,45 +29,22 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
 
     @Override
     protected void createFieldEditors() {
-        useCommonsLang3 = new BooleanFieldEditor(PreferenceConstants.USE_COMMONS_LANG3,
-                "&Import commons-lang3 for all code generation", getFieldEditorParent());
-        addField(useCommonsLang3);
 
-        cacheHashCode = new BooleanFieldEditor(PreferenceConstants.CACHE_HASHCODE,
-                "Cache &hashCode when all selected fields are final", getFieldEditorParent());
-        addField(cacheHashCode);
-
-        hashCodeField = new StringFieldEditor(PreferenceConstants.HASHCODE_CACHING_FIELD, "Hash&Code caching field",
-                getFieldEditorParent());
-        addField(hashCodeField);
-
-        cacheToString = new BooleanFieldEditor(PreferenceConstants.CACHE_TOSTRING,
-                "Cache &toString when all selected fields are final", getFieldEditorParent());
-        addField(cacheToString);
-
-        toStringField = new StringFieldEditor(PreferenceConstants.TOSTRING_CACHING_FIELD, "To&String caching field",
-                getFieldEditorParent());
-        addField(toStringField);
-
-        addOverrideAnnotation = new BooleanFieldEditor(PreferenceConstants.ADD_OVERRIDE_ANNOTATION,
-                "Add @&Override when the source compatibility is 5.0 or above", getFieldEditorParent());
-        addField(addOverrideAnnotation);
-
-        generifyCompareTo = new BooleanFieldEditor(PreferenceConstants.GENERIFY_COMPARETO,
-                "&Generify compareTo when the source compatibility is 5.0 or above", getFieldEditorParent());
-        addField(generifyCompareTo);
-
-        displayFieldsOfSuperclasses = new BooleanFieldEditor(PreferenceConstants.DISPLAY_FIELDS_OF_SUPERCLASSES,
-                "&Display fields of superclasses", getFieldEditorParent());
-        addField(displayFieldsOfSuperclasses);
-
-        useGettersInsteadOfFields = new BooleanFieldEditor(PreferenceConstants.USE_GETTERS_INSTEAD_OF_FIELDS,
-                "&Use getters instead of fields (for Hibernate)", getFieldEditorParent());
-        addField(useGettersInsteadOfFields);
-
-        useBlocksInIfStatements = new BooleanFieldEditor(PreferenceConstants.USE_BLOCKS_IN_IF_STATEMENTS,
-                "&Use blocks in 'if' statments", getFieldEditorParent());
-        addField(useBlocksInIfStatements);
+        for (JeneratePreference jeneratePreference : JeneratePreference.values()) {
+            Class<?> type = jeneratePreference.getType();
+            String key = jeneratePreference.getKey();
+            String description = jeneratePreference.getDescription();
+            FieldEditor fieldEditor = null;
+            if (Boolean.class.isAssignableFrom(type)) {
+                fieldEditor = new BooleanFieldEditor(key, description, getFieldEditorParent());
+            } else if (String.class.isAssignableFrom(type)) {
+                fieldEditor = new StringFieldEditor(key, description, getFieldEditorParent());
+            } else {
+                throw new UnsupportedOperationException("The preference type '" + type + "' is not currently handled. ");
+            }
+            fieldEditors.put(jeneratePreference, fieldEditor);
+            addField(fieldEditor);
+        }
     }
 
     @Override
@@ -92,14 +54,17 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
         if (!isValid())
             return;
 
-        IStatus status = JavaConventions.validateIdentifier(hashCodeField.getStringValue());
+        String hashCodeFieldStringValue = getHashCodeCachingField().getStringValue();
+        String toStringFieldStringValue = getToStringCachingField().getStringValue();
+
+        IStatus status = JavaConventions.validateIdentifier(hashCodeFieldStringValue);
         if (!status.isOK()) {
             setErrorMessage(status.getMessage());
             setValid(false);
             return;
         }
 
-        status = JavaConventions.validateIdentifier(toStringField.getStringValue());
+        status = JavaConventions.validateIdentifier(toStringFieldStringValue);
         if (!status.isOK()) {
             setErrorMessage(status.getMessage());
             setValid(false);
@@ -113,13 +78,13 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
 
         if (event.getProperty().equals(FieldEditor.VALUE)) {
 
-            if (event.getSource() == cacheHashCode) {
-                hashCodeField.setEnabled(cacheHashCode.getBooleanValue(), getFieldEditorParent());
+            if (event.getSource() == getCacheHashCodeField()) {
+                getHashCodeCachingField().setEnabled(getCacheHashCodeField().getBooleanValue(), getFieldEditorParent());
 
-            } else if (event.getSource() == cacheToString) {
-                toStringField.setEnabled(cacheToString.getBooleanValue(), getFieldEditorParent());
+            } else if (event.getSource() == getCacheToStringField()) {
+                getToStringCachingField().setEnabled(getCacheToStringField().getBooleanValue(), getFieldEditorParent());
 
-            } else if (event.getSource() == hashCodeField || event.getSource() == toStringField) {
+            } else if (event.getSource() == getHashCodeCachingField() || event.getSource() == getToStringCachingField()) {
                 checkState();
             }
         }
@@ -128,5 +93,21 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
     @Override
     public void init(IWorkbench workbench) {
         /* Nothing to be done here */
+    }
+
+    private StringFieldEditor getToStringCachingField() {
+        return (StringFieldEditor) fieldEditors.get(JeneratePreference.TOSTRING_CACHING_FIELD);
+    }
+
+    private StringFieldEditor getHashCodeCachingField() {
+        return (StringFieldEditor) fieldEditors.get(JeneratePreference.HASHCODE_CACHING_FIELD);
+    }
+
+    private BooleanFieldEditor getCacheToStringField() {
+        return (BooleanFieldEditor) fieldEditors.get(JeneratePreference.CACHE_TOSTRING);
+    }
+
+    private BooleanFieldEditor getCacheHashCodeField() {
+        return (BooleanFieldEditor) fieldEditors.get(JeneratePreference.CACHE_HASHCODE);
     }
 }

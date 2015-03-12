@@ -1,6 +1,5 @@
 package org.jenerate.internal.lang.generators;
 
-import org.jenerate.internal.util.PreferenceUtils;
 
 /**
  * Helper class to ease the construction of the commons-lang library objects to be used by the generator classes. This
@@ -37,58 +36,57 @@ public final class CommonsLangLibraryUtils {
     /**
      * @return the full constructed CompareToBuilder library
      */
-    public static String getCompareToBuilderLibrary() {
-        return createLibraryFullPath(COMPARE_TO_BUILDER_POSTFIX);
+    public static String getCompareToBuilderLibrary(boolean useCommonsLang3) {
+        return createLibraryFullPath(COMPARE_TO_BUILDER_POSTFIX, useCommonsLang3);
     }
 
     /**
      * @return the full constructed HashCodeBuilder library
      */
-    public static String getHashCodeBuilderLibrary() {
-        return createLibraryFullPath(HASH_CODE_BUILDER_POSTFIX);
+    public static String getHashCodeBuilderLibrary(boolean useCommonsLang3) {
+        return createLibraryFullPath(HASH_CODE_BUILDER_POSTFIX, useCommonsLang3);
     }
 
     /**
      * @return the full constructed EqualsBuilder library
      */
-    public static String getEqualsBuilderLibrary() {
-        return createLibraryFullPath(EQUALS_BUILDER_POSTFIX);
+    public static String getEqualsBuilderLibrary(boolean useCommonsLang3) {
+        return createLibraryFullPath(EQUALS_BUILDER_POSTFIX, useCommonsLang3);
     }
 
     /**
      * @return the full constructed ToStringBuilder library
      */
-    public static String getToStringBuilderLibrary() {
-        return createLibraryFullPath(TO_STRING_BUILDER_POSTFIX);
+    public static String getToStringBuilderLibrary(boolean useCommonsLang3) {
+        return createLibraryFullPath(TO_STRING_BUILDER_POSTFIX, useCommonsLang3);
     }
 
     /**
      * @return the full constructed ToStringStyle library
      */
-    public static String getToStringStyleLibrary() {
-        return createLibraryFullPath(TO_STRING_STYLE_POSTFIX);
+    public static String getToStringStyleLibrary(boolean useCommonsLang3) {
+        return createLibraryFullPath(TO_STRING_STYLE_POSTFIX, useCommonsLang3);
     }
 
     /**
      * @return the full constructed ToStringStyle.DEFAULT_STYLE library
      */
-    public static String getToStringStyleLibraryDefaultStyle() {
-        return createLibraryFullPath(TO_STRING_STYLE_POSTFIX) + DEFAULT_STYLE_POSTFIX;
+    public static String getToStringStyleLibraryDefaultStyle(boolean useCommonsLang3) {
+        return createLibraryFullPath(TO_STRING_STYLE_POSTFIX, useCommonsLang3) + DEFAULT_STYLE_POSTFIX;
     }
 
     /**
      * @return an array containing all the fully constructed styles of the ToStringStyle library
      */
-    public static String[] createToStringStyles() {
-        String toStringStyleLibrary = getToStringStyleLibrary();
+    public static String[] createToStringStyles(boolean useCommonsLang3) {
+        String toStringStyleLibrary = getToStringStyleLibrary(useCommonsLang3);
         return new String[] { toStringStyleLibrary + DEFAULT_STYLE_POSTFIX,
                 toStringStyleLibrary + MULTI_LINE_STYLE_POSTFIX, toStringStyleLibrary + NO_FIELD_NAMES_STYLE_POSTFIX,
                 toStringStyleLibrary + SHORT_PREFIX_STYLE_POSTFIX, toStringStyleLibrary + SIMPLE_STYLE_POSTFIX };
     }
 
-    private static String createLibraryFullPath(String libraryToImportPostfix) {
-        return COMMONS_LANG_PREFIX + (PreferenceUtils.getUseCommonsLang3() ? COMMONS_LANG3_ADDON : EMPTY_STRING)
-                + libraryToImportPostfix;
+    private static String createLibraryFullPath(String libraryToImportPostfix, boolean useCommonsLang3) {
+        return COMMONS_LANG_PREFIX + (useCommonsLang3 ? COMMONS_LANG3_ADDON : EMPTY_STRING) + libraryToImportPostfix;
     }
 
 }

@@ -17,21 +17,28 @@ import org.jenerate.internal.data.impl.EqualsMethodGenerationData;
 import org.jenerate.internal.data.impl.HashCodeMethodGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
+import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
+import org.jenerate.internal.ui.preferences.JeneratePreference;
+import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JavaUtils;
-import org.jenerate.internal.util.PreferenceUtils;
 
 /**
  * XXX test caching field empty for hashCode
  * 
- * @author jiayun
+ * @author jiayun, maudrain
  */
 public final class EqualsHashCodeGenerator implements ILangGenerator {
 
     private final JavaUiCodeAppender javaUiCodeAppender;
-    
-    public EqualsHashCodeGenerator(JavaUiCodeAppender javaUiCodeAppender) {
+    private final PreferencesManager preferencesManager;
+    private final DialogProvider<EqualsHashCodeDialog> dialogProvider;
+
+    public EqualsHashCodeGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
+            DialogProvider<EqualsHashCodeDialog> dialogProvider) {
         this.javaUiCodeAppender = javaUiCodeAppender;
+        this.preferencesManager = preferencesManager;
+        this.dialogProvider = dialogProvider;
     }
 
     @Override
@@ -49,7 +56,9 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         }
         try {
             IField[] fields;
-            if (PreferenceUtils.getDisplayFieldsOfSuperclasses()) {
+            boolean displayFieldsOfSuperClasses = ((Boolean) preferencesManager
+                    .getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES)).booleanValue();
+            if (displayFieldsOfSuperClasses) {
                 fields = JavaUtils.getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass);
             } else {
                 fields = JavaUtils.getNonStaticNonCacheFields(objectClass);
@@ -59,8 +68,8 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
                     || !JavaUtils.isEqualsOverriddenInSuperclass(objectClass)
                     || !JavaUtils.isHashCodeOverriddenInSuperclass(objectClass);
 
-            EqualsHashCodeDialog dialog = new EqualsHashCodeDialog(parentShell, "Generate Equals and HashCode",
-                    objectClass, fields, excludedMethods, disableAppendSuper);
+            EqualsHashCodeDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
+                    disableAppendSuper, preferencesManager);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
 
@@ -80,11 +89,17 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
                 boolean useBlocksInIfStatements = dialog.getUseBlockInIfStatements();
                 IInitMultNumbers imNumbers = dialog.getInitMultNumbers();
 
+                boolean useCommonLang3 = ((Boolean) preferencesManager
+                        .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
+                boolean addOverridePreference = ((Boolean) preferencesManager
+                        .getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).booleanValue();
                 IJavaElement created = generateHashCode(parentShell, objectClass, checkedFields, insertPosition,
-                        appendSuper, generateComment, imNumbers, useGettersInsteadOfFields);
+                        appendSuper, generateComment, imNumbers, useGettersInsteadOfFields, useCommonLang3,
+                        addOverridePreference);
 
                 created = generateEquals(parentShell, objectClass, checkedFields, created, appendSuper,
-                        generateComment, compareReferences, useGettersInsteadOfFields, useBlocksInIfStatements);
+                        generateComment, compareReferences, useGettersInsteadOfFields, useBlocksInIfStatements,
+                        useCommonLang3, addOverridePreference);
 
                 javaUiCodeAppender.revealInEditor(objectClass, created);
             }
@@ -98,10 +113,11 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
     private IJavaElement generateEquals(final Shell parentShell, final IType objectClass, final IField[] checkedFields,
             final IJavaElement insertPosition, final boolean appendSuper, final boolean generateComment,
             final boolean compareReferences, final boolean useGettersInsteadOfFields,
-            final boolean useBlocksInIfStatements) throws JavaModelException {
+            final boolean useBlocksInIfStatements, boolean useCommonLang3, boolean addOverridePreference)
+            throws JavaModelException {
 
-        boolean addOverride = PreferenceUtils.getAddOverride()
-                && PreferenceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
+        boolean addOverride = addOverridePreference
+                && JavaUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
         String source = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields, objectClass,
                 appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
@@ -109,30 +125,35 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 
-        objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getEqualsBuilderLibrary(), null, null);
+        objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getEqualsBuilderLibrary(useCommonLang3),
+                null, null);
         return objectClass.createMethod(formattedContent, insertPosition, true, null);
     }
 
     private IJavaElement generateHashCode(final Shell parentShell, final IType objectClass,
             final IField[] checkedFields, final IJavaElement insertPosition, final boolean appendSuper,
-            final boolean generateComment, final IInitMultNumbers imNumbers, final boolean useGettersInsteadOfFields)
-            throws JavaModelException {
+            final boolean generateComment, final IInitMultNumbers imNumbers, final boolean useGettersInsteadOfFields,
+            boolean useCommonLang3, boolean addOverridePreference) throws JavaModelException {
 
-        boolean isCacheable = PreferenceUtils.getCacheHashCode() && JavaUtils.areAllFinalFields(checkedFields);
+        boolean cacheHashCode = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).booleanValue();
+        boolean isCacheable = cacheHashCode && JavaUtils.areAllFinalFields(checkedFields);
         String cachingField = "";
         if (isCacheable) {
-            cachingField = PreferenceUtils.getHashCodeCachingField();
+            cachingField = (String) preferencesManager
+                    .getCurrentPreferenceValue(JeneratePreference.HASHCODE_CACHING_FIELD);
         }
 
-        boolean addOverride = PreferenceUtils.getAddOverride()
-                && PreferenceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
+        boolean addOverride = addOverridePreference
+                && JavaUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
         String source = MethodGenerations.createHashCodeMethod(new HashCodeMethodGenerationData(checkedFields,
                 appendSuper, generateComment, imNumbers, cachingField, addOverride, useGettersInsteadOfFields));
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 
-        objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getHashCodeBuilderLibrary(), null, null);
+        objectClass.getCompilationUnit().createImport(
+                CommonsLangLibraryUtils.getHashCodeBuilderLibrary(useCommonLang3), null, null);
         IJavaElement created = objectClass.createMethod(formattedContent, insertPosition, true, null);
 
         IField field = objectClass.getField(cachingField);

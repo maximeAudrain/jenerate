@@ -19,19 +19,26 @@ import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.impl.CompareToMethodGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.OrderableFieldDialog;
+import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
+import org.jenerate.internal.ui.preferences.JeneratePreference;
+import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JavaUtils;
-import org.jenerate.internal.util.PreferenceUtils;
 
 /**
- * @author jiayun
+ * @author jiayun, maudrain
  */
 public final class CompareToGenerator implements ILangGenerator {
-    
-    private final JavaUiCodeAppender javaUiCodeAppender;
 
-    public CompareToGenerator(JavaUiCodeAppender javaUiCodeAppender) {
+    private final JavaUiCodeAppender javaUiCodeAppender;
+    private final PreferencesManager preferencesManager;
+    private final DialogProvider<OrderableFieldDialog> dialogProvider;
+
+    public CompareToGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
+            DialogProvider<OrderableFieldDialog> dialogProvider) {
         this.javaUiCodeAppender = javaUiCodeAppender;
+        this.preferencesManager = preferencesManager;
+        this.dialogProvider = dialogProvider;
     }
 
     @Override
@@ -52,15 +59,18 @@ public final class CompareToGenerator implements ILangGenerator {
 
         try {
             IField[] fields;
-            if (PreferenceUtils.getDisplayFieldsOfSuperclasses()) {
+            boolean displayFieldsOfSuperClasses = ((Boolean) preferencesManager
+                    .getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES)).booleanValue();
+            if (displayFieldsOfSuperClasses) {
                 fields = JavaUtils.getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass);
             } else {
                 fields = JavaUtils.getNonStaticNonCacheFields(objectClass);
             }
 
-            OrderableFieldDialog dialog = new OrderableFieldDialog(parentShell, "Generate CompareTo Method",
-                    objectClass, fields, excludedMethods, !(JavaUtils.isImplementedInSupertype(objectClass,
-                            "Comparable") && JavaUtils.isHashCodeOverriddenInSuperclass(objectClass)));
+            boolean disableAppendSuper = !(JavaUtils.isImplementedInSupertype(objectClass, "Comparable") && JavaUtils
+                    .isHashCodeOverriddenInSuperclass(objectClass));
+            OrderableFieldDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
+                    disableAppendSuper, preferencesManager);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
 
@@ -88,8 +98,10 @@ public final class CompareToGenerator implements ILangGenerator {
 
         boolean implementedOrExtendedInSuperType = JavaUtils.isImplementedOrExtendedInSupertype(objectClass,
                 "Comparable");
-        boolean generify = PreferenceUtils.getGenerifyCompareTo()
-                && PreferenceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject())
+        boolean generifyPreference = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).booleanValue();
+        boolean generify = generifyPreference
+                && JavaUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject())
                 && !implementedOrExtendedInSuperType;
 
         if (!implementedOrExtendedInSuperType) {
@@ -110,7 +122,10 @@ public final class CompareToGenerator implements ILangGenerator {
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 
-        objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getCompareToBuilderLibrary(), null, null);
+        boolean useCommonLang3 = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
+        objectClass.getCompilationUnit().createImport(
+                CommonsLangLibraryUtils.getCompareToBuilderLibrary(useCommonLang3), null, null);
         IMethod created = objectClass.createMethod(formattedContent, insertPosition, true, null);
 
         javaUiCodeAppender.revealInEditor(objectClass, created);

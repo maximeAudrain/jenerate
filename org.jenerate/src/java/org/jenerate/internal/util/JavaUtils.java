@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.ISourceReference;
 import org.eclipse.jdt.core.IType;
@@ -39,7 +40,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 import org.jenerate.JeneratePlugin;
-import org.jenerate.internal.ui.preferences.PreferenceConstants;
+import org.jenerate.internal.ui.preferences.JeneratePreference;
 
 /**
  * This class contains some code from org.eclipse.jdt.internal.corext.codemanipulation.StubUtility
@@ -256,9 +257,9 @@ public final class JavaUtils {
 
         Set<String> cacheFields = new HashSet<>();
         cacheFields.add(JeneratePlugin.getDefault().getPreferenceStore()
-                .getString(PreferenceConstants.HASHCODE_CACHING_FIELD));
+                .getString(JeneratePreference.HASHCODE_CACHING_FIELD.getKey()));
         cacheFields.add(JeneratePlugin.getDefault().getPreferenceStore()
-                .getString(PreferenceConstants.TOSTRING_CACHING_FIELD));
+                .getString(JeneratePreference.TOSTRING_CACHING_FIELD.getKey()));
 
         IField[] fields;
         fields = objectClass.getFields();
@@ -464,5 +465,10 @@ public final class JavaUtils {
         String firstChar = string.substring(0, 1);
         String remain = string.substring(1);
         return firstChar.toUpperCase() + remain;
+    }
+
+    public static boolean isSourceLevelGreaterThanOrEqualTo5(IJavaProject project) {
+        float sc = Float.parseFloat(project.getOption(JavaCore.COMPILER_SOURCE, true));
+        return sc >= 1.5;
     }
 }

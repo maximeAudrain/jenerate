@@ -35,8 +35,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
+import org.jenerate.internal.ui.preferences.JeneratePreference;
+import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUtils;
-import org.jenerate.internal.util.PreferenceUtils;
 
 /**
  * This class contains some code from org.eclipse.jdt.internal.ui.dialogs.SourceActionDialog
@@ -44,6 +45,16 @@ import org.jenerate.internal.util.PreferenceUtils;
  * @author jiayun
  */
 public class FieldDialog extends Dialog {
+
+    private static final String SETTINGS_SECTION = "FieldDialog";
+
+    private static final String SETTINGS_INSERT_POSITION = "InsertPosition";
+
+    private static final String SETTINGS_APPEND_SUPER = "AppendSuper";
+
+    private static final String SETTINGS_GENERATE_COMMENT = "GenerateComment";
+
+    private static final String SETTINGS_USE_GETTERS = "UseGetters";
 
     protected CLabel messageLabel;
 
@@ -75,19 +86,12 @@ public class FieldDialog extends Dialog {
 
     private IDialogSettings settings;
 
-    private static final String SETTINGS_SECTION = "FieldDialog";
-
-    private static final String SETTINGS_INSERT_POSITION = "InsertPosition";
-
-    private static final String SETTINGS_APPEND_SUPER = "AppendSuper";
-
-    private static final String SETTINGS_GENERATE_COMMENT = "GenerateComment";
-
-    private static final String SETTINGS_USE_GETTERS = "UseGetters";
+    private final PreferencesManager preferencesManager;
 
     public FieldDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
-            final IField[] fields, final Set<IMethod> excludedMethods) throws JavaModelException {
-        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, false);
+            final IField[] fields, final Set<IMethod> excludedMethods, PreferencesManager preferencesManager)
+            throws JavaModelException {
+        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, false, preferencesManager);
     }
 
     /**
@@ -99,14 +103,15 @@ public class FieldDialog extends Dialog {
      * @throws JavaModelException
      */
     public FieldDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
-            final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper)
-            throws JavaModelException {
+            final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper,
+            PreferencesManager preferencesManager) throws JavaModelException {
         super(parentShell);
         setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.RESIZE);
         this.title = dialogTitle;
         this.objectClass = objectClass;
         this.fields = fields;
         this.disableAppendSuper = disableAppendSuper;
+        this.preferencesManager = preferencesManager;
 
         IDialogSettings dialogSettings = JeneratePlugin.getDefault().getDialogSettings();
         settings = dialogSettings.getSection(SETTINGS_SECTION);
@@ -443,7 +448,8 @@ public class FieldDialog extends Dialog {
                 widgetSelected(e);
             }
         });
-        useGettersInsteadOfFields = PreferenceUtils.getUseGettersInsteadOfFields();
+        useGettersInsteadOfFields = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.USE_GETTERS_INSTEAD_OF_FIELDS)).booleanValue();
         gettersButton.setSelection(useGettersInsteadOfFields);
 
         return gettersComposite;
@@ -472,7 +478,8 @@ public class FieldDialog extends Dialog {
                 widgetSelected(e);
             }
         });
-        useBlockInIfStatements = PreferenceUtils.getUseBlocksInIfStatements();
+        useBlockInIfStatements = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.USE_BLOCKS_IN_IF_STATEMENTS)).booleanValue();
         blocksInIfButton.setSelection(useBlockInIfStatements);
 
         return blocksInIfComposite;
@@ -503,5 +510,9 @@ public class FieldDialog extends Dialog {
 
     public boolean getUseBlockInIfStatements() {
         return useBlockInIfStatements;
+    }
+
+    public PreferencesManager getPreferencesManager() {
+        return preferencesManager;
     }
 }

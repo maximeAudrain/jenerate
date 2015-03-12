@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.jenerate.internal.ui.preferences.PreferencesManager;
 
 /**
  * This class contains some code from org.eclipse.ui.externaltools.internal.ui.BuilderPropertyPage
@@ -31,13 +32,14 @@ public class OrderableFieldDialog extends FieldDialog {
     private Button downButton;
 
     public OrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
-            Set<IMethod> excludedMethods) throws JavaModelException {
-        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, false);
+            Set<IMethod> excludedMethods, PreferencesManager preferencesManager) throws JavaModelException {
+        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, false, preferencesManager);
     }
 
     public OrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
-            Set<IMethod> excludedMethods, boolean disableAppendSuper) throws JavaModelException {
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper);
+            Set<IMethod> excludedMethods, boolean disableAppendSuper, PreferencesManager preferencesManager)
+            throws JavaModelException {
+        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager);
     }
 
     @Override

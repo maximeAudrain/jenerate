@@ -17,21 +17,28 @@ import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.impl.ToStringMethodGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.ToStringDialog;
+import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
+import org.jenerate.internal.ui.preferences.JeneratePreference;
+import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JavaUtils;
-import org.jenerate.internal.util.PreferenceUtils;
 
 /**
  * XXX test caching field empty for toString
  * 
- * @author jiayun
+ * @author jiayun, maudrain
  */
 public final class ToStringGenerator implements ILangGenerator {
 
     private final JavaUiCodeAppender javaUiCodeAppender;
+    private final PreferencesManager preferencesManager;
+    private final DialogProvider<ToStringDialog> dialogProvider;
 
-    public ToStringGenerator(JavaUiCodeAppender javaUiCodeAppender) {
+    public ToStringGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
+            DialogProvider<ToStringDialog> dialogProvider) {
         this.javaUiCodeAppender = javaUiCodeAppender;
+        this.preferencesManager = preferencesManager;
+        this.dialogProvider = dialogProvider;
     }
 
     @Override
@@ -46,14 +53,17 @@ public final class ToStringGenerator implements ILangGenerator {
         }
         try {
             IField[] fields;
-            if (PreferenceUtils.getDisplayFieldsOfSuperclasses()) {
+            boolean displayFieldsOfSuperClasses = ((Boolean) preferencesManager
+                    .getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES)).booleanValue();
+            if (displayFieldsOfSuperClasses) {
                 fields = JavaUtils.getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass);
             } else {
                 fields = JavaUtils.getNonStaticNonCacheFields(objectClass);
             }
 
-            ToStringDialog dialog = new ToStringDialog(parentShell, "Generate ToString Method", objectClass, fields,
-                    excludedMethods, !JavaUtils.isToStringConcreteInSuperclass(objectClass));
+            boolean disableAppendSuper = !JavaUtils.isToStringConcreteInSuperclass(objectClass);
+            ToStringDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
+                    disableAppendSuper, preferencesManager);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
 
@@ -82,21 +92,30 @@ public final class ToStringGenerator implements ILangGenerator {
             final IJavaElement insertPosition, final boolean appendSuper, final boolean generateComment,
             final String style, final boolean useGettersInsteadOfFields) throws PartInitException, JavaModelException {
 
-        boolean isCacheable = PreferenceUtils.getCacheToString() && JavaUtils.areAllFinalFields(checkedFields);
+        boolean cacheToString = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).booleanValue();
+        boolean isCacheable = cacheToString && JavaUtils.areAllFinalFields(checkedFields);
         String cachingField = "";
         if (isCacheable) {
-            cachingField = PreferenceUtils.getToStringCachingField();
+            cachingField = (String) preferencesManager
+                    .getCurrentPreferenceValue(JeneratePreference.TOSTRING_CACHING_FIELD);
         }
 
-        boolean addOverride = PreferenceUtils.getAddOverride()
-                && PreferenceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
+        boolean addOverridePreference = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).booleanValue();
+        boolean addOverride = addOverridePreference
+                && JavaUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
-        String styleConstant = getStyleConstantAndAddImport(style, objectClass);
-        String source = MethodGenerations.createToStringMethod(new ToStringMethodGenerationData(checkedFields, appendSuper, generateComment, styleConstant, cachingField, addOverride, useGettersInsteadOfFields));
+        boolean useCommonLang3 = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
+        String styleConstant = getStyleConstantAndAddImport(style, objectClass, useCommonLang3);
+        String source = MethodGenerations.createToStringMethod(new ToStringMethodGenerationData(checkedFields,
+                appendSuper, generateComment, styleConstant, cachingField, addOverride, useGettersInsteadOfFields));
 
         String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
 
-        objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getToStringBuilderLibrary(), null, null);
+        objectClass.getCompilationUnit().createImport(
+                CommonsLangLibraryUtils.getToStringBuilderLibrary(useCommonLang3), null, null);
         IMethod created = objectClass.createMethod(formattedContent, insertPosition, true, null);
 
         IField field = objectClass.getField(cachingField);
@@ -112,10 +131,12 @@ public final class ToStringGenerator implements ILangGenerator {
         javaUiCodeAppender.revealInEditor(objectClass, created);
     }
 
-    private String getStyleConstantAndAddImport(final String style, final IType objectClass) throws JavaModelException {
+    private String getStyleConstantAndAddImport(final String style, final IType objectClass, boolean useCommonLang3)
+            throws JavaModelException {
 
         String styleConstant = null;
-        if (!style.equals(CommonsLangLibraryUtils.getToStringStyleLibraryDefaultStyle()) && !style.equals("")) {
+        if (!style.equals(CommonsLangLibraryUtils.getToStringStyleLibraryDefaultStyle(useCommonLang3))
+                && !style.equals("")) {
 
             int lastDot = style.lastIndexOf('.');
             if (lastDot != -1 && lastDot != (style.length() - 1)) {
