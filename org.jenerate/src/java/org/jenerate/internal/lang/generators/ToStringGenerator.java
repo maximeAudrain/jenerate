@@ -17,7 +17,7 @@ import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.impl.ToStringMethodGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.ToStringDialog;
-import org.jenerate.internal.util.GenerationUtils;
+import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.PreferenceUtils;
 
@@ -28,13 +28,10 @@ import org.jenerate.internal.util.PreferenceUtils;
  */
 public final class ToStringGenerator implements ILangGenerator {
 
-    private static final ILangGenerator instance = new ToStringGenerator();
+    private final JavaUiCodeAppender javaUiCodeAppender;
 
-    private ToStringGenerator() {
-    }
-
-    public static ILangGenerator getInstance() {
-        return instance;
+    public ToStringGenerator(JavaUiCodeAppender javaUiCodeAppender) {
+        this.javaUiCodeAppender = javaUiCodeAppender;
     }
 
     @Override
@@ -112,7 +109,7 @@ public final class ToStringGenerator implements ILangGenerator {
             objectClass.createField(formattedFieldSrc, created, true, null);
         }
 
-        GenerationUtils.revealInEditor(objectClass, created);
+        javaUiCodeAppender.revealInEditor(objectClass, created);
     }
 
     private String getStyleConstantAndAddImport(final String style, final IType objectClass) throws JavaModelException {

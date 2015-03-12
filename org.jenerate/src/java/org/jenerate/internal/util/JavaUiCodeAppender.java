@@ -13,16 +13,12 @@ import org.eclipse.ui.PartInitException;
  * 
  * @author maudrain
  */
-public final class GenerationUtils {
-
-    private GenerationUtils() {
-        /* Only static helper methods */
-    }
+public final class JavaUiCodeAppender {
 
     /**
      * @see JavaUI#revealInEditor(IEditorPart, IJavaElement)
      */
-    public static void revealInEditor(IType objectClass, IJavaElement elementToReveal) throws JavaModelException,
+    public void revealInEditor(IType objectClass, IJavaElement elementToReveal) throws JavaModelException,
             PartInitException {
         ICompilationUnit compilationUnit = objectClass.getCompilationUnit();
         IEditorPart javaEditor = JavaUI.openInEditor(compilationUnit);

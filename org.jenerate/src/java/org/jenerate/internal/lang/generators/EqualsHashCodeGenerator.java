@@ -17,7 +17,7 @@ import org.jenerate.internal.data.impl.EqualsMethodGenerationData;
 import org.jenerate.internal.data.impl.HashCodeMethodGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
-import org.jenerate.internal.util.GenerationUtils;
+import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.PreferenceUtils;
 
@@ -28,13 +28,10 @@ import org.jenerate.internal.util.PreferenceUtils;
  */
 public final class EqualsHashCodeGenerator implements ILangGenerator {
 
-    private static final ILangGenerator instance = new EqualsHashCodeGenerator();
-
-    private EqualsHashCodeGenerator() {
-    }
-
-    public static ILangGenerator getInstance() {
-        return instance;
+    private final JavaUiCodeAppender javaUiCodeAppender;
+    
+    public EqualsHashCodeGenerator(JavaUiCodeAppender javaUiCodeAppender) {
+        this.javaUiCodeAppender = javaUiCodeAppender;
     }
 
     @Override
@@ -89,7 +86,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
                 created = generateEquals(parentShell, objectClass, checkedFields, created, appendSuper,
                         generateComment, compareReferences, useGettersInsteadOfFields, useBlocksInIfStatements);
 
-                GenerationUtils.revealInEditor(objectClass, created);
+                javaUiCodeAppender.revealInEditor(objectClass, created);
             }
 
         } catch (CoreException e) {

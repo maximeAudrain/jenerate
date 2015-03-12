@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.jenerate.internal.lang.generators.LangGenerators;
+import org.jenerate.internal.lang.generators.GeneratorsManager;
 
 /**
  * Handler that determine which generation should be performed depending on the event commandId. It also ensures that
@@ -31,6 +31,8 @@ import org.jenerate.internal.lang.generators.LangGenerators;
  * @author jiayun, maudrain
  */
 public class GenerateHandler extends AbstractHandler {
+    
+    private final GeneratorsManager generatorsManager = new GeneratorsManager();
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -64,7 +66,7 @@ public class GenerateHandler extends AbstractHandler {
                 MessageDialog.openInformation(parentShell, "Method Generation",
                         "Cursor not in a class, or no class has the same name with the Java file.");
             } else {
-                LangGenerators.getGenerator(commandId).generate(parentShell, objectClass);
+                generatorsManager.getGenerator(commandId).generate(parentShell, objectClass);
             }
         } catch (JavaModelException e) {
             MessageDialog.openError(parentShell, "Error", e.getMessage());

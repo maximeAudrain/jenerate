@@ -19,7 +19,7 @@ import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.impl.CompareToMethodGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.OrderableFieldDialog;
-import org.jenerate.internal.util.GenerationUtils;
+import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.PreferenceUtils;
 
@@ -27,14 +27,11 @@ import org.jenerate.internal.util.PreferenceUtils;
  * @author jiayun
  */
 public final class CompareToGenerator implements ILangGenerator {
+    
+    private final JavaUiCodeAppender javaUiCodeAppender;
 
-    private static final ILangGenerator instance = new CompareToGenerator();
-
-    private CompareToGenerator() {
-    }
-
-    public static ILangGenerator getInstance() {
-        return instance;
+    public CompareToGenerator(JavaUiCodeAppender javaUiCodeAppender) {
+        this.javaUiCodeAppender = javaUiCodeAppender;
     }
 
     @Override
@@ -116,7 +113,7 @@ public final class CompareToGenerator implements ILangGenerator {
         objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getCompareToBuilderLibrary(), null, null);
         IMethod created = objectClass.createMethod(formattedContent, insertPosition, true, null);
 
-        GenerationUtils.revealInEditor(objectClass, created);
+        javaUiCodeAppender.revealInEditor(objectClass, created);
     }
 
 }
