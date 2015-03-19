@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.Preferences;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -391,8 +391,8 @@ public final class JavaUtils {
     }
 
     private static int getTabWidth() {
-        Preferences preferences = JavaCore.getPlugin().getPluginPreferences();
-        return preferences.getInt(DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE);
+        return Platform.getPreferencesService().getInt("org.eclipse.jdt.core",
+                DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE, 4, null);
     }
 
     /**

@@ -1,6 +1,6 @@
 package org.jenerate.internal.ui.preferences;
 
-public enum JeneratePreference {
+public enum JeneratePreference implements PluginPreference {
 
     USE_COMMONS_LANG3("useCommonsLang3", "&Import commons-lang3 for all code generation", Boolean.class, Boolean.FALSE),
 
@@ -39,18 +39,22 @@ public enum JeneratePreference {
         this.defaultValue = defaultValue;
     }
 
+    @Override
     public String getKey() {
         return key;
     }
 
+    @Override
     public Class<?> getType() {
         return type;
     }
 
+    @Override
     public Object getDefaultValue() {
         return defaultValue;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }

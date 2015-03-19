@@ -12,6 +12,8 @@ import org.osgi.framework.BundleContext;
  */
 public class JeneratePlugin extends AbstractUIPlugin {
 
+    private static final String JENERATE_PLUGIN_RESOURCES_ID = "org.jenerate.JeneratePluginResources";
+
     // The shared instance.
     private static JeneratePlugin plugin;
 
@@ -25,7 +27,7 @@ public class JeneratePlugin extends AbstractUIPlugin {
         super();
         plugin = this;
         try {
-            resourceBundle = ResourceBundle.getBundle("org.jenerate.JeneratePluginResources");
+            resourceBundle = ResourceBundle.getBundle(JENERATE_PLUGIN_RESOURCES_ID);
         } catch (MissingResourceException x) {
             resourceBundle = null;
         }
