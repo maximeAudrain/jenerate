@@ -27,10 +27,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jenerate.JeneratePlugin;
-import org.jenerate.internal.lang.generators.CustomInitMultNumbers;
-import org.jenerate.internal.lang.generators.DefaultInitMultNumbers;
-import org.jenerate.internal.lang.generators.IInitMultNumbers;
-import org.jenerate.internal.lang.generators.RandomInitMultNumbers;
+import org.jenerate.internal.data.IInitMultNumbers;
+import org.jenerate.internal.data.impl.CustomInitMultNumbers;
+import org.jenerate.internal.data.impl.DefaultInitMultNumbers;
+import org.jenerate.internal.data.impl.RandomInitMultNumbers;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
 /**

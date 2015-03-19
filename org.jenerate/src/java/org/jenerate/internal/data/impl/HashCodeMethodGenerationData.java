@@ -1,7 +1,7 @@
 package org.jenerate.internal.data.impl;
 
 import org.eclipse.jdt.core.IField;
-import org.jenerate.internal.lang.generators.IInitMultNumbers;
+import org.jenerate.internal.data.IInitMultNumbers;
 
 /**
  * XXX Needs protection and consider using builder pattern

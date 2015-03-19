@@ -1,6 +1,8 @@
-package org.jenerate.internal.lang.generators;
+package org.jenerate.internal.data.impl;
 
 import java.util.Random;
+
+import org.jenerate.internal.data.IInitMultNumbers;
 
 /**
  * @author jiayun

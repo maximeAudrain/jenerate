@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
+import org.jenerate.internal.data.IInitMultNumbers;
 import org.jenerate.internal.data.impl.EqualsMethodGenerationData;
 import org.jenerate.internal.data.impl.HashCodeMethodGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;

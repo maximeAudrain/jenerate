@@ -2,11 +2,11 @@ package org.jenerate.internal.lang;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
+import org.jenerate.internal.data.IInitMultNumbers;
 import org.jenerate.internal.data.impl.CompareToMethodGenerationData;
 import org.jenerate.internal.data.impl.EqualsMethodGenerationData;
 import org.jenerate.internal.data.impl.HashCodeMethodGenerationData;
 import org.jenerate.internal.data.impl.ToStringMethodGenerationData;
-import org.jenerate.internal.lang.generators.IInitMultNumbers;
 import org.jenerate.internal.util.JavaUtils;
 
 /**

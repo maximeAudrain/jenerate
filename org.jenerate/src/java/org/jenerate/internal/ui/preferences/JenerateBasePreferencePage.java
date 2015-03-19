@@ -17,6 +17,7 @@ import org.jenerate.JeneratePlugin;
 
 /**
  * @author jiayun
+ * @author maudrain
  */
 public class JenerateBasePreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -29,7 +30,6 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
 
     @Override
     protected void createFieldEditors() {
-
         for (JeneratePreference jeneratePreference : JeneratePreference.values()) {
             Class<?> type = jeneratePreference.getType();
             String key = jeneratePreference.getKey();
