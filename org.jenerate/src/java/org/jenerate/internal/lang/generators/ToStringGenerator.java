@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
@@ -22,6 +23,7 @@ import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JavaUtils;
+import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
 /**
  * XXX test caching field empty for toString
@@ -33,12 +35,14 @@ public final class ToStringGenerator implements ILangGenerator {
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final PreferencesManager preferencesManager;
     private final DialogProvider<ToStringDialog> dialogProvider;
+    private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
 
     public ToStringGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
-            DialogProvider<ToStringDialog> dialogProvider) {
+            DialogProvider<ToStringDialog> dialogProvider, JeneratePluginCodeFormatter jeneratePluginCodeFormatter) {
         this.javaUiCodeAppender = javaUiCodeAppender;
         this.preferencesManager = preferencesManager;
         this.dialogProvider = dialogProvider;
+        this.jeneratePluginCodeFormatter = jeneratePluginCodeFormatter;
     }
 
     @Override
@@ -56,9 +60,10 @@ public final class ToStringGenerator implements ILangGenerator {
             boolean displayFieldsOfSuperClasses = ((Boolean) preferencesManager
                     .getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES)).booleanValue();
             if (displayFieldsOfSuperClasses) {
-                fields = JavaUtils.getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass);
+                fields = JavaUtils.getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
+                        preferencesManager);
             } else {
-                fields = JavaUtils.getNonStaticNonCacheFields(objectClass);
+                fields = JavaUtils.getNonStaticNonCacheFields(objectClass, preferencesManager);
             }
 
             boolean disableAppendSuper = !JavaUtils.isToStringConcreteInSuperclass(objectClass);
@@ -112,7 +117,7 @@ public final class ToStringGenerator implements ILangGenerator {
         String source = MethodGenerations.createToStringMethod(new ToStringMethodGenerationData(checkedFields,
                 appendSuper, generateComment, styleConstant, cachingField, addOverride, useGettersInsteadOfFields));
 
-        String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
+        String formattedContent = format(parentShell, objectClass, source);
 
         objectClass.getCompilationUnit().createImport(
                 CommonsLangLibraryUtils.getToStringBuilderLibrary(useCommonLang3), null, null);
@@ -124,7 +129,7 @@ public final class ToStringGenerator implements ILangGenerator {
         }
         if (isCacheable) {
             String fieldSrc = "private transient String " + cachingField + ";\n\n";
-            String formattedFieldSrc = JavaUtils.formatCode(parentShell, objectClass, fieldSrc);
+            String formattedFieldSrc = format(parentShell, objectClass, fieldSrc);
             objectClass.createField(formattedFieldSrc, created, true, null);
         }
 
@@ -157,6 +162,15 @@ public final class ToStringGenerator implements ILangGenerator {
             }
         }
         return styleConstant;
+    }
+    
+    private String format(final Shell parentShell, final IType objectClass, String source) throws JavaModelException {
+        try {
+            return jeneratePluginCodeFormatter.formatCode(objectClass, source);
+        } catch (BadLocationException e) {
+            MessageDialog.openError(parentShell, "Error", e.getMessage());
+            return "";
+        }
     }
 
 }

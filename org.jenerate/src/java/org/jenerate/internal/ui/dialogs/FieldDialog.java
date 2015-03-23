@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -37,7 +38,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
-import org.jenerate.internal.util.JavaUtils;
 
 /**
  * This class contains some code from org.eclipse.jdt.internal.ui.dialogs.SourceActionDialog
@@ -149,11 +149,32 @@ public class FieldDialog extends Dialog {
 
         for (int i = 0; i < methods.length; i++) {
             IMethod curr = methods[i];
-            String methodLabel = JavaUtils.getMethodLabel(curr);
+            String methodLabel = getMethodLabel(curr);
             insertPositionLabels.add("After " + methodLabel);
             insertPositions.add(findSibling(curr, members));
         }
         insertPositions.add(null);
+    }
+    
+    /**
+     * XXX test me?
+     */
+    private String getMethodLabel(final IMethod method) {
+        StringBuffer result = new StringBuffer("`");
+
+        String[] params = method.getParameterTypes();
+
+        result.append(method.getElementName());
+        result.append("(");
+        for (int i = 0; i < params.length; i++) {
+            if (i != 0) {
+                result.append(", ");
+            }
+            result.append(Signature.toString(params[i]));
+        }
+        result.append(")`");
+
+        return result.toString();
     }
 
     private Collection<IJavaElement> filterOutExcludedElements(IJavaElement[] src, Set<IMethod> excludedElements) {

@@ -10,6 +10,8 @@ import org.jenerate.internal.ui.dialogs.provider.impl.ToStringDialogProvider;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.ui.preferences.impl.PreferencesManagerImpl;
 import org.jenerate.internal.util.JavaUiCodeAppender;
+import org.jenerate.internal.util.JeneratePluginCodeFormatter;
+import org.jenerate.internal.util.impl.JeneratePluginCodeFormatterImpl;
 
 /**
  * @author jiayun
@@ -24,16 +26,17 @@ public final class GeneratorsManager {
 
     private static final JavaUiCodeAppender JAVA_UI_CODE_APPENDER = new JavaUiCodeAppender();
     private static final PreferencesManager PREFERENCES_MANAGER = new PreferencesManagerImpl();
+    private static final JeneratePluginCodeFormatter CODE_FORMATTER = new JeneratePluginCodeFormatterImpl();
 
     private final Map<String, ILangGenerator> generators = new HashMap<>();
 
     public GeneratorsManager() {
         generators.put(COMPARETO_GENERATOR_KEY, new CompareToGenerator(JAVA_UI_CODE_APPENDER, PREFERENCES_MANAGER,
-                new CompareToDialogProvider()));
+                new CompareToDialogProvider(), CODE_FORMATTER));
         generators.put(EQUALS_HASHCODE_GENERATOR_KEY, new EqualsHashCodeGenerator(JAVA_UI_CODE_APPENDER,
-                PREFERENCES_MANAGER, new EqualsHashCodeDialogProvider()));
+                PREFERENCES_MANAGER, new EqualsHashCodeDialogProvider(), CODE_FORMATTER));
         generators.put(TOSTRING_GENERATOR_KEY, new ToStringGenerator(JAVA_UI_CODE_APPENDER, PREFERENCES_MANAGER,
-                new ToStringDialogProvider()));
+                new ToStringDialogProvider(), CODE_FORMATTER));
     }
 
     public ILangGenerator getGenerator(String key) {

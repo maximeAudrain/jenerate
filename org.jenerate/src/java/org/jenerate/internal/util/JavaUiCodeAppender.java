@@ -13,7 +13,7 @@ import org.eclipse.ui.PartInitException;
  * 
  * @author maudrain
  */
-public final class JavaUiCodeAppender {
+public class JavaUiCodeAppender {
 
     /**
      * @see JavaUI#revealInEditor(IEditorPart, IJavaElement)

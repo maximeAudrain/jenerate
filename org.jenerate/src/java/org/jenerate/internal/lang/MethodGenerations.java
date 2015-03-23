@@ -2,12 +2,12 @@ package org.jenerate.internal.lang;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.Signature;
 import org.jenerate.internal.data.IInitMultNumbers;
 import org.jenerate.internal.data.impl.CompareToMethodGenerationData;
 import org.jenerate.internal.data.impl.EqualsMethodGenerationData;
 import org.jenerate.internal.data.impl.HashCodeMethodGenerationData;
 import org.jenerate.internal.data.impl.ToStringMethodGenerationData;
-import org.jenerate.internal.util.JavaUtils;
 
 /**
  * Utility class that generates the method strings given certain parameters
@@ -96,7 +96,7 @@ public final class MethodGenerations {
         }
         for (int i = 0; i < equalsMethodGenerationData.getFields().length; i++) {
             content.append(".append(");
-            String fieldName = JavaUtils.generateFieldAccessor(equalsMethodGenerationData.getFields()[i],
+            String fieldName = generateFieldAccessor(equalsMethodGenerationData.getFields()[i],
                     equalsMethodGenerationData.isUseGettersInsteadOfFields());
             content.append(fieldName);
             content.append(", castOther.");
@@ -153,7 +153,7 @@ public final class MethodGenerations {
         }
         for (int i = 0; i < checkedFields.length; i++) {
             content.append(".append(");
-            content.append(JavaUtils.generateFieldAccessor(checkedFields[i], useGettersInsteadOfFields));
+            content.append(generateFieldAccessor(checkedFields[i], useGettersInsteadOfFields));
             content.append(")");
         }
         content.append(".toHashCode();\n");
@@ -211,12 +211,39 @@ public final class MethodGenerations {
             content.append(".append(\"");
             content.append(checkedFields[i].getElementName());
             content.append("\", ");
-            content.append(JavaUtils.generateFieldAccessor(checkedFields[i], useGettersInsteadOfFields));
+            content.append(generateFieldAccessor(checkedFields[i], useGettersInsteadOfFields));
             content.append(")");
         }
         content.append(".toString();\n");
 
         return content.toString();
+    }
+    
+    private static String generateFieldAccessor(final IField field, final boolean useGettersInsteadOfFields)
+            throws JavaModelException {
+        if (useGettersInsteadOfFields) {
+            return generateGetter(field);
+        }
+        return field.getElementName();
+
+    }
+
+    private static String generateGetter(final IField field) throws JavaModelException {
+        if (isFieldABoolean(field)) {
+            return "is" + upperCaseFirst(field.getElementName() + "()");
+        }
+        return "get" + upperCaseFirst(field.getElementName() + "()");
+
+    }
+
+    private static boolean isFieldABoolean(final IField field) throws JavaModelException {
+        return Signature.SIG_BOOLEAN.equals(field.getTypeSignature());
+    }
+
+    private static String upperCaseFirst(final String string) {
+        String firstChar = string.substring(0, 1);
+        String remain = string.substring(1);
+        return firstChar.toUpperCase() + remain;
     }
 
 }

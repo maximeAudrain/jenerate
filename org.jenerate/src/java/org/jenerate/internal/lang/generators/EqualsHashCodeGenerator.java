@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.data.IInitMultNumbers;
@@ -23,6 +24,7 @@ import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JavaUtils;
+import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
 /**
  * XXX test caching field empty for hashCode
@@ -34,12 +36,14 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final PreferencesManager preferencesManager;
     private final DialogProvider<EqualsHashCodeDialog> dialogProvider;
+    private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
 
     public EqualsHashCodeGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
-            DialogProvider<EqualsHashCodeDialog> dialogProvider) {
+            DialogProvider<EqualsHashCodeDialog> dialogProvider, JeneratePluginCodeFormatter jeneratePluginCodeFormatter) {
         this.javaUiCodeAppender = javaUiCodeAppender;
         this.preferencesManager = preferencesManager;
         this.dialogProvider = dialogProvider;
+        this.jeneratePluginCodeFormatter = jeneratePluginCodeFormatter;
     }
 
     @Override
@@ -60,12 +64,13 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             boolean displayFieldsOfSuperClasses = ((Boolean) preferencesManager
                     .getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES)).booleanValue();
             if (displayFieldsOfSuperClasses) {
-                fields = JavaUtils.getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass);
+                fields = JavaUtils.getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
+                        preferencesManager);
             } else {
-                fields = JavaUtils.getNonStaticNonCacheFields(objectClass);
+                fields = JavaUtils.getNonStaticNonCacheFields(objectClass, preferencesManager);
             }
 
-            boolean disableAppendSuper = JavaUtils.isDirectSubclassOfObject(objectClass)
+            boolean disableAppendSuper = isDirectSubclassOfObject(objectClass)
                     || !JavaUtils.isEqualsOverriddenInSuperclass(objectClass)
                     || !JavaUtils.isHashCodeOverriddenInSuperclass(objectClass);
 
@@ -123,9 +128,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         String source = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields, objectClass,
                 appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
                 useBlocksInIfStatements));
-
-        String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
-
+        String formattedContent = format(parentShell, objectClass, source);
         objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getEqualsBuilderLibrary(useCommonLang3),
                 null, null);
         return objectClass.createMethod(formattedContent, insertPosition, true, null);
@@ -151,7 +154,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         String source = MethodGenerations.createHashCodeMethod(new HashCodeMethodGenerationData(checkedFields,
                 appendSuper, generateComment, imNumbers, cachingField, addOverride, useGettersInsteadOfFields));
 
-        String formattedContent = JavaUtils.formatCode(parentShell, objectClass, source);
+        String formattedContent = format(parentShell, objectClass, source);
 
         objectClass.getCompilationUnit().createImport(
                 CommonsLangLibraryUtils.getHashCodeBuilderLibrary(useCommonLang3), null, null);
@@ -163,10 +166,35 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         }
         if (isCacheable) {
             String fieldSrc = "private transient int " + cachingField + ";\n\n";
-            String formattedFieldSrc = JavaUtils.formatCode(parentShell, objectClass, fieldSrc);
+            String formattedFieldSrc = format(parentShell, objectClass, fieldSrc);
             created = objectClass.createField(formattedFieldSrc, created, true, null);
         }
 
         return created;
+    }
+
+    private boolean isDirectSubclassOfObject(final IType objectClass) throws JavaModelException {
+        String superclass = objectClass.getSuperclassName();
+
+        if (superclass == null) {
+            return true;
+        }
+        if (superclass.equals("Object")) {
+            return true;
+        }
+        if (superclass.equals("java.lang.Object")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private String format(final Shell parentShell, final IType objectClass, String source) throws JavaModelException {
+        try {
+            return jeneratePluginCodeFormatter.formatCode(objectClass, source);
+        } catch (BadLocationException e) {
+            MessageDialog.openError(parentShell, "Error", e.getMessage());
+            return "";
+        }
     }
 }
