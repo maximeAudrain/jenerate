@@ -23,7 +23,6 @@ import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUiCodeAppender;
-import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
 /**
@@ -37,13 +36,17 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
     private final PreferencesManager preferencesManager;
     private final DialogProvider<EqualsHashCodeDialog> dialogProvider;
     private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
+    private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
     public EqualsHashCodeGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
-            DialogProvider<EqualsHashCodeDialog> dialogProvider, JeneratePluginCodeFormatter jeneratePluginCodeFormatter) {
+            DialogProvider<EqualsHashCodeDialog> dialogProvider,
+            JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
+            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         this.javaUiCodeAppender = javaUiCodeAppender;
         this.preferencesManager = preferencesManager;
         this.dialogProvider = dialogProvider;
         this.jeneratePluginCodeFormatter = jeneratePluginCodeFormatter;
+        this.generatorsCommonMethodsDelegate = generatorsCommonMethodsDelegate;
     }
 
     @Override
@@ -64,15 +67,15 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             boolean displayFieldsOfSuperClasses = ((Boolean) preferencesManager
                     .getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES)).booleanValue();
             if (displayFieldsOfSuperClasses) {
-                fields = JavaUtils.getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
-                        preferencesManager);
+                fields = generatorsCommonMethodsDelegate
+                        .getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
+                                preferencesManager);
             } else {
-                fields = JavaUtils.getNonStaticNonCacheFields(objectClass, preferencesManager);
+                fields = generatorsCommonMethodsDelegate.getNonStaticNonCacheFields(objectClass, preferencesManager);
             }
 
             boolean disableAppendSuper = isDirectSubclassOfObject(objectClass)
-                    || !JavaUtils.isEqualsOverriddenInSuperclass(objectClass)
-                    || !JavaUtils.isHashCodeOverriddenInSuperclass(objectClass);
+                    || !isEqualsOverriddenInSuperclass(objectClass) || !isHashCodeOverriddenInSuperclass(objectClass);
 
             EqualsHashCodeDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
                     disableAppendSuper, preferencesManager);
@@ -123,7 +126,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             throws JavaModelException {
 
         boolean addOverride = addOverridePreference
-                && JavaUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
+                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
         String source = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields, objectClass,
                 appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
@@ -141,7 +144,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
 
         boolean cacheHashCode = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).booleanValue();
-        boolean isCacheable = cacheHashCode && JavaUtils.areAllFinalFields(checkedFields);
+        boolean isCacheable = cacheHashCode && generatorsCommonMethodsDelegate.areAllFinalFields(checkedFields);
         String cachingField = "";
         if (isCacheable) {
             cachingField = (String) preferencesManager
@@ -149,7 +152,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         }
 
         boolean addOverride = addOverridePreference
-                && JavaUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
+                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
         String source = MethodGenerations.createHashCodeMethod(new HashCodeMethodGenerationData(checkedFields,
                 appendSuper, generateComment, imNumbers, cachingField, addOverride, useGettersInsteadOfFields));
@@ -196,5 +199,15 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             MessageDialog.openError(parentShell, "Error", e.getMessage());
             return "";
         }
+    }
+
+    public boolean isHashCodeOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
+        return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "hashCode", new String[0],
+                "java.lang.Object");
+    }
+
+    public boolean isEqualsOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
+        return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "equals",
+                new String[] { "QObject;" }, "java.lang.Object");
     }
 }

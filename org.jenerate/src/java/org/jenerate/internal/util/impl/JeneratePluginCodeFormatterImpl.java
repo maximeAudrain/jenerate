@@ -16,7 +16,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.text.edits.TextEdit;
 import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
-public class JeneratePluginCodeFormatterImpl implements JeneratePluginCodeFormatter {
+public final class JeneratePluginCodeFormatterImpl implements JeneratePluginCodeFormatter {
 
     @Override
     public String formatCode(IType objectClass, String source) throws JavaModelException, BadLocationException {

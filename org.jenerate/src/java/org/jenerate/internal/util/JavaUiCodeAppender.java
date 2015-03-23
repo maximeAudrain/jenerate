@@ -1,6 +1,5 @@
 package org.jenerate.internal.util;
 
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -9,20 +8,15 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 
 /**
- * Helper class providing common methods for code generation
+ * Class providing code appending capabilities in order to reveal a certain piece of code in the editor.
  * 
  * @author maudrain
  */
-public class JavaUiCodeAppender {
+public interface JavaUiCodeAppender {
 
     /**
      * @see JavaUI#revealInEditor(IEditorPart, IJavaElement)
      */
-    public void revealInEditor(IType objectClass, IJavaElement elementToReveal) throws JavaModelException,
-            PartInitException {
-        ICompilationUnit compilationUnit = objectClass.getCompilationUnit();
-        IEditorPart javaEditor = JavaUI.openInEditor(compilationUnit);
-        JavaUI.revealInEditor(javaEditor, elementToReveal);
-    }
+    void revealInEditor(IType objectClass, IJavaElement elementToReveal) throws JavaModelException, PartInitException;
 
 }

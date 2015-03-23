@@ -36,7 +36,6 @@ import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUiCodeAppender;
-import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
 /**
@@ -48,13 +47,17 @@ public final class CompareToGenerator implements ILangGenerator {
     private final PreferencesManager preferencesManager;
     private final DialogProvider<OrderableFieldDialog> dialogProvider;
     private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
+    private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
     public CompareToGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
-            DialogProvider<OrderableFieldDialog> dialogProvider, JeneratePluginCodeFormatter jeneratePluginCodeFormatter) {
+            DialogProvider<OrderableFieldDialog> dialogProvider,
+            JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
+            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         this.javaUiCodeAppender = javaUiCodeAppender;
         this.preferencesManager = preferencesManager;
         this.dialogProvider = dialogProvider;
         this.jeneratePluginCodeFormatter = jeneratePluginCodeFormatter;
+        this.generatorsCommonMethodsDelegate = generatorsCommonMethodsDelegate;
     }
 
     @Override
@@ -78,14 +81,14 @@ public final class CompareToGenerator implements ILangGenerator {
             boolean displayFieldsOfSuperClasses = ((Boolean) preferencesManager
                     .getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES)).booleanValue();
             if (displayFieldsOfSuperClasses) {
-                fields = JavaUtils.getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
-                        preferencesManager);
+                fields = generatorsCommonMethodsDelegate
+                        .getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
+                                preferencesManager);
             } else {
-                fields = JavaUtils.getNonStaticNonCacheFields(objectClass, preferencesManager);
+                fields = generatorsCommonMethodsDelegate.getNonStaticNonCacheFields(objectClass, preferencesManager);
             }
 
-            boolean disableAppendSuper = !(isImplementedInSupertype(objectClass, "Comparable") && JavaUtils
-                    .isCompareToImplementedInSuperclass(objectClass));
+            boolean disableAppendSuper = !(isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
             OrderableFieldDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
                     disableAppendSuper, preferencesManager);
             int returnCode = dialog.open();
@@ -117,7 +120,7 @@ public final class CompareToGenerator implements ILangGenerator {
         boolean generifyPreference = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).booleanValue();
         boolean generify = generifyPreference
-                && JavaUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject())
+                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject())
                 && !implementedOrExtendedInSuperType;
 
         if (!implementedOrExtendedInSuperType) {
@@ -278,6 +281,11 @@ public final class CompareToGenerator implements ILangGenerator {
             }
         }
         return false;
+    }
+
+    public boolean isCompareToImplementedInSuperclass(final IType objectClass) throws JavaModelException {
+        return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "compareTo",
+                new String[] { "QObject;" }, null);
     }
 
 }

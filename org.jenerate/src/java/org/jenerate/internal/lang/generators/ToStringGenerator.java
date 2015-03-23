@@ -22,7 +22,6 @@ import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUiCodeAppender;
-import org.jenerate.internal.util.JavaUtils;
 import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
 /**
@@ -36,13 +35,16 @@ public final class ToStringGenerator implements ILangGenerator {
     private final PreferencesManager preferencesManager;
     private final DialogProvider<ToStringDialog> dialogProvider;
     private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
+    private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
     public ToStringGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
-            DialogProvider<ToStringDialog> dialogProvider, JeneratePluginCodeFormatter jeneratePluginCodeFormatter) {
+            DialogProvider<ToStringDialog> dialogProvider, JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
+            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         this.javaUiCodeAppender = javaUiCodeAppender;
         this.preferencesManager = preferencesManager;
         this.dialogProvider = dialogProvider;
         this.jeneratePluginCodeFormatter = jeneratePluginCodeFormatter;
+        this.generatorsCommonMethodsDelegate = generatorsCommonMethodsDelegate;
     }
 
     @Override
@@ -60,13 +62,14 @@ public final class ToStringGenerator implements ILangGenerator {
             boolean displayFieldsOfSuperClasses = ((Boolean) preferencesManager
                     .getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES)).booleanValue();
             if (displayFieldsOfSuperClasses) {
-                fields = JavaUtils.getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
-                        preferencesManager);
+                fields = generatorsCommonMethodsDelegate
+                        .getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
+                                preferencesManager);
             } else {
-                fields = JavaUtils.getNonStaticNonCacheFields(objectClass, preferencesManager);
+                fields = generatorsCommonMethodsDelegate.getNonStaticNonCacheFields(objectClass, preferencesManager);
             }
 
-            boolean disableAppendSuper = !JavaUtils.isToStringConcreteInSuperclass(objectClass);
+            boolean disableAppendSuper = !isToStringConcreteInSuperclass(objectClass);
             ToStringDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
                     disableAppendSuper, preferencesManager);
             int returnCode = dialog.open();
@@ -99,7 +102,7 @@ public final class ToStringGenerator implements ILangGenerator {
 
         boolean cacheToString = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).booleanValue();
-        boolean isCacheable = cacheToString && JavaUtils.areAllFinalFields(checkedFields);
+        boolean isCacheable = cacheToString && generatorsCommonMethodsDelegate.areAllFinalFields(checkedFields);
         String cachingField = "";
         if (isCacheable) {
             cachingField = (String) preferencesManager
@@ -109,7 +112,7 @@ public final class ToStringGenerator implements ILangGenerator {
         boolean addOverridePreference = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).booleanValue();
         boolean addOverride = addOverridePreference
-                && JavaUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
+                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
@@ -163,7 +166,7 @@ public final class ToStringGenerator implements ILangGenerator {
         }
         return styleConstant;
     }
-    
+
     private String format(final Shell parentShell, final IType objectClass, String source) throws JavaModelException {
         try {
             return jeneratePluginCodeFormatter.formatCode(objectClass, source);
@@ -171,6 +174,10 @@ public final class ToStringGenerator implements ILangGenerator {
             MessageDialog.openError(parentShell, "Error", e.getMessage());
             return "";
         }
+    }
+
+    public boolean isToStringConcreteInSuperclass(final IType objectClass) throws JavaModelException {
+        return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "toString", new String[0], null);
     }
 
 }
