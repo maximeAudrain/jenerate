@@ -8,6 +8,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
+import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.IInitMultNumbers;
 import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
@@ -19,6 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 /**
@@ -59,6 +61,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
         mockSpecificFieldDialog();
         mockHashCodeMethodExists(false);
         mockEqualsMethodExists(false);
+        mockAppendGeneratedCode();
 
         when(
                 dialogProvider.getDialog(parentShell, objectClass, Collections.<IMethod> emptySet(), fields, true,
@@ -70,13 +73,135 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     public void verifyGeneratedCodeDefault() throws RuntimeException, CoreException {
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+
+    @Test
+    public void verifyGeneratedCodeHashCodeMethodExists() throws RuntimeException, CoreException {
+        mockHashCodeMethodExists(true);
+        when(
+                dialogProvider.getDialog(parentShell, objectClass, Collections.singleton(hashCodeMethod), fields, true,
+                        preferencesManager)).thenReturn(fieldDialog);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+        verify(hashCodeMethod, times(1)).delete(true, null);
+    }
+
+    @Test
+    public void verifyGeneratedCodeEqualsMethodExists() throws RuntimeException, CoreException {
+        mockEqualsMethodExists(true);
+        when(
+                dialogProvider.getDialog(parentShell, objectClass, Collections.singleton(equalsMethod), fields, true,
+                        preferencesManager)).thenReturn(fieldDialog);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+        verify(equalsMethod, times(1)).delete(true, null);
+    }
+
+    /**
+     * XXX same except the generator
+     */
+    @Test
+    public void testDialogCancelPressed() throws RuntimeException {
+        when(fieldDialog.open()).thenReturn(Window.CANCEL);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyNoMoreInteractions(javaUiCodeAppender, compilationUnit);
+    }
+
+    /**
+     * XXX same except the generator
+     */
+    @Test
+    public void verifyGeneratedCodeWithDisplayedFieldsOfSuperclass() throws RuntimeException, CoreException {
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES))
+                .thenReturn(true);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+
+    @Test
+    public void verifyGeneratedCodeDisableAppendSuperCauseDirectSubclassOfObject() throws RuntimeException,
+            CoreException {
+        when(objectClass.getSuperclassName()).thenReturn("Object");
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+
+    @Test
+    public void verifyGeneratedCodeDisableAppendSuperCauseDirectSubclassOfJavaLangObject() throws RuntimeException,
+            CoreException {
+        when(objectClass.getSuperclassName()).thenReturn("java.lang.Object");
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+
+    @Test
+    public void verifyGeneratedCodeEnableAppendSuper() throws RuntimeException, CoreException {
+        when(objectClass.getSuperclassName()).thenReturn("SomeOtherObject");
+        when(
+                dialogProvider.getDialog(parentShell, objectClass, Collections.<IMethod> emptySet(), fields, false,
+                        preferencesManager)).thenReturn(fieldDialog);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+
+    @Test
+    public void verifyGeneratedCodeDisableAppendSuperBecauseHashCodeNotOverriden() throws RuntimeException,
+            CoreException {
+        when(objectClass.getSuperclassName()).thenReturn("SomeOtherObject");
+        when(
+                generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "hashCode", new String[0],
+                        "java.lang.Object")).thenReturn(false);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+
+    @Test
+    public void verifyGeneratedCodeDisableAppendSuperBecauseEqualsNotOverriden() throws RuntimeException, CoreException {
+        when(objectClass.getSuperclassName()).thenReturn("SomeOtherObject");
+        when(
+                generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "equals",
+                        new String[] { "QObject;" }, "java.lang.Object")).thenReturn(false);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+
+    /**
+     * XXX same except the generator
+     */
+    @Test
+    public void verifyGeneratedCodeWithOverrideAnnotation() throws RuntimeException, CoreException {
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).thenReturn(true);
+        when(generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)).thenReturn(true);
+
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+
+    @Test
+    public void verifyGeneratedCodeCacheHashCode() throws RuntimeException, CoreException {
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).thenReturn(Boolean.TRUE);
+        when(generatorsCommonMethodsDelegate.areAllFinalFields(fields)).thenReturn(true);
+        when(hashCodeCachingField.exists()).thenReturn(true);
+        when(objectClass.getField(HASH_CODE_FIELD_NAME)).thenReturn(hashCodeCachingField);
+        when(objectClass.createMethod(FORMATTED_CODE_1, elementPosition, true, null)).thenReturn(createdMethod1);
+        when(objectClass.createField(FORMATTED_CODE_2, createdMethod1, true, null)).thenReturn(hashCodeCachingField);
+        when(objectClass.createMethod(FORMATTED_CODE_3, hashCodeCachingField, true, null)).thenReturn(createdMethod2);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+
+    private void mockAppendGeneratedCode() throws JavaModelException {
         when(objectClass.createMethod(FORMATTED_CODE_1, elementPosition, true, null)).thenReturn(createdMethod1);
         when(objectClass.createMethod(FORMATTED_CODE_2, createdMethod1, true, null)).thenReturn(createdMethod2);
-        equalsHashCodeGenerator.generate(parentShell, objectClass);
-        verify(compilationUnit, times(1)).createImport(CommonsLangLibraryUtils.getHashCodeBuilderLibrary(false), null,
-                null);
-        verify(compilationUnit, times(1)).createImport(CommonsLangLibraryUtils.getEqualsBuilderLibrary(false), null,
-                null);
+    }
+
+    private void verifyCodeAppended(boolean useCommonsLang3) throws JavaModelException, PartInitException {
+        verify(compilationUnit, times(1)).createImport(
+                CommonsLangLibraryUtils.getHashCodeBuilderLibrary(useCommonsLang3), null, null);
+        verify(compilationUnit, times(1)).createImport(
+                CommonsLangLibraryUtils.getEqualsBuilderLibrary(useCommonsLang3), null, null);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, createdMethod2);
     }
 
@@ -106,11 +231,11 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     private void mockSpecificGeneratorsCommonMethodsDelegate() throws JavaModelException {
         when(
                 generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "hashCode", new String[0],
-                        "java.lang.Object")).thenReturn(false);
+                        "java.lang.Object")).thenReturn(true);
 
         when(
                 generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "equals",
-                        new String[] { "QObject;" }, "java.lang.Object")).thenReturn(false);
+                        new String[] { "QObject;" }, "java.lang.Object")).thenReturn(true);
     }
 
     private void mockCommonFieldDialog() {

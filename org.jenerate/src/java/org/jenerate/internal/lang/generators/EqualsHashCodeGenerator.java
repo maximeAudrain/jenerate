@@ -178,10 +178,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         if (superclass == null) {
             return true;
         }
-        if (superclass.equals("Object")) {
-            return true;
-        }
-        if (superclass.equals("java.lang.Object")) {
+        if (superclass.equals("Object") || superclass.equals("java.lang.Object")) {
             return true;
         }
 
