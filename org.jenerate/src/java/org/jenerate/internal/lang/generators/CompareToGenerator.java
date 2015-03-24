@@ -120,7 +120,7 @@ public final class CompareToGenerator implements ILangGenerator {
         boolean generifyPreference = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).booleanValue();
         boolean generify = generifyPreference
-                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject())
+                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)
                 && !implementedOrExtendedInSuperType;
 
         if (!implementedOrExtendedInSuperType) {

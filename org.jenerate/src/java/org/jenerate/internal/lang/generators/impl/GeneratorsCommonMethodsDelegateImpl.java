@@ -120,7 +120,8 @@ public class GeneratorsCommonMethodsDelegateImpl implements GeneratorsCommonMeth
     }
 
     @Override
-    public boolean isSourceLevelGreaterThanOrEqualTo5(IJavaProject project) {
+    public boolean isSourceLevelGreaterThanOrEqualTo5(IType objectClass) {
+        IJavaProject project = objectClass.getJavaProject();
         float sc = Float.parseFloat(project.getOption(JavaCore.COMPILER_SOURCE, true));
         return sc >= 1.5;
     }

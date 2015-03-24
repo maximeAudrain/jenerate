@@ -1,7 +1,6 @@
 package org.jenerate.internal.lang.generators;
 
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
@@ -36,6 +35,6 @@ public interface GeneratorsCommonMethodsDelegate {
     IField[] getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(final IType objectClass,
             PreferencesManager preferencesManager) throws JavaModelException;
 
-    boolean isSourceLevelGreaterThanOrEqualTo5(IJavaProject project);
+    boolean isSourceLevelGreaterThanOrEqualTo5(IType objectClass);
 
 }

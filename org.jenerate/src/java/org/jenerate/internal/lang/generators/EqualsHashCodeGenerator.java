@@ -102,13 +102,15 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
                         .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
                 boolean addOverridePreference = ((Boolean) preferencesManager
                         .getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).booleanValue();
+                boolean addOverride = addOverridePreference
+                        && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass);
                 IJavaElement created = generateHashCode(parentShell, objectClass, checkedFields, insertPosition,
                         appendSuper, generateComment, imNumbers, useGettersInsteadOfFields, useCommonLang3,
-                        addOverridePreference);
+                        addOverride);
 
                 created = generateEquals(parentShell, objectClass, checkedFields, created, appendSuper,
                         generateComment, compareReferences, useGettersInsteadOfFields, useBlocksInIfStatements,
-                        useCommonLang3, addOverridePreference);
+                        useCommonLang3, addOverride);
 
                 javaUiCodeAppender.revealInEditor(objectClass, created);
             }
@@ -119,28 +121,10 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
 
     }
 
-    private IJavaElement generateEquals(final Shell parentShell, final IType objectClass, final IField[] checkedFields,
-            final IJavaElement insertPosition, final boolean appendSuper, final boolean generateComment,
-            final boolean compareReferences, final boolean useGettersInsteadOfFields,
-            final boolean useBlocksInIfStatements, boolean useCommonLang3, boolean addOverridePreference)
-            throws JavaModelException {
-
-        boolean addOverride = addOverridePreference
-                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
-
-        String source = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields, objectClass,
-                appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
-                useBlocksInIfStatements));
-        String formattedContent = format(parentShell, objectClass, source);
-        objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getEqualsBuilderLibrary(useCommonLang3),
-                null, null);
-        return objectClass.createMethod(formattedContent, insertPosition, true, null);
-    }
-
     private IJavaElement generateHashCode(final Shell parentShell, final IType objectClass,
             final IField[] checkedFields, final IJavaElement insertPosition, final boolean appendSuper,
             final boolean generateComment, final IInitMultNumbers imNumbers, final boolean useGettersInsteadOfFields,
-            boolean useCommonLang3, boolean addOverridePreference) throws JavaModelException {
+            boolean useCommonLang3, boolean addOverride) throws JavaModelException {
 
         boolean cacheHashCode = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).booleanValue();
@@ -150,9 +134,6 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             cachingField = (String) preferencesManager
                     .getCurrentPreferenceValue(JeneratePreference.HASHCODE_CACHING_FIELD);
         }
-
-        boolean addOverride = addOverridePreference
-                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
 
         String source = MethodGenerations.createHashCodeMethod(new HashCodeMethodGenerationData(checkedFields,
                 appendSuper, generateComment, imNumbers, cachingField, addOverride, useGettersInsteadOfFields));
@@ -174,6 +155,21 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         }
 
         return created;
+    }
+    
+    private IJavaElement generateEquals(final Shell parentShell, final IType objectClass, final IField[] checkedFields,
+            final IJavaElement insertPosition, final boolean appendSuper, final boolean generateComment,
+            final boolean compareReferences, final boolean useGettersInsteadOfFields,
+            final boolean useBlocksInIfStatements, boolean useCommonLang3, boolean addOverride)
+            throws JavaModelException {
+
+        String source = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields, objectClass,
+                appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
+                useBlocksInIfStatements));
+        String formattedContent = format(parentShell, objectClass, source);
+        objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getEqualsBuilderLibrary(useCommonLang3),
+                null, null);
+        return objectClass.createMethod(formattedContent, insertPosition, true, null);
     }
 
     private boolean isDirectSubclassOfObject(final IType objectClass) throws JavaModelException {

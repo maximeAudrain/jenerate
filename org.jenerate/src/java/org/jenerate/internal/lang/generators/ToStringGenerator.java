@@ -112,7 +112,7 @@ public final class ToStringGenerator implements ILangGenerator {
         boolean addOverridePreference = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).booleanValue();
         boolean addOverride = addOverridePreference
-                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass.getJavaProject());
+                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass);
 
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
@@ -139,7 +139,12 @@ public final class ToStringGenerator implements ILangGenerator {
         javaUiCodeAppender.revealInEditor(objectClass, created);
     }
 
-    private String getStyleConstantAndAddImport(final String style, final IType objectClass, boolean useCommonLang3)
+    /**
+     * XXX test me
+     * 
+     * Package private for testing
+     */
+    String getStyleConstantAndAddImport(final String style, final IType objectClass, boolean useCommonLang3)
             throws JavaModelException {
 
         String styleConstant = null;
