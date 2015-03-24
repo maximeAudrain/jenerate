@@ -93,8 +93,8 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
                 IJavaElement insertPosition = dialog.getElementPosition();
                 boolean appendSuper = dialog.getAppendSuper();
                 boolean generateComment = dialog.getGenerateComment();
-                boolean compareReferences = dialog.getCompareReferences();
                 boolean useGettersInsteadOfFields = dialog.getUseGettersInsteadOfFields();
+                boolean compareReferences = dialog.getCompareReferences();
                 boolean useBlocksInIfStatements = dialog.getUseBlockInIfStatements();
                 IInitMultNumbers imNumbers = dialog.getInitMultNumbers();
 

@@ -510,19 +510,19 @@ public class FieldDialog extends Dialog {
         return checkedFields;
     }
 
-    /*
-     * Determine where in the file to enter the newly created methods.
-     */
-    public IJavaElement getElementPosition() {
-        return insertPositions.get(currentPositionIndex);
-    }
-
     public boolean getAppendSuper() {
         return appendSuper;
     }
 
     public boolean getGenerateComment() {
         return generateComment;
+    }
+
+    /*
+     * Determine where in the file to enter the newly created methods.
+     */
+    public IJavaElement getElementPosition() {
+        return insertPositions.get(currentPositionIndex);
     }
 
     public boolean getUseGettersInsteadOfFields() {

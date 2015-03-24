@@ -12,8 +12,10 @@ public class HashCodeMethodGenerationData extends AbstractMethodGenerationData {
     
     private final boolean addOverride;
     private final boolean useGettersInsteadOfFields;
-    private final IInitMultNumbers imNumbers;
+    
     private final String cachingField;
+    
+    private final IInitMultNumbers imNumbers;
 
     public HashCodeMethodGenerationData(IField[] checkedFields, boolean appendSuper, boolean generateComment,
             IInitMultNumbers imNumbers, String cachingField, boolean addOverride, boolean useGettersInsteadOfFields) {

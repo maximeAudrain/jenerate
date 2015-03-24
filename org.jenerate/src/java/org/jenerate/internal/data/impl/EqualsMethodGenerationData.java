@@ -12,6 +12,7 @@ public class EqualsMethodGenerationData extends AbstractMethodGenerationData {
     
     private final boolean addOverride;
     private final boolean useGettersInsteadOfFields;
+    
     private final IType objectClass;
     private final boolean compareReferences;
     private final boolean useBlocksInIfStatements;

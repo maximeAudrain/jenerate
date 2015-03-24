@@ -11,8 +11,10 @@ public class ToStringMethodGenerationData extends AbstractMethodGenerationData {
     
     private final boolean addOverride;
     private final boolean useGettersInsteadOfFields;
-    private final String styleConstant;
+    
     private final String cachingField;
+    
+    private final String styleConstant;
 
     public ToStringMethodGenerationData(IField[] checkedFields, boolean appendSuper, boolean generateComment,
             String styleConstant, String cachingField, boolean addOverride, boolean useGettersInsteadOfFields) {
