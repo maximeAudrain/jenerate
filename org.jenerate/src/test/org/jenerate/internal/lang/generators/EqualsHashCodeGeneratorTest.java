@@ -192,6 +192,61 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
         verifyCodeAppended(false);
     }
 
+    /**
+     * XXX same except the generator
+     */
+    @Test
+    public void verifyGeneratedCodeWithCommonsLang3() throws RuntimeException, CoreException {
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).thenReturn(true);
+
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(true);
+    }
+
+    /**
+     * XXX same except the generator
+     */
+    @Test
+    public void verifyGeneratedCodeWithComment() throws RuntimeException, CoreException {
+        when(fieldDialog.getGenerateComment()).thenReturn(true);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+
+    /**
+     * XXX same except the generator
+     */
+    @Test
+    public void verifyGeneratedCodeWithAppendSuper() throws RuntimeException, CoreException {
+        when(fieldDialog.getAppendSuper()).thenReturn(true);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+
+    /**
+     * XXX same except the generator
+     */
+    @Test
+    public void verifyGeneratedCodeWithGettersInsteadOfFields() throws RuntimeException, CoreException {
+        when(fieldDialog.getUseGettersInsteadOfFields()).thenReturn(true);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+    
+    @Test
+    public void verifyGeneratedCodeWithCompareReferences() throws RuntimeException, CoreException {
+        when(fieldDialog.getCompareReferences()).thenReturn(true);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+    
+    @Test
+    public void verifyGeneratedCodeWithUseBlockInIfStatements() throws RuntimeException, CoreException {
+        when(fieldDialog.getUseBlockInIfStatements()).thenReturn(true);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+        verifyCodeAppended(false);
+    }
+    
     private void mockAppendGeneratedCode() throws JavaModelException {
         when(objectClass.createMethod(FORMATTED_CODE_1, elementPosition, true, null)).thenReturn(createdMethod1);
         when(objectClass.createMethod(FORMATTED_CODE_2, createdMethod1, true, null)).thenReturn(createdMethod2);
