@@ -29,9 +29,9 @@ import org.eclipse.swt.widgets.Text;
 import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.data.EqualsHashCodeDialogData;
 import org.jenerate.internal.data.IInitMultNumbers;
+import org.jenerate.internal.data.impl.EqualsHashCodeDialogDataImpl;
 import org.jenerate.internal.data.impl.InitMultNumbersCustom;
 import org.jenerate.internal.data.impl.InitMultNumbersDefault;
-import org.jenerate.internal.data.impl.EqualsHashCodeDialogDataImpl;
 import org.jenerate.internal.data.impl.InitMultNumbersRandom;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 

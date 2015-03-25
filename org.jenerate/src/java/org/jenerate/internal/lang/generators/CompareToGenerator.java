@@ -53,7 +53,34 @@ public final class CompareToGenerator implements ILangGenerator {
 
     @Override
     public void generate(Shell parentShell, IType objectClass) {
+        Set<IMethod> excludedMethods = getExcludedMethods(objectClass);
+        try {
+            IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
+            boolean disableAppendSuper = !(javaInterfaceCodeAppender
+                    .isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
+            
+            CompareToDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
+                    disableAppendSuper, preferencesManager);
+            int returnCode = dialog.open();
+            if (returnCode == Window.OK) {
+
+                for(IMethod excludedMethod : excludedMethods) {
+                    if (excludedMethod.exists()) {
+                        excludedMethod.delete(true, null);
+                    }
+                }
+
+                generateCompareTo(parentShell, objectClass, dialog.getData());
+            }
+
+        } catch (CoreException e) {
+            MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
+        }
+
+    }
+
+    private Set<IMethod> getExcludedMethods(IType objectClass) {
         Set<IMethod> excludedMethods = new HashSet<>();
 
         IMethod existingMethod = objectClass.getMethod("compareTo", new String[] { "QObject;" });
@@ -66,28 +93,7 @@ public final class CompareToGenerator implements ILangGenerator {
         if (existingMethod.exists()) {
             excludedMethods.add(existingMethod);
         }
-
-        try {
-            IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
-
-            boolean disableAppendSuper = !(javaInterfaceCodeAppender
-                    .isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
-            CompareToDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
-                    disableAppendSuper, preferencesManager);
-            int returnCode = dialog.open();
-            if (returnCode == Window.OK) {
-
-                if (existingMethod.exists()) {
-                    existingMethod.delete(true, null);
-                }
-
-                generateCompareTo(parentShell, objectClass, dialog.getData());
-            }
-
-        } catch (CoreException e) {
-            MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
-        }
-
+        return excludedMethods;
     }
 
     private void generateCompareTo(final Shell parentShell, final IType objectClass, CompareToDialogData compareToDialogData)

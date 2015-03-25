@@ -49,7 +49,33 @@ public final class ToStringGenerator implements ILangGenerator {
 
     @Override
     public void generate(Shell parentShell, IType objectClass) {
+        Set<IMethod> excludedMethods = getExcludedMethods(objectClass);
+        try {
+            IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
+            boolean disableAppendSuper = !isToStringConcreteInSuperclass(objectClass);
+            
+            ToStringDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
+                    disableAppendSuper, preferencesManager);
+            int returnCode = dialog.open();
+            if (returnCode == Window.OK) {
+
+                for(IMethod excludedMethod : excludedMethods) {
+                    if (excludedMethod.exists()) {
+                        excludedMethod.delete(true, null);
+                    }
+                }
+
+                generateToString(parentShell, objectClass, dialog.getData());
+            }
+
+        } catch (CoreException e) {
+            MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
+        }
+
+    }
+
+    private Set<IMethod> getExcludedMethods(IType objectClass) {
         Set<IMethod> excludedMethods = new HashSet<>();
 
         IMethod existingMethod = objectClass.getMethod("toString", new String[0]);
@@ -57,28 +83,7 @@ public final class ToStringGenerator implements ILangGenerator {
         if (existingMethod.exists()) {
             excludedMethods.add(existingMethod);
         }
-        try {
-            IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
-
-            boolean disableAppendSuper = !isToStringConcreteInSuperclass(objectClass);
-            ToStringDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
-                    disableAppendSuper, preferencesManager);
-            int returnCode = dialog.open();
-            if (returnCode == Window.OK) {
-
-                if (existingMethod.exists()) {
-                    existingMethod.delete(true, null);
-                }
-
-                ToStringDialogData data = dialog.getData();
-
-                generateToString(parentShell, objectClass, data);
-            }
-
-        } catch (CoreException e) {
-            MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
-        }
-
+        return excludedMethods;
     }
 
     private void generateToString(final Shell parentShell, final IType objectClass, ToStringDialogData data)

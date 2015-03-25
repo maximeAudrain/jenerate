@@ -15,7 +15,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.data.ToStringDialogData;
-import org.jenerate.internal.data.impl.CompareToDialogDataImpl;
 import org.jenerate.internal.data.impl.ToStringDialogDataImpl;
 import org.jenerate.internal.lang.generators.CommonsLangLibraryUtils;
 import org.jenerate.internal.ui.preferences.JeneratePreference;

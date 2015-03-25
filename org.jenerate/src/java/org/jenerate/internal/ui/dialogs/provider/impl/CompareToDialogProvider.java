@@ -8,7 +8,6 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.data.CompareToDialogData;
-import org.jenerate.internal.data.FieldDialogData;
 import org.jenerate.internal.ui.dialogs.CompareToDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.PreferencesManager;

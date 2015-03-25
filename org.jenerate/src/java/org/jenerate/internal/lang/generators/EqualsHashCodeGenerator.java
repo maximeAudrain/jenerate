@@ -49,33 +49,22 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
 
     @Override
     public void generate(Shell parentShell, IType objectClass) {
-
-        Set<IMethod> excludedMethods = new HashSet<>();
-
-        IMethod existingEquals = objectClass.getMethod("equals", new String[] { "QObject;" });
-        IMethod existingHashCode = objectClass.getMethod("hashCode", new String[0]);
-        if (existingEquals.exists()) {
-            excludedMethods.add(existingEquals);
-        }
-        if (existingHashCode.exists()) {
-            excludedMethods.add(existingHashCode);
-        }
+        Set<IMethod> excludedMethods = getExcludedMethods(objectClass);
         try {
             IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
             boolean disableAppendSuper = isDirectSubclassOfObject(objectClass)
                     || !isEqualsOverriddenInSuperclass(objectClass) || !isHashCodeOverriddenInSuperclass(objectClass);
-
+            
             EqualsHashCodeDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
                     disableAppendSuper, preferencesManager);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
-
-                if (existingEquals.exists()) {
-                    existingEquals.delete(true, null);
-                }
-                if (existingHashCode.exists()) {
-                    existingHashCode.delete(true, null);
+                
+                for(IMethod excludedMethod : excludedMethods) {
+                    if (excludedMethod.exists()) {
+                        excludedMethod.delete(true, null);
+                    }
                 }
 
                 EqualsHashCodeDialogData data = dialog.getData();
@@ -97,6 +86,20 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
         }
 
+    }
+
+    private Set<IMethod> getExcludedMethods(IType objectClass) {
+        Set<IMethod> excludedMethods = new HashSet<>();
+
+        IMethod existingEquals = objectClass.getMethod("equals", new String[] { "QObject;" });
+        IMethod existingHashCode = objectClass.getMethod("hashCode", new String[0]);
+        if (existingEquals.exists()) {
+            excludedMethods.add(existingEquals);
+        }
+        if (existingHashCode.exists()) {
+            excludedMethods.add(existingHashCode);
+        }
+        return excludedMethods;
     }
 
     private IJavaElement generateHashCode(final Shell parentShell, final IType objectClass,
