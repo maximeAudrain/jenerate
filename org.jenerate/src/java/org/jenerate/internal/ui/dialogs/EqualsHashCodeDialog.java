@@ -27,16 +27,18 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jenerate.JeneratePlugin;
+import org.jenerate.internal.data.EqualsHashCodeDialogData;
 import org.jenerate.internal.data.IInitMultNumbers;
-import org.jenerate.internal.data.impl.CustomInitMultNumbers;
-import org.jenerate.internal.data.impl.DefaultInitMultNumbers;
-import org.jenerate.internal.data.impl.RandomInitMultNumbers;
+import org.jenerate.internal.data.impl.InitMultNumbersCustom;
+import org.jenerate.internal.data.impl.InitMultNumbersDefault;
+import org.jenerate.internal.data.impl.EqualsHashCodeDialogDataImpl;
+import org.jenerate.internal.data.impl.InitMultNumbersRandom;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
 /**
  * @author jiayun
  */
-public class EqualsHashCodeDialog extends FieldDialog {
+public class EqualsHashCodeDialog extends FieldDialog<EqualsHashCodeDialogData> {
 
     private static final String EQUALS_SETTINGS_SECTION = "EqualsDialog";
 
@@ -58,8 +60,8 @@ public class EqualsHashCodeDialog extends FieldDialog {
 
     private Text multText;
 
-    private IInitMultNumbers imNumbers[] = new IInitMultNumbers[] { new DefaultInitMultNumbers(),
-            new RandomInitMultNumbers(), new CustomInitMultNumbers() };
+    private IInitMultNumbers imNumbers[] = new IInitMultNumbers[] { new InitMultNumbersDefault(),
+            new InitMultNumbersRandom(), new InitMultNumbersCustom() };
 
     private int initMultType;
 
@@ -317,12 +319,20 @@ public class EqualsHashCodeDialog extends FieldDialog {
         getButton(IDialogConstants.OK_ID).setEnabled(true);
     }
 
-    public boolean getCompareReferences() {
-        return compareReferences;
-    }
-
-    public IInitMultNumbers getInitMultNumbers() {
-        return imNumbers[initMultType];
+    @Override
+    public EqualsHashCodeDialogData getData() {
+        //@formatter:off
+        return new EqualsHashCodeDialogDataImpl.Builder()
+                .withCheckedFields(getCheckedFields())
+                .withElementPosition(getElementPosition())
+                .withAppendSuper(getAppendSuper())
+                .withGenerateComment(getGenerateComment())
+                .withUseBlockInIfStatements(getUseBlockInIfStatements())
+                .withUseGettersInsteadOfFields(getUseGettersInsteadOfFields())
+                .withCompareReferences(compareReferences)
+                .withInitMultNumbers(imNumbers[initMultType])
+                .build();
+        //@formatter:on
     }
 
     private static class IntegerVerifyListener implements VerifyListener {

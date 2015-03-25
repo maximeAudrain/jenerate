@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.PartInitException;
+import org.jenerate.internal.data.EqualsHashCodeDialogData;
 import org.jenerate.internal.data.IInitMultNumbers;
 import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
@@ -44,9 +45,11 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     protected IMethod createdMethod2;
 
     @Mock
-    private DialogProvider<EqualsHashCodeDialog> dialogProvider;
+    private DialogProvider<EqualsHashCodeDialog, EqualsHashCodeDialogData> dialogProvider;
     @Mock
     private EqualsHashCodeDialog fieldDialog;
+    @Mock
+    private EqualsHashCodeDialogData data;
     @Mock
     private IInitMultNumbers iInitMultNumbers;
 
@@ -197,7 +200,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
      */
     @Test
     public void verifyGeneratedCodeWithComment() throws RuntimeException, CoreException {
-        when(fieldDialog.getGenerateComment()).thenReturn(true);
+        when(data.getGenerateComment()).thenReturn(true);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
@@ -207,7 +210,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
      */
     @Test
     public void verifyGeneratedCodeWithAppendSuper() throws RuntimeException, CoreException {
-        when(fieldDialog.getAppendSuper()).thenReturn(true);
+        when(data.getAppendSuper()).thenReturn(true);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
@@ -217,21 +220,21 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
      */
     @Test
     public void verifyGeneratedCodeWithGettersInsteadOfFields() throws RuntimeException, CoreException {
-        when(fieldDialog.getUseGettersInsteadOfFields()).thenReturn(true);
+        when(data.getUseGettersInsteadOfFields()).thenReturn(true);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
     
     @Test
     public void verifyGeneratedCodeWithCompareReferences() throws RuntimeException, CoreException {
-        when(fieldDialog.getCompareReferences()).thenReturn(true);
+        when(data.getCompareReferences()).thenReturn(true);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
     
     @Test
     public void verifyGeneratedCodeWithUseBlockInIfStatements() throws RuntimeException, CoreException {
-        when(fieldDialog.getUseBlockInIfStatements()).thenReturn(true);
+        when(data.getUseBlockInIfStatements()).thenReturn(true);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
@@ -284,17 +287,18 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
 
     private void mockCommonFieldDialog() {
         when(fieldDialog.open()).thenReturn(Window.OK);
-        when(fieldDialog.getCheckedFields()).thenReturn(fields);
-        when(fieldDialog.getElementPosition()).thenReturn(elementPosition);
-        when(fieldDialog.getGenerateComment()).thenReturn(false);
-        when(fieldDialog.getAppendSuper()).thenReturn(false);
-        when(fieldDialog.getUseGettersInsteadOfFields()).thenReturn(false);
+        when(fieldDialog.getData()).thenReturn(data);
+        when(data.getCheckedFields()).thenReturn(fields);
+        when(data.getElementPosition()).thenReturn(elementPosition);
+        when(data.getGenerateComment()).thenReturn(false);
+        when(data.getAppendSuper()).thenReturn(false);
+        when(data.getUseGettersInsteadOfFields()).thenReturn(false);
     }
-
+    
     private void mockSpecificFieldDialog() {
-        when(fieldDialog.getCompareReferences()).thenReturn(false);
-        when(fieldDialog.getUseBlockInIfStatements()).thenReturn(false);
-        when(fieldDialog.getInitMultNumbers()).thenReturn(iInitMultNumbers);
+        when(data.getCompareReferences()).thenReturn(false);
+        when(data.getUseBlockInIfStatements()).thenReturn(false);
+        when(data.getInitMultNumbers()).thenReturn(iInitMultNumbers);
     }
 
 }

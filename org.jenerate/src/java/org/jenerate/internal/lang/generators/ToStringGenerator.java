@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -15,7 +14,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
-import org.jenerate.internal.data.impl.ToStringMethodGenerationData;
+import org.jenerate.internal.data.ToStringDialogData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.ToStringDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
@@ -33,12 +32,13 @@ public final class ToStringGenerator implements ILangGenerator {
 
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final PreferencesManager preferencesManager;
-    private final DialogProvider<ToStringDialog> dialogProvider;
+    private final DialogProvider<ToStringDialog, ToStringDialogData> dialogProvider;
     private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
     private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
     public ToStringGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
-            DialogProvider<ToStringDialog> dialogProvider, JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
+            DialogProvider<ToStringDialog, ToStringDialogData> dialogProvider,
+            JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         this.javaUiCodeAppender = javaUiCodeAppender;
         this.preferencesManager = preferencesManager;
@@ -70,15 +70,9 @@ public final class ToStringGenerator implements ILangGenerator {
                     existingMethod.delete(true, null);
                 }
 
-                IField[] checkedFields = dialog.getCheckedFields();
-                IJavaElement insertPosition = dialog.getElementPosition();
-                boolean appendSuper = dialog.getAppendSuper();
-                boolean generateComment = dialog.getGenerateComment();
-                boolean useGettersInsteadOfFields = dialog.getUseGettersInsteadOfFields();
-                String style = dialog.getToStringStyle();
+                ToStringDialogData data = dialog.getData();
 
-                generateToString(parentShell, objectClass, checkedFields, insertPosition, appendSuper, generateComment,
-                        style, useGettersInsteadOfFields);
+                generateToString(parentShell, objectClass, data);
             }
 
         } catch (CoreException e) {
@@ -87,13 +81,13 @@ public final class ToStringGenerator implements ILangGenerator {
 
     }
 
-    private void generateToString(final Shell parentShell, final IType objectClass, final IField[] checkedFields,
-            final IJavaElement insertPosition, final boolean appendSuper, final boolean generateComment,
-            final String style, final boolean useGettersInsteadOfFields) throws PartInitException, JavaModelException {
+    private void generateToString(final Shell parentShell, final IType objectClass, ToStringDialogData data)
+            throws PartInitException, JavaModelException {
 
         boolean cacheToString = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).booleanValue();
-        boolean isCacheable = cacheToString && generatorsCommonMethodsDelegate.areAllFinalFields(checkedFields);
+        boolean isCacheable = cacheToString
+                && generatorsCommonMethodsDelegate.areAllFinalFields(data.getCheckedFields());
         String cachingField = "";
         if (isCacheable) {
             cachingField = (String) preferencesManager
@@ -107,15 +101,14 @@ public final class ToStringGenerator implements ILangGenerator {
 
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
-        String styleConstant = getStyleConstantAndAddImport(style, objectClass, useCommonLang3);
-        String source = MethodGenerations.createToStringMethod(new ToStringMethodGenerationData(checkedFields,
-                appendSuper, generateComment, styleConstant, cachingField, addOverride, useGettersInsteadOfFields));
+        String styleConstant = getStyleConstantAndAddImport(data.getToStringStyle(), objectClass, useCommonLang3);
+        String source = MethodGenerations.createToStringMethod(data, styleConstant, cachingField, addOverride);
 
         String formattedContent = format(parentShell, objectClass, source);
 
         objectClass.getCompilationUnit().createImport(
                 CommonsLangLibraryUtils.getToStringBuilderLibrary(useCommonLang3), null, null);
-        IMethod created = objectClass.createMethod(formattedContent, insertPosition, true, null);
+        IMethod created = objectClass.createMethod(formattedContent, data.getElementPosition(), true, null);
 
         IField field = objectClass.getField(cachingField);
         if (field.exists()) {
@@ -131,9 +124,7 @@ public final class ToStringGenerator implements ILangGenerator {
     }
 
     /**
-     * XXX test me
-     * 
-     * Package private for testing
+     * XXX test me Package private for testing
      */
     String getStyleConstantAndAddImport(final String style, final IType objectClass, boolean useCommonLang3)
             throws JavaModelException {

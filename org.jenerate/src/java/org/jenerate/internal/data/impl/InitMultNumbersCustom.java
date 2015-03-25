@@ -5,16 +5,20 @@ import org.jenerate.internal.data.IInitMultNumbers;
 /**
  * @author jiayun
  */
-public class DefaultInitMultNumbers implements IInitMultNumbers {
+public class InitMultNumbersCustom implements IInitMultNumbers {
+
+    private int initial;
+    private int multiplier;
 
     @Override
     public void setNumbers(int initial, int multiplier) {
-        /* Nothing to be done here */
+        this.initial = initial;
+        this.multiplier = multiplier;
     }
 
     @Override
     public String getValue() {
-        return "";
+        return String.valueOf(initial) + ", " + String.valueOf(multiplier);
     }
 
 }

@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.jenerate.internal.data.FieldDialogData;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
 /**
@@ -25,7 +26,7 @@ import org.jenerate.internal.ui.preferences.PreferencesManager;
  * 
  * @author jiayun
  */
-public class OrderableFieldDialog extends FieldDialog {
+public abstract class OrderableFieldDialog<T extends FieldDialogData> extends FieldDialog<T> {
 
     private Button upButton;
 

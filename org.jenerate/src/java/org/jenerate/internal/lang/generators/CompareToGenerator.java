@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -17,9 +16,9 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.ui.PartInitException;
-import org.jenerate.internal.data.impl.CompareToMethodGenerationData;
+import org.jenerate.internal.data.CompareToDialogData;
 import org.jenerate.internal.lang.MethodGenerations;
-import org.jenerate.internal.ui.dialogs.OrderableFieldDialog;
+import org.jenerate.internal.ui.dialogs.CompareToDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
@@ -34,13 +33,13 @@ public final class CompareToGenerator implements ILangGenerator {
 
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final PreferencesManager preferencesManager;
-    private final DialogProvider<OrderableFieldDialog> dialogProvider;
+    private final DialogProvider<CompareToDialog, CompareToDialogData> dialogProvider;
     private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
     private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
     private final JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
     public CompareToGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
-            DialogProvider<OrderableFieldDialog> dialogProvider,
+            DialogProvider<CompareToDialog, CompareToDialogData> dialogProvider,
             JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
@@ -73,7 +72,7 @@ public final class CompareToGenerator implements ILangGenerator {
 
             boolean disableAppendSuper = !(javaInterfaceCodeAppender
                     .isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
-            OrderableFieldDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
+            CompareToDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
                     disableAppendSuper, preferencesManager);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
@@ -82,12 +81,7 @@ public final class CompareToGenerator implements ILangGenerator {
                     existingMethod.delete(true, null);
                 }
 
-                IField[] checkedFields = dialog.getCheckedFields();
-                IJavaElement insertPosition = dialog.getElementPosition();
-                boolean appendSuper = dialog.getAppendSuper();
-                boolean generateComment = dialog.getGenerateComment();
-
-                generateCompareTo(parentShell, objectClass, checkedFields, insertPosition, appendSuper, generateComment);
+                generateCompareTo(parentShell, objectClass, dialog.getData());
             }
 
         } catch (CoreException e) {
@@ -96,8 +90,7 @@ public final class CompareToGenerator implements ILangGenerator {
 
     }
 
-    private void generateCompareTo(final Shell parentShell, final IType objectClass, final IField[] checkedFields,
-            final IJavaElement insertPosition, final boolean appendSuper, final boolean generateComment)
+    private void generateCompareTo(final Shell parentShell, final IType objectClass, CompareToDialogData compareToDialogData)
             throws PartInitException, JavaModelException, MalformedTreeException {
 
         boolean implementedOrExtendedInSuperType = javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(
@@ -121,8 +114,7 @@ public final class CompareToGenerator implements ILangGenerator {
             }
         }
 
-        String source = MethodGenerations.createCompareToMethod(new CompareToMethodGenerationData(checkedFields,
-                objectClass, appendSuper, generateComment, generify));
+        String source = MethodGenerations.createCompareToMethod(objectClass, compareToDialogData, generify);
 
         String formattedContent = format(parentShell, objectClass, source);
 
@@ -130,7 +122,7 @@ public final class CompareToGenerator implements ILangGenerator {
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
         objectClass.getCompilationUnit().createImport(
                 CommonsLangLibraryUtils.getCompareToBuilderLibrary(useCommonLang3), null, null);
-        IMethod created = objectClass.createMethod(formattedContent, insertPosition, true, null);
+        IMethod created = objectClass.createMethod(formattedContent, compareToDialogData.getElementPosition(), true, null);
 
         javaUiCodeAppender.revealInEditor(objectClass, created);
     }

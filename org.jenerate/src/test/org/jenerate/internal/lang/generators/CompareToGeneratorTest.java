@@ -10,7 +10,8 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.ui.PartInitException;
-import org.jenerate.internal.ui.dialogs.OrderableFieldDialog;
+import org.jenerate.internal.data.CompareToDialogData;
+import org.jenerate.internal.ui.dialogs.CompareToDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
@@ -36,9 +37,11 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
     @Mock
     private JavaInterfaceCodeAppender javaInterfaceCodeAppender;
     @Mock
-    private DialogProvider<OrderableFieldDialog> dialogProvider;
+    private DialogProvider<CompareToDialog, CompareToDialogData> dialogProvider;
     @Mock
-    private OrderableFieldDialog fieldDialog;
+    private CompareToDialog fieldDialog;
+    @Mock
+    private CompareToDialogData data;
 
     private CompareToGenerator compareToGenerator;
 
@@ -156,7 +159,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
      */
     @Test
     public void verifyGeneratedCodeWithComment() throws RuntimeException, CoreException {
-        when(fieldDialog.getGenerateComment()).thenReturn(true);
+        when(data.getGenerateComment()).thenReturn(true);
         compareToGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
@@ -166,7 +169,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
      */
     @Test
     public void verifyGeneratedCodeWithAppendSuper() throws RuntimeException, CoreException {
-        when(fieldDialog.getAppendSuper()).thenReturn(true);
+        when(data.getAppendSuper()).thenReturn(true);
         compareToGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
@@ -209,10 +212,11 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
 
     private void mockCommonFieldDialog() {
         when(fieldDialog.open()).thenReturn(Window.OK);
-        when(fieldDialog.getCheckedFields()).thenReturn(fields);
-        when(fieldDialog.getElementPosition()).thenReturn(elementPosition);
-        when(fieldDialog.getGenerateComment()).thenReturn(false);
-        when(fieldDialog.getAppendSuper()).thenReturn(false);
-        when(fieldDialog.getUseGettersInsteadOfFields()).thenReturn(false);
+        when(fieldDialog.getData()).thenReturn(data);
+        when(data.getCheckedFields()).thenReturn(fields);
+        when(data.getElementPosition()).thenReturn(elementPosition);
+        when(data.getGenerateComment()).thenReturn(false);
+        when(data.getAppendSuper()).thenReturn(false);
+        when(data.getUseGettersInsteadOfFields()).thenReturn(false);
     }
 }

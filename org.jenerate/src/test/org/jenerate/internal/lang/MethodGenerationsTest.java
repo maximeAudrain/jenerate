@@ -1,23 +1,22 @@
 package org.jenerate.internal.lang;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.jenerate.internal.data.CompareToDialogData;
+import org.jenerate.internal.data.EqualsHashCodeDialogData;
 import org.jenerate.internal.data.IInitMultNumbers;
-import org.jenerate.internal.data.impl.CompareToMethodGenerationData;
-import org.jenerate.internal.data.impl.CustomInitMultNumbers;
-import org.jenerate.internal.data.impl.DefaultInitMultNumbers;
-import org.jenerate.internal.data.impl.EqualsMethodGenerationData;
-import org.jenerate.internal.data.impl.HashCodeMethodGenerationData;
-import org.jenerate.internal.data.impl.ToStringMethodGenerationData;
+import org.jenerate.internal.data.ToStringDialogData;
+import org.jenerate.internal.data.impl.InitMultNumbersCustom;
+import org.jenerate.internal.data.impl.InitMultNumbersDefault;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 /**
  * Junit tests for the {@link MethodGenerations} helper class
@@ -41,34 +40,60 @@ public class MethodGenerationsTest {
     @Mock
     private IField iField2;
 
-    private IInitMultNumbers imNumbers;
+    @Mock
+    private CompareToDialogData compareToDialogData;
+    @Mock
+    private EqualsHashCodeDialogData equalsHashCodeDialogData;
+    @Mock
+    private ToStringDialogData toStringDialogData;
 
     private IField[] checkedFields = new IField[2];
 
-    private boolean appendSuper;
-    private boolean generateComment;
     private boolean generify;
     private boolean addOverride;
-    private boolean useGettersInsteadOfFields;
-    private boolean compareReferences;
-    private boolean useBlocksInIfStatements;
 
     @Before
     public void setUp() {
         when(objectClass.getElementName()).thenReturn(CLASS_NAME);
         when(iField1.getElementName()).thenReturn(FIELD_1);
         when(iField2.getElementName()).thenReturn(FIELD_2);
-        imNumbers = new CustomInitMultNumbers();
-        imNumbers.setNumbers(54, 12);
 
         checkedFields[0] = iField1;
         checkedFields[1] = iField2;
+
+        mockCompareToDialogData();
+        mockEqualsHashCodeDialogData();
+        mockToStringDialogData();
+    }
+
+    private void mockCompareToDialogData() {
+        when(compareToDialogData.getCheckedFields()).thenReturn(checkedFields);
+        when(compareToDialogData.getGenerateComment()).thenReturn(false);
+        when(compareToDialogData.getAppendSuper()).thenReturn(false);
+    }
+
+    private void mockEqualsHashCodeDialogData() {
+        when(equalsHashCodeDialogData.getCheckedFields()).thenReturn(checkedFields);
+        when(equalsHashCodeDialogData.getGenerateComment()).thenReturn(false);
+        when(equalsHashCodeDialogData.getAppendSuper()).thenReturn(false);
+        when(equalsHashCodeDialogData.getCompareReferences()).thenReturn(false);
+        when(equalsHashCodeDialogData.getUseGettersInsteadOfFields()).thenReturn(false);
+        when(equalsHashCodeDialogData.getUseBlockInIfStatements()).thenReturn(false);
+        IInitMultNumbers imNumbers = new InitMultNumbersCustom();
+        imNumbers.setNumbers(54, 12);
+        when(equalsHashCodeDialogData.getInitMultNumbers()).thenReturn(imNumbers);
+    }
+
+    private void mockToStringDialogData() {
+        when(toStringDialogData.getCheckedFields()).thenReturn(checkedFields);
+        when(toStringDialogData.getGenerateComment()).thenReturn(false);
+        when(toStringDialogData.getAppendSuper()).thenReturn(false);
+        when(toStringDialogData.getUseGettersInsteadOfFields()).thenReturn(false);
     }
 
     @Test
     public void testGenerateCompareToDefault() {
-        String compareToMethod = MethodGenerations.createCompareToMethod(new CompareToMethodGenerationData(
-                checkedFields, objectClass, appendSuper, generateComment, generify));
+        String compareToMethod = MethodGenerations.createCompareToMethod(objectClass, compareToDialogData, generify);
         assertEquals("public int compareTo(final Object other) {\nClazz castOther = (Clazz) other;\n"
                 + "return new CompareToBuilder().append(field1, castOther.field1)"
                 + ".append(field2, castOther.field2).toComparison();\n}\n\n", compareToMethod);
@@ -77,8 +102,7 @@ public class MethodGenerationsTest {
     @Test
     public void testGenerateCompareToWithGeneric() {
         generify = true;
-        String compareToMethod = MethodGenerations.createCompareToMethod(new CompareToMethodGenerationData(
-                checkedFields, objectClass, appendSuper, generateComment, generify));
+        String compareToMethod = MethodGenerations.createCompareToMethod(objectClass, compareToDialogData, generify);
         assertEquals("public int compareTo(final Clazz other) {\n"
                 + "return new CompareToBuilder().append(field1, other.field1)"
                 + ".append(field2, other.field2).toComparison();\n}\n\n", compareToMethod);
@@ -86,9 +110,8 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateCompareWithComment() {
-        generateComment = true;
-        String compareToMethod = MethodGenerations.createCompareToMethod(new CompareToMethodGenerationData(
-                checkedFields, objectClass, appendSuper, generateComment, generify));
+        when(compareToDialogData.getGenerateComment()).thenReturn(true);
+        String compareToMethod = MethodGenerations.createCompareToMethod(objectClass, compareToDialogData, generify);
         assertEquals("/* (non-Javadoc)\n * @see java.lang.Comparable#compareTo(java.lang.Object)\n */\n"
                 + "public int compareTo(final Object other) {\nClazz castOther = (Clazz) other;"
                 + "\nreturn new CompareToBuilder().append(field1, castOther.field1)"
@@ -97,9 +120,8 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateCompareToWithSuper() {
-        appendSuper = true;
-        String compareToMethod = MethodGenerations.createCompareToMethod(new CompareToMethodGenerationData(
-                checkedFields, objectClass, appendSuper, generateComment, generify));
+        when(compareToDialogData.getAppendSuper()).thenReturn(true);
+        String compareToMethod = MethodGenerations.createCompareToMethod(objectClass, compareToDialogData, generify);
         assertEquals("public int compareTo(final Object other) {\nClazz castOther = (Clazz) other;"
                 + "\nreturn new CompareToBuilder().appendSuper(super.compareTo(other))"
                 + ".append(field1, castOther.field1).append(field2, castOther.field2).toComparison();\n}\n\n",
@@ -108,17 +130,15 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateToStringDefault() throws JavaModelException {
-        String toStringMethod = MethodGenerations.createToStringMethod(new ToStringMethodGenerationData(checkedFields,
-                appendSuper, generateComment, null, "", addOverride, useGettersInsteadOfFields));
+        String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, null, "", addOverride);
         assertEquals("public String toString() {\nreturn new ToStringBuilder(this)"
                 + ".append(\"field1\", field1).append(\"field2\", field2).toString();\n}\n\n", toStringMethod);
     }
 
     @Test
     public void testGenerateToStringWithAppendSuper() throws JavaModelException {
-        appendSuper = true;
-        String toStringMethod = MethodGenerations.createToStringMethod(new ToStringMethodGenerationData(checkedFields,
-                appendSuper, generateComment, null, "", addOverride, useGettersInsteadOfFields));
+        when(toStringDialogData.getAppendSuper()).thenReturn(true);
+        String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, null, "", addOverride);
         assertEquals("public String toString() {\nreturn new ToStringBuilder(this)"
                 + ".appendSuper(super.toString()).append(\"field1\", field1)"
                 + ".append(\"field2\", field2).toString();\n}\n\n", toStringMethod);
@@ -126,9 +146,8 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateToStringWithGenerateComment() throws JavaModelException {
-        generateComment = true;
-        String toStringMethod = MethodGenerations.createToStringMethod(new ToStringMethodGenerationData(checkedFields,
-                appendSuper, generateComment, null, "", addOverride, useGettersInsteadOfFields));
+        when(toStringDialogData.getGenerateComment()).thenReturn(true);
+        String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, null, "", addOverride);
         assertEquals("/* (non-Javadoc)\n * @see java.lang.Object#toString()\n */\n"
                 + "public String toString() {\nreturn new ToStringBuilder(this)"
                 + ".append(\"field1\", field1).append(\"field2\", field2).toString();\n}\n\n", toStringMethod);
@@ -136,16 +155,16 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateToStringWithStyle() throws JavaModelException {
-        String toStringMethod = MethodGenerations.createToStringMethod(new ToStringMethodGenerationData(checkedFields,
-                appendSuper, generateComment, STYLE_CONSTANT, "", addOverride, useGettersInsteadOfFields));
+        String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, STYLE_CONSTANT, "",
+                addOverride);
         assertEquals("public String toString() {\nreturn new ToStringBuilder(this, STYLE)"
                 + ".append(\"field1\", field1).append(\"field2\", field2).toString();\n}\n\n", toStringMethod);
     }
 
     @Test
     public void testGenerateToStringWithCache() throws JavaModelException {
-        String toStringMethod = MethodGenerations.createToStringMethod(new ToStringMethodGenerationData(checkedFields,
-                appendSuper, generateComment, null, TO_STRING_CACHING_FIELD, addOverride, useGettersInsteadOfFields));
+        String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, null,
+                TO_STRING_CACHING_FIELD, addOverride);
         assertEquals("public String toString() {\nif (toString== null) {\n"
                 + "toString = new ToStringBuilder(this).append(\"field1\", field1)"
                 + ".append(\"field2\", field2).toString();\n}\nreturn toString;\n}\n\n", toStringMethod);
@@ -154,26 +173,22 @@ public class MethodGenerationsTest {
     @Test
     public void testGenerateToStringWithOverride() throws JavaModelException {
         addOverride = true;
-        String toStringMethod = MethodGenerations.createToStringMethod(new ToStringMethodGenerationData(checkedFields,
-                appendSuper, generateComment, null, "", addOverride, useGettersInsteadOfFields));
+        String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, null, "", addOverride);
         assertEquals("@Override\npublic String toString() {\nreturn new ToStringBuilder(this)"
                 + ".append(\"field1\", field1).append(\"field2\", field2).toString();\n}\n\n", toStringMethod);
     }
 
     @Test
     public void testGenerateToStringWithUseGetters() throws JavaModelException {
-        useGettersInsteadOfFields = true;
-        String toStringMethod = MethodGenerations.createToStringMethod(new ToStringMethodGenerationData(checkedFields,
-                appendSuper, generateComment, null, "", addOverride, useGettersInsteadOfFields));
+        when(toStringDialogData.getUseGettersInsteadOfFields()).thenReturn(true);
+        String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, null, "", addOverride);
         assertEquals("public String toString() {\nreturn new ToStringBuilder(this)"
                 + ".append(\"field1\", getField1()).append(\"field2\", getField2()).toString();\n}\n\n", toStringMethod);
     }
 
     @Test
     public void testGenerateEqualsDefault() throws JavaModelException {
-        String equalsMethod = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields,
-                objectClass, appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
-                useBlocksInIfStatements));
+        String equalsMethod = MethodGenerations.createEqualsMethod(objectClass, equalsHashCodeDialogData, addOverride);
         assertEquals("public boolean equals(final Object other) {\nif ( !(other instanceof Clazz) ) return false;"
                 + "Clazz castOther = (Clazz) other;\nreturn new EqualsBuilder()"
                 + ".append(field1, castOther.field1).append(field2, castOther.field2).isEquals();\n}\n\n", equalsMethod);
@@ -181,10 +196,8 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateEqualsWithAppendSuper() throws JavaModelException {
-        appendSuper = true;
-        String equalsMethod = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields,
-                objectClass, appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
-                useBlocksInIfStatements));
+        when(equalsHashCodeDialogData.getAppendSuper()).thenReturn(true);
+        String equalsMethod = MethodGenerations.createEqualsMethod(objectClass, equalsHashCodeDialogData, addOverride);
         assertEquals("public boolean equals(final Object other) {\nif ( !(other instanceof Clazz) ) return false;"
                 + "Clazz castOther = (Clazz) other;\nreturn new EqualsBuilder()"
                 + ".appendSuper(super.equals(other)).append(field1, castOther.field1)"
@@ -193,10 +206,8 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateEqualsWithComment() throws JavaModelException {
-        generateComment = true;
-        String equalsMethod = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields,
-                objectClass, appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
-                useBlocksInIfStatements));
+        when(equalsHashCodeDialogData.getGenerateComment()).thenReturn(true);
+        String equalsMethod = MethodGenerations.createEqualsMethod(objectClass, equalsHashCodeDialogData, addOverride);
         assertEquals("/* (non-Javadoc)\n * @see java.lang.Object#equals(java.lang.Object)\n */\n"
                 + "public boolean equals(final Object other) {\nif ( !(other instanceof Clazz) ) return false;"
                 + "Clazz castOther = (Clazz) other;\nreturn new EqualsBuilder()"
@@ -205,10 +216,8 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateEqualsWithCompareReferences() throws JavaModelException {
-        compareReferences = true;
-        String equalsMethod = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields,
-                objectClass, appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
-                useBlocksInIfStatements));
+        when(equalsHashCodeDialogData.getCompareReferences()).thenReturn(true);
+        String equalsMethod = MethodGenerations.createEqualsMethod(objectClass, equalsHashCodeDialogData, addOverride);
         assertEquals("public boolean equals(final Object other) {\nif (this == other) return true;"
                 + "if ( !(other instanceof Clazz) ) return false;Clazz castOther = (Clazz) other;\n"
                 + "return new EqualsBuilder().append(field1, castOther.field1).append(field2, castOther.field2)"
@@ -218,9 +227,7 @@ public class MethodGenerationsTest {
     @Test
     public void testGenerateEqualsWithAddOverride() throws JavaModelException {
         addOverride = true;
-        String equalsMethod = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields,
-                objectClass, appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
-                useBlocksInIfStatements));
+        String equalsMethod = MethodGenerations.createEqualsMethod(objectClass, equalsHashCodeDialogData, addOverride);
         assertEquals("@Override\npublic boolean equals(final Object other) {\nif ( !(other instanceof Clazz) ) "
                 + "return false;Clazz castOther = (Clazz) other;\nreturn new EqualsBuilder()"
                 + ".append(field1, castOther.field1).append(field2, castOther.field2).isEquals();\n}\n\n", equalsMethod);
@@ -228,10 +235,8 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateEqualsWithGetters() throws JavaModelException {
-        useGettersInsteadOfFields = true;
-        String equalsMethod = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields,
-                objectClass, appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
-                useBlocksInIfStatements));
+        when(equalsHashCodeDialogData.getUseGettersInsteadOfFields()).thenReturn(true);
+        String equalsMethod = MethodGenerations.createEqualsMethod(objectClass, equalsHashCodeDialogData, addOverride);
         assertEquals("public boolean equals(final Object other) {\nif ( !(other instanceof Clazz) ) return false;"
                 + "Clazz castOther = (Clazz) other;\nreturn new EqualsBuilder()"
                 + ".append(getField1(), castOther.getField1()).append(getField2(), castOther.getField2())"
@@ -240,10 +245,8 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateEqualsWithBlocksInIfs() throws JavaModelException {
-        useBlocksInIfStatements = true;
-        String equalsMethod = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields,
-                objectClass, appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
-                useBlocksInIfStatements));
+        when(equalsHashCodeDialogData.getUseBlockInIfStatements()).thenReturn(true);
+        String equalsMethod = MethodGenerations.createEqualsMethod(objectClass, equalsHashCodeDialogData, addOverride);
         assertEquals(
                 "public boolean equals(final Object other) {\nif ( !(other instanceof Clazz) ){\n return false;\n}"
                         + "\nClazz castOther = (Clazz) other;\nreturn new EqualsBuilder().append(field1, castOther.field1)"
@@ -252,11 +255,9 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateEqualsWithBlocksInIfsAndCompareReferences() throws JavaModelException {
-        useBlocksInIfStatements = true;
-        compareReferences = true;
-        String equalsMethod = MethodGenerations.createEqualsMethod(new EqualsMethodGenerationData(checkedFields,
-                objectClass, appendSuper, generateComment, compareReferences, addOverride, useGettersInsteadOfFields,
-                useBlocksInIfStatements));
+        when(equalsHashCodeDialogData.getUseBlockInIfStatements()).thenReturn(true);
+        when(equalsHashCodeDialogData.getCompareReferences()).thenReturn(true);
+        String equalsMethod = MethodGenerations.createEqualsMethod(objectClass, equalsHashCodeDialogData, addOverride);
         assertEquals("public boolean equals(final Object other) {\nif (this == other){\n return true;\n}\n"
                 + "if ( !(other instanceof Clazz) ){\n return false;\n}\nClazz castOther = (Clazz) other;\n"
                 + "return new EqualsBuilder().append(field1, castOther.field1).append(field2, castOther.field2)"
@@ -265,26 +266,23 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateHashCodeDefault() throws JavaModelException {
-        String hashcodeMethod = MethodGenerations.createHashCodeMethod(new HashCodeMethodGenerationData(checkedFields,
-                appendSuper, generateComment, imNumbers, "", addOverride, useGettersInsteadOfFields));
+        String hashcodeMethod = MethodGenerations.createHashCodeMethod(equalsHashCodeDialogData, "", addOverride);
         assertEquals("public int hashCode() {\nreturn new HashCodeBuilder(54, 12)"
                 + ".append(field1).append(field2).toHashCode();\n}\n\n", hashcodeMethod);
     }
 
     @Test
     public void testGenerateHashCodeWithSuper() throws JavaModelException {
-        appendSuper = true;
-        String hashcodeMethod = MethodGenerations.createHashCodeMethod(new HashCodeMethodGenerationData(checkedFields,
-                appendSuper, generateComment, imNumbers, "", addOverride, useGettersInsteadOfFields));
+        when(equalsHashCodeDialogData.getAppendSuper()).thenReturn(true);
+        String hashcodeMethod = MethodGenerations.createHashCodeMethod(equalsHashCodeDialogData, "", addOverride);
         assertEquals("public int hashCode() {\nreturn new HashCodeBuilder(54, 12)"
                 + ".appendSuper(super.hashCode()).append(field1).append(field2).toHashCode();\n}\n\n", hashcodeMethod);
     }
 
     @Test
     public void testGenerateHashCodeWithComment() throws JavaModelException {
-        generateComment = true;
-        String hashcodeMethod = MethodGenerations.createHashCodeMethod(new HashCodeMethodGenerationData(checkedFields,
-                appendSuper, generateComment, imNumbers, "", addOverride, useGettersInsteadOfFields));
+        when(equalsHashCodeDialogData.getGenerateComment()).thenReturn(true);
+        String hashcodeMethod = MethodGenerations.createHashCodeMethod(equalsHashCodeDialogData, "", addOverride);
         assertEquals("/* (non-Javadoc)\n * @see java.lang.Object#hashCode()\n */\n"
                 + "public int hashCode() {\nreturn new HashCodeBuilder(54, 12)"
                 + ".append(field1).append(field2).toHashCode();\n}\n\n", hashcodeMethod);
@@ -292,18 +290,16 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateHashCodeWithDefaultNumbers() throws JavaModelException {
-        imNumbers = new DefaultInitMultNumbers();
-        String hashcodeMethod = MethodGenerations.createHashCodeMethod(new HashCodeMethodGenerationData(checkedFields,
-                appendSuper, generateComment, imNumbers, "", addOverride, useGettersInsteadOfFields));
+        when(equalsHashCodeDialogData.getInitMultNumbers()).thenReturn(new InitMultNumbersDefault());
+        String hashcodeMethod = MethodGenerations.createHashCodeMethod(equalsHashCodeDialogData, "", addOverride);
         assertEquals("public int hashCode() {\nreturn new HashCodeBuilder()"
                 + ".append(field1).append(field2).toHashCode();\n}\n\n", hashcodeMethod);
     }
 
     @Test
     public void testGenerateHashCodeWithCachingField() throws JavaModelException {
-        String hashcodeMethod = MethodGenerations.createHashCodeMethod(new HashCodeMethodGenerationData(checkedFields,
-                appendSuper, generateComment, imNumbers, HASH_CODE_CACHING_FIELD, addOverride,
-                useGettersInsteadOfFields));
+        String hashcodeMethod = MethodGenerations.createHashCodeMethod(equalsHashCodeDialogData,
+                HASH_CODE_CACHING_FIELD, addOverride);
         assertEquals("public int hashCode() {\nif (hashCode== 0) {\nhashCode = new HashCodeBuilder(54, 12)"
                 + ".append(field1).append(field2).toHashCode();\n}\nreturn hashCode;\n}\n\n", hashcodeMethod);
     }
@@ -311,17 +307,15 @@ public class MethodGenerationsTest {
     @Test
     public void testGenerateHashCodeWithOverride() throws JavaModelException {
         addOverride = true;
-        String hashcodeMethod = MethodGenerations.createHashCodeMethod(new HashCodeMethodGenerationData(checkedFields,
-                appendSuper, generateComment, imNumbers, "", addOverride, useGettersInsteadOfFields));
+        String hashcodeMethod = MethodGenerations.createHashCodeMethod(equalsHashCodeDialogData, "", addOverride);
         assertEquals("@Override\npublic int hashCode() {\nreturn new HashCodeBuilder(54, 12)"
                 + ".append(field1).append(field2).toHashCode();\n}\n\n", hashcodeMethod);
     }
 
     @Test
     public void testGenerateHashCodeWithGetters() throws JavaModelException {
-        useGettersInsteadOfFields = true;
-        String hashcodeMethod = MethodGenerations.createHashCodeMethod(new HashCodeMethodGenerationData(checkedFields,
-                appendSuper, generateComment, imNumbers, "", addOverride, useGettersInsteadOfFields));
+        when(equalsHashCodeDialogData.getUseGettersInsteadOfFields()).thenReturn(true);
+        String hashcodeMethod = MethodGenerations.createHashCodeMethod(equalsHashCodeDialogData, "", addOverride);
         assertEquals("public int hashCode() {\nreturn new HashCodeBuilder(54, 12).append(getField1())"
                 + ".append(getField2()).toHashCode();\n}\n\n", hashcodeMethod);
     }

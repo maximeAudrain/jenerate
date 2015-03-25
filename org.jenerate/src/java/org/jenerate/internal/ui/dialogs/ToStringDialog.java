@@ -14,6 +14,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
+import org.jenerate.internal.data.ToStringDialogData;
+import org.jenerate.internal.data.impl.CompareToDialogDataImpl;
+import org.jenerate.internal.data.impl.ToStringDialogDataImpl;
 import org.jenerate.internal.lang.generators.CommonsLangLibraryUtils;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
@@ -21,7 +24,7 @@ import org.jenerate.internal.ui.preferences.PreferencesManager;
 /**
  * @author jiayun
  */
-public class ToStringDialog extends OrderableFieldDialog {
+public class ToStringDialog extends OrderableFieldDialog<ToStringDialogData> {
 
     private Combo styleCombo;
 
@@ -91,7 +94,18 @@ public class ToStringDialog extends OrderableFieldDialog {
         return composite;
     }
 
-    public String getToStringStyle() {
-        return toStringStyle;
+    @Override
+    public ToStringDialogData getData() {
+        //@formatter:off
+        return new ToStringDialogDataImpl.Builder()
+                .withCheckedFields(getCheckedFields())
+                .withElementPosition(getElementPosition())
+                .withAppendSuper(getAppendSuper())
+                .withGenerateComment(getGenerateComment())
+                .withUseBlockInIfStatements(getUseBlockInIfStatements())
+                .withUseGettersInsteadOfFields(getUseGettersInsteadOfFields())
+                .withToStringStyle(toStringStyle)
+                .build();
+        //@formatter:on
     }
 }

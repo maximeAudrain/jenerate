@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.PartInitException;
+import org.jenerate.internal.data.ToStringDialogData;
 import org.jenerate.internal.ui.dialogs.ToStringDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
@@ -35,10 +36,11 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
     private static final String TO_STRING_STYLE = "TO.STRING.STYLE";
 
     @Mock
-    private DialogProvider<ToStringDialog> dialogProvider;
-
+    private DialogProvider<ToStringDialog, ToStringDialogData> dialogProvider;
     @Mock
     private ToStringDialog fieldDialog;
+    @Mock
+    private ToStringDialogData data;
     @Mock
     private IMethod toStringMethod;
     @Mock
@@ -133,28 +135,28 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     public void verifyGeneratedCodeWithComment() throws RuntimeException, CoreException {
-        when(fieldDialog.getGenerateComment()).thenReturn(true);
+        when(data.getGenerateComment()).thenReturn(true);
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
 
     @Test
     public void verifyGeneratedCodeWithAppendSuper() throws RuntimeException, CoreException {
-        when(fieldDialog.getAppendSuper()).thenReturn(true);
+        when(data.getAppendSuper()).thenReturn(true);
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
 
     @Test
     public void verifyGeneratedCodeWithNoStyleConstant() throws RuntimeException, CoreException {
-        when(fieldDialog.getToStringStyle()).thenReturn("");
+        when(data.getToStringStyle()).thenReturn("");
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
 
     @Test
     public void verifyGeneratedCodeWithGettersInsteadOfFields() throws RuntimeException, CoreException {
-        when(fieldDialog.getUseGettersInsteadOfFields()).thenReturn(true);
+        when(data.getUseGettersInsteadOfFields()).thenReturn(true);
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
@@ -196,15 +198,16 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
 
     private void mockCommonFieldDialog() {
         when(fieldDialog.open()).thenReturn(Window.OK);
-        when(fieldDialog.getCheckedFields()).thenReturn(fields);
-        when(fieldDialog.getElementPosition()).thenReturn(elementPosition);
-        when(fieldDialog.getGenerateComment()).thenReturn(false);
-        when(fieldDialog.getAppendSuper()).thenReturn(false);
-        when(fieldDialog.getUseGettersInsteadOfFields()).thenReturn(false);
+        when(fieldDialog.getData()).thenReturn(data);
+        when(data.getCheckedFields()).thenReturn(fields);
+        when(data.getElementPosition()).thenReturn(elementPosition);
+        when(data.getGenerateComment()).thenReturn(false);
+        when(data.getAppendSuper()).thenReturn(false);
+        when(data.getUseGettersInsteadOfFields()).thenReturn(false);
     }
 
     private void mockSpecificFieldDialog() {
-        when(fieldDialog.getToStringStyle()).thenReturn(TO_STRING_STYLE);
+        when(data.getToStringStyle()).thenReturn(TO_STRING_STYLE);
     }
 
     private void mockToStringMethodExists(boolean exists) {

@@ -36,6 +36,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
+import org.jenerate.internal.data.FieldDialogData;
+import org.jenerate.internal.data.FieldDialogDataPovider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
@@ -44,7 +46,7 @@ import org.jenerate.internal.ui.preferences.PreferencesManager;
  * 
  * @author jiayun
  */
-public class FieldDialog extends Dialog {
+public abstract class FieldDialog<T extends FieldDialogData> extends Dialog implements FieldDialogDataPovider<T> {
 
     private static final String SETTINGS_SECTION = "FieldDialog";
 

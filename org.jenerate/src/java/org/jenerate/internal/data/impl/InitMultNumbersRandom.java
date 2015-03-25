@@ -7,7 +7,7 @@ import org.jenerate.internal.data.IInitMultNumbers;
 /**
  * @author jiayun
  */
-public class RandomInitMultNumbers implements IInitMultNumbers {
+public class InitMultNumbersRandom implements IInitMultNumbers {
 
     private static Random random = new Random();
 
