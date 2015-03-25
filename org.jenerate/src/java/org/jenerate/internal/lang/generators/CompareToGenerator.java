@@ -57,8 +57,7 @@ public final class CompareToGenerator implements ILangGenerator {
         try {
             IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
-            boolean disableAppendSuper = !(javaInterfaceCodeAppender
-                    .isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
+            boolean disableAppendSuper = getDisableAppendSuper(objectClass);
             
             CompareToDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
                     disableAppendSuper, preferencesManager);
@@ -71,13 +70,18 @@ public final class CompareToGenerator implements ILangGenerator {
                     }
                 }
 
-                generateCompareTo(parentShell, objectClass, dialog.getData());
+                generateCode(parentShell, objectClass, dialog.getData());
             }
 
         } catch (CoreException e) {
             MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
         }
 
+    }
+
+    private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
+        return !(javaInterfaceCodeAppender
+                .isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
     }
 
     private Set<IMethod> getExcludedMethods(IType objectClass) {
@@ -96,7 +100,7 @@ public final class CompareToGenerator implements ILangGenerator {
         return excludedMethods;
     }
 
-    private void generateCompareTo(final Shell parentShell, final IType objectClass, CompareToDialogData compareToDialogData)
+    private void generateCode(final Shell parentShell, final IType objectClass, CompareToDialogData compareToDialogData)
             throws PartInitException, JavaModelException, MalformedTreeException {
 
         boolean implementedOrExtendedInSuperType = javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(

@@ -53,7 +53,7 @@ public final class ToStringGenerator implements ILangGenerator {
         try {
             IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
-            boolean disableAppendSuper = !isToStringConcreteInSuperclass(objectClass);
+            boolean disableAppendSuper = getDisableAppendSuper(objectClass);
             
             ToStringDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
                     disableAppendSuper, preferencesManager);
@@ -66,13 +66,17 @@ public final class ToStringGenerator implements ILangGenerator {
                     }
                 }
 
-                generateToString(parentShell, objectClass, dialog.getData());
+                generateCode(parentShell, objectClass, dialog.getData());
             }
 
         } catch (CoreException e) {
             MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
         }
 
+    }
+
+    private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
+        return !isToStringConcreteInSuperclass(objectClass);
     }
 
     private Set<IMethod> getExcludedMethods(IType objectClass) {
@@ -86,7 +90,7 @@ public final class ToStringGenerator implements ILangGenerator {
         return excludedMethods;
     }
 
-    private void generateToString(final Shell parentShell, final IType objectClass, ToStringDialogData data)
+    private void generateCode(final Shell parentShell, final IType objectClass, ToStringDialogData data)
             throws PartInitException, JavaModelException {
 
         boolean cacheToString = ((Boolean) preferencesManager

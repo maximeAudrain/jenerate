@@ -14,6 +14,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.EqualsHashCodeDialogData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
@@ -53,8 +54,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         try {
             IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
-            boolean disableAppendSuper = isDirectSubclassOfObject(objectClass)
-                    || !isEqualsOverriddenInSuperclass(objectClass) || !isHashCodeOverriddenInSuperclass(objectClass);
+            boolean disableAppendSuper = getDisableAppendSuper(objectClass);
             
             EqualsHashCodeDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
                     disableAppendSuper, preferencesManager);
@@ -67,25 +67,18 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
                     }
                 }
 
-                EqualsHashCodeDialogData data = dialog.getData();
-
-                boolean useCommonLang3 = ((Boolean) preferencesManager
-                        .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
-                boolean addOverridePreference = ((Boolean) preferencesManager
-                        .getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).booleanValue();
-                boolean addOverride = addOverridePreference
-                        && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass);
-                IJavaElement created = generateHashCode(parentShell, objectClass, data, useCommonLang3, addOverride);
-
-                created = generateEquals(parentShell, objectClass, data, created, useCommonLang3, addOverride);
-
-                javaUiCodeAppender.revealInEditor(objectClass, created);
+                generateCode(parentShell, objectClass, dialog.getData());
             }
 
         } catch (CoreException e) {
             MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
         }
 
+    }
+
+    private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
+        return isDirectSubclassOfObject(objectClass)
+                || !isEqualsOverriddenInSuperclass(objectClass) || !isHashCodeOverriddenInSuperclass(objectClass);
     }
 
     private Set<IMethod> getExcludedMethods(IType objectClass) {
@@ -100,6 +93,21 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             excludedMethods.add(existingHashCode);
         }
         return excludedMethods;
+    }
+
+    private void generateCode(Shell parentShell, IType objectClass, EqualsHashCodeDialogData data)
+            throws JavaModelException, PartInitException {
+        boolean useCommonLang3 = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
+        boolean addOverridePreference = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).booleanValue();
+        boolean addOverride = addOverridePreference
+                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass);
+        IJavaElement created = generateHashCode(parentShell, objectClass, data, useCommonLang3, addOverride);
+
+        created = generateEquals(parentShell, objectClass, data, created, useCommonLang3, addOverride);
+
+        javaUiCodeAppender.revealInEditor(objectClass, created);
     }
 
     private IJavaElement generateHashCode(final Shell parentShell, final IType objectClass,
