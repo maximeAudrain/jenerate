@@ -109,17 +109,6 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
         verifyNoMoreInteractions(javaUiCodeAppender, compilationUnit);
     }
 
-    /**
-     * XXX same except the generator
-     */
-    @Test
-    public void verifyGeneratedCodeWithDisplayedFieldsOfSuperclass() throws RuntimeException, CoreException {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES))
-                .thenReturn(true);
-        equalsHashCodeGenerator.generate(parentShell, objectClass);
-        verifyCodeAppended(false);
-    }
-
     @Test
     public void verifyGeneratedCodeDisableAppendSuperCauseDirectSubclassOfObject() throws RuntimeException,
             CoreException {

@@ -64,9 +64,30 @@ public class GeneratorsCommonMethodsDelegateImpl implements GeneratorsCommonMeth
 
         return true;
     }
-
+    
     @Override
-    public IField[] getNonStaticNonCacheFields(IType objectClass, PreferencesManager preferencesManager)
+    public boolean isSourceLevelGreaterThanOrEqualTo5(IType objectClass) {
+        IJavaProject project = objectClass.getJavaProject();
+        float sc = Float.parseFloat(project.getOption(JavaCore.COMPILER_SOURCE, true));
+        return sc >= 1.5;
+    }
+    
+    @Override
+    public IField[] getObjectClassFields(IType objectClass, PreferencesManager preferencesManager)
+            throws JavaModelException {
+        boolean displayFieldsOfSuperClasses = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES)).booleanValue();
+        IField[] fields;
+        if (displayFieldsOfSuperClasses) {
+            fields = getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
+                    preferencesManager);
+        } else {
+            fields = getNonStaticNonCacheFields(objectClass, preferencesManager);
+        }
+        return fields;
+    }
+
+    private IField[] getNonStaticNonCacheFields(IType objectClass, PreferencesManager preferencesManager)
             throws JavaModelException {
         Set<String> cacheFields = new HashSet<>();
         cacheFields.add((String) preferencesManager
@@ -88,8 +109,7 @@ public class GeneratorsCommonMethodsDelegateImpl implements GeneratorsCommonMeth
         return result.toArray(new IField[result.size()]);
     }
 
-    @Override
-    public IField[] getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(IType objectClass,
+    private IField[] getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(IType objectClass,
             PreferencesManager preferencesManager) throws JavaModelException {
         List<IField> result = new ArrayList<>();
 
@@ -118,12 +138,4 @@ public class GeneratorsCommonMethodsDelegateImpl implements GeneratorsCommonMeth
 
         return result.toArray(new IField[result.size()]);
     }
-
-    @Override
-    public boolean isSourceLevelGreaterThanOrEqualTo5(IType objectClass) {
-        IJavaProject project = objectClass.getJavaProject();
-        float sc = Float.parseFloat(project.getOption(JavaCore.COMPILER_SOURCE, true));
-        return sc >= 1.5;
-    }
-
 }

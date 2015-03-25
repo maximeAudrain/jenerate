@@ -72,8 +72,6 @@ public abstract class AbstractGeneratorTest {
     }
 
     protected void mockCommonPreferencesManager() {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES))
-                .thenReturn(false);
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION))
                 .thenReturn(false);
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).thenReturn(false);
@@ -90,11 +88,8 @@ public abstract class AbstractGeneratorTest {
     }
 
     private void mockCommonGeneratorsCommonMethodsDelegate() throws JavaModelException {
-        when(generatorsCommonMethodsDelegate.getNonStaticNonCacheFields(objectClass, preferencesManager)).thenReturn(
+        when(generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager)).thenReturn(
                 fields);
-        when(
-                generatorsCommonMethodsDelegate.getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(
-                        objectClass, preferencesManager)).thenReturn(fields);
         when(generatorsCommonMethodsDelegate.areAllFinalFields(fields)).thenReturn(false);
         when(generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)).thenReturn(false);
     }

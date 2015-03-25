@@ -63,16 +63,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             excludedMethods.add(existingHashCode);
         }
         try {
-            IField[] fields;
-            boolean displayFieldsOfSuperClasses = ((Boolean) preferencesManager
-                    .getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES)).booleanValue();
-            if (displayFieldsOfSuperClasses) {
-                fields = generatorsCommonMethodsDelegate
-                        .getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
-                                preferencesManager);
-            } else {
-                fields = generatorsCommonMethodsDelegate.getNonStaticNonCacheFields(objectClass, preferencesManager);
-            }
+            IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
             boolean disableAppendSuper = isDirectSubclassOfObject(objectClass)
                     || !isEqualsOverriddenInSuperclass(objectClass) || !isHashCodeOverriddenInSuperclass(objectClass);

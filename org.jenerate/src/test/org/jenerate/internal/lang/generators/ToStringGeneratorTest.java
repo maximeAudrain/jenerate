@@ -81,14 +81,6 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeWithDisplayedFieldsOfSuperclass() throws RuntimeException, CoreException {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES))
-                .thenReturn(true);
-        toStringGenerator.generate(parentShell, objectClass);
-        verifyCodeAppended(false);
-    }
-
-    @Test
     public void verifyGeneratedCodeWithOverridenInSuperclass() throws RuntimeException, CoreException {
         when(
                 generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, TO_STRING_FIELD_NAME,
@@ -173,7 +165,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
     @Ignore
     @Test
     public void verifyGeneratedCodeFormatFails() throws RuntimeException, CoreException {
-        when(generatorsCommonMethodsDelegate.getNonStaticNonCacheFields(objectClass, preferencesManager)).thenThrow(
+        when(generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager)).thenThrow(
                 javaModelException);
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(true);

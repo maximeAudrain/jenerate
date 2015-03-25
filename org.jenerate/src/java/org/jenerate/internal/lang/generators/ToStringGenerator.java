@@ -58,16 +58,7 @@ public final class ToStringGenerator implements ILangGenerator {
             excludedMethods.add(existingMethod);
         }
         try {
-            IField[] fields;
-            boolean displayFieldsOfSuperClasses = ((Boolean) preferencesManager
-                    .getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES)).booleanValue();
-            if (displayFieldsOfSuperClasses) {
-                fields = generatorsCommonMethodsDelegate
-                        .getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
-                                preferencesManager);
-            } else {
-                fields = generatorsCommonMethodsDelegate.getNonStaticNonCacheFields(objectClass, preferencesManager);
-            }
+            IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
             boolean disableAppendSuper = !isToStringConcreteInSuperclass(objectClass);
             ToStringDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,

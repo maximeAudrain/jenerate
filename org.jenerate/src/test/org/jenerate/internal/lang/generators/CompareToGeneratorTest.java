@@ -86,17 +86,6 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
         verifyCodeAppended(false);
     }
 
-    /**
-     * XXX same except the generator
-     */
-    @Test
-    public void verifyGeneratedCodeWithDisplayedFieldsOfSuperclass() throws RuntimeException, CoreException {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES))
-                .thenReturn(true);
-        compareToGenerator.generate(parentShell, objectClass);
-        verifyCodeAppended(false);
-    }
-
     @Test
     public void verifyGeneratedCodeIsImplementedInSupertypeDisableAppendSuper() throws PartInitException,
             JavaModelException {
