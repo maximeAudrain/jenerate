@@ -62,8 +62,6 @@ public abstract class FieldDialog<T extends FieldDialogData> extends Dialog impl
 
     private String title;
 
-    private IType objectClass;
-
     protected CheckboxTableViewer fieldViewer;
 
     private IField[] fields;
@@ -110,7 +108,6 @@ public abstract class FieldDialog<T extends FieldDialogData> extends Dialog impl
         super(parentShell);
         setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.RESIZE);
         this.title = dialogTitle;
-        this.objectClass = objectClass;
         this.fields = fields;
         this.disableAppendSuper = disableAppendSuper;
         this.preferencesManager = preferencesManager;

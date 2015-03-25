@@ -1,5 +1,6 @@
 package org.jenerate.internal.ui.preferences;
 
+@SuppressWarnings("rawtypes")
 public enum JeneratePreference implements PluginPreference {
 
     USE_COMMONS_LANG3("useCommonsLang3", "&Import commons-lang3 for all code generation", Boolean.class, Boolean.FALSE),
