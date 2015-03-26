@@ -62,7 +62,7 @@ public abstract class AbstractGeneratorTest {
     protected IField[] fields = new IField[] { field1, field2 };
 
     @Before
-    public void SetUp() throws RuntimeException, CoreException, BadLocationException {
+    public void SetUp() throws Exception {
         mockCommonPreferencesManager();
         mockCommonObjectClass();
         mockCommonGeneratorsCommonMethodsDelegate();
@@ -87,8 +87,7 @@ public abstract class AbstractGeneratorTest {
     }
 
     private void mockCommonGeneratorsCommonMethodsDelegate() throws JavaModelException {
-        when(generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager)).thenReturn(
-                fields);
+        when(generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager)).thenReturn(fields);
         when(generatorsCommonMethodsDelegate.areAllFinalFields(fields)).thenReturn(false);
         when(generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)).thenReturn(false);
     }
@@ -101,6 +100,6 @@ public abstract class AbstractGeneratorTest {
     /**
      * Callback after the Junit Before annotated setUp method
      */
-    public abstract void callbackAfterSetUp() throws CoreException, BadLocationException;
+    public abstract void callbackAfterSetUp() throws Exception;
 
 }

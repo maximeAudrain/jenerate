@@ -14,7 +14,7 @@ import org.jenerate.internal.data.JenerateDialogData;
  */
 public interface MethodContent<T extends JenerateDialogData> {
 
-    String getMethodContent(IType objectClass, T data) throws JavaModelException;
+    String getMethodContent(IType objectClass, T data) throws Exception;
     
     Set<String> getLibrariesToImport(T data);
 }

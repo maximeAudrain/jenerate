@@ -4,8 +4,6 @@ package org.jenerate.internal.lang.generators;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
@@ -53,12 +51,8 @@ public final class ToStringGenerator implements ILangGenerator {
     public void generate(Shell parentShell, IType objectClass) {
         Set<IMethod> excludedMethods = getExcludedMethods(objectClass);
         try {
-            IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
-            boolean disableAppendSuper = getDisableAppendSuper(objectClass);
-
-            ToStringDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
-                    disableAppendSuper, preferencesManager);
+            ToStringDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
 
@@ -71,14 +65,10 @@ public final class ToStringGenerator implements ILangGenerator {
                 generateCode(parentShell, objectClass, dialog.getData());
             }
 
-        } catch (CoreException e) {
+        } catch (Exception e) {
             MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
         }
 
-    }
-
-    private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
-        return !isToStringConcreteInSuperclass(objectClass);
     }
 
     private Set<IMethod> getExcludedMethods(IType objectClass) {
@@ -123,10 +113,6 @@ public final class ToStringGenerator implements ILangGenerator {
             MessageDialog.openError(parentShell, "Error", e.getMessage());
             return "";
         }
-    }
-
-    public boolean isToStringConcreteInSuperclass(final IType objectClass) throws JavaModelException {
-        return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "toString", new String[0], null);
     }
 
 }

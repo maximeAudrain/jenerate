@@ -37,12 +37,16 @@ public final class GeneratorsManager {
     private final Map<String, ILangGenerator> generators = new HashMap<>();
 
     public GeneratorsManager() {
-        generators.put(COMPARETO_GENERATOR_KEY, new CompareToGenerator(JAVA_UI_CODE_APPENDER, PREFERENCES_MANAGER,
-                new CompareToDialogProvider(), CODE_FORMATTER, COMMON_METHODS_DELEGATE, JAVA_INTERFACE_CODE_APPENDER));
+        generators.put(COMPARETO_GENERATOR_KEY,
+                new CompareToGenerator(JAVA_UI_CODE_APPENDER, PREFERENCES_MANAGER, new CompareToDialogProvider(
+                        PREFERENCES_MANAGER, COMMON_METHODS_DELEGATE, JAVA_INTERFACE_CODE_APPENDER), CODE_FORMATTER,
+                        COMMON_METHODS_DELEGATE, JAVA_INTERFACE_CODE_APPENDER));
         generators.put(EQUALS_HASHCODE_GENERATOR_KEY, new EqualsHashCodeGenerator(JAVA_UI_CODE_APPENDER,
-                PREFERENCES_MANAGER, new EqualsHashCodeDialogProvider(), CODE_FORMATTER, COMMON_METHODS_DELEGATE));
+                PREFERENCES_MANAGER, new EqualsHashCodeDialogProvider(PREFERENCES_MANAGER, COMMON_METHODS_DELEGATE),
+                CODE_FORMATTER, COMMON_METHODS_DELEGATE));
         generators.put(TOSTRING_GENERATOR_KEY, new ToStringGenerator(JAVA_UI_CODE_APPENDER, PREFERENCES_MANAGER,
-                new ToStringDialogProvider(), CODE_FORMATTER, COMMON_METHODS_DELEGATE));
+                new ToStringDialogProvider(PREFERENCES_MANAGER, COMMON_METHODS_DELEGATE), CODE_FORMATTER,
+                COMMON_METHODS_DELEGATE));
     }
 
     public ILangGenerator getGenerator(String key) {

@@ -56,7 +56,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     private EqualsHashCodeGenerator equalsHashCodeGenerator;
 
     @Override
-    public void callbackAfterSetUp() throws CoreException, BadLocationException {
+    public void callbackAfterSetUp() throws Exception {
         mockSpecificPreferencesManager();
         mockSpecificObjectClass();
         mockSpecificGeneratorsCommonMethodsDelegate();
@@ -66,9 +66,8 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
         mockEqualsMethodExists(false);
         mockAppendGeneratedCode();
 
-        when(
-                dialogProvider.getDialog(parentShell, objectClass, Collections.<IMethod> emptySet(), fields, true,
-                        preferencesManager)).thenReturn(fieldDialog);
+        when(dialogProvider.getDialog(parentShell, objectClass, Collections.<IMethod> emptySet())).thenReturn(
+                fieldDialog);
 
         equalsHashCodeGenerator = new EqualsHashCodeGenerator(javaUiCodeAppender, preferencesManager, dialogProvider,
                 jeneratePluginCodeFormatter, generatorsCommonMethodsDelegate);
@@ -81,22 +80,20 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeHashCodeMethodExists() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeHashCodeMethodExists() throws Exception {
         mockHashCodeMethodExists(true);
-        when(
-                dialogProvider.getDialog(parentShell, objectClass, Collections.singleton(hashCodeMethod), fields, true,
-                        preferencesManager)).thenReturn(fieldDialog);
+        when(dialogProvider.getDialog(parentShell, objectClass, Collections.singleton(hashCodeMethod))).thenReturn(
+                fieldDialog);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
         verify(hashCodeMethod, times(1)).delete(true, null);
     }
 
     @Test
-    public void verifyGeneratedCodeEqualsMethodExists() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeEqualsMethodExists() throws Exception {
         mockEqualsMethodExists(true);
-        when(
-                dialogProvider.getDialog(parentShell, objectClass, Collections.singleton(equalsMethod), fields, true,
-                        preferencesManager)).thenReturn(fieldDialog);
+        when(dialogProvider.getDialog(parentShell, objectClass, Collections.singleton(equalsMethod))).thenReturn(
+                fieldDialog);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
         verify(equalsMethod, times(1)).delete(true, null);
@@ -111,7 +108,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyNoMoreInteractions(javaUiCodeAppender, compilationUnit);
     }
-    
+
     @Test
     public void verifyGeneratedCodeWithCachedToString() throws RuntimeException, CoreException {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).thenReturn(Boolean.TRUE);
@@ -144,12 +141,15 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
         verifyCodeAppended(false);
     }
 
+    /**
+     * XXX Move test to dialog provider
+     */
     @Test
     public void verifyGeneratedCodeEnableAppendSuper() throws RuntimeException, CoreException {
         when(objectClass.getSuperclassName()).thenReturn("SomeOtherObject");
-        when(
-                dialogProvider.getDialog(parentShell, objectClass, Collections.<IMethod> emptySet(), fields, false,
-                        preferencesManager)).thenReturn(fieldDialog);
+        // when(
+        // dialogProvider.getDialog(parentShell, objectClass, Collections.<IMethod> emptySet(), fields, false,
+        // preferencesManager)).thenReturn(fieldDialog);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
@@ -239,21 +239,21 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
-    
+
     @Test
     public void verifyGeneratedCodeWithCompareReferences() throws RuntimeException, CoreException {
         when(data.getCompareReferences()).thenReturn(true);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
-    
+
     @Test
     public void verifyGeneratedCodeWithUseBlockInIfStatements() throws RuntimeException, CoreException {
         when(data.getUseBlockInIfStatements()).thenReturn(true);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
-    
+
     private void mockAppendGeneratedCode() throws JavaModelException {
         when(objectClass.createMethod(FORMATTED_CODE_1, elementPosition, true, null)).thenReturn(createdMethod1);
         when(objectClass.createMethod(FORMATTED_CODE_2, createdMethod1, true, null)).thenReturn(createdMethod2);
@@ -309,7 +309,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
         when(data.getAppendSuper()).thenReturn(false);
         when(data.getUseGettersInsteadOfFields()).thenReturn(false);
     }
-    
+
     private void mockSpecificFieldDialog() {
         when(data.getCompareReferences()).thenReturn(false);
         when(data.getUseBlockInIfStatements()).thenReturn(false);

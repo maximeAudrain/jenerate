@@ -4,21 +4,16 @@ package org.jenerate.internal.lang.generators;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.text.edits.MalformedTreeException;
-import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.CompareToDialogData;
+import org.jenerate.internal.domain.method.content.compareto.CommonsLangCompareToMethodContent;
 import org.jenerate.internal.domain.method.impl.CompareToMethod;
-import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.CompareToDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
@@ -56,12 +51,8 @@ public final class CompareToGenerator implements ILangGenerator {
     public void generate(Shell parentShell, IType objectClass) {
         Set<IMethod> excludedMethods = getExcludedMethods(objectClass);
         try {
-            IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
-            boolean disableAppendSuper = getDisableAppendSuper(objectClass);
-
-            CompareToDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
-                    disableAppendSuper, preferencesManager);
+            CompareToDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
 
@@ -74,14 +65,10 @@ public final class CompareToGenerator implements ILangGenerator {
                 generateCode(parentShell, objectClass, dialog.getData());
             }
 
-        } catch (CoreException e) {
+        } catch (Exception e) {
             MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
         }
 
-    }
-
-    private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
-        return !(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
     }
 
     private Set<IMethod> getExcludedMethods(IType objectClass) {
@@ -100,44 +87,28 @@ public final class CompareToGenerator implements ILangGenerator {
         return excludedMethods;
     }
 
-    private void generateCode(final Shell parentShell, final IType objectClass, CompareToDialogData compareToDialogData)
-            throws PartInitException, JavaModelException, MalformedTreeException {
-
-        boolean implementedOrExtendedInSuperType = javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(
-                objectClass, "Comparable");
-        boolean generifyPreference = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).booleanValue();
-        boolean generify = generifyPreference
-                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)
-                && !implementedOrExtendedInSuperType;
-
-        if (!implementedOrExtendedInSuperType) {
-            try {
-                String interfaceName = "Comparable";
-                if (generify) {
-                    interfaceName = "Comparable<" + objectClass.getElementName() + ">";
-                }
-                javaInterfaceCodeAppender.addSuperInterface(objectClass, interfaceName);
-            } catch (InvalidInputException e) {
-                MessageDialog.openError(parentShell, "Error",
-                        "Failed to add Comparable to implements clause:\n" + e.getMessage());
-            }
-        }
-
-        String compareToMethodContent = MethodGenerations.generateCompareToMethodContent(compareToDialogData, generify,
-                objectClass);
-        CompareToMethod compareToMethod = new CompareToMethod(preferencesManager, generatorsCommonMethodsDelegate,
-                javaInterfaceCodeAppender);
-        String source = compareToMethod.getMethod(objectClass, compareToDialogData, compareToMethodContent);
-
-        String formattedContent = format(parentShell, objectClass, source);
+    private void generateCode(final Shell parentShell, final IType objectClass, CompareToDialogData data)
+            throws Exception {
 
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
-        objectClass.getCompilationUnit().createImport(
-                CommonsLangLibraryUtils.getCompareToBuilderLibrary(useCommonLang3), null, null);
-        IMethod created = objectClass.createMethod(formattedContent, compareToDialogData.getElementPosition(), true,
-                null);
+
+        CommonsLangCompareToMethodContent compareToMethodContent = new CommonsLangCompareToMethodContent(
+                preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3, javaInterfaceCodeAppender);
+        String methodContent = compareToMethodContent.getMethodContent(objectClass, data);
+        CompareToMethod compareToMethod = new CompareToMethod(preferencesManager, generatorsCommonMethodsDelegate,
+                javaInterfaceCodeAppender);
+        String source = compareToMethod.getMethod(objectClass, data, methodContent);
+
+        for (String libraryToImport : compareToMethod.getLibrariesToImport()) {
+            objectClass.getCompilationUnit().createImport(libraryToImport, null, null);
+        }
+        for (String libraryToImport : compareToMethodContent.getLibrariesToImport(data)) {
+            objectClass.getCompilationUnit().createImport(libraryToImport, null, null);
+        }
+
+        String formattedContent = format(parentShell, objectClass, source);
+        IMethod created = objectClass.createMethod(formattedContent, data.getElementPosition(), true, null);
 
         javaUiCodeAppender.revealInEditor(objectClass, created);
     }
@@ -149,11 +120,6 @@ public final class CompareToGenerator implements ILangGenerator {
             MessageDialog.openError(parentShell, "Error", e.getMessage());
             return "";
         }
-    }
-
-    public boolean isCompareToImplementedInSuperclass(final IType objectClass) throws JavaModelException {
-        return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "compareTo",
-                new String[] { "QObject;" }, null);
     }
 
 }
