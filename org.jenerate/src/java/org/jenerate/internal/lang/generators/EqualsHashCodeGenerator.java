@@ -55,13 +55,13 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
             boolean disableAppendSuper = getDisableAppendSuper(objectClass);
-            
+
             EqualsHashCodeDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
                     disableAppendSuper, preferencesManager);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
-                
-                for(IMethod excludedMethod : excludedMethods) {
+
+                for (IMethod excludedMethod : excludedMethods) {
                     if (excludedMethod.exists()) {
                         excludedMethod.delete(true, null);
                     }
@@ -77,8 +77,8 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
     }
 
     private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
-        return isDirectSubclassOfObject(objectClass)
-                || !isEqualsOverriddenInSuperclass(objectClass) || !isHashCodeOverriddenInSuperclass(objectClass);
+        return isDirectSubclassOfObject(objectClass) || !isEqualsOverriddenInSuperclass(objectClass)
+                || !isHashCodeOverriddenInSuperclass(objectClass);
     }
 
     private Set<IMethod> getExcludedMethods(IType objectClass) {
@@ -123,7 +123,8 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
                     .getCurrentPreferenceValue(JeneratePreference.HASHCODE_CACHING_FIELD);
         }
 
-        String source = MethodGenerations.createHashCodeMethod(data, cachingField, addOverride);
+        String hashCodeMethodContent = MethodGenerations.generateHashCodeMethodContent(data, cachingField);
+        String source = MethodGenerations.createHashCodeMethod(data, addOverride, hashCodeMethodContent);
 
         String formattedContent = format(parentShell, objectClass, source);
 
@@ -148,7 +149,8 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             EqualsHashCodeDialogData data, final IJavaElement insertPosition, boolean useCommonLang3,
             boolean addOverride) throws JavaModelException {
 
-        String source = MethodGenerations.createEqualsMethod(objectClass, data, addOverride);
+        String equalsMethodContent = MethodGenerations.generateEqualsMethodContent(data, objectClass);
+        String source = MethodGenerations.createEqualsMethod(data, addOverride, equalsMethodContent);
         String formattedContent = format(parentShell, objectClass, source);
         objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getEqualsBuilderLibrary(useCommonLang3),
                 null, null);

@@ -54,13 +54,13 @@ public final class ToStringGenerator implements ILangGenerator {
             IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
             boolean disableAppendSuper = getDisableAppendSuper(objectClass);
-            
+
             ToStringDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
                     disableAppendSuper, preferencesManager);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
 
-                for(IMethod excludedMethod : excludedMethods) {
+                for (IMethod excludedMethod : excludedMethods) {
                     if (excludedMethod.exists()) {
                         excludedMethod.delete(true, null);
                     }
@@ -111,7 +111,9 @@ public final class ToStringGenerator implements ILangGenerator {
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
         String styleConstant = getStyleConstantAndAddImport(data.getToStringStyle(), objectClass, useCommonLang3);
-        String source = MethodGenerations.createToStringMethod(data, styleConstant, cachingField, addOverride);
+        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(data, styleConstant,
+                cachingField);
+        String source = MethodGenerations.createToStringMethod(data, addOverride, toStringMethodContent);
 
         String formattedContent = format(parentShell, objectClass, source);
 

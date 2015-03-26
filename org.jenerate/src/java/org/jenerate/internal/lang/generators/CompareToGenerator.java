@@ -58,13 +58,13 @@ public final class CompareToGenerator implements ILangGenerator {
             IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
             boolean disableAppendSuper = getDisableAppendSuper(objectClass);
-            
+
             CompareToDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods, fields,
                     disableAppendSuper, preferencesManager);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
 
-                for(IMethod excludedMethod : excludedMethods) {
+                for (IMethod excludedMethod : excludedMethods) {
                     if (excludedMethod.exists()) {
                         excludedMethod.delete(true, null);
                     }
@@ -80,8 +80,7 @@ public final class CompareToGenerator implements ILangGenerator {
     }
 
     private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
-        return !(javaInterfaceCodeAppender
-                .isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
+        return !(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
     }
 
     private Set<IMethod> getExcludedMethods(IType objectClass) {
@@ -124,7 +123,10 @@ public final class CompareToGenerator implements ILangGenerator {
             }
         }
 
-        String source = MethodGenerations.createCompareToMethod(objectClass, compareToDialogData, generify);
+        String compareToMethodContent = MethodGenerations.generateCompareToMethodContent(compareToDialogData, generify,
+                objectClass);
+        String source = MethodGenerations.createCompareToMethod(objectClass, compareToDialogData, generify,
+                compareToMethodContent);
 
         String formattedContent = format(parentShell, objectClass, source);
 
@@ -132,7 +134,8 @@ public final class CompareToGenerator implements ILangGenerator {
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
         objectClass.getCompilationUnit().createImport(
                 CommonsLangLibraryUtils.getCompareToBuilderLibrary(useCommonLang3), null, null);
-        IMethod created = objectClass.createMethod(formattedContent, compareToDialogData.getElementPosition(), true, null);
+        IMethod created = objectClass.createMethod(formattedContent, compareToDialogData.getElementPosition(), true,
+                null);
 
         javaUiCodeAppender.revealInEditor(objectClass, created);
     }
