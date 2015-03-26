@@ -10,7 +10,6 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.data.CompareToDialogData;
 import org.jenerate.internal.data.impl.CompareToDialogDataImpl;
-import org.jenerate.internal.domain.impl.UserActionIdentifier;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
 public class CompareToDialog extends OrderableFieldDialog<CompareToDialogData> {
@@ -39,10 +38,4 @@ public class CompareToDialog extends OrderableFieldDialog<CompareToDialogData> {
     public Dialog getDialog() {
         return this;
     }
-
-    @Override
-    public UserActionIdentifier getUserActionIdentifier() {
-        return UserActionIdentifier.COMPARE_TO;
-    }
-
 }

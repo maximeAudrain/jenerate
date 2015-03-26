@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.data.ToStringDialogData;
 import org.jenerate.internal.data.impl.ToStringDialogDataImpl;
-import org.jenerate.internal.domain.impl.UserActionIdentifier;
+import org.jenerate.internal.domain.UserActionIdentifier;
 import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
@@ -117,10 +117,5 @@ public class ToStringDialog extends OrderableFieldDialog<ToStringDialogData> {
     @Override
     public Dialog getDialog() {
         return this;
-    }
-
-    @Override
-    public UserActionIdentifier getUserActionIdentifier() {
-        return UserActionIdentifier.TO_STRING;
     }
 }

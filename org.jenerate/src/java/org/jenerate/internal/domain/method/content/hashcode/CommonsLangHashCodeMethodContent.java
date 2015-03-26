@@ -8,21 +8,20 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.data.EqualsHashCodeDialogData;
+import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.method.content.AbstractMethodContent;
+import org.jenerate.internal.domain.method.content.CommonsLangLibraryUtils;
+import org.jenerate.internal.domain.method.skeleton.impl.HashCodeMethod;
 import org.jenerate.internal.lang.MethodGenerations;
-import org.jenerate.internal.lang.generators.CommonsLangLibraryUtils;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
-public class CommonsLangHashCodeMethodContent extends AbstractMethodContent<EqualsHashCodeDialogData> {
+public class CommonsLangHashCodeMethodContent extends AbstractMethodContent<HashCodeMethod, EqualsHashCodeDialogData> {
 
-    private final boolean useCommonsLang3;
-
-    public CommonsLangHashCodeMethodContent(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate, boolean useCommonsLang3) {
-        super(preferencesManager, generatorsCommonMethodsDelegate);
-        this.useCommonsLang3 = useCommonsLang3;
+    public CommonsLangHashCodeMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
+            PreferencesManager preferencesManager, GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
+        super(methodContentStrategyIdentifier, preferencesManager, generatorsCommonMethodsDelegate);
     }
 
     @Override
@@ -52,7 +51,15 @@ public class CommonsLangHashCodeMethodContent extends AbstractMethodContent<Equa
 
     @Override
     public Set<String> getLibrariesToImport(EqualsHashCodeDialogData data) {
+        boolean useCommonsLang3 = false;
+        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
+            useCommonsLang3 = true;
+        }
         return Collections.singleton(CommonsLangLibraryUtils.getHashCodeBuilderLibrary(useCommonsLang3));
     }
 
+    @Override
+    public Class<HashCodeMethod> getRelatedMethodSkeletonClass() {
+        return HashCodeMethod.class;
+    }
 }

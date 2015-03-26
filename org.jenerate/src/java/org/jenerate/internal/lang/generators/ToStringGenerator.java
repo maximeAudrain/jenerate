@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.ToStringDialogData;
 import org.jenerate.internal.domain.method.content.tostring.CommonsLangToStringMethodContent;
-import org.jenerate.internal.domain.method.impl.ToStringMethod;
+import org.jenerate.internal.domain.method.skeleton.impl.ToStringMethod;
 import org.jenerate.internal.ui.dialogs.ToStringDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
@@ -66,7 +66,7 @@ public final class ToStringGenerator implements ILangGenerator {
             }
 
         } catch (Exception e) {
-            MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
+            MessageDialog.openError(parentShell, "MethodSkeleton Generation Failed", e.getMessage());
         }
 
     }
@@ -88,8 +88,9 @@ public final class ToStringGenerator implements ILangGenerator {
         IJavaElement currentPosition = data.getElementPosition();
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
-        CommonsLangToStringMethodContent toStringMethodContent = new CommonsLangToStringMethodContent(
-                preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3);
+        CommonsLangToStringMethodContent toStringMethodContent = null;
+//                new CommonsLangToStringMethodContent(
+//                preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3);
         String methodContent = toStringMethodContent.getMethodContent(objectClass, data);
         ToStringMethod toStringMethod = new ToStringMethod(preferencesManager, generatorsCommonMethodsDelegate);
         String source = toStringMethod.getMethod(objectClass, data, methodContent);

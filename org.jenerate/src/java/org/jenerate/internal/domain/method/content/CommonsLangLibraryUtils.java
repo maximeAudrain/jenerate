@@ -1,4 +1,4 @@
-package org.jenerate.internal.lang.generators;
+package org.jenerate.internal.domain.method.content;
 
 
 /**
@@ -30,32 +30,28 @@ public final class CommonsLangLibraryUtils {
      * @return the full constructed CompareToBuilder library
      */
     public static String getCompareToBuilderLibrary(boolean useCommonsLang3) {
-        return createLibraryFullPath(COMPARE_TO_BUILDER_POSTFIX, useCommonsLang3);
+        return COMMONS_LANG_PREFIX + (useCommonsLang3 ? COMMONS_LANG3_ADDON : EMPTY_STRING) + COMPARE_TO_BUILDER_POSTFIX;
     }
 
     /**
      * @return the full constructed HashCodeBuilder library
      */
     public static String getHashCodeBuilderLibrary(boolean useCommonsLang3) {
-        return createLibraryFullPath(HASH_CODE_BUILDER_POSTFIX, useCommonsLang3);
+        return COMMONS_LANG_PREFIX + (useCommonsLang3 ? COMMONS_LANG3_ADDON : EMPTY_STRING) + HASH_CODE_BUILDER_POSTFIX;
     }
 
     /**
      * @return the full constructed EqualsBuilder library
      */
     public static String getEqualsBuilderLibrary(boolean useCommonsLang3) {
-        return createLibraryFullPath(EQUALS_BUILDER_POSTFIX, useCommonsLang3);
+        return COMMONS_LANG_PREFIX + (useCommonsLang3 ? COMMONS_LANG3_ADDON : EMPTY_STRING) + EQUALS_BUILDER_POSTFIX;
     }
 
     /**
      * @return the full constructed ToStringBuilder library
      */
     public static String getToStringBuilderLibrary(boolean useCommonsLang3) {
-        return createLibraryFullPath(TO_STRING_BUILDER_POSTFIX, useCommonsLang3);
-    }
-
-    private static String createLibraryFullPath(String libraryToImportPostfix, boolean useCommonsLang3) {
-        return COMMONS_LANG_PREFIX + (useCommonsLang3 ? COMMONS_LANG3_ADDON : EMPTY_STRING) + libraryToImportPostfix;
+        return COMMONS_LANG_PREFIX + (useCommonsLang3 ? COMMONS_LANG3_ADDON : EMPTY_STRING) + TO_STRING_BUILDER_POSTFIX;
     }
 
 }

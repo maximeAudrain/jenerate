@@ -1,8 +1,9 @@
-package org.jenerate.internal.domain.method.impl;
+package org.jenerate.internal.domain.method.skeleton.impl;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.data.EqualsHashCodeDialogData;
+import org.jenerate.internal.domain.UserActionIdentifier;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
@@ -19,6 +20,16 @@ public class EqualsMethod extends AbstractMethod<EqualsHashCodeDialogData> {
             throws JavaModelException {
         boolean addOverride = addOverride(objectClass);
         return MethodGenerations.createEqualsMethod(data, addOverride, methodContent);
+    }
+
+    @Override
+    public UserActionIdentifier getUserActionIdentifier() {
+        return UserActionIdentifier.EQUALS_HASH_CODE;
+    }
+
+    @Override
+    public String getMethodName() {
+        return "equals";
     }
 
 }

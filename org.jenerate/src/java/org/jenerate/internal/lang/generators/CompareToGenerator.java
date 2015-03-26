@@ -13,7 +13,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.data.CompareToDialogData;
 import org.jenerate.internal.domain.method.content.compareto.CommonsLangCompareToMethodContent;
-import org.jenerate.internal.domain.method.impl.CompareToMethod;
+import org.jenerate.internal.domain.method.skeleton.impl.CompareToMethod;
 import org.jenerate.internal.ui.dialogs.CompareToDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
@@ -66,7 +66,7 @@ public final class CompareToGenerator implements ILangGenerator {
             }
 
         } catch (Exception e) {
-            MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
+            MessageDialog.openError(parentShell, "MethodSkeleton Generation Failed", e.getMessage());
         }
 
     }
@@ -93,8 +93,9 @@ public final class CompareToGenerator implements ILangGenerator {
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
 
-        CommonsLangCompareToMethodContent compareToMethodContent = new CommonsLangCompareToMethodContent(
-                preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3, javaInterfaceCodeAppender);
+        CommonsLangCompareToMethodContent compareToMethodContent = null;
+//                new CommonsLangCompareToMethodContent(
+//                preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3, javaInterfaceCodeAppender);
         String methodContent = compareToMethodContent.getMethodContent(objectClass, data);
         CompareToMethod compareToMethod = new CompareToMethod(preferencesManager, generatorsCommonMethodsDelegate,
                 javaInterfaceCodeAppender);

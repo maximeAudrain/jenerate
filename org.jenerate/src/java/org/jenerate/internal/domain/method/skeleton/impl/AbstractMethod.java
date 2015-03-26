@@ -1,16 +1,16 @@
-package org.jenerate.internal.domain.method.impl;
+package org.jenerate.internal.domain.method.skeleton.impl;
 
 import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.data.JenerateDialogData;
-import org.jenerate.internal.domain.method.Method;
+import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
-public abstract class AbstractMethod<T extends JenerateDialogData> implements Method<T> {
+public abstract class AbstractMethod<T extends JenerateDialogData> implements MethodSkeleton<T> {
 
     protected final PreferencesManager preferencesManager;
     protected final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;

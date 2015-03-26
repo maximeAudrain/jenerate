@@ -1,8 +1,9 @@
-package org.jenerate.internal.domain.method.impl;
+package org.jenerate.internal.domain.method.skeleton.impl;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.data.ToStringDialogData;
+import org.jenerate.internal.domain.UserActionIdentifier;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
@@ -18,6 +19,16 @@ public class ToStringMethod extends AbstractMethod<ToStringDialogData> {
     public String getMethod(IType objectClass, ToStringDialogData data, String methodContent) throws JavaModelException {
         boolean addOverride = addOverride(objectClass);
         return MethodGenerations.createToStringMethod(data, addOverride, methodContent);
+    }
+
+    @Override
+    public UserActionIdentifier getUserActionIdentifier() {
+        return UserActionIdentifier.TO_STRING;
+    }
+
+    @Override
+    public String getMethodName() {
+        return "toString";
     }
 
 }

@@ -16,8 +16,8 @@ import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.EqualsHashCodeDialogData;
 import org.jenerate.internal.domain.method.content.equals.CommonsLangEqualsMethodContent;
 import org.jenerate.internal.domain.method.content.hashcode.CommonsLangHashCodeMethodContent;
-import org.jenerate.internal.domain.method.impl.EqualsMethod;
-import org.jenerate.internal.domain.method.impl.HashCodeMethod;
+import org.jenerate.internal.domain.method.skeleton.impl.EqualsMethod;
+import org.jenerate.internal.domain.method.skeleton.impl.HashCodeMethod;
 import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
@@ -68,7 +68,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             }
 
         } catch (Exception e) {
-            MessageDialog.openError(parentShell, "Method Generation Failed", e.getMessage());
+            MessageDialog.openError(parentShell, "MethodSkeleton Generation Failed", e.getMessage());
         }
 
     }
@@ -102,8 +102,9 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             EqualsHashCodeDialogData data, boolean useCommonLang3) throws JavaModelException {
 
         IJavaElement currentPosition = data.getElementPosition();
-        CommonsLangHashCodeMethodContent hashCodeMethodContent = new CommonsLangHashCodeMethodContent(
-                preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3);
+        CommonsLangHashCodeMethodContent hashCodeMethodContent = null;
+//                new CommonsLangHashCodeMethodContent(
+//                preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3);
         String methodContent = hashCodeMethodContent.getMethodContent(objectClass, data);
         HashCodeMethod hashCodeMethod = new HashCodeMethod(preferencesManager, generatorsCommonMethodsDelegate);
         String source = hashCodeMethod.getMethod(objectClass, data, methodContent);
@@ -123,8 +124,9 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             EqualsHashCodeDialogData data, final IJavaElement insertPosition, boolean useCommonLang3)
             throws JavaModelException {
 
-        CommonsLangEqualsMethodContent equalsMethodContent = new CommonsLangEqualsMethodContent(preferencesManager,
-                generatorsCommonMethodsDelegate, useCommonLang3);
+        CommonsLangEqualsMethodContent equalsMethodContent = null;
+//                new CommonsLangEqualsMethodContent(preferencesManager,
+//                generatorsCommonMethodsDelegate, useCommonLang3);
         String methodContent = equalsMethodContent.getMethodContent(objectClass, data);
         EqualsMethod equalsMethod = new EqualsMethod(preferencesManager, generatorsCommonMethodsDelegate);
         String source = equalsMethod.getMethod(objectClass, data, methodContent);

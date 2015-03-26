@@ -64,14 +64,17 @@ public class GeneratorsCommonMethodsDelegateImpl implements GeneratorsCommonMeth
 
         return true;
     }
-    
+
     @Override
     public boolean isSourceLevelGreaterThanOrEqualTo5(IType objectClass) {
         IJavaProject project = objectClass.getJavaProject();
         float sc = Float.parseFloat(project.getOption(JavaCore.COMPILER_SOURCE, true));
         return sc >= 1.5;
     }
-    
+
+    /**
+     * Move closer to dialog provider
+     */
     @Override
     public IField[] getObjectClassFields(IType objectClass, PreferencesManager preferencesManager)
             throws JavaModelException {

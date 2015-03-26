@@ -8,6 +8,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.data.EqualsHashCodeDialogData;
+import org.jenerate.internal.domain.UserActionIdentifier;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
@@ -54,6 +55,11 @@ public class EqualsHashCodeDialogProvider extends AbstractDialogProvider<EqualsH
     public boolean isEqualsOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
         return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "equals",
                 new String[] { "QObject;" }, "java.lang.Object");
+    }
+    
+    @Override
+    public UserActionIdentifier getUserActionIdentifier() {
+        return UserActionIdentifier.EQUALS_HASH_CODE;
     }
 
 }

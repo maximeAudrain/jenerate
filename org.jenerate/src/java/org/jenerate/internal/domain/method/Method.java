@@ -1,21 +1,13 @@
 package org.jenerate.internal.domain.method;
 
-import java.util.Set;
-
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.data.JenerateDialogData;
+import org.jenerate.internal.domain.method.content.MethodContent;
+import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 
-/**
- * Define a method that can be generated. The method skeleton that can be generated depends on the user specific needs
- * provided by the {@link JenerateDialogData}
- * 
- * @author maudrain
- */
-public interface Method<T extends JenerateDialogData> {
+public interface Method<T extends MethodSkeleton<U>, U extends JenerateDialogData> {
 
-    String getMethod(IType objectClass, T data, String methodContent) throws JavaModelException;
+    T getMethodSkeleton();
 
-    Set<String> getLibrariesToImport();
+    MethodContent<T, U> getMethodContent();
 
 }

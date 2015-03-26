@@ -8,6 +8,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.data.ToStringDialogData;
+import org.jenerate.internal.domain.UserActionIdentifier;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.ui.dialogs.ToStringDialog;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
@@ -25,7 +26,7 @@ public class ToStringDialogProvider extends AbstractDialogProvider<ToStringDialo
         IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
-        return new ToStringDialog(parentShell, "Generate ToString Method", objectClass, fields, excludedMethods,
+        return new ToStringDialog(parentShell, "Generate ToString MethodSkeleton", objectClass, fields, excludedMethods,
                 disableAppendSuper, preferencesManager);
     }
     
@@ -37,4 +38,8 @@ public class ToStringDialogProvider extends AbstractDialogProvider<ToStringDialo
         return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "toString", new String[0], null);
     }
 
+    @Override
+    public UserActionIdentifier getUserActionIdentifier() {
+        return UserActionIdentifier.TO_STRING;
+    }
 }

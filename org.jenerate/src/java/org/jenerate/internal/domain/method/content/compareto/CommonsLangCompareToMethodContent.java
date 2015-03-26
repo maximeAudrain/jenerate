@@ -5,24 +5,24 @@ import java.util.Set;
 
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.data.CompareToDialogData;
+import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.method.content.AbstractMethodContent;
+import org.jenerate.internal.domain.method.content.CommonsLangLibraryUtils;
+import org.jenerate.internal.domain.method.skeleton.impl.CompareToMethod;
 import org.jenerate.internal.lang.MethodGenerations;
-import org.jenerate.internal.lang.generators.CommonsLangLibraryUtils;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
-public class CommonsLangCompareToMethodContent extends AbstractMethodContent<CompareToDialogData> {
+public class CommonsLangCompareToMethodContent extends AbstractMethodContent<CompareToMethod, CompareToDialogData> {
 
-    private final boolean useCommonsLang3;
     private final JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
-    public CommonsLangCompareToMethodContent(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate, boolean useCommonsLang3,
+    public CommonsLangCompareToMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
+            PreferencesManager preferencesManager, GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
-        super(preferencesManager, generatorsCommonMethodsDelegate);
-        this.useCommonsLang3 = useCommonsLang3;
+        super(methodContentStrategyIdentifier, preferencesManager, generatorsCommonMethodsDelegate);
         this.javaInterfaceCodeAppender = javaInterfaceCodeAppender;
     }
 
@@ -48,7 +48,16 @@ public class CommonsLangCompareToMethodContent extends AbstractMethodContent<Com
 
     @Override
     public Set<String> getLibrariesToImport(CompareToDialogData data) {
+        boolean useCommonsLang3 = false;
+        if(MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
+            useCommonsLang3 = true;
+        }
         return Collections.singleton(CommonsLangLibraryUtils.getCompareToBuilderLibrary(useCommonsLang3));
+    }
+
+    @Override
+    public Class<CompareToMethod> getRelatedMethodSkeletonClass() {
+        return CompareToMethod.class;
     }
 
 }

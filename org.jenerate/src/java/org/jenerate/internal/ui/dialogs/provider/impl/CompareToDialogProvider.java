@@ -8,6 +8,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.data.CompareToDialogData;
+import org.jenerate.internal.domain.UserActionIdentifier;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.ui.dialogs.CompareToDialog;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
@@ -29,7 +30,7 @@ public class CompareToDialogProvider extends AbstractDialogProvider<CompareToDia
             throws Exception {
         IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
-        return new CompareToDialog(parentShell, "Generate CompareTo Method", objectClass, fields, excludedMethods,
+        return new CompareToDialog(parentShell, "Generate CompareTo MethodSkeleton", objectClass, fields, excludedMethods,
                 disableAppendSuper, preferencesManager);
     }
 
@@ -40,6 +41,11 @@ public class CompareToDialogProvider extends AbstractDialogProvider<CompareToDia
     public boolean isCompareToImplementedInSuperclass(final IType objectClass) throws JavaModelException {
         return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "compareTo",
                 new String[] { "QObject;" }, null);
+    }
+    
+    @Override
+    public UserActionIdentifier getUserActionIdentifier() {
+        return UserActionIdentifier.COMPARE_TO;
     }
 
 }

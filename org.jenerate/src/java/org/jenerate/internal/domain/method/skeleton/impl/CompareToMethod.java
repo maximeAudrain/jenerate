@@ -1,8 +1,9 @@
-package org.jenerate.internal.domain.method.impl;
+package org.jenerate.internal.domain.method.skeleton.impl;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.data.CompareToDialogData;
+import org.jenerate.internal.domain.UserActionIdentifier;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
@@ -31,6 +32,16 @@ public class CompareToMethod extends AbstractMethod<CompareToDialogData> {
                 && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)
                 && !implementedOrExtendedInSuperType;
         return MethodGenerations.createCompareToMethod(objectClass, data, generify, methodContent);
+    }
+
+    @Override
+    public UserActionIdentifier getUserActionIdentifier() {
+        return UserActionIdentifier.COMPARE_TO;
+    }
+
+    @Override
+    public String getMethodName() {
+        return "compareTo";
     }
 
 }
