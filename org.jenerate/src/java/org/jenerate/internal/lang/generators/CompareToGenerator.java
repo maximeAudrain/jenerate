@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.CompareToDialogData;
+import org.jenerate.internal.domain.method.impl.CompareToMethod;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.CompareToDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
@@ -125,8 +126,9 @@ public final class CompareToGenerator implements ILangGenerator {
 
         String compareToMethodContent = MethodGenerations.generateCompareToMethodContent(compareToDialogData, generify,
                 objectClass);
-        String source = MethodGenerations.createCompareToMethod(objectClass, compareToDialogData, generify,
-                compareToMethodContent);
+        CompareToMethod compareToMethod = new CompareToMethod(preferencesManager, generatorsCommonMethodsDelegate,
+                javaInterfaceCodeAppender);
+        String source = compareToMethod.getMethod(objectClass, compareToDialogData, compareToMethodContent);
 
         String formattedContent = format(parentShell, objectClass, source);
 

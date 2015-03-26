@@ -9,6 +9,7 @@ import org.jenerate.internal.data.IInitMultNumbers;
 import org.jenerate.internal.data.ToStringDialogData;
 import org.jenerate.internal.data.impl.InitMultNumbersCustom;
 import org.jenerate.internal.data.impl.InitMultNumbersDefault;
+import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -89,6 +90,7 @@ public class MethodGenerationsTest {
         when(toStringDialogData.getGenerateComment()).thenReturn(false);
         when(toStringDialogData.getAppendSuper()).thenReturn(false);
         when(toStringDialogData.getUseGettersInsteadOfFields()).thenReturn(false);
+        when(toStringDialogData.getToStringStyle()).thenReturn(ToStringStyle.NO_STYLE);
     }
 
     @Test
@@ -142,7 +144,7 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateToStringDefault() throws JavaModelException {
-        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, null, "");
+        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, "");
         String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, addOverride,
                 toStringMethodContent);
         assertEquals("public String toString() {\nreturn new ToStringBuilder(this)"
@@ -152,7 +154,7 @@ public class MethodGenerationsTest {
     @Test
     public void testGenerateToStringWithAppendSuper() throws JavaModelException {
         when(toStringDialogData.getAppendSuper()).thenReturn(true);
-        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, null, "");
+        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, "");
         String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, addOverride,
                 toStringMethodContent);
         assertEquals("public String toString() {\nreturn new ToStringBuilder(this)"
@@ -163,7 +165,7 @@ public class MethodGenerationsTest {
     @Test
     public void testGenerateToStringWithGenerateComment() throws JavaModelException {
         when(toStringDialogData.getGenerateComment()).thenReturn(true);
-        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, null, "");
+        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, "");
         String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, addOverride,
                 toStringMethodContent);
         assertEquals("/* (non-Javadoc)\n * @see java.lang.Object#toString()\n */\n"
@@ -173,17 +175,17 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateToStringWithStyle() throws JavaModelException {
-        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData,
-                STYLE_CONSTANT, "");
+        when(toStringDialogData.getToStringStyle()).thenReturn(ToStringStyle.DEFAULT_STYLE);
+        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, "");
         String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, addOverride,
                 toStringMethodContent);
-        assertEquals("public String toString() {\nreturn new ToStringBuilder(this, STYLE)"
+        assertEquals("public String toString() {\nreturn new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)"
                 + ".append(\"field1\", field1).append(\"field2\", field2).toString();\n}\n\n", toStringMethod);
     }
 
     @Test
     public void testGenerateToStringWithCache() throws JavaModelException {
-        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, null,
+        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData,
                 TO_STRING_CACHING_FIELD);
         String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, addOverride,
                 toStringMethodContent);
@@ -195,7 +197,7 @@ public class MethodGenerationsTest {
     @Test
     public void testGenerateToStringWithOverride() throws JavaModelException {
         addOverride = true;
-        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, null, "");
+        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, "");
         String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, addOverride,
                 toStringMethodContent);
         assertEquals("@Override\npublic String toString() {\nreturn new ToStringBuilder(this)"
@@ -205,7 +207,7 @@ public class MethodGenerationsTest {
     @Test
     public void testGenerateToStringWithUseGetters() throws JavaModelException {
         when(toStringDialogData.getUseGettersInsteadOfFields()).thenReturn(true);
-        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, null, "");
+        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, "");
         String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, addOverride,
                 toStringMethodContent);
         assertEquals("public String toString() {\nreturn new ToStringBuilder(this)"

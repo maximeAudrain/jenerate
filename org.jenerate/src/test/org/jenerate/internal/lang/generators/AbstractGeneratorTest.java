@@ -33,7 +33,6 @@ public abstract class AbstractGeneratorTest {
 
     public static final String FORMATTED_CODE_1 = "formatted_code_1";
     public static final String FORMATTED_CODE_2 = "formatted_code_2";
-    public static final String FORMATTED_CODE_3 = "formatted_code_3";
 
     @Mock
     protected PreferencesManager preferencesManager;
@@ -96,7 +95,7 @@ public abstract class AbstractGeneratorTest {
 
     private void mockJeneratePluginCodeFormatter() throws JavaModelException, BadLocationException {
         when(jeneratePluginCodeFormatter.formatCode(any(IType.class), anyString())).thenReturn(FORMATTED_CODE_1,
-                FORMATTED_CODE_2, FORMATTED_CODE_3);
+                FORMATTED_CODE_2);
     }
 
     /**

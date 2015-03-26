@@ -1,11 +1,14 @@
 package org.jenerate.internal.ui.dialogs;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -16,7 +19,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.data.ToStringDialogData;
 import org.jenerate.internal.data.impl.ToStringDialogDataImpl;
-import org.jenerate.internal.lang.generators.CommonsLangLibraryUtils;
+import org.jenerate.internal.domain.impl.UserActionIdentifier;
+import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
@@ -49,15 +53,8 @@ public class ToStringDialog extends OrderableFieldDialog<ToStringDialogData> {
 
         toStringStyle = settings.get(SETTINGS_STYLE);
         if (toStringStyle == null) {
-            toStringStyle = CommonsLangLibraryUtils
-                    .getToStringStyleLibraryDefaultStyle((Boolean) getPreferencesManager().getCurrentPreferenceValue(
-                            JeneratePreference.USE_COMMONS_LANG3));
-        } else {
-            String[] splittedToStringStyle = toStringStyle.split("\\.");
-            String chosenStyle = splittedToStringStyle[splittedToStringStyle.length - 1];
-            toStringStyle = CommonsLangLibraryUtils.getToStringStyleLibrary((Boolean) getPreferencesManager()
-                    .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3))
-                    + CommonsLangLibraryUtils.DOT_STRING + chosenStyle;
+            toStringStyle = ToStringStyle.NO_STYLE.getFullLibraryString((Boolean) getPreferencesManager()
+                    .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3));
         }
     }
 
@@ -83,8 +80,17 @@ public class ToStringDialog extends OrderableFieldDialog<ToStringDialogData> {
         label.setLayoutData(data);
 
         styleCombo = new Combo(composite, SWT.NONE);
-        styleCombo.setItems(CommonsLangLibraryUtils.createToStringStyles((Boolean) getPreferencesManager()
-                .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)));
+        Boolean useCommonsLang3 = (Boolean) getPreferencesManager().getCurrentPreferenceValue(
+                JeneratePreference.USE_COMMONS_LANG3);
+        List<String> styles = new ArrayList<String>();
+        for (ToStringStyle style : ToStringStyle.values()) {
+            if (ToStringStyle.NO_STYLE.equals(style)) {
+                styles.add(ToStringStyle.NO_STYLE.name());
+            } else {
+                styles.add(style.getFullLibraryString(useCommonsLang3));
+            }
+        }
+        styleCombo.setItems(styles.toArray(new String[styles.size()]));
         styleCombo.setText(toStringStyle);
 
         data = new GridData(GridData.FILL_HORIZONTAL);
@@ -103,8 +109,18 @@ public class ToStringDialog extends OrderableFieldDialog<ToStringDialogData> {
                 .withGenerateComment(getGenerateComment())
                 .withUseBlockInIfStatements(getUseBlockInIfStatements())
                 .withUseGettersInsteadOfFields(getUseGettersInsteadOfFields())
-                .withToStringStyle(toStringStyle)
+                .withToStringStyle(ToStringStyle.getToStringStyle(toStringStyle))
                 .build();
         //@formatter:on
+    }
+
+    @Override
+    public Dialog getDialog() {
+        return this;
+    }
+
+    @Override
+    public UserActionIdentifier getUserActionIdentifier() {
+        return UserActionIdentifier.TO_STRING;
     }
 }

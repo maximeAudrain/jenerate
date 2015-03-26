@@ -16,6 +16,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.EqualsHashCodeDialogData;
+import org.jenerate.internal.domain.method.impl.EqualsMethod;
+import org.jenerate.internal.domain.method.impl.HashCodeMethod;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
@@ -99,19 +101,15 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             throws JavaModelException, PartInitException {
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
-        boolean addOverridePreference = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).booleanValue();
-        boolean addOverride = addOverridePreference
-                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass);
-        IJavaElement created = generateHashCode(parentShell, objectClass, data, useCommonLang3, addOverride);
+        IJavaElement created = generateHashCode(parentShell, objectClass, data, useCommonLang3);
 
-        created = generateEquals(parentShell, objectClass, data, created, useCommonLang3, addOverride);
+        created = generateEquals(parentShell, objectClass, data, created, useCommonLang3);
 
         javaUiCodeAppender.revealInEditor(objectClass, created);
     }
 
     private IJavaElement generateHashCode(final Shell parentShell, final IType objectClass,
-            EqualsHashCodeDialogData data, boolean useCommonLang3, boolean addOverride) throws JavaModelException {
+            EqualsHashCodeDialogData data, boolean useCommonLang3) throws JavaModelException {
 
         boolean cacheHashCode = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).booleanValue();
@@ -123,34 +121,34 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
                     .getCurrentPreferenceValue(JeneratePreference.HASHCODE_CACHING_FIELD);
         }
 
-        String hashCodeMethodContent = MethodGenerations.generateHashCodeMethodContent(data, cachingField);
-        String source = MethodGenerations.createHashCodeMethod(data, addOverride, hashCodeMethodContent);
-
-        String formattedContent = format(parentShell, objectClass, source);
-
-        objectClass.getCompilationUnit().createImport(
-                CommonsLangLibraryUtils.getHashCodeBuilderLibrary(useCommonLang3), null, null);
-        IJavaElement created = objectClass.createMethod(formattedContent, data.getElementPosition(), true, null);
-
+        IJavaElement currentPosition = data.getElementPosition();
         IField field = objectClass.getField(cachingField);
         if (field.exists()) {
             field.delete(true, null);
         }
         if (isCacheable) {
             String fieldSrc = "private transient int " + cachingField + ";\n\n";
-            String formattedFieldSrc = format(parentShell, objectClass, fieldSrc);
-            created = objectClass.createField(formattedFieldSrc, created, true, null);
+            objectClass.createField(fieldSrc, currentPosition, true, null);
         }
 
-        return created;
+        String hashCodeMethodContent = MethodGenerations.generateHashCodeMethodContent(data, cachingField);
+        HashCodeMethod hashCodeMethod = new HashCodeMethod(preferencesManager, generatorsCommonMethodsDelegate);
+        String source = hashCodeMethod.getMethod(objectClass, data, hashCodeMethodContent);
+
+        String formattedContent = format(parentShell, objectClass, source);
+
+        objectClass.getCompilationUnit().createImport(
+                CommonsLangLibraryUtils.getHashCodeBuilderLibrary(useCommonLang3), null, null);
+        return objectClass.createMethod(formattedContent, currentPosition, true, null);
     }
 
     private IJavaElement generateEquals(final Shell parentShell, final IType objectClass,
-            EqualsHashCodeDialogData data, final IJavaElement insertPosition, boolean useCommonLang3,
-            boolean addOverride) throws JavaModelException {
+            EqualsHashCodeDialogData data, final IJavaElement insertPosition, boolean useCommonLang3)
+            throws JavaModelException {
 
         String equalsMethodContent = MethodGenerations.generateEqualsMethodContent(data, objectClass);
-        String source = MethodGenerations.createEqualsMethod(data, addOverride, equalsMethodContent);
+        EqualsMethod equalsMethod = new EqualsMethod(preferencesManager, generatorsCommonMethodsDelegate);
+        String source = equalsMethod.getMethod(objectClass, data, equalsMethodContent);
         String formattedContent = format(parentShell, objectClass, source);
         objectClass.getCompilationUnit().createImport(CommonsLangLibraryUtils.getEqualsBuilderLibrary(useCommonLang3),
                 null, null);

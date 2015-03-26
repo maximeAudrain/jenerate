@@ -45,6 +45,9 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
             fieldEditors.put(jeneratePreference, fieldEditor);
             addField(fieldEditor);
         }
+
+//        getHashCodeCachingField().setEnabled(getCacheHashCodeField().getBooleanValue(), getFieldEditorParent());
+//        getToStringCachingField().setEnabled(getCacheToStringField().getBooleanValue(), getFieldEditorParent());
     }
 
     @Override

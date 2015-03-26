@@ -7,8 +7,9 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.internal.data.FieldDialogData;
+import org.jenerate.internal.data.JenerateDialogData;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
+import org.jenerate.internal.ui.dialogs.JenerateDialog;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
 /**
@@ -18,7 +19,7 @@ import org.jenerate.internal.ui.preferences.PreferencesManager;
  * @author maudrain
  * @param <T> the type of {@link FieldDialog} this provider provides.
  */
-public interface DialogProvider<T extends FieldDialog<U>, U extends FieldDialogData> {
+public interface DialogProvider<T extends JenerateDialog<U>, U extends JenerateDialogData> {
 
     /**
      * @param parentShell the parent shell of the dialog

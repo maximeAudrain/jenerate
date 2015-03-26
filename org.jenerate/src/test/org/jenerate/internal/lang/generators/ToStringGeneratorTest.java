@@ -10,6 +10,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.ToStringDialogData;
+import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
 import org.jenerate.internal.ui.dialogs.ToStringDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
@@ -33,7 +34,7 @@ import static org.mockito.Mockito.when;
 public class ToStringGeneratorTest extends AbstractGeneratorTest {
 
     private static final String TO_STRING_FIELD_NAME = "toString";
-    private static final String TO_STRING_STYLE = "TO.STRING.STYLE";
+    private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.DEFAULT_STYLE;
 
     @Mock
     private DialogProvider<ToStringDialog, ToStringDialogData> dialogProvider;
@@ -108,11 +109,12 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
 
         when(toStringCachingField.exists()).thenReturn(true);
         when(objectClass.getField(TO_STRING_FIELD_NAME)).thenReturn(toStringCachingField);
-
+        when(objectClass.createMethod(FORMATTED_CODE_2, elementPosition, true, null)).thenReturn(createdMethod1);
         toStringGenerator.generate(parentShell, objectClass);
 
         verify(toStringCachingField, times(1)).delete(true, null);
-        verify(objectClass, times(1)).createField(FORMATTED_CODE_2, createdMethod1, true, null);
+        verify(objectClass, times(1)).createField("private transient String " + TO_STRING_FIELD_NAME + ";\n\n",
+                elementPosition, true, null);
         verifyCodeAppended(false);
     }
 
@@ -149,7 +151,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     public void verifyGeneratedCodeWithNoStyleConstant() throws RuntimeException, CoreException {
-        when(data.getToStringStyle()).thenReturn("");
+        when(data.getToStringStyle()).thenReturn(ToStringStyle.NO_STYLE);
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }

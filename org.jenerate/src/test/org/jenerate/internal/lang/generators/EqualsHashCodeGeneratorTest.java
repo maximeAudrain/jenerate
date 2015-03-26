@@ -111,6 +111,22 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyNoMoreInteractions(javaUiCodeAppender, compilationUnit);
     }
+    
+    @Test
+    public void verifyGeneratedCodeWithCachedToString() throws RuntimeException, CoreException {
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).thenReturn(Boolean.TRUE);
+        when(generatorsCommonMethodsDelegate.areAllFinalFields(fields)).thenReturn(true);
+
+        when(hashCodeCachingField.exists()).thenReturn(true);
+        when(objectClass.getField(HASH_CODE_FIELD_NAME)).thenReturn(hashCodeCachingField);
+        when(objectClass.createMethod(FORMATTED_CODE_2, elementPosition, true, null)).thenReturn(createdMethod1);
+        equalsHashCodeGenerator.generate(parentShell, objectClass);
+
+        verify(hashCodeCachingField, times(1)).delete(true, null);
+        verify(objectClass, times(1)).createField("private transient int " + HASH_CODE_FIELD_NAME + ";\n\n",
+                elementPosition, true, null);
+        verifyCodeAppended(false);
+    }
 
     @Test
     public void verifyGeneratedCodeDisableAppendSuperCauseDirectSubclassOfObject() throws RuntimeException,
@@ -178,8 +194,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
         when(hashCodeCachingField.exists()).thenReturn(true);
         when(objectClass.getField(HASH_CODE_FIELD_NAME)).thenReturn(hashCodeCachingField);
         when(objectClass.createMethod(FORMATTED_CODE_1, elementPosition, true, null)).thenReturn(createdMethod1);
-        when(objectClass.createField(FORMATTED_CODE_2, createdMethod1, true, null)).thenReturn(hashCodeCachingField);
-        when(objectClass.createMethod(FORMATTED_CODE_3, hashCodeCachingField, true, null)).thenReturn(createdMethod2);
+        when(objectClass.createMethod(FORMATTED_CODE_2, createdMethod1, true, null)).thenReturn(createdMethod2);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }

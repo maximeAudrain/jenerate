@@ -33,6 +33,7 @@ import org.jenerate.internal.data.impl.EqualsHashCodeDialogDataImpl;
 import org.jenerate.internal.data.impl.InitMultNumbersCustom;
 import org.jenerate.internal.data.impl.InitMultNumbersDefault;
 import org.jenerate.internal.data.impl.InitMultNumbersRandom;
+import org.jenerate.internal.domain.impl.UserActionIdentifier;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
 /**
@@ -358,5 +359,15 @@ public class EqualsHashCodeDialog extends FieldDialog<EqualsHashCodeDialogData> 
             }
         }
 
+    }
+
+    @Override
+    public Dialog getDialog() {
+        return this;
+    }
+
+    @Override
+    public UserActionIdentifier getUserActionIdentifier() {
+        return UserActionIdentifier.EQUALS_HASH_CODE;
     }
 }

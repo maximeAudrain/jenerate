@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.Signature;
 import org.jenerate.internal.data.CompareToDialogData;
 import org.jenerate.internal.data.EqualsHashCodeDialogData;
 import org.jenerate.internal.data.ToStringDialogData;
+import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
 
 /**
  * Utility class that generates the method strings given certain parameters
@@ -202,10 +203,10 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String generateToStringMethodContent(ToStringDialogData data, String styleConstant,
+    public static String generateToStringMethodContent(ToStringDialogData data,
             String cachingField) throws JavaModelException {
         StringBuffer content = new StringBuffer();
-        String toStringBuilderString = createToStringBuilderString(data, styleConstant);
+        String toStringBuilderString = createToStringBuilderString(data);
 
         if (cachingField.isEmpty()) {
             content.append("return ");
@@ -221,14 +222,15 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    private static String createToStringBuilderString(ToStringDialogData data, String styleConstant)
+    private static String createToStringBuilderString(ToStringDialogData data)
             throws JavaModelException {
         StringBuffer content = new StringBuffer();
-        if (styleConstant == null) {
+        ToStringStyle toStringStyle = data.getToStringStyle();
+        if (ToStringStyle.NO_STYLE.equals(toStringStyle)) {
             content.append("new ToStringBuilder(this)");
         } else {
             content.append("new ToStringBuilder(this, ");
-            content.append(styleConstant);
+            content.append(toStringStyle.getFullStyle());
             content.append(")");
         }
         if (data.getAppendSuper()) {

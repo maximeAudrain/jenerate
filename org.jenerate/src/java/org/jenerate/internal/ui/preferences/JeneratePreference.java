@@ -6,10 +6,10 @@ public enum JeneratePreference implements PluginPreference {
     USE_COMMONS_LANG3("useCommonsLang3", "&Import commons-lang3 for all code generation", Boolean.class, Boolean.FALSE),
 
     CACHE_HASHCODE("cacheHashCode", "Cache &hashCode when all selected fields are final", Boolean.class, Boolean.TRUE),
+    
+    HASHCODE_CACHING_FIELD("hashCodeCachingField", "Hash&Code caching field", String.class, "hashCode"),
 
     CACHE_TOSTRING("cacheToString", "Cache &toString when all selected fields are final", Boolean.class, Boolean.TRUE),
-
-    HASHCODE_CACHING_FIELD("hashCodeCachingField", "Hash&Code caching field", String.class, "hashCode"),
 
     TOSTRING_CACHING_FIELD("toStringCachingField", "To&String caching field", String.class, "toString"),
 

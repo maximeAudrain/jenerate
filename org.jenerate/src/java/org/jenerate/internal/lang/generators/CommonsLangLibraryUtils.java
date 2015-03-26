@@ -18,16 +18,9 @@ public final class CommonsLangLibraryUtils {
     private static final String HASH_CODE_BUILDER_POSTFIX = BUILDER_STRING + "HashCodeBuilder";
     private static final String EQUALS_BUILDER_POSTFIX = BUILDER_STRING + "EqualsBuilder";
     private static final String TO_STRING_BUILDER_POSTFIX = BUILDER_STRING + "ToStringBuilder";
-    private static final String TO_STRING_STYLE_POSTFIX = BUILDER_STRING + "ToStringStyle";
 
     private static final String COMMONS_LANG3_ADDON = "3";
     private static final String EMPTY_STRING = "";
-
-    private static final String DEFAULT_STYLE_POSTFIX = DOT_STRING + "DEFAULT_STYLE";
-    private static final String MULTI_LINE_STYLE_POSTFIX = DOT_STRING + "MULTI_LINE_STYLE";
-    private static final String NO_FIELD_NAMES_STYLE_POSTFIX = DOT_STRING + "NO_FIELD_NAMES_STYLE";
-    private static final String SHORT_PREFIX_STYLE_POSTFIX = DOT_STRING + "SHORT_PREFIX_STYLE";
-    private static final String SIMPLE_STYLE_POSTFIX = DOT_STRING + "SIMPLE_STYLE";
 
     private CommonsLangLibraryUtils() {
         /* Only static constants */
@@ -59,30 +52,6 @@ public final class CommonsLangLibraryUtils {
      */
     public static String getToStringBuilderLibrary(boolean useCommonsLang3) {
         return createLibraryFullPath(TO_STRING_BUILDER_POSTFIX, useCommonsLang3);
-    }
-
-    /**
-     * @return the full constructed ToStringStyle library
-     */
-    public static String getToStringStyleLibrary(boolean useCommonsLang3) {
-        return createLibraryFullPath(TO_STRING_STYLE_POSTFIX, useCommonsLang3);
-    }
-
-    /**
-     * @return the full constructed ToStringStyle.DEFAULT_STYLE library
-     */
-    public static String getToStringStyleLibraryDefaultStyle(boolean useCommonsLang3) {
-        return createLibraryFullPath(TO_STRING_STYLE_POSTFIX, useCommonsLang3) + DEFAULT_STYLE_POSTFIX;
-    }
-
-    /**
-     * @return an array containing all the fully constructed styles of the ToStringStyle library
-     */
-    public static String[] createToStringStyles(boolean useCommonsLang3) {
-        String toStringStyleLibrary = getToStringStyleLibrary(useCommonsLang3);
-        return new String[] { toStringStyleLibrary + DEFAULT_STYLE_POSTFIX,
-                toStringStyleLibrary + MULTI_LINE_STYLE_POSTFIX, toStringStyleLibrary + NO_FIELD_NAMES_STYLE_POSTFIX,
-                toStringStyleLibrary + SHORT_PREFIX_STYLE_POSTFIX, toStringStyleLibrary + SIMPLE_STYLE_POSTFIX };
     }
 
     private static String createLibraryFullPath(String libraryToImportPostfix, boolean useCommonsLang3) {

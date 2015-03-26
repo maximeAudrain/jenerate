@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -15,7 +16,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.ToStringDialogData;
-import org.jenerate.internal.lang.MethodGenerations;
+import org.jenerate.internal.domain.method.content.tostring.CommonsLangToStringMethodContent;
+import org.jenerate.internal.domain.method.impl.ToStringMethod;
 import org.jenerate.internal.ui.dialogs.ToStringDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
@@ -93,76 +95,25 @@ public final class ToStringGenerator implements ILangGenerator {
     private void generateCode(final Shell parentShell, final IType objectClass, ToStringDialogData data)
             throws PartInitException, JavaModelException {
 
-        boolean cacheToString = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).booleanValue();
-        boolean isCacheable = cacheToString
-                && generatorsCommonMethodsDelegate.areAllFinalFields(data.getCheckedFields());
-        String cachingField = "";
-        if (isCacheable) {
-            cachingField = (String) preferencesManager
-                    .getCurrentPreferenceValue(JeneratePreference.TOSTRING_CACHING_FIELD);
-        }
-
-        boolean addOverridePreference = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).booleanValue();
-        boolean addOverride = addOverridePreference
-                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass);
-
+        IJavaElement currentPosition = data.getElementPosition();
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
-        String styleConstant = getStyleConstantAndAddImport(data.getToStringStyle(), objectClass, useCommonLang3);
-        String toStringMethodContent = MethodGenerations.generateToStringMethodContent(data, styleConstant,
-                cachingField);
-        String source = MethodGenerations.createToStringMethod(data, addOverride, toStringMethodContent);
-
+        CommonsLangToStringMethodContent toStringMethodContent = new CommonsLangToStringMethodContent(
+                preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3);
+        String methodContent = toStringMethodContent.getMethodContent(objectClass, data);
+        ToStringMethod toStringMethod = new ToStringMethod(preferencesManager, generatorsCommonMethodsDelegate);
+        String source = toStringMethod.getMethod(objectClass, data, methodContent);
         String formattedContent = format(parentShell, objectClass, source);
+        IMethod created = objectClass.createMethod(formattedContent, currentPosition, true, null);
 
-        objectClass.getCompilationUnit().createImport(
-                CommonsLangLibraryUtils.getToStringBuilderLibrary(useCommonLang3), null, null);
-        IMethod created = objectClass.createMethod(formattedContent, data.getElementPosition(), true, null);
-
-        IField field = objectClass.getField(cachingField);
-        if (field.exists()) {
-            field.delete(true, null);
+        for (String libraryToImport : toStringMethod.getLibrariesToImport()) {
+            objectClass.getCompilationUnit().createImport(libraryToImport, null, null);
         }
-        if (isCacheable) {
-            String fieldSrc = "private transient String " + cachingField + ";\n\n";
-            String formattedFieldSrc = format(parentShell, objectClass, fieldSrc);
-            objectClass.createField(formattedFieldSrc, created, true, null);
+        for (String libraryToImport : toStringMethodContent.getLibrariesToImport(data)) {
+            objectClass.getCompilationUnit().createImport(libraryToImport, null, null);
         }
 
         javaUiCodeAppender.revealInEditor(objectClass, created);
-    }
-
-    /**
-     * XXX test me Package private for testing
-     */
-    String getStyleConstantAndAddImport(final String style, final IType objectClass, boolean useCommonLang3)
-            throws JavaModelException {
-
-        String styleConstant = null;
-        if (!style.equals(CommonsLangLibraryUtils.getToStringStyleLibraryDefaultStyle(useCommonLang3))
-                && !style.equals("")) {
-
-            int lastDot = style.lastIndexOf('.');
-            if (lastDot != -1 && lastDot != (style.length() - 1)) {
-
-                String styleClass = style.substring(0, lastDot);
-                if (styleClass.length() == 0) {
-                    return null;
-                }
-
-                int lastDot2 = styleClass.lastIndexOf('.');
-                if (lastDot2 != (styleClass.length() - 1)) {
-
-                    styleConstant = style.substring(lastDot2 + 1, style.length());
-                    if (lastDot2 != -1) {
-                        objectClass.getCompilationUnit().createImport(styleClass, null, null);
-                    }
-                }
-            }
-        }
-        return styleConstant;
     }
 
     private String format(final Shell parentShell, final IType objectClass, String source) throws JavaModelException {
