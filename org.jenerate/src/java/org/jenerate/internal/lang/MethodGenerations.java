@@ -27,14 +27,25 @@ public final class MethodGenerations {
             content.append(" * @see java.lang.Comparable#compareTo(java.lang.Object)\n");
             content.append(" */\n");
         }
-        String other;
+
         String className = objectClass.getElementName();
         if (generify) {
             content.append("public int compareTo(final " + className + " other) {\n");
-
-            other = "other";
         } else {
             content.append("public int compareTo(final Object other) {\n");
+        }
+        content.append(generateCompareToMethodContent(data, generify, className));
+        content.append("}\n\n");
+
+        return content.toString();
+    }
+
+    private static String generateCompareToMethodContent(CompareToDialogData data, boolean generify, String className) {
+        StringBuffer content = new StringBuffer();
+        String other;
+        if (generify) {
+            other = "other";
+        } else {
             content.append(className);
             content.append(" castOther = (");
             content.append(className);
@@ -42,6 +53,7 @@ public final class MethodGenerations {
 
             other = "castOther";
         }
+
         content.append("return new CompareToBuilder()");
         if (data.getAppendSuper()) {
             content.append(".appendSuper(super.compareTo(other))");
@@ -56,15 +68,12 @@ public final class MethodGenerations {
             content.append(")");
         }
         content.append(".toComparison();\n");
-        content.append("}\n\n");
-
         return content.toString();
     }
 
     public static String createEqualsMethod(IType objectClass, EqualsHashCodeDialogData data, boolean addOverride)
             throws JavaModelException {
 
-        boolean useBlockInIfStatements = data.getUseBlockInIfStatements();
         String elementName = objectClass.getElementName();
 
         StringBuffer content = new StringBuffer();
@@ -77,6 +86,16 @@ public final class MethodGenerations {
             content.append("@Override\n");
         }
         content.append("public boolean equals(final Object other) {\n");
+        content.append(generateEqualsMethodContent(data, elementName));
+        content.append("}\n\n");
+
+        return content.toString();
+    }
+
+    private static String generateEqualsMethodContent(EqualsHashCodeDialogData data, String elementName)
+            throws JavaModelException {
+        boolean useBlockInIfStatements = data.getUseBlockInIfStatements();
+        StringBuffer content = new StringBuffer();
         if (data.getCompareReferences()) {
             content.append("if (this == other)");
             content.append(useBlockInIfStatements ? "{\n" : "");
@@ -107,8 +126,6 @@ public final class MethodGenerations {
             content.append(")");
         }
         content.append(".isEquals();\n");
-        content.append("}\n\n");
-
         return content.toString();
     }
 
@@ -125,7 +142,15 @@ public final class MethodGenerations {
             content.append("@Override\n");
         }
         content.append("public int hashCode() {\n");
+        content.append(generateHashCodeMethodContent(data, cachingField));
+        content.append("}\n\n");
 
+        return content.toString();
+    }
+
+    private static String generateHashCodeMethodContent(EqualsHashCodeDialogData data, String cachingField)
+            throws JavaModelException {
+        StringBuffer content = new StringBuffer();
         String hashCodeBuilderString = createHashCodeBuilderString(data);
 
         if (cachingField.isEmpty()) {
@@ -138,8 +163,6 @@ public final class MethodGenerations {
             content.append("}\n");
             content.append("return " + cachingField + ";\n");
         }
-        content.append("}\n\n");
-
         return content.toString();
     }
 
@@ -175,6 +198,15 @@ public final class MethodGenerations {
             content.append("@Override\n");
         }
         content.append("public String toString() {\n");
+        content.append(generateToStringMethodContent(data, styleConstant, cachingField));
+        content.append("}\n\n");
+
+        return content.toString();
+    }
+
+    private static String generateToStringMethodContent(ToStringDialogData data, String styleConstant,
+            String cachingField) throws JavaModelException {
+        StringBuffer content = new StringBuffer();
         String toStringBuilderString = createToStringBuilderString(data, styleConstant);
 
         if (cachingField.isEmpty()) {
@@ -188,8 +220,6 @@ public final class MethodGenerations {
             content.append("}\n");
             content.append("return " + cachingField + ";\n");
         }
-        content.append("}\n\n");
-
         return content.toString();
     }
 
