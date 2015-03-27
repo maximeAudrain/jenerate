@@ -9,6 +9,11 @@ import org.jenerate.internal.manage.PreferencesManager;
 
 public class EqualsMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeGenerationData> {
 
+    /**
+     * Public for testing purpose
+     */
+    public static final String EQUALS_METHOD_NAME = "equals";
+
     public EqualsMethodSkeleton(PreferencesManager preferencesManager,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         super(preferencesManager, generatorsCommonMethodsDelegate);
@@ -28,7 +33,7 @@ public class EqualsMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeG
 
     @Override
     public String getMethodName() {
-        return "equals";
+        return EQUALS_METHOD_NAME;
     }
 
     @Override

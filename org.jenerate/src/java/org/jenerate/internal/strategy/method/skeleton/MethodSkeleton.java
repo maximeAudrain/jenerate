@@ -3,7 +3,6 @@ package org.jenerate.internal.strategy.method.skeleton;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 
@@ -15,14 +14,14 @@ import org.jenerate.internal.domain.data.MethodGenerationData;
  */
 public interface MethodSkeleton<T extends MethodGenerationData> {
 
-    String getMethod(IType objectClass, T data, String methodContent) throws JavaModelException;
+    String getMethod(IType objectClass, T data, String methodContent) throws Exception;
 
     Set<String> getLibrariesToImport();
 
     UserActionIdentifier getUserActionIdentifier();
 
     String getMethodName();
-    
+
     String[] getMethodArguments(IType objectClass) throws Exception;
 
 }

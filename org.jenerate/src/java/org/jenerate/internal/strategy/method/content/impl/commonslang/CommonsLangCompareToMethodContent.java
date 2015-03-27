@@ -34,14 +34,6 @@ public class CommonsLangCompareToMethodContent extends AbstractMethodContent<Com
         boolean generify = generifyPreference
                 && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)
                 && !implementedOrExtendedInSuperType;
-
-        if (!implementedOrExtendedInSuperType) {
-            String interfaceName = "Comparable";
-            if (generify) {
-                interfaceName = "Comparable<" + objectClass.getElementName() + ">";
-            }
-            javaInterfaceCodeAppender.addSuperInterface(objectClass, interfaceName);
-        }
         return MethodGenerations.generateCompareToMethodContent(data, generify, objectClass);
     }
 

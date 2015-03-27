@@ -4,11 +4,15 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
-import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.PreferencesManager;
 
 public class ToStringMethodSkeleton extends AbstractMethodSkeleton<ToStringGenerationData> {
+
+    /**
+     * Public for testing purpose
+     */
+    public static final String TO_STRING_METHOD_NAME = "toString";
 
     public ToStringMethodSkeleton(PreferencesManager preferencesManager,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
@@ -16,9 +20,10 @@ public class ToStringMethodSkeleton extends AbstractMethodSkeleton<ToStringGener
     }
 
     @Override
-    public String getMethod(IType objectClass, ToStringGenerationData data, String methodContent) throws JavaModelException {
+    public String getMethod(IType objectClass, ToStringGenerationData data, String methodContent)
+            throws JavaModelException {
         boolean addOverride = addOverride(objectClass);
-        return MethodGenerations.createToStringMethod(data, addOverride, methodContent);
+        return createToStringMethod(data, addOverride, methodContent);
     }
 
     @Override
@@ -28,12 +33,30 @@ public class ToStringMethodSkeleton extends AbstractMethodSkeleton<ToStringGener
 
     @Override
     public String getMethodName() {
-        return "toString";
+        return TO_STRING_METHOD_NAME;
     }
 
     @Override
     public String[] getMethodArguments(IType objectClass) throws Exception {
         return new String[0];
+    }
+
+    private String createToStringMethod(ToStringGenerationData data, boolean addOverride, String methodContent) {
+
+        StringBuffer content = new StringBuffer();
+        if (data.getGenerateComment()) {
+            content.append("/* (non-Javadoc)\n");
+            content.append(" * @see java.lang.Object#toString()\n");
+            content.append(" */\n");
+        }
+        if (addOverride) {
+            content.append("@Override\n");
+        }
+        content.append("public String toString() {\n");
+        content.append(methodContent);
+        content.append("}\n\n");
+
+        return content.toString();
     }
 
 }

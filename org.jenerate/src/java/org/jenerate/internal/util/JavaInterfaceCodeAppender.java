@@ -12,8 +12,7 @@ import org.eclipse.text.edits.MalformedTreeException;
  */
 public interface JavaInterfaceCodeAppender {
 
-    boolean isImplementedOrExtendedInSupertype(final IType objectClass, final String interfaceName)
-            throws JavaModelException;
+    boolean isImplementedOrExtendedInSupertype(final IType objectClass, final String interfaceName) throws Exception;
 
     boolean isImplementedInSupertype(final IType objectClass, final String interfaceName) throws JavaModelException;
 

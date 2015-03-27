@@ -2,13 +2,9 @@ package org.jenerate.internal.lang.generators;
 
 import java.util.Collections;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.eclipse.jface.window.Window;
-import org.eclipse.text.edits.MalformedTreeException;
-import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangMethodContentLibraries;
@@ -204,7 +200,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
                         new String[] { "QObject;" }, null)).thenReturn(isOverriden);
     }
 
-    private void mockJavaInterfaceCodeAppender() throws JavaModelException {
+    private void mockJavaInterfaceCodeAppender() throws Exception {
         when(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable")).thenReturn(true);
         when(javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable")).thenReturn(true);
     }
