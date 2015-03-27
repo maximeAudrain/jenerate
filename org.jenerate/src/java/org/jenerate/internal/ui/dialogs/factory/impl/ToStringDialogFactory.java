@@ -9,9 +9,9 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.impl.ToStringDialog;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public class ToStringDialogFactory extends AbstractDialogFactory<ToStringDialog, ToStringGenerationData> {
 

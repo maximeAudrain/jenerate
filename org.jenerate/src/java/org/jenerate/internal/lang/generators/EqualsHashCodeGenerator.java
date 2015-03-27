@@ -24,6 +24,7 @@ import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
 import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleton;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 /**
  * XXX test caching field empty for hashCode

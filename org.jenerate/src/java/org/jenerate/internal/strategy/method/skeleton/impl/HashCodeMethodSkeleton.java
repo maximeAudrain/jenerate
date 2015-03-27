@@ -4,8 +4,8 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public class HashCodeMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeGenerationData> {
 

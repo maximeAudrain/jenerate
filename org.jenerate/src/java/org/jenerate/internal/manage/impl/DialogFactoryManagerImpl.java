@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.DialogFactoryManager;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
@@ -13,6 +12,7 @@ import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.impl.CompareToDialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.impl.EqualsHashCodeDialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.impl.ToStringDialogFactory;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class DialogFactoryManagerImpl implements DialogFactoryManager {

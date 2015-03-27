@@ -1,4 +1,4 @@
-package org.jenerate.internal.lang.generators.impl;
+package org.jenerate.internal.util.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,8 +15,8 @@ import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 /**
  * XXX get rid of me once the code is tested and the strategy pattern in effect. Also see if code redundancy can be

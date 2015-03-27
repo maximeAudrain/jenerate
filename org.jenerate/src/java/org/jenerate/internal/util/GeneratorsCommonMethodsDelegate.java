@@ -1,4 +1,4 @@
-package org.jenerate.internal.lang.generators;
+package org.jenerate.internal.util;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;

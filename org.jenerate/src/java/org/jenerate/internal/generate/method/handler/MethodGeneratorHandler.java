@@ -29,8 +29,6 @@ import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
 import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
 import org.jenerate.internal.generate.method.util.impl.JavaCodeFormatterImpl;
 import org.jenerate.internal.generate.method.util.impl.JavaUiCodeAppenderImpl;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.lang.generators.impl.GeneratorsCommonMethodsDelegateImpl;
 import org.jenerate.internal.manage.MethodGeneratorManager;
 import org.jenerate.internal.manage.MethodManager;
 import org.jenerate.internal.manage.PreferencesManager;
@@ -40,7 +38,9 @@ import org.jenerate.internal.manage.impl.PreferencesManagerImpl;
 import org.jenerate.internal.strategy.method.Method;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
+import org.jenerate.internal.util.impl.GeneratorsCommonMethodsDelegateImpl;
 import org.jenerate.internal.util.impl.JavaInterfaceCodeAppenderImpl;
 
 /**

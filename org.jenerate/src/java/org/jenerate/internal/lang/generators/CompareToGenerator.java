@@ -20,6 +20,7 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLan
 import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkeleton;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.CompareToDialog;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 /**

@@ -5,7 +5,6 @@ import java.util.LinkedHashSet;
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.MethodContentManager;
 import org.jenerate.internal.manage.MethodManager;
 import org.jenerate.internal.manage.MethodSkeletonManager;
@@ -15,6 +14,7 @@ import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
 import org.jenerate.internal.strategy.method.impl.MethodImpl;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class MethodManagerImpl implements MethodManager {

@@ -1,11 +1,11 @@
 package org.jenerate.internal.strategy.method.content.impl;
 
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public abstract class AbstractMethodContent<T extends MethodSkeleton<U>, U extends MethodGenerationData> implements
         MethodContent<T, U> {

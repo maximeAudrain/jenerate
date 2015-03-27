@@ -9,9 +9,9 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public class EqualsHashCodeDialogFactory extends AbstractDialogFactory<EqualsHashCodeDialog, EqualsHashCodeGenerationData> {
 

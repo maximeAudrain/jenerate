@@ -4,8 +4,8 @@ import org.eclipse.jdt.core.IType;
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGenerationData> {

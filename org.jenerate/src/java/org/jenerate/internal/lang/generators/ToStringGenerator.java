@@ -20,6 +20,7 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLan
 import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleton;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.ToStringDialog;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 /**
  * XXX test caching field empty for toString

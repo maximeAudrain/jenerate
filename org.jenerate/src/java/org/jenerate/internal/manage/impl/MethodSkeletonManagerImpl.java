@@ -6,7 +6,6 @@ import java.util.TreeSet;
 
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.MethodSkeletonManager;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
@@ -14,6 +13,7 @@ import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkelet
 import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
 import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleton;
 import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleton;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class MethodSkeletonManagerImpl implements MethodSkeletonManager {

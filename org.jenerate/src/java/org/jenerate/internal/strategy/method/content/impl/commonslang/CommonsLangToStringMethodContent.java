@@ -9,12 +9,12 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
 import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleton;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public class CommonsLangToStringMethodContent extends AbstractMethodContent<ToStringMethodSkeleton, ToStringGenerationData> {
 

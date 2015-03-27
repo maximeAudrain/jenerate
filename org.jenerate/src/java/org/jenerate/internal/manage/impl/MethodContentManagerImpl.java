@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.MethodContentManager;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.MethodContent;
@@ -14,6 +13,7 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLan
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangHashCodeMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringMethodContent;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class MethodContentManagerImpl implements MethodContentManager {

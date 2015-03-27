@@ -6,9 +6,9 @@ import java.util.Set;
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public abstract class AbstractMethodSkeleton<T extends MethodGenerationData> implements MethodSkeleton<T> {
 

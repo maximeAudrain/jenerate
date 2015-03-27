@@ -6,13 +6,13 @@ import org.jenerate.internal.generate.method.MethodGenerator;
 import org.jenerate.internal.generate.method.impl.MethodGeneratorImpl;
 import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
 import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
-import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.DialogFactoryManager;
 import org.jenerate.internal.manage.MethodGeneratorManager;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
+import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class MethodGeneratorManagerImpl implements MethodGeneratorManager {
