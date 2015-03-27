@@ -1,4 +1,4 @@
-package org.jenerate.internal.lang.generators;
+package org.jenerate.internal.generate.method;
 
 import java.util.Set;
 

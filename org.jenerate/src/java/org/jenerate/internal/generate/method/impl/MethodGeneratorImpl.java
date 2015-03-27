@@ -1,4 +1,4 @@
-package org.jenerate.internal.lang.generators.impl;
+package org.jenerate.internal.generate.method.impl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,24 +12,24 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.lang.generators.MethodGenerator;
+import org.jenerate.internal.generate.method.MethodGenerator;
+import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
+import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
 import org.jenerate.internal.strategy.method.Method;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
-import org.jenerate.internal.util.JavaUiCodeAppender;
-import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
 public class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData>
         implements MethodGenerator<T, U, V> {
 
     private final DialogFactory<U, V> dialogProvider;
     private final JavaUiCodeAppender javaUiCodeAppender;
-    private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
+    private final JavaCodeFormatter jeneratePluginCodeFormatter;
 
     public MethodGeneratorImpl(DialogFactory<U, V> dialogProvider, JavaUiCodeAppender javaUiCodeAppender,
-            JeneratePluginCodeFormatter jeneratePluginCodeFormatter) {
+            JavaCodeFormatter jeneratePluginCodeFormatter) {
         this.dialogProvider = dialogProvider;
         this.javaUiCodeAppender = javaUiCodeAppender;
         this.jeneratePluginCodeFormatter = jeneratePluginCodeFormatter;

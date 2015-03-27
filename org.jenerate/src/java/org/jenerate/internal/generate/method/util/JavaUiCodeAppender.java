@@ -1,4 +1,4 @@
-package org.jenerate.internal.util;
+package org.jenerate.internal.generate.method.util;
 
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;

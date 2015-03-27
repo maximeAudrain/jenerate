@@ -1,4 +1,4 @@
-package org.jenerate.internal.util.impl;
+package org.jenerate.internal.generate.method.util.impl;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
-import org.jenerate.internal.util.JavaUiCodeAppender;
+import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
 
 /**
  * Implementation of the {@link JavaUiCodeAppender}

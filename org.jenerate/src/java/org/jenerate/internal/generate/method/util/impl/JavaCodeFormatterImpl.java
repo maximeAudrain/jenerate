@@ -1,4 +1,4 @@
-package org.jenerate.internal.util.impl;
+package org.jenerate.internal.generate.method.util.impl;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IBuffer;
@@ -14,9 +14,9 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.swt.SWT;
 import org.eclipse.text.edits.TextEdit;
-import org.jenerate.internal.util.JeneratePluginCodeFormatter;
+import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
 
-public final class JeneratePluginCodeFormatterImpl implements JeneratePluginCodeFormatter {
+public final class JavaCodeFormatterImpl implements JavaCodeFormatter {
 
     @Override
     public String formatCode(IType objectClass, String source) throws JavaModelException, BadLocationException {

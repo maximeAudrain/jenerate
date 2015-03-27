@@ -13,14 +13,14 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
+import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangCompareToMethodContent;
 import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkeleton;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.CompareToDialog;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
-import org.jenerate.internal.util.JavaUiCodeAppender;
-import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
 /**
  * @author jiayun, maudrain
@@ -30,13 +30,13 @@ public final class CompareToGenerator implements ILangGenerator {
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final PreferencesManager preferencesManager;
     private final DialogFactory<CompareToDialog, CompareToGenerationData> dialogProvider;
-    private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
+    private final JavaCodeFormatter jeneratePluginCodeFormatter;
     private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
     private final JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
     public CompareToGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
             DialogFactory<CompareToDialog, CompareToGenerationData> dialogProvider,
-            JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
+            JavaCodeFormatter jeneratePluginCodeFormatter,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
         this.javaUiCodeAppender = javaUiCodeAppender;

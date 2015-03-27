@@ -2,7 +2,7 @@
  * Copyright (c) 2014 European Organisation for Nuclear Research (CERN), All Rights Reserved.
  */
 
-package org.jenerate.internal.lang.handlers;
+package org.jenerate.internal.generate.method.handler;
 
 import java.util.Set;
 
@@ -24,8 +24,12 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.generate.method.MethodGenerator;
+import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
+import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
+import org.jenerate.internal.generate.method.util.impl.JavaCodeFormatterImpl;
+import org.jenerate.internal.generate.method.util.impl.JavaUiCodeAppenderImpl;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.lang.generators.MethodGenerator;
 import org.jenerate.internal.lang.generators.impl.GeneratorsCommonMethodsDelegateImpl;
 import org.jenerate.internal.manage.MethodGeneratorManager;
 import org.jenerate.internal.manage.MethodManager;
@@ -37,32 +41,28 @@ import org.jenerate.internal.strategy.method.Method;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
-import org.jenerate.internal.util.JavaUiCodeAppender;
-import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 import org.jenerate.internal.util.impl.JavaInterfaceCodeAppenderImpl;
-import org.jenerate.internal.util.impl.JavaUiCodeAppenderImpl;
-import org.jenerate.internal.util.impl.JeneratePluginCodeFormatterImpl;
 
 /**
  * Handler that determine which generation should be performed depending on the event commandId. It also ensures that
  * the currently selected object in the editor is a class in order to be able to perform the generation. The
- * {@link GenerateHandler#generate(String, ISelection, ICompilationUnit, Shell)} method is extracted from the
+ * {@link MethodGeneratorHandler#generate(String, ISelection, ICompilationUnit, Shell)} method is extracted from the
  * {@link IEditorActionDelegate} written by jiayun previously in the plugin.
  * 
  * @author jiayun, maudrain
  */
-public class GenerateHandler extends AbstractHandler {
+public class MethodGeneratorHandler extends AbstractHandler {
 
     private static final JavaUiCodeAppender JAVA_UI_CODE_APPENDER = new JavaUiCodeAppenderImpl();
     private static final PreferencesManager PREFERENCES_MANAGER = new PreferencesManagerImpl();
-    private static final JeneratePluginCodeFormatter CODE_FORMATTER = new JeneratePluginCodeFormatterImpl();
+    private static final JavaCodeFormatter CODE_FORMATTER = new JavaCodeFormatterImpl();
     private static final GeneratorsCommonMethodsDelegate COMMON_METHODS_DELEGATE = new GeneratorsCommonMethodsDelegateImpl();
     private static final JavaInterfaceCodeAppender JAVA_INTERFACE_CODE_APPENDER = new JavaInterfaceCodeAppenderImpl();
 
     private final MethodManager methodManager;
     private final MethodGeneratorManager generatorManager;
 
-    public GenerateHandler() {
+    public MethodGeneratorHandler() {
         this.methodManager = new MethodManagerImpl(PREFERENCES_MANAGER, COMMON_METHODS_DELEGATE,
                 JAVA_INTERFACE_CODE_APPENDER);
         this.generatorManager = new MethodGeneratorManagerImpl(PREFERENCES_MANAGER, COMMON_METHODS_DELEGATE,

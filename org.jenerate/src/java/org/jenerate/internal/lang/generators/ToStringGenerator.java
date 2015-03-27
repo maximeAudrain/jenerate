@@ -15,13 +15,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
+import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringMethodContent;
 import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleton;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.ToStringDialog;
-import org.jenerate.internal.util.JavaUiCodeAppender;
-import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
 /**
  * XXX test caching field empty for toString
@@ -33,12 +33,12 @@ public final class ToStringGenerator implements ILangGenerator {
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final PreferencesManager preferencesManager;
     private final DialogFactory<ToStringDialog, ToStringGenerationData> dialogProvider;
-    private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
+    private final JavaCodeFormatter jeneratePluginCodeFormatter;
     private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
     public ToStringGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
             DialogFactory<ToStringDialog, ToStringGenerationData> dialogProvider,
-            JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
+            JavaCodeFormatter jeneratePluginCodeFormatter,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         this.javaUiCodeAppender = javaUiCodeAppender;
         this.preferencesManager = preferencesManager;

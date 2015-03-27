@@ -15,6 +15,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
+import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangEqualsMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangHashCodeMethodContent;
@@ -22,8 +24,6 @@ import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
 import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleton;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
-import org.jenerate.internal.util.JavaUiCodeAppender;
-import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
 /**
  * XXX test caching field empty for hashCode
@@ -35,12 +35,12 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final PreferencesManager preferencesManager;
     private final DialogFactory<EqualsHashCodeDialog, EqualsHashCodeGenerationData> dialogProvider;
-    private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
+    private final JavaCodeFormatter jeneratePluginCodeFormatter;
     private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
     public EqualsHashCodeGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
             DialogFactory<EqualsHashCodeDialog, EqualsHashCodeGenerationData> dialogProvider,
-            JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
+            JavaCodeFormatter jeneratePluginCodeFormatter,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         this.javaUiCodeAppender = javaUiCodeAppender;
         this.preferencesManager = preferencesManager;

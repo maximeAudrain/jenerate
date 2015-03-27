@@ -11,9 +11,9 @@ import org.eclipse.jdt.core.Signature;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
+import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
 import org.jenerate.internal.manage.PreferencesManager;
-import org.jenerate.internal.util.JavaUiCodeAppender;
-import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -39,7 +39,7 @@ public abstract class AbstractGeneratorTest {
     @Mock
     protected JavaUiCodeAppender javaUiCodeAppender;
     @Mock
-    protected JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
+    protected JavaCodeFormatter jeneratePluginCodeFormatter;
     @Mock
     protected GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
