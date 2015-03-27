@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.PreferencesManager;

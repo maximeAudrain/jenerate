@@ -1,9 +1,9 @@
 package org.jenerate.internal.manage;
 
-import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.domain.method.content.MethodContent;
-import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
+import org.jenerate.internal.strategy.method.content.MethodContent;
+import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
+import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 
 /**
  * Manager responsible for retrieving a {@link MethodContent} for a given {@link MethodSkeleton} and a

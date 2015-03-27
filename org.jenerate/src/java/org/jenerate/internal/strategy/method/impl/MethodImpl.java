@@ -1,9 +1,9 @@
-package org.jenerate.internal.domain.method.impl;
+package org.jenerate.internal.strategy.method.impl;
 
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.domain.method.Method;
-import org.jenerate.internal.domain.method.content.MethodContent;
-import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
+import org.jenerate.internal.strategy.method.Method;
+import org.jenerate.internal.strategy.method.content.MethodContent;
+import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 
 public class MethodImpl<T extends MethodSkeleton<U>, U extends MethodGenerationData> implements Method<T, U> {
 

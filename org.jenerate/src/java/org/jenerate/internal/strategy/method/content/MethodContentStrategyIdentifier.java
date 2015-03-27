@@ -1,4 +1,4 @@
-package org.jenerate.internal.domain;
+package org.jenerate.internal.strategy.method.content;
 
 public enum MethodContentStrategyIdentifier {
 

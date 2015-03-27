@@ -1,8 +1,8 @@
-package org.jenerate.internal.domain.method.content.tostring;
+package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
 import java.util.EnumSet;
 
-public enum ToStringStyle {
+public enum CommonsLangToStringStyle {
 
     NO_STYLE,
 
@@ -15,7 +15,7 @@ public enum ToStringStyle {
     public static final String DOT_STRING = ".";
     private static final String COMMONS_LANG_PREFIX = "org.apache.commons.lang";
     private static final String BUILDER_STRING = ".builder.";
-    private static final String TO_STRING_STYLE = "ToStringStyle";
+    private static final String TO_STRING_STYLE = "CommonsLangToStringStyle";
     private static final String COMMONS_LANG3_ADDON = "3";
     private static final String EMPTY_STRING = "";
 
@@ -33,9 +33,9 @@ public enum ToStringStyle {
                 + TO_STRING_STYLE;
     }
 
-    public static ToStringStyle getToStringStyle(String fullLibraryString) {
-        EnumSet<ToStringStyle> enumSet = EnumSet.allOf(ToStringStyle.class);
-        for (ToStringStyle style : enumSet) {
+    public static CommonsLangToStringStyle getToStringStyle(String fullLibraryString) {
+        EnumSet<CommonsLangToStringStyle> enumSet = EnumSet.allOf(CommonsLangToStringStyle.class);
+        for (CommonsLangToStringStyle style : enumSet) {
             if (fullLibraryString.contains(style.name())) {
                 return style;
             }

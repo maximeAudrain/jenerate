@@ -1,8 +1,8 @@
-package org.jenerate.internal.domain.method.skeleton.impl;
+package org.jenerate.internal.strategy.method.skeleton.impl;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;

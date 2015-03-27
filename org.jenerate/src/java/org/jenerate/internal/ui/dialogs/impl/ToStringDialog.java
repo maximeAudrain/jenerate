@@ -19,9 +19,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.data.impl.ToStringGenerationDataImpl;
-import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringStyle;
 
 /**
  * @author jiayun
@@ -36,7 +36,7 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
 
     private static final String SETTINGS_SECTION = "ToStringDialog";
 
-    private static final String SETTINGS_STYLE = "ToStringStyle";
+    private static final String SETTINGS_STYLE = "CommonsLangToStringStyle";
 
     public ToStringDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
             final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper,
@@ -52,7 +52,7 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
 
         toStringStyle = settings.get(SETTINGS_STYLE);
         if (toStringStyle == null) {
-            toStringStyle = ToStringStyle.NO_STYLE.getFullLibraryString((Boolean) getPreferencesManager()
+            toStringStyle = CommonsLangToStringStyle.NO_STYLE.getFullLibraryString((Boolean) getPreferencesManager()
                     .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3));
         }
     }
@@ -82,9 +82,9 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
         Boolean useCommonsLang3 = (Boolean) getPreferencesManager().getCurrentPreferenceValue(
                 JeneratePreference.USE_COMMONS_LANG3);
         List<String> styles = new ArrayList<String>();
-        for (ToStringStyle style : ToStringStyle.values()) {
-            if (ToStringStyle.NO_STYLE.equals(style)) {
-                styles.add(ToStringStyle.NO_STYLE.name());
+        for (CommonsLangToStringStyle style : CommonsLangToStringStyle.values()) {
+            if (CommonsLangToStringStyle.NO_STYLE.equals(style)) {
+                styles.add(CommonsLangToStringStyle.NO_STYLE.name());
             } else {
                 styles.add(style.getFullLibraryString(useCommonsLang3));
             }
@@ -108,7 +108,7 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
                 .withGenerateComment(getGenerateComment())
                 .withUseBlockInIfStatements(getUseBlockInIfStatements())
                 .withUseGettersInsteadOfFields(getUseGettersInsteadOfFields())
-                .withToStringStyle(ToStringStyle.getToStringStyle(toStringStyle))
+                .withToStringStyle(CommonsLangToStringStyle.getToStringStyle(toStringStyle))
                 .build();
         //@formatter:on
     }

@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.Signature;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
-import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
+import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringStyle;
 
 /**
  * Utility class that generates the method strings given certain parameters
@@ -224,8 +224,8 @@ public final class MethodGenerations {
 
     private static String createToStringBuilderString(ToStringGenerationData data) throws JavaModelException {
         StringBuffer content = new StringBuffer();
-        ToStringStyle toStringStyle = data.getToStringStyle();
-        if (ToStringStyle.NO_STYLE.equals(toStringStyle)) {
+        CommonsLangToStringStyle toStringStyle = data.getToStringStyle();
+        if (CommonsLangToStringStyle.NO_STYLE.equals(toStringStyle)) {
             content.append("new ToStringBuilder(this)");
         } else {
             content.append("new ToStringBuilder(this, ");

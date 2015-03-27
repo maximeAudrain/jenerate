@@ -10,8 +10,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
-import org.jenerate.internal.domain.method.content.MethodContentLibraries;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangMethodContentLibraries;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
 import org.junit.Ignore;
@@ -263,9 +263,9 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
 
     private void verifyCodeAppended(boolean useCommonsLang3) throws JavaModelException, PartInitException {
         verify(compilationUnit, times(1)).createImport(
-                MethodContentLibraries.getHashCodeBuilderLibrary(useCommonsLang3), null, null);
+                CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(useCommonsLang3), null, null);
         verify(compilationUnit, times(1)).createImport(
-                MethodContentLibraries.getEqualsBuilderLibrary(useCommonsLang3), null, null);
+                CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(useCommonsLang3), null, null);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, createdMethod2);
     }
 

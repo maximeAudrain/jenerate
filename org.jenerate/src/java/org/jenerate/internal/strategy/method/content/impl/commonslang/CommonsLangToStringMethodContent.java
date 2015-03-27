@@ -1,4 +1,4 @@
-package org.jenerate.internal.domain.method.content.tostring;
+package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,15 +7,14 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
-import org.jenerate.internal.domain.method.content.AbstractMethodContent;
-import org.jenerate.internal.domain.method.content.MethodContentLibraries;
-import org.jenerate.internal.domain.method.skeleton.impl.ToStringMethodSkeleton;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
+import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
+import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleton;
 
 public class CommonsLangToStringMethodContent extends AbstractMethodContent<ToStringMethodSkeleton, ToStringGenerationData> {
 
@@ -54,10 +53,10 @@ public class CommonsLangToStringMethodContent extends AbstractMethodContent<ToSt
             useCommonsLang3 = true;
         }
         Set<String> libraries = new HashSet<String>();
-        String toStringBuilderLibrary = MethodContentLibraries.getToStringBuilderLibrary(useCommonsLang3);
+        String toStringBuilderLibrary = CommonsLangMethodContentLibraries.getToStringBuilderLibrary(useCommonsLang3);
         libraries.add(toStringBuilderLibrary);
-        if (!ToStringStyle.NO_STYLE.equals(data.getToStringStyle())) {
-            String styleLibrary = ToStringStyle.getToStringStyleLibrary(useCommonsLang3);
+        if (!CommonsLangToStringStyle.NO_STYLE.equals(data.getToStringStyle())) {
+            String styleLibrary = CommonsLangToStringStyle.getToStringStyleLibrary(useCommonsLang3);
             libraries.add(styleLibrary);
         }
         return libraries;

@@ -5,7 +5,7 @@ import java.util.Set;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 

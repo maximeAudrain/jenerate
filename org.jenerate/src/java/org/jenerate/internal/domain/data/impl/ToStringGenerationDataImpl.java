@@ -1,11 +1,11 @@
 package org.jenerate.internal.domain.data.impl;
 
 import org.jenerate.internal.domain.data.ToStringGenerationData;
-import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
+import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringStyle;
 
 public class ToStringGenerationDataImpl extends AbstractMethodGenerationData implements ToStringGenerationData {
 
-    private final ToStringStyle toStringStyle;
+    private final CommonsLangToStringStyle toStringStyle;
 
     private ToStringGenerationDataImpl(Builder builder) {
         super(builder);
@@ -13,20 +13,20 @@ public class ToStringGenerationDataImpl extends AbstractMethodGenerationData imp
     }
 
     @Override
-    public ToStringStyle getToStringStyle() {
+    public CommonsLangToStringStyle getToStringStyle() {
         return toStringStyle;
     }
 
     public static class Builder extends AbstractMethodGenerationData.Builder<Builder> {
 
-        private ToStringStyle builderToStringStyle;
+        private CommonsLangToStringStyle builderToStringStyle;
 
         @Override
         public Builder getThis() {
             return this;
         }
 
-        public Builder withToStringStyle(ToStringStyle toStringStyle) {
+        public Builder withToStringStyle(CommonsLangToStringStyle toStringStyle) {
             this.builderToStringStyle = toStringStyle;
             return getThis();
         }

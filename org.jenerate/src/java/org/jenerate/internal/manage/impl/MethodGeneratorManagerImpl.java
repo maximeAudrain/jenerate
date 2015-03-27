@@ -1,14 +1,14 @@
 package org.jenerate.internal.manage.impl;
 
-import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.lang.generators.MethodGenerator;
 import org.jenerate.internal.lang.generators.impl.MethodGeneratorImpl;
 import org.jenerate.internal.manage.DialogFactoryManager;
 import org.jenerate.internal.manage.MethodGeneratorManager;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;

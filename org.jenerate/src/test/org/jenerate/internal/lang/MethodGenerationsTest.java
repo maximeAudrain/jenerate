@@ -9,7 +9,7 @@ import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersCustom;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersDefault;
-import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
+import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringStyle;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -90,7 +90,7 @@ public class MethodGenerationsTest {
         when(toStringDialogData.getGenerateComment()).thenReturn(false);
         when(toStringDialogData.getAppendSuper()).thenReturn(false);
         when(toStringDialogData.getUseGettersInsteadOfFields()).thenReturn(false);
-        when(toStringDialogData.getToStringStyle()).thenReturn(ToStringStyle.NO_STYLE);
+        when(toStringDialogData.getToStringStyle()).thenReturn(CommonsLangToStringStyle.NO_STYLE);
     }
 
     @Test
@@ -175,11 +175,11 @@ public class MethodGenerationsTest {
 
     @Test
     public void testGenerateToStringWithStyle() throws JavaModelException {
-        when(toStringDialogData.getToStringStyle()).thenReturn(ToStringStyle.DEFAULT_STYLE);
+        when(toStringDialogData.getToStringStyle()).thenReturn(CommonsLangToStringStyle.DEFAULT_STYLE);
         String toStringMethodContent = MethodGenerations.generateToStringMethodContent(toStringDialogData, "");
         String toStringMethod = MethodGenerations.createToStringMethod(toStringDialogData, addOverride,
                 toStringMethodContent);
-        assertEquals("public String toString() {\nreturn new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)"
+        assertEquals("public String toString() {\nreturn new ToStringBuilder(this, CommonsLangToStringStyle.DEFAULT_STYLE)"
                 + ".append(\"field1\", field1).append(\"field2\", field2).toString();\n}\n\n", toStringMethod);
     }
 

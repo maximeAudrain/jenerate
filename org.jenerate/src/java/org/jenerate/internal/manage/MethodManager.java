@@ -2,10 +2,10 @@ package org.jenerate.internal.manage;
 
 import java.util.Set;
 
-import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.domain.method.Method;
-import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
+import org.jenerate.internal.strategy.method.Method;
+import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 
 /**
  * Manager responsible for retrieving a set of {@link Method}s given a unique {@link UserActionIdentifier}.

@@ -1,11 +1,10 @@
-package org.jenerate.internal.domain.method.content;
+package org.jenerate.internal.strategy.method.content;
 
 import java.util.Set;
 
 import org.eclipse.jdt.core.IType;
-import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
+import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 
 /**
  * Defines content of a single method.

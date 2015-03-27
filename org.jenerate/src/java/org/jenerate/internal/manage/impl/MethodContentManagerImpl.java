@@ -3,17 +3,17 @@ package org.jenerate.internal.manage.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.domain.method.content.MethodContent;
-import org.jenerate.internal.domain.method.content.compareto.CommonsLangCompareToMethodContent;
-import org.jenerate.internal.domain.method.content.equals.CommonsLangEqualsMethodContent;
-import org.jenerate.internal.domain.method.content.hashcode.CommonsLangHashCodeMethodContent;
-import org.jenerate.internal.domain.method.content.tostring.CommonsLangToStringMethodContent;
-import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.MethodContentManager;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.strategy.method.content.MethodContent;
+import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
+import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangCompareToMethodContent;
+import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangEqualsMethodContent;
+import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangHashCodeMethodContent;
+import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringMethodContent;
+import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class MethodContentManagerImpl implements MethodContentManager {

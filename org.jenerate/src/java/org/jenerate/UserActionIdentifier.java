@@ -1,4 +1,4 @@
-package org.jenerate.internal.domain;
+package org.jenerate;
 
 import java.util.HashMap;
 import java.util.Map;

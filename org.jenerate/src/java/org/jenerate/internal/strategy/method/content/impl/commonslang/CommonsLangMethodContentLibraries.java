@@ -1,4 +1,4 @@
-package org.jenerate.internal.domain.method.content;
+package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
 /**
  * Helper class to ease the construction of the commons-lang library objects to be used by the generator classes. This
@@ -6,7 +6,7 @@ package org.jenerate.internal.domain.method.content;
  * 
  * @author maudrain
  */
-public final class MethodContentLibraries {
+public final class CommonsLangMethodContentLibraries {
 
     public static final String DOT_STRING = ".";
 
@@ -21,7 +21,7 @@ public final class MethodContentLibraries {
     private static final String COMMONS_LANG3_ADDON = "3";
     private static final String EMPTY_STRING = "";
 
-    private MethodContentLibraries() {
+    private CommonsLangMethodContentLibraries() {
         /* Only static constants */
     }
 

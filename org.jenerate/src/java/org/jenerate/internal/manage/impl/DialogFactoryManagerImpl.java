@@ -3,7 +3,7 @@ package org.jenerate.internal.manage.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.DialogFactoryManager;

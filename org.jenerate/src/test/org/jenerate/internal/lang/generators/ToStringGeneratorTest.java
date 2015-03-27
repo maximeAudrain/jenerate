@@ -9,9 +9,9 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
-import org.jenerate.internal.domain.method.content.MethodContentLibraries;
-import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangMethodContentLibraries;
+import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringStyle;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.ToStringDialog;
 import org.junit.Ignore;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 public class ToStringGeneratorTest extends AbstractGeneratorTest {
 
     private static final String TO_STRING_FIELD_NAME = "toString";
-    private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.DEFAULT_STYLE;
+    private static final CommonsLangToStringStyle TO_STRING_STYLE = CommonsLangToStringStyle.DEFAULT_STYLE;
 
     @Mock
     private DialogFactory<ToStringDialog, ToStringGenerationData> dialogProvider;
@@ -154,7 +154,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     public void verifyGeneratedCodeWithNoStyleConstant() throws RuntimeException, CoreException {
-        when(data.getToStringStyle()).thenReturn(ToStringStyle.NO_STYLE);
+        when(data.getToStringStyle()).thenReturn(CommonsLangToStringStyle.NO_STYLE);
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
@@ -180,7 +180,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
 
     private void verifyCodeAppended(boolean useCommonsLang3) throws JavaModelException, PartInitException {
         verify(compilationUnit, times(1)).createImport(
-                MethodContentLibraries.getToStringBuilderLibrary(useCommonsLang3), null, null);
+                CommonsLangMethodContentLibraries.getToStringBuilderLibrary(useCommonsLang3), null, null);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, createdMethod1);
     }
 

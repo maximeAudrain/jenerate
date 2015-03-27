@@ -1,10 +1,10 @@
-package org.jenerate.internal.domain.method.skeleton;
+package org.jenerate.internal.strategy.method.skeleton;
 
 import java.util.Set;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 
 /**
