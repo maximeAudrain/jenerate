@@ -1,6 +1,6 @@
-package org.jenerate.internal.data.impl;
+package org.jenerate.internal.domain.hashcode.impl;
 
-import org.jenerate.internal.data.IInitMultNumbers;
+import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
 
 /**
  * @author jiayun

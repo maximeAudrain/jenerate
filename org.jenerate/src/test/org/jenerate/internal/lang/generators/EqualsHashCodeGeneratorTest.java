@@ -8,12 +8,12 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.PartInitException;
-import org.jenerate.internal.data.EqualsHashCodeDialogData;
-import org.jenerate.internal.data.IInitMultNumbers;
-import org.jenerate.internal.domain.method.content.CommonsLangLibraryUtils;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
+import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
+import org.jenerate.internal.domain.method.content.MethodContentLibraries;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,11 +47,11 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     protected IMethod createdMethod2;
 
     @Mock
-    private DialogFactory<EqualsHashCodeDialog, EqualsHashCodeDialogData> dialogProvider;
+    private DialogFactory<EqualsHashCodeDialog, EqualsHashCodeGenerationData> dialogProvider;
     @Mock
     private EqualsHashCodeDialog fieldDialog;
     @Mock
-    private EqualsHashCodeDialogData data;
+    private EqualsHashCodeGenerationData data;
     @Mock
     private IInitMultNumbers iInitMultNumbers;
 
@@ -263,9 +263,9 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
 
     private void verifyCodeAppended(boolean useCommonsLang3) throws JavaModelException, PartInitException {
         verify(compilationUnit, times(1)).createImport(
-                CommonsLangLibraryUtils.getHashCodeBuilderLibrary(useCommonsLang3), null, null);
+                MethodContentLibraries.getHashCodeBuilderLibrary(useCommonsLang3), null, null);
         verify(compilationUnit, times(1)).createImport(
-                CommonsLangLibraryUtils.getEqualsBuilderLibrary(useCommonsLang3), null, null);
+                MethodContentLibraries.getEqualsBuilderLibrary(useCommonsLang3), null, null);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, createdMethod2);
     }
 

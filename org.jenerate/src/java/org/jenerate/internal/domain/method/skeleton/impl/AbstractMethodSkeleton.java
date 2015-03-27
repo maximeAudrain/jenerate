@@ -4,18 +4,18 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IType;
-import org.jenerate.internal.data.JenerateDialogData;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 
-public abstract class AbstractMethod<T extends JenerateDialogData> implements MethodSkeleton<T> {
+public abstract class AbstractMethodSkeleton<T extends MethodGenerationData> implements MethodSkeleton<T> {
 
     protected final PreferencesManager preferencesManager;
     protected final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
-    public AbstractMethod(PreferencesManager preferencesManager,
+    public AbstractMethodSkeleton(PreferencesManager preferencesManager,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         this.preferencesManager = preferencesManager;
         this.generatorsCommonMethodsDelegate = generatorsCommonMethodsDelegate;

@@ -1,13 +1,13 @@
-package org.jenerate.internal.data.impl;
+package org.jenerate.internal.domain.data.impl;
 
-import org.jenerate.internal.data.ToStringDialogData;
+import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
 
-public class ToStringDialogDataImpl extends AbstractFieldDialogData implements ToStringDialogData {
+public class ToStringGenerationDataImpl extends AbstractMethodGenerationData implements ToStringGenerationData {
 
     private final ToStringStyle toStringStyle;
 
-    private ToStringDialogDataImpl(Builder builder) {
+    private ToStringGenerationDataImpl(Builder builder) {
         super(builder);
         this.toStringStyle = builder.builderToStringStyle;
     }
@@ -17,7 +17,7 @@ public class ToStringDialogDataImpl extends AbstractFieldDialogData implements T
         return toStringStyle;
     }
 
-    public static class Builder extends AbstractFieldDialogData.Builder<Builder> {
+    public static class Builder extends AbstractMethodGenerationData.Builder<Builder> {
 
         private ToStringStyle builderToStringStyle;
 
@@ -31,8 +31,8 @@ public class ToStringDialogDataImpl extends AbstractFieldDialogData implements T
             return getThis();
         }
 
-        public ToStringDialogData build() {
-            return new ToStringDialogDataImpl(getThis());
+        public ToStringGenerationData build() {
+            return new ToStringGenerationDataImpl(getThis());
         }
 
     }

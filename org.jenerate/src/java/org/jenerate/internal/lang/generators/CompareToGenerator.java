@@ -11,13 +11,13 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.internal.data.CompareToDialogData;
+import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.method.content.compareto.CommonsLangCompareToMethodContent;
-import org.jenerate.internal.domain.method.skeleton.impl.CompareToMethod;
+import org.jenerate.internal.domain.method.skeleton.impl.CompareToMethodSkeleton;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.CompareToDialog;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JeneratePluginCodeFormatter;
@@ -29,13 +29,13 @@ public final class CompareToGenerator implements ILangGenerator {
 
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final PreferencesManager preferencesManager;
-    private final DialogFactory<CompareToDialog, CompareToDialogData> dialogProvider;
+    private final DialogFactory<CompareToDialog, CompareToGenerationData> dialogProvider;
     private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
     private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
     private final JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
     public CompareToGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
-            DialogFactory<CompareToDialog, CompareToDialogData> dialogProvider,
+            DialogFactory<CompareToDialog, CompareToGenerationData> dialogProvider,
             JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
@@ -87,7 +87,7 @@ public final class CompareToGenerator implements ILangGenerator {
         return excludedMethods;
     }
 
-    private void generateCode(final Shell parentShell, final IType objectClass, CompareToDialogData data)
+    private void generateCode(final Shell parentShell, final IType objectClass, CompareToGenerationData data)
             throws Exception {
 
         boolean useCommonLang3 = ((Boolean) preferencesManager
@@ -97,7 +97,7 @@ public final class CompareToGenerator implements ILangGenerator {
         // new CommonsLangCompareToMethodContent(
         // preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3, javaInterfaceCodeAppender);
         String methodContent = compareToMethodContent.getMethodContent(objectClass, data);
-        CompareToMethod compareToMethod = new CompareToMethod(preferencesManager, generatorsCommonMethodsDelegate,
+        CompareToMethodSkeleton compareToMethod = new CompareToMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate,
                 javaInterfaceCodeAppender);
         String source = compareToMethod.getMethod(objectClass, data, methodContent);
 

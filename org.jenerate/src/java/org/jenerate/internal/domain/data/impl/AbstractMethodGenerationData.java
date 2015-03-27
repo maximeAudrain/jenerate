@@ -1,10 +1,10 @@
-package org.jenerate.internal.data.impl;
+package org.jenerate.internal.domain.data.impl;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
-import org.jenerate.internal.data.FieldDialogData;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 
-public abstract class AbstractFieldDialogData implements FieldDialogData {
+public abstract class AbstractMethodGenerationData implements MethodGenerationData {
 
     private final IField[] checkedFields;
     private final IJavaElement elementPosition;
@@ -13,7 +13,7 @@ public abstract class AbstractFieldDialogData implements FieldDialogData {
     private final boolean useGettersInsteadOfFields;
     private final boolean useBlockInIfStatements;
 
-    protected AbstractFieldDialogData(@SuppressWarnings("rawtypes") Builder builder) {
+    protected AbstractMethodGenerationData(@SuppressWarnings("rawtypes") Builder builder) {
         this.checkedFields = builder.builderCheckedFields;
         this.elementPosition = builder.builderElementPosition;
         this.appendSuper = builder.builderAppendSuper;

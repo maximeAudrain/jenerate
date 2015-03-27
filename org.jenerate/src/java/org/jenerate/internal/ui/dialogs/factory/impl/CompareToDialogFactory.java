@@ -7,14 +7,14 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.internal.data.CompareToDialogData;
 import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
+import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.impl.CompareToDialog;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
-public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialog, CompareToDialogData> {
+public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialog, CompareToGenerationData> {
 
     private JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 

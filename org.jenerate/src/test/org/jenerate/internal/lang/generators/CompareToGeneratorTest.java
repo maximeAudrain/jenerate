@@ -9,11 +9,11 @@ import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.ui.PartInitException;
-import org.jenerate.internal.data.CompareToDialogData;
-import org.jenerate.internal.domain.method.content.CommonsLangLibraryUtils;
+import org.jenerate.internal.domain.data.CompareToGenerationData;
+import org.jenerate.internal.domain.method.content.MethodContentLibraries;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.CompareToDialog;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -39,11 +39,11 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
     @Mock
     private JavaInterfaceCodeAppender javaInterfaceCodeAppender;
     @Mock
-    private DialogFactory<CompareToDialog, CompareToDialogData> dialogProvider;
+    private DialogFactory<CompareToDialog, CompareToGenerationData> dialogProvider;
     @Mock
     private CompareToDialog fieldDialog;
     @Mock
-    private CompareToDialogData data;
+    private CompareToGenerationData data;
 
     private CompareToGenerator compareToGenerator;
 
@@ -183,7 +183,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
 
     private void verifyCodeAppended(boolean useCommonsLang3) throws JavaModelException, PartInitException {
         verify(compilationUnit, times(1)).createImport(
-                CommonsLangLibraryUtils.getCompareToBuilderLibrary(useCommonsLang3), null, null);
+                MethodContentLibraries.getCompareToBuilderLibrary(useCommonsLang3), null, null);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, createdMethod1);
     }
 

@@ -3,7 +3,7 @@ package org.jenerate.internal.lang.generators;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 
 /**
  * XXX get rid of me once the code is tested and the strategy pattern in effect

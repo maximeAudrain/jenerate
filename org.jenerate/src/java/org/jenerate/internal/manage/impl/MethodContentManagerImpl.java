@@ -3,8 +3,8 @@ package org.jenerate.internal.manage.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jenerate.internal.data.JenerateDialogData;
 import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.method.content.MethodContent;
 import org.jenerate.internal.domain.method.content.compareto.CommonsLangCompareToMethodContent;
 import org.jenerate.internal.domain.method.content.equals.CommonsLangEqualsMethodContent;
@@ -13,12 +13,12 @@ import org.jenerate.internal.domain.method.content.tostring.CommonsLangToStringM
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.MethodContentManager;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class MethodContentManagerImpl implements MethodContentManager {
 
-    private final Set<MethodContent<? extends MethodSkeleton<?>, ? extends JenerateDialogData>> methodContents = new HashSet<>();
+    private final Set<MethodContent<? extends MethodSkeleton<?>, ? extends MethodGenerationData>> methodContents = new HashSet<>();
 
     public MethodContentManagerImpl(PreferencesManager preferencesManager,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
@@ -46,9 +46,9 @@ public class MethodContentManagerImpl implements MethodContentManager {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends MethodSkeleton<U>, U extends JenerateDialogData> MethodContent<T, U> getMethodContent(
+    public <T extends MethodSkeleton<U>, U extends MethodGenerationData> MethodContent<T, U> getMethodContent(
             MethodSkeleton<U> methodSkeleton, MethodContentStrategyIdentifier methodContentStrategyIdentifier) {
-        for (MethodContent<? extends MethodSkeleton<?>, ? extends JenerateDialogData> methodContent : methodContents) {
+        for (MethodContent<? extends MethodSkeleton<?>, ? extends MethodGenerationData> methodContent : methodContents) {
             if (methodSkeleton.getClass().isAssignableFrom(methodContent.getRelatedMethodSkeletonClass())
                     && methodContentStrategyIdentifier.equals(methodContent.getMethodContentStrategyIdentifier())) {
                 return (MethodContent<T, U>) methodContent;

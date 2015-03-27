@@ -4,18 +4,18 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IType;
-import org.jenerate.internal.data.CompareToDialogData;
 import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
+import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.method.content.AbstractMethodContent;
-import org.jenerate.internal.domain.method.content.CommonsLangLibraryUtils;
-import org.jenerate.internal.domain.method.skeleton.impl.CompareToMethod;
+import org.jenerate.internal.domain.method.content.MethodContentLibraries;
+import org.jenerate.internal.domain.method.skeleton.impl.CompareToMethodSkeleton;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
-public class CommonsLangCompareToMethodContent extends AbstractMethodContent<CompareToMethod, CompareToDialogData> {
+public class CommonsLangCompareToMethodContent extends AbstractMethodContent<CompareToMethodSkeleton, CompareToGenerationData> {
 
     private final JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
@@ -27,7 +27,7 @@ public class CommonsLangCompareToMethodContent extends AbstractMethodContent<Com
     }
 
     @Override
-    public String getMethodContent(IType objectClass, CompareToDialogData data) throws Exception {
+    public String getMethodContent(IType objectClass, CompareToGenerationData data) throws Exception {
         boolean implementedOrExtendedInSuperType = javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(
                 objectClass, "Comparable");
         boolean generifyPreference = ((Boolean) preferencesManager
@@ -47,17 +47,17 @@ public class CommonsLangCompareToMethodContent extends AbstractMethodContent<Com
     }
 
     @Override
-    public Set<String> getLibrariesToImport(CompareToDialogData data) {
+    public Set<String> getLibrariesToImport(CompareToGenerationData data) {
         boolean useCommonsLang3 = false;
         if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
             useCommonsLang3 = true;
         }
-        return Collections.singleton(CommonsLangLibraryUtils.getCompareToBuilderLibrary(useCommonsLang3));
+        return Collections.singleton(MethodContentLibraries.getCompareToBuilderLibrary(useCommonsLang3));
     }
 
     @Override
-    public Class<CompareToMethod> getRelatedMethodSkeletonClass() {
-        return CompareToMethod.class;
+    public Class<CompareToMethodSkeleton> getRelatedMethodSkeletonClass() {
+        return CompareToMethodSkeleton.class;
     }
 
 }

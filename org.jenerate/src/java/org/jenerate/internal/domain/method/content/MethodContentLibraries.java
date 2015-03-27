@@ -6,7 +6,7 @@ package org.jenerate.internal.domain.method.content;
  * 
  * @author maudrain
  */
-public final class CommonsLangLibraryUtils {
+public final class MethodContentLibraries {
 
     public static final String DOT_STRING = ".";
 
@@ -21,7 +21,7 @@ public final class CommonsLangLibraryUtils {
     private static final String COMMONS_LANG3_ADDON = "3";
     private static final String EMPTY_STRING = "";
 
-    private CommonsLangLibraryUtils() {
+    private MethodContentLibraries() {
         /* Only static constants */
     }
 

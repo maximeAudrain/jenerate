@@ -4,8 +4,8 @@ package org.jenerate;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PluginPreference;
+import org.jenerate.internal.domain.preference.PluginPreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 
 /**
  * Jenerate plugin preferences initializer. Takes the default values for all plugin preferences and register them.

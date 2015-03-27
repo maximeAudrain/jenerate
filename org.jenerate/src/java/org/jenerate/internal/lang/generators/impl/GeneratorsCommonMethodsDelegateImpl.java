@@ -14,9 +14,9 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 
 /**
  * XXX get rid of me once the code is tested and the strategy pattern in effect. Also see if code redundancy can be

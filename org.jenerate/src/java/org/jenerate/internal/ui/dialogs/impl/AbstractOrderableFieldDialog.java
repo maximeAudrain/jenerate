@@ -18,15 +18,15 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
-import org.jenerate.internal.data.FieldDialogData;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.manage.PreferencesManager;
 
 /**
  * This class contains some code from org.eclipse.ui.externaltools.internal.ui.BuilderPropertyPage
  * 
  * @author jiayun
  */
-public abstract class AbstractOrderableFieldDialog<T extends FieldDialogData> extends AbstractFieldDialog<T> {
+public abstract class AbstractOrderableFieldDialog<T extends MethodGenerationData> extends AbstractFieldDialog<T> {
 
     private Button upButton;
 

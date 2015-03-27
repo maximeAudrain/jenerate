@@ -1,14 +1,14 @@
-package org.jenerate.internal.data.impl;
+package org.jenerate.internal.domain.data.impl;
 
-import org.jenerate.internal.data.EqualsHashCodeDialogData;
-import org.jenerate.internal.data.IInitMultNumbers;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
+import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
 
-public class EqualsHashCodeDialogDataImpl extends AbstractFieldDialogData implements EqualsHashCodeDialogData {
+public class EqualsHashCodeGenerationDataImpl extends AbstractMethodGenerationData implements EqualsHashCodeGenerationData {
 
     private final boolean compareReferences;
     private final IInitMultNumbers initMultNumbers;
 
-    private EqualsHashCodeDialogDataImpl(Builder builder) {
+    private EqualsHashCodeGenerationDataImpl(Builder builder) {
         super(builder);
         this.compareReferences = builder.builderCompareReferences;
         this.initMultNumbers = builder.builderInitMultNumbers;
@@ -24,7 +24,7 @@ public class EqualsHashCodeDialogDataImpl extends AbstractFieldDialogData implem
         return initMultNumbers;
     }
 
-    public static class Builder extends AbstractFieldDialogData.Builder<Builder> {
+    public static class Builder extends AbstractMethodGenerationData.Builder<Builder> {
 
         private boolean builderCompareReferences;
         private IInitMultNumbers builderInitMultNumbers;
@@ -44,8 +44,8 @@ public class EqualsHashCodeDialogDataImpl extends AbstractFieldDialogData implem
             return getThis();
         }
 
-        public EqualsHashCodeDialogData build() {
-            return new EqualsHashCodeDialogDataImpl(getThis());
+        public EqualsHashCodeGenerationData build() {
+            return new EqualsHashCodeGenerationDataImpl(getThis());
         }
 
     }

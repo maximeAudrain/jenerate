@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.jenerate.internal.data.JenerateDialogData;
 import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.method.Method;
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
@@ -31,11 +31,11 @@ import org.jenerate.internal.lang.generators.MethodGenerator;
 import org.jenerate.internal.lang.generators.impl.GeneratorsCommonMethodsDelegateImpl;
 import org.jenerate.internal.manage.MethodGeneratorManager;
 import org.jenerate.internal.manage.MethodManager;
+import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.manage.impl.MethodGeneratorManagerImpl;
 import org.jenerate.internal.manage.impl.MethodManagerImpl;
+import org.jenerate.internal.manage.impl.PreferencesManagerImpl;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
-import org.jenerate.internal.ui.preferences.impl.PreferencesManagerImpl;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JeneratePluginCodeFormatter;
@@ -109,7 +109,7 @@ public class GenerateHandler extends AbstractHandler {
         }
     }
 
-    private <T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends JenerateDialogData> void generateCode(
+    private <T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData> void generateCode(
             Shell parentShell, IType objectClass, UserActionIdentifier userActionIdentifier) {
         Set<Method<T, V>> methods = methodManager.getMethods(userActionIdentifier);
         MethodGenerator<T, U, V> genericGenerator = generatorManager.getMethodGenerator(userActionIdentifier);

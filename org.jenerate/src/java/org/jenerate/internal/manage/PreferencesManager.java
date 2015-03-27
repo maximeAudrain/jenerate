@@ -1,4 +1,6 @@
-package org.jenerate.internal.ui.preferences;
+package org.jenerate.internal.manage;
+
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 
 /**
  * TODO : make this guy generic if possible

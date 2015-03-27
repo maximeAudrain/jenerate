@@ -1,7 +1,7 @@
 package org.jenerate.internal.manage;
 
-import org.jenerate.internal.data.JenerateDialogData;
 import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 
@@ -20,7 +20,7 @@ public interface DialogFactoryManager {
      * @throws IllegalStateException if no {@link DialogFactory} could be found for a provided
      *             {@link UserActionIdentifier}
      */
-    <T extends FieldDialog<U>, U extends JenerateDialogData> DialogFactory<T, U> getDialogFactory(
+    <T extends FieldDialog<U>, U extends MethodGenerationData> DialogFactory<T, U> getDialogFactory(
             UserActionIdentifier userActionIdentifier);
 
 }

@@ -13,15 +13,15 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
-import org.jenerate.internal.data.EqualsHashCodeDialogData;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.method.content.equals.CommonsLangEqualsMethodContent;
 import org.jenerate.internal.domain.method.content.hashcode.CommonsLangHashCodeMethodContent;
-import org.jenerate.internal.domain.method.skeleton.impl.EqualsMethod;
-import org.jenerate.internal.domain.method.skeleton.impl.HashCodeMethod;
+import org.jenerate.internal.domain.method.skeleton.impl.EqualsMethodSkeleton;
+import org.jenerate.internal.domain.method.skeleton.impl.HashCodeMethodSkeleton;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
@@ -34,12 +34,12 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
 
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final PreferencesManager preferencesManager;
-    private final DialogFactory<EqualsHashCodeDialog, EqualsHashCodeDialogData> dialogProvider;
+    private final DialogFactory<EqualsHashCodeDialog, EqualsHashCodeGenerationData> dialogProvider;
     private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
     private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
     public EqualsHashCodeGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
-            DialogFactory<EqualsHashCodeDialog, EqualsHashCodeDialogData> dialogProvider,
+            DialogFactory<EqualsHashCodeDialog, EqualsHashCodeGenerationData> dialogProvider,
             JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         this.javaUiCodeAppender = javaUiCodeAppender;
@@ -87,7 +87,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         return excludedMethods;
     }
 
-    private void generateCode(Shell parentShell, IType objectClass, EqualsHashCodeDialogData data)
+    private void generateCode(Shell parentShell, IType objectClass, EqualsHashCodeGenerationData data)
             throws JavaModelException, PartInitException {
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
@@ -99,14 +99,14 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
     }
 
     private IJavaElement generateHashCode(final Shell parentShell, final IType objectClass,
-            EqualsHashCodeDialogData data, boolean useCommonLang3) throws JavaModelException {
+            EqualsHashCodeGenerationData data, boolean useCommonLang3) throws JavaModelException {
 
         IJavaElement currentPosition = data.getElementPosition();
         CommonsLangHashCodeMethodContent hashCodeMethodContent = null;
         // new CommonsLangHashCodeMethodContent(
         // preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3);
         String methodContent = hashCodeMethodContent.getMethodContent(objectClass, data);
-        HashCodeMethod hashCodeMethod = new HashCodeMethod(preferencesManager, generatorsCommonMethodsDelegate);
+        HashCodeMethodSkeleton hashCodeMethod = new HashCodeMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate);
         String source = hashCodeMethod.getMethod(objectClass, data, methodContent);
 
         for (String libraryToImport : hashCodeMethod.getLibrariesToImport()) {
@@ -121,14 +121,14 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
     }
 
     private IJavaElement generateEquals(final Shell parentShell, final IType objectClass,
-            EqualsHashCodeDialogData data, final IJavaElement insertPosition, boolean useCommonLang3)
+            EqualsHashCodeGenerationData data, final IJavaElement insertPosition, boolean useCommonLang3)
             throws JavaModelException {
 
         CommonsLangEqualsMethodContent equalsMethodContent = null;
         // new CommonsLangEqualsMethodContent(preferencesManager,
         // generatorsCommonMethodsDelegate, useCommonLang3);
         String methodContent = equalsMethodContent.getMethodContent(objectClass, data);
-        EqualsMethod equalsMethod = new EqualsMethod(preferencesManager, generatorsCommonMethodsDelegate);
+        EqualsMethodSkeleton equalsMethod = new EqualsMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate);
         String source = equalsMethod.getMethod(objectClass, data, methodContent);
 
         for (String libraryToImport : equalsMethod.getLibrariesToImport()) {

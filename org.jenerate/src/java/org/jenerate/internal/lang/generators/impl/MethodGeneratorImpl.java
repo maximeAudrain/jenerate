@@ -11,7 +11,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.internal.data.JenerateDialogData;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.method.Method;
 import org.jenerate.internal.domain.method.content.MethodContent;
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
@@ -21,7 +21,7 @@ import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
-public class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends JenerateDialogData>
+public class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData>
         implements MethodGenerator<T, U, V> {
 
     private final DialogFactory<U, V> dialogProvider;

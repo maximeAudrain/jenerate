@@ -5,16 +5,16 @@ import java.util.Set;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.internal.data.EqualsHashCodeDialogData;
 import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.method.content.AbstractMethodContent;
-import org.jenerate.internal.domain.method.content.CommonsLangLibraryUtils;
-import org.jenerate.internal.domain.method.skeleton.impl.EqualsMethod;
+import org.jenerate.internal.domain.method.content.MethodContentLibraries;
+import org.jenerate.internal.domain.method.skeleton.impl.EqualsMethodSkeleton;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 
-public class CommonsLangEqualsMethodContent extends AbstractMethodContent<EqualsMethod, EqualsHashCodeDialogData> {
+public class CommonsLangEqualsMethodContent extends AbstractMethodContent<EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
 
     public CommonsLangEqualsMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
             PreferencesManager preferencesManager, GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
@@ -22,21 +22,21 @@ public class CommonsLangEqualsMethodContent extends AbstractMethodContent<Equals
     }
 
     @Override
-    public String getMethodContent(IType objectClass, EqualsHashCodeDialogData data) throws JavaModelException {
+    public String getMethodContent(IType objectClass, EqualsHashCodeGenerationData data) throws JavaModelException {
         return MethodGenerations.generateEqualsMethodContent(data, objectClass);
     }
 
     @Override
-    public Set<String> getLibrariesToImport(EqualsHashCodeDialogData data) {
+    public Set<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
         boolean useCommonsLang3 = false;
         if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
             useCommonsLang3 = true;
         }
-        return Collections.singleton(CommonsLangLibraryUtils.getEqualsBuilderLibrary(useCommonsLang3));
+        return Collections.singleton(MethodContentLibraries.getEqualsBuilderLibrary(useCommonsLang3));
     }
 
     @Override
-    public Class<EqualsMethod> getRelatedMethodSkeletonClass() {
-        return EqualsMethod.class;
+    public Class<EqualsMethodSkeleton> getRelatedMethodSkeletonClass() {
+        return EqualsMethodSkeleton.class;
     }
 }

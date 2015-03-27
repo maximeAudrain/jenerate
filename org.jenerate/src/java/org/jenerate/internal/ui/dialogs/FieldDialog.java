@@ -1,7 +1,7 @@
 package org.jenerate.internal.ui.dialogs;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.jenerate.internal.data.JenerateDialogData;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 
 /**
  * Defines a dialog of the Jenerate plugin. It is called {@link FieldDialog} because it knows about the current fields
@@ -11,7 +11,7 @@ import org.jenerate.internal.data.JenerateDialogData;
  * @author maudrain
  * @param <T> the type of user data provided by this dialog
  */
-public interface FieldDialog<T extends JenerateDialogData> {
+public interface FieldDialog<T extends MethodGenerationData> {
 
     /**
      * @return the data which will be used for the code generation

@@ -1,11 +1,11 @@
 package org.jenerate.internal.domain.method.impl;
 
-import org.jenerate.internal.data.JenerateDialogData;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.method.Method;
 import org.jenerate.internal.domain.method.content.MethodContent;
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 
-public class MethodImpl<T extends MethodSkeleton<U>, U extends JenerateDialogData> implements Method<T, U> {
+public class MethodImpl<T extends MethodSkeleton<U>, U extends MethodGenerationData> implements Method<T, U> {
 
     private final T methodSkeleton;
     private final MethodContent<T, U> methodContent;

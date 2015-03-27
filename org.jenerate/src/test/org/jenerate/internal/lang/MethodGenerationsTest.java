@@ -3,12 +3,12 @@ package org.jenerate.internal.lang;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.internal.data.CompareToDialogData;
-import org.jenerate.internal.data.EqualsHashCodeDialogData;
-import org.jenerate.internal.data.IInitMultNumbers;
-import org.jenerate.internal.data.ToStringDialogData;
-import org.jenerate.internal.data.impl.InitMultNumbersCustom;
-import org.jenerate.internal.data.impl.InitMultNumbersDefault;
+import org.jenerate.internal.domain.data.CompareToGenerationData;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
+import org.jenerate.internal.domain.data.ToStringGenerationData;
+import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
+import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersCustom;
+import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersDefault;
 import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,11 +42,11 @@ public class MethodGenerationsTest {
     private IField iField2;
 
     @Mock
-    private CompareToDialogData compareToDialogData;
+    private CompareToGenerationData compareToDialogData;
     @Mock
-    private EqualsHashCodeDialogData equalsHashCodeDialogData;
+    private EqualsHashCodeGenerationData equalsHashCodeDialogData;
     @Mock
-    private ToStringDialogData toStringDialogData;
+    private ToStringGenerationData toStringDialogData;
 
     private IField[] checkedFields = new IField[2];
 

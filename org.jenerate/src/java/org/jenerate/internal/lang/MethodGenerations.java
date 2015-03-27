@@ -4,9 +4,9 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
-import org.jenerate.internal.data.CompareToDialogData;
-import org.jenerate.internal.data.EqualsHashCodeDialogData;
-import org.jenerate.internal.data.ToStringDialogData;
+import org.jenerate.internal.domain.data.CompareToGenerationData;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
+import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
 
 /**
@@ -20,7 +20,7 @@ public final class MethodGenerations {
         /* Only static helper methods */
     }
 
-    public static String createCompareToMethod(IType objectClass, CompareToDialogData data, boolean generify,
+    public static String createCompareToMethod(IType objectClass, CompareToGenerationData data, boolean generify,
             String methodContent) {
 
         StringBuffer content = new StringBuffer();
@@ -42,7 +42,7 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String generateCompareToMethodContent(CompareToDialogData data, boolean generify, IType objectClass) {
+    public static String generateCompareToMethodContent(CompareToGenerationData data, boolean generify, IType objectClass) {
         String className = objectClass.getElementName();
         StringBuffer content = new StringBuffer();
         String other;
@@ -74,7 +74,7 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String createEqualsMethod(EqualsHashCodeDialogData data, boolean addOverride, String methodContent) {
+    public static String createEqualsMethod(EqualsHashCodeGenerationData data, boolean addOverride, String methodContent) {
 
         StringBuffer content = new StringBuffer();
         if (data.getGenerateComment()) {
@@ -92,7 +92,7 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String generateEqualsMethodContent(EqualsHashCodeDialogData data, IType objectClass)
+    public static String generateEqualsMethodContent(EqualsHashCodeGenerationData data, IType objectClass)
             throws JavaModelException {
         String elementName = objectClass.getElementName();
         boolean useBlockInIfStatements = data.getUseBlockInIfStatements();
@@ -130,7 +130,7 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String createHashCodeMethod(EqualsHashCodeDialogData data, boolean addOverride, String methodContent) {
+    public static String createHashCodeMethod(EqualsHashCodeGenerationData data, boolean addOverride, String methodContent) {
 
         StringBuffer content = new StringBuffer();
         if (data.getGenerateComment()) {
@@ -148,7 +148,7 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String generateHashCodeMethodContent(EqualsHashCodeDialogData data, String cachingField)
+    public static String generateHashCodeMethodContent(EqualsHashCodeGenerationData data, String cachingField)
             throws JavaModelException {
         StringBuffer content = new StringBuffer();
         String hashCodeBuilderString = createHashCodeBuilderString(data);
@@ -166,7 +166,7 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    private static String createHashCodeBuilderString(EqualsHashCodeDialogData data) throws JavaModelException {
+    private static String createHashCodeBuilderString(EqualsHashCodeGenerationData data) throws JavaModelException {
         StringBuffer content = new StringBuffer();
         content.append("new HashCodeBuilder(");
         content.append(data.getInitMultNumbers().getValue());
@@ -185,7 +185,7 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String createToStringMethod(ToStringDialogData data, boolean addOverride, String methodContent) {
+    public static String createToStringMethod(ToStringGenerationData data, boolean addOverride, String methodContent) {
 
         StringBuffer content = new StringBuffer();
         if (data.getGenerateComment()) {
@@ -203,7 +203,7 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String generateToStringMethodContent(ToStringDialogData data, String cachingField)
+    public static String generateToStringMethodContent(ToStringGenerationData data, String cachingField)
             throws JavaModelException {
         StringBuffer content = new StringBuffer();
         String toStringBuilderString = createToStringBuilderString(data);
@@ -222,7 +222,7 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    private static String createToStringBuilderString(ToStringDialogData data) throws JavaModelException {
+    private static String createToStringBuilderString(ToStringGenerationData data) throws JavaModelException {
         StringBuffer content = new StringBuffer();
         ToStringStyle toStringStyle = data.getToStringStyle();
         if (ToStringStyle.NO_STYLE.equals(toStringStyle)) {

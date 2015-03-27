@@ -8,14 +8,14 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.internal.data.CompareToDialogData;
-import org.jenerate.internal.data.impl.CompareToDialogDataImpl;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.domain.data.CompareToGenerationData;
+import org.jenerate.internal.domain.data.impl.CompareToGenerationDataImpl;
+import org.jenerate.internal.manage.PreferencesManager;
 
 /**
  * @author maudrain
  */
-public class CompareToDialog extends AbstractOrderableFieldDialog<CompareToDialogData> {
+public class CompareToDialog extends AbstractOrderableFieldDialog<CompareToGenerationData> {
 
     public CompareToDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
             Set<IMethod> excludedMethods, boolean disableAppendSuper, PreferencesManager preferencesManager)
@@ -24,9 +24,9 @@ public class CompareToDialog extends AbstractOrderableFieldDialog<CompareToDialo
     }
 
     @Override
-    public CompareToDialogData getData() {
+    public CompareToGenerationData getData() {
         //@formatter:off
-        return new CompareToDialogDataImpl.Builder()
+        return new CompareToGenerationDataImpl.Builder()
                 .withCheckedFields(getCheckedFields())
                 .withElementPosition(getElementPosition())
                 .withAppendSuper(getAppendSuper())

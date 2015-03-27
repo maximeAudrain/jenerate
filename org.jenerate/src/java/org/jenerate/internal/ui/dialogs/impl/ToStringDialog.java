@@ -17,16 +17,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
-import org.jenerate.internal.data.ToStringDialogData;
-import org.jenerate.internal.data.impl.ToStringDialogDataImpl;
+import org.jenerate.internal.domain.data.ToStringGenerationData;
+import org.jenerate.internal.domain.data.impl.ToStringGenerationDataImpl;
 import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.manage.PreferencesManager;
 
 /**
  * @author jiayun
  */
-public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringDialogData> {
+public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerationData> {
 
     private Combo styleCombo;
 
@@ -99,9 +99,9 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringDialogD
     }
 
     @Override
-    public ToStringDialogData getData() {
+    public ToStringGenerationData getData() {
         //@formatter:off
-        return new ToStringDialogDataImpl.Builder()
+        return new ToStringGenerationDataImpl.Builder()
                 .withCheckedFields(getCheckedFields())
                 .withElementPosition(getElementPosition())
                 .withAppendSuper(getAppendSuper())

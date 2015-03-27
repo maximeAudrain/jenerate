@@ -1,7 +1,7 @@
 package org.jenerate;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.jenerate.internal.ui.preferences.PluginPreference;
+import org.jenerate.internal.domain.preference.PluginPreference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

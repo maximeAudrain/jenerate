@@ -2,8 +2,8 @@ package org.jenerate.internal.manage;
 
 import java.util.Set;
 
-import org.jenerate.internal.data.JenerateDialogData;
 import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 
 /**
@@ -21,6 +21,6 @@ public interface MethodSkeletonManager {
      * @return the Set of {@link MethodSkeleton} for the given {@link UserActionIdentifier}, or an empty set if not
      *         {@link MethodSkeleton}s could be found for the provided {@link UserActionIdentifier}.
      */
-    <T extends JenerateDialogData> Set<MethodSkeleton<T>> getMethodSkeletons(UserActionIdentifier userActionIdentifier);
+    <T extends MethodGenerationData> Set<MethodSkeleton<T>> getMethodSkeletons(UserActionIdentifier userActionIdentifier);
 
 }

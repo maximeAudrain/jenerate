@@ -1,4 +1,4 @@
-package org.jenerate.internal.ui.preferences;
+package org.jenerate.internal.domain.preference;
 
 /**
  * Defines a plugin preference. Contains a key as unique identifier, a description to be shown to the user and a default

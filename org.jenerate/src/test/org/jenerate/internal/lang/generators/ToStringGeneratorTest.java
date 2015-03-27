@@ -8,12 +8,12 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.PartInitException;
-import org.jenerate.internal.data.ToStringDialogData;
-import org.jenerate.internal.domain.method.content.CommonsLangLibraryUtils;
+import org.jenerate.internal.domain.data.ToStringGenerationData;
+import org.jenerate.internal.domain.method.content.MethodContentLibraries;
 import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.impl.ToStringDialog;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,11 +38,11 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
     private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.DEFAULT_STYLE;
 
     @Mock
-    private DialogFactory<ToStringDialog, ToStringDialogData> dialogProvider;
+    private DialogFactory<ToStringDialog, ToStringGenerationData> dialogProvider;
     @Mock
     private ToStringDialog fieldDialog;
     @Mock
-    private ToStringDialogData data;
+    private ToStringGenerationData data;
     @Mock
     private IMethod toStringMethod;
     @Mock
@@ -180,7 +180,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
 
     private void verifyCodeAppended(boolean useCommonsLang3) throws JavaModelException, PartInitException {
         verify(compilationUnit, times(1)).createImport(
-                CommonsLangLibraryUtils.getToStringBuilderLibrary(useCommonsLang3), null, null);
+                MethodContentLibraries.getToStringBuilderLibrary(useCommonsLang3), null, null);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, createdMethod1);
     }
 

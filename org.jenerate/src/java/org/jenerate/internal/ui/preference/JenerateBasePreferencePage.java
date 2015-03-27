@@ -1,5 +1,5 @@
 // $Id$
-package org.jenerate.internal.ui.preferences;
+package org.jenerate.internal.ui.preference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +14,7 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.jenerate.JeneratePlugin;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 
 /**
  * @author jiayun

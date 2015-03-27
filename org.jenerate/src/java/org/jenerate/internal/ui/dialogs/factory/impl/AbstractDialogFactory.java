@@ -1,12 +1,12 @@
 package org.jenerate.internal.ui.dialogs.factory.impl;
 
-import org.jenerate.internal.data.JenerateDialogData;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
+import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
 
-public abstract class AbstractDialogFactory<T extends FieldDialog<U>, U extends JenerateDialogData> implements
+public abstract class AbstractDialogFactory<T extends FieldDialog<U>, U extends MethodGenerationData> implements
         DialogFactory<T, U> {
 
     protected final PreferencesManager preferencesManager;

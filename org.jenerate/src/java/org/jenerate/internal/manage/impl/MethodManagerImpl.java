@@ -3,19 +3,19 @@ package org.jenerate.internal.manage.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jenerate.internal.data.JenerateDialogData;
 import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.method.Method;
 import org.jenerate.internal.domain.method.content.MethodContent;
 import org.jenerate.internal.domain.method.impl.MethodImpl;
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.manage.MethodContentManager;
 import org.jenerate.internal.manage.MethodManager;
 import org.jenerate.internal.manage.MethodSkeletonManager;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class MethodManagerImpl implements MethodManager {
@@ -36,7 +36,7 @@ public class MethodManagerImpl implements MethodManager {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends MethodSkeleton<U>, U extends JenerateDialogData> Set<Method<T, U>> getMethods(
+    public <T extends MethodSkeleton<U>, U extends MethodGenerationData> Set<Method<T, U>> getMethods(
             UserActionIdentifier userActionIdentifier) {
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();

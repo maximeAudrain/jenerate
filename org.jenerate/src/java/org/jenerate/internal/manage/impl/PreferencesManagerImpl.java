@@ -1,9 +1,9 @@
-package org.jenerate.internal.ui.preferences.impl;
+package org.jenerate.internal.manage.impl;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.jenerate.JeneratePlugin;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.manage.PreferencesManager;
 
 public class PreferencesManagerImpl implements PreferencesManager {
 

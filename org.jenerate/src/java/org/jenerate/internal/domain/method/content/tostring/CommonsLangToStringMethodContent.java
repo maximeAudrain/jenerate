@@ -7,17 +7,17 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.internal.data.ToStringDialogData;
 import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
+import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.method.content.AbstractMethodContent;
-import org.jenerate.internal.domain.method.content.CommonsLangLibraryUtils;
-import org.jenerate.internal.domain.method.skeleton.impl.ToStringMethod;
+import org.jenerate.internal.domain.method.content.MethodContentLibraries;
+import org.jenerate.internal.domain.method.skeleton.impl.ToStringMethodSkeleton;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 
-public class CommonsLangToStringMethodContent extends AbstractMethodContent<ToStringMethod, ToStringDialogData> {
+public class CommonsLangToStringMethodContent extends AbstractMethodContent<ToStringMethodSkeleton, ToStringGenerationData> {
 
     public CommonsLangToStringMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
             PreferencesManager preferencesManager, GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
@@ -25,7 +25,7 @@ public class CommonsLangToStringMethodContent extends AbstractMethodContent<ToSt
     }
 
     @Override
-    public String getMethodContent(IType objectClass, ToStringDialogData data) throws JavaModelException {
+    public String getMethodContent(IType objectClass, ToStringGenerationData data) throws JavaModelException {
         boolean cacheToString = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).booleanValue();
         boolean isCacheable = cacheToString
@@ -48,13 +48,13 @@ public class CommonsLangToStringMethodContent extends AbstractMethodContent<ToSt
     }
 
     @Override
-    public Set<String> getLibrariesToImport(ToStringDialogData data) {
+    public Set<String> getLibrariesToImport(ToStringGenerationData data) {
         boolean useCommonsLang3 = false;
         if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
             useCommonsLang3 = true;
         }
         Set<String> libraries = new HashSet<String>();
-        String toStringBuilderLibrary = CommonsLangLibraryUtils.getToStringBuilderLibrary(useCommonsLang3);
+        String toStringBuilderLibrary = MethodContentLibraries.getToStringBuilderLibrary(useCommonsLang3);
         libraries.add(toStringBuilderLibrary);
         if (!ToStringStyle.NO_STYLE.equals(data.getToStringStyle())) {
             String styleLibrary = ToStringStyle.getToStringStyleLibrary(useCommonsLang3);
@@ -64,7 +64,7 @@ public class CommonsLangToStringMethodContent extends AbstractMethodContent<ToSt
     }
 
     @Override
-    public Class<ToStringMethod> getRelatedMethodSkeletonClass() {
-        return ToStringMethod.class;
+    public Class<ToStringMethodSkeleton> getRelatedMethodSkeletonClass() {
+        return ToStringMethodSkeleton.class;
     }
 }

@@ -2,19 +2,19 @@ package org.jenerate.internal.domain.method.skeleton.impl;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.internal.data.CompareToDialogData;
 import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.internal.domain.data.CompareToGenerationData;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
-public class CompareToMethod extends AbstractMethod<CompareToDialogData> {
+public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGenerationData> {
 
     private final JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
-    public CompareToMethod(PreferencesManager preferencesManager,
+    public CompareToMethodSkeleton(PreferencesManager preferencesManager,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
         super(preferencesManager, generatorsCommonMethodsDelegate);
@@ -22,7 +22,7 @@ public class CompareToMethod extends AbstractMethod<CompareToDialogData> {
     }
 
     @Override
-    public String getMethod(IType objectClass, CompareToDialogData data, String methodContent)
+    public String getMethod(IType objectClass, CompareToGenerationData data, String methodContent)
             throws JavaModelException {
         boolean implementedOrExtendedInSuperType = javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(
                 objectClass, "Comparable");

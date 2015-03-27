@@ -36,17 +36,17 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
-import org.jenerate.internal.data.JenerateDialogData;
+import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
 
 /**
  * This class contains some code from org.eclipse.jdt.internal.ui.dialogs.SourceActionDialog
  * 
  * @author jiayun
  */
-public abstract class AbstractFieldDialog<T extends JenerateDialogData> extends Dialog implements FieldDialog<T> {
+public abstract class AbstractFieldDialog<T extends MethodGenerationData> extends Dialog implements FieldDialog<T> {
 
     private static final String SETTINGS_SECTION = "AbstractFieldDialog";
 

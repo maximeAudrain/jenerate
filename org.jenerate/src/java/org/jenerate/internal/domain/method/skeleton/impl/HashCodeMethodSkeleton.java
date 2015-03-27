@@ -2,21 +2,21 @@ package org.jenerate.internal.domain.method.skeleton.impl;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.internal.data.EqualsHashCodeDialogData;
 import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 
-public class HashCodeMethod extends AbstractMethod<EqualsHashCodeDialogData> {
+public class HashCodeMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeGenerationData> {
 
-    public HashCodeMethod(PreferencesManager preferencesManager,
+    public HashCodeMethodSkeleton(PreferencesManager preferencesManager,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         super(preferencesManager, generatorsCommonMethodsDelegate);
     }
 
     @Override
-    public String getMethod(IType objectClass, EqualsHashCodeDialogData data, String methodContent)
+    public String getMethod(IType objectClass, EqualsHashCodeGenerationData data, String methodContent)
             throws JavaModelException {
         boolean addOverride = addOverride(objectClass);
         return MethodGenerations.createHashCodeMethod(data, addOverride, methodContent);

@@ -1,4 +1,6 @@
-package org.jenerate.internal.ui.preferences;
+package org.jenerate.internal.domain.preference.impl;
+
+import org.jenerate.internal.domain.preference.PluginPreference;
 
 @SuppressWarnings("rawtypes")
 public enum JeneratePreference implements PluginPreference {

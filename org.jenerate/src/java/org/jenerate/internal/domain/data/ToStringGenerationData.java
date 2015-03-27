@@ -1,8 +1,8 @@
-package org.jenerate.internal.data;
+package org.jenerate.internal.domain.data;
 
 import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
 
-public interface ToStringDialogData extends FieldDialogData {
+public interface ToStringGenerationData extends MethodGenerationData {
 
     ToStringStyle getToStringStyle();
 }

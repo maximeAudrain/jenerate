@@ -1,4 +1,4 @@
-package org.jenerate.internal.data;
+package org.jenerate.internal.domain.hashcode;
 
 /**
  * @author jiayun

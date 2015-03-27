@@ -1,12 +1,12 @@
 package org.jenerate.internal.domain.method.content;
 
-import org.jenerate.internal.data.JenerateDialogData;
 import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 
-public abstract class AbstractMethodContent<T extends MethodSkeleton<U>, U extends JenerateDialogData> implements
+public abstract class AbstractMethodContent<T extends MethodSkeleton<U>, U extends MethodGenerationData> implements
         MethodContent<T, U> {
 
     protected final MethodContentStrategyIdentifier methodContentStrategyIdentifier;

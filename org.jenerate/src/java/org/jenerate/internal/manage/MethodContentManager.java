@@ -1,7 +1,7 @@
 package org.jenerate.internal.manage;
 
-import org.jenerate.internal.data.JenerateDialogData;
 import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.method.content.MethodContent;
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 
@@ -21,7 +21,7 @@ public interface MethodContentManager {
      * @return the {@link MethodContent} for the provided parameters
      * @throws IllegalStateException if the {@link MethodContent} could not be retrieved for the provided parameters
      */
-    <T extends MethodSkeleton<U>, U extends JenerateDialogData> MethodContent<T, U> getMethodContent(
+    <T extends MethodSkeleton<U>, U extends MethodGenerationData> MethodContent<T, U> getMethodContent(
             MethodSkeleton<U> methodSkeleton, MethodContentStrategyIdentifier methodContentStrategyIdentifier);
 
 }

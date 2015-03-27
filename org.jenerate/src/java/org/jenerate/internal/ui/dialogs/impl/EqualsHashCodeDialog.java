@@ -27,18 +27,18 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jenerate.JeneratePlugin;
-import org.jenerate.internal.data.EqualsHashCodeDialogData;
-import org.jenerate.internal.data.IInitMultNumbers;
-import org.jenerate.internal.data.impl.EqualsHashCodeDialogDataImpl;
-import org.jenerate.internal.data.impl.InitMultNumbersCustom;
-import org.jenerate.internal.data.impl.InitMultNumbersDefault;
-import org.jenerate.internal.data.impl.InitMultNumbersRandom;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
+import org.jenerate.internal.domain.data.impl.EqualsHashCodeGenerationDataImpl;
+import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
+import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersCustom;
+import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersDefault;
+import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersRandom;
+import org.jenerate.internal.manage.PreferencesManager;
 
 /**
  * @author jiayun
  */
-public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeDialogData> {
+public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGenerationData> {
 
     private static final String EQUALS_SETTINGS_SECTION = "EqualsDialog";
 
@@ -320,9 +320,9 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeDial
     }
 
     @Override
-    public EqualsHashCodeDialogData getData() {
+    public EqualsHashCodeGenerationData getData() {
         //@formatter:off
-        return new EqualsHashCodeDialogDataImpl.Builder()
+        return new EqualsHashCodeGenerationDataImpl.Builder()
                 .withCheckedFields(getCheckedFields())
                 .withElementPosition(getElementPosition())
                 .withAppendSuper(getAppendSuper())

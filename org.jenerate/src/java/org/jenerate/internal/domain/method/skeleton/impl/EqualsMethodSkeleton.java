@@ -2,33 +2,34 @@ package org.jenerate.internal.domain.method.skeleton.impl;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.internal.data.ToStringDialogData;
 import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 
-public class ToStringMethod extends AbstractMethod<ToStringDialogData> {
+public class EqualsMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeGenerationData> {
 
-    public ToStringMethod(PreferencesManager preferencesManager,
+    public EqualsMethodSkeleton(PreferencesManager preferencesManager,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         super(preferencesManager, generatorsCommonMethodsDelegate);
     }
 
     @Override
-    public String getMethod(IType objectClass, ToStringDialogData data, String methodContent) throws JavaModelException {
+    public String getMethod(IType objectClass, EqualsHashCodeGenerationData data, String methodContent)
+            throws JavaModelException {
         boolean addOverride = addOverride(objectClass);
-        return MethodGenerations.createToStringMethod(data, addOverride, methodContent);
+        return MethodGenerations.createEqualsMethod(data, addOverride, methodContent);
     }
 
     @Override
     public UserActionIdentifier getUserActionIdentifier() {
-        return UserActionIdentifier.TO_STRING;
+        return UserActionIdentifier.EQUALS_HASH_CODE;
     }
 
     @Override
     public String getMethodName() {
-        return "toString";
+        return "equals";
     }
 
 }

@@ -5,8 +5,8 @@ import java.util.Set;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.internal.data.JenerateDialogData;
 import org.jenerate.internal.domain.UserActionIdentifier;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 
 /**
@@ -15,9 +15,9 @@ import org.jenerate.internal.ui.dialogs.FieldDialog;
  * 
  * @author maudrain
  * @param <T> the type of {@link FieldDialog} this provider provides.
- * @param <U> the type of {@link JenerateDialogData} provided by this {@link FieldDialog}
+ * @param <U> the type of {@link MethodGenerationData} provided by this {@link FieldDialog}
  */
-public interface DialogFactory<T extends FieldDialog<U>, U extends JenerateDialogData> {
+public interface DialogFactory<T extends FieldDialog<U>, U extends MethodGenerationData> {
 
     /**
      * @param parentShell the shell where the dialog is opened from.

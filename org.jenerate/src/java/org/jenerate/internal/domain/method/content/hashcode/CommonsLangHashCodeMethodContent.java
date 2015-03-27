@@ -7,17 +7,17 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.internal.data.EqualsHashCodeDialogData;
 import org.jenerate.internal.domain.MethodContentStrategyIdentifier;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.method.content.AbstractMethodContent;
-import org.jenerate.internal.domain.method.content.CommonsLangLibraryUtils;
-import org.jenerate.internal.domain.method.skeleton.impl.HashCodeMethod;
+import org.jenerate.internal.domain.method.content.MethodContentLibraries;
+import org.jenerate.internal.domain.method.skeleton.impl.HashCodeMethodSkeleton;
+import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.lang.MethodGenerations;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.ui.preferences.JeneratePreference;
-import org.jenerate.internal.ui.preferences.PreferencesManager;
+import org.jenerate.internal.manage.PreferencesManager;
 
-public class CommonsLangHashCodeMethodContent extends AbstractMethodContent<HashCodeMethod, EqualsHashCodeDialogData> {
+public class CommonsLangHashCodeMethodContent extends AbstractMethodContent<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
 
     public CommonsLangHashCodeMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
             PreferencesManager preferencesManager, GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
@@ -25,7 +25,7 @@ public class CommonsLangHashCodeMethodContent extends AbstractMethodContent<Hash
     }
 
     @Override
-    public String getMethodContent(IType objectClass, EqualsHashCodeDialogData data) throws JavaModelException {
+    public String getMethodContent(IType objectClass, EqualsHashCodeGenerationData data) throws JavaModelException {
         boolean cacheHashCode = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).booleanValue();
         boolean isCacheable = cacheHashCode
@@ -50,16 +50,16 @@ public class CommonsLangHashCodeMethodContent extends AbstractMethodContent<Hash
     }
 
     @Override
-    public Set<String> getLibrariesToImport(EqualsHashCodeDialogData data) {
+    public Set<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
         boolean useCommonsLang3 = false;
         if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
             useCommonsLang3 = true;
         }
-        return Collections.singleton(CommonsLangLibraryUtils.getHashCodeBuilderLibrary(useCommonsLang3));
+        return Collections.singleton(MethodContentLibraries.getHashCodeBuilderLibrary(useCommonsLang3));
     }
 
     @Override
-    public Class<HashCodeMethod> getRelatedMethodSkeletonClass() {
-        return HashCodeMethod.class;
+    public Class<HashCodeMethodSkeleton> getRelatedMethodSkeletonClass() {
+        return HashCodeMethodSkeleton.class;
     }
 }
