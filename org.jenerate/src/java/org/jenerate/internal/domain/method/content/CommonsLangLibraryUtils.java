@@ -1,6 +1,5 @@
 package org.jenerate.internal.domain.method.content;
 
-
 /**
  * Helper class to ease the construction of the commons-lang library objects to be used by the generator classes. This
  * class cannot be instantiated since it only holds static constants and static helper methods.
@@ -30,7 +29,8 @@ public final class CommonsLangLibraryUtils {
      * @return the full constructed CompareToBuilder library
      */
     public static String getCompareToBuilderLibrary(boolean useCommonsLang3) {
-        return COMMONS_LANG_PREFIX + (useCommonsLang3 ? COMMONS_LANG3_ADDON : EMPTY_STRING) + COMPARE_TO_BUILDER_POSTFIX;
+        return COMMONS_LANG_PREFIX + (useCommonsLang3 ? COMMONS_LANG3_ADDON : EMPTY_STRING)
+                + COMPARE_TO_BUILDER_POSTFIX;
     }
 
     /**

@@ -19,7 +19,7 @@ import org.jenerate.internal.domain.method.content.hashcode.CommonsLangHashCodeM
 import org.jenerate.internal.domain.method.skeleton.impl.EqualsMethod;
 import org.jenerate.internal.domain.method.skeleton.impl.HashCodeMethod;
 import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
-import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
+import org.jenerate.internal.ui.dialogs.provider.DialogFactory;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUiCodeAppender;
@@ -34,12 +34,12 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
 
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final PreferencesManager preferencesManager;
-    private final DialogProvider<EqualsHashCodeDialog, EqualsHashCodeDialogData> dialogProvider;
+    private final DialogFactory<EqualsHashCodeDialog, EqualsHashCodeDialogData> dialogProvider;
     private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
     private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
     public EqualsHashCodeGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
-            DialogProvider<EqualsHashCodeDialog, EqualsHashCodeDialogData> dialogProvider,
+            DialogFactory<EqualsHashCodeDialog, EqualsHashCodeDialogData> dialogProvider,
             JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         this.javaUiCodeAppender = javaUiCodeAppender;
@@ -54,7 +54,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         Set<IMethod> excludedMethods = getExcludedMethods(objectClass);
         try {
 
-            EqualsHashCodeDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods);
+            EqualsHashCodeDialog dialog = dialogProvider.createDialog(parentShell, objectClass, excludedMethods);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
 
@@ -103,8 +103,8 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
 
         IJavaElement currentPosition = data.getElementPosition();
         CommonsLangHashCodeMethodContent hashCodeMethodContent = null;
-//                new CommonsLangHashCodeMethodContent(
-//                preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3);
+        // new CommonsLangHashCodeMethodContent(
+        // preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3);
         String methodContent = hashCodeMethodContent.getMethodContent(objectClass, data);
         HashCodeMethod hashCodeMethod = new HashCodeMethod(preferencesManager, generatorsCommonMethodsDelegate);
         String source = hashCodeMethod.getMethod(objectClass, data, methodContent);
@@ -125,8 +125,8 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
             throws JavaModelException {
 
         CommonsLangEqualsMethodContent equalsMethodContent = null;
-//                new CommonsLangEqualsMethodContent(preferencesManager,
-//                generatorsCommonMethodsDelegate, useCommonLang3);
+        // new CommonsLangEqualsMethodContent(preferencesManager,
+        // generatorsCommonMethodsDelegate, useCommonLang3);
         String methodContent = equalsMethodContent.getMethodContent(objectClass, data);
         EqualsMethod equalsMethod = new EqualsMethod(preferencesManager, generatorsCommonMethodsDelegate);
         String source = equalsMethod.getMethod(objectClass, data, methodContent);

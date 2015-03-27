@@ -203,8 +203,8 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    public static String generateToStringMethodContent(ToStringDialogData data,
-            String cachingField) throws JavaModelException {
+    public static String generateToStringMethodContent(ToStringDialogData data, String cachingField)
+            throws JavaModelException {
         StringBuffer content = new StringBuffer();
         String toStringBuilderString = createToStringBuilderString(data);
 
@@ -222,8 +222,7 @@ public final class MethodGenerations {
         return content.toString();
     }
 
-    private static String createToStringBuilderString(ToStringDialogData data)
-            throws JavaModelException {
+    private static String createToStringBuilderString(ToStringDialogData data) throws JavaModelException {
         StringBuffer content = new StringBuffer();
         ToStringStyle toStringStyle = data.getToStringStyle();
         if (ToStringStyle.NO_STYLE.equals(toStringStyle)) {

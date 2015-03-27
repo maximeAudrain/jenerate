@@ -15,7 +15,7 @@ import org.jenerate.internal.data.CompareToDialogData;
 import org.jenerate.internal.domain.method.content.compareto.CommonsLangCompareToMethodContent;
 import org.jenerate.internal.domain.method.skeleton.impl.CompareToMethod;
 import org.jenerate.internal.ui.dialogs.CompareToDialog;
-import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
+import org.jenerate.internal.ui.dialogs.provider.DialogFactory;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
@@ -29,13 +29,13 @@ public final class CompareToGenerator implements ILangGenerator {
 
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final PreferencesManager preferencesManager;
-    private final DialogProvider<CompareToDialog, CompareToDialogData> dialogProvider;
+    private final DialogFactory<CompareToDialog, CompareToDialogData> dialogProvider;
     private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
     private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
     private final JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
     public CompareToGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
-            DialogProvider<CompareToDialog, CompareToDialogData> dialogProvider,
+            DialogFactory<CompareToDialog, CompareToDialogData> dialogProvider,
             JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
@@ -52,7 +52,7 @@ public final class CompareToGenerator implements ILangGenerator {
         Set<IMethod> excludedMethods = getExcludedMethods(objectClass);
         try {
 
-            CompareToDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods);
+            CompareToDialog dialog = dialogProvider.createDialog(parentShell, objectClass, excludedMethods);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
 
@@ -94,8 +94,8 @@ public final class CompareToGenerator implements ILangGenerator {
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
 
         CommonsLangCompareToMethodContent compareToMethodContent = null;
-//                new CommonsLangCompareToMethodContent(
-//                preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3, javaInterfaceCodeAppender);
+        // new CommonsLangCompareToMethodContent(
+        // preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3, javaInterfaceCodeAppender);
         String methodContent = compareToMethodContent.getMethodContent(objectClass, data);
         CompareToMethod compareToMethod = new CompareToMethod(preferencesManager, generatorsCommonMethodsDelegate,
                 javaInterfaceCodeAppender);

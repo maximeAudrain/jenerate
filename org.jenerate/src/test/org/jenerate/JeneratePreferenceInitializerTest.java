@@ -10,7 +10,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for the {@link JeneratePreferenceInitializer}
@@ -25,7 +27,7 @@ public class JeneratePreferenceInitializerTest {
 
     @Mock
     private PluginPreference<Integer> pluginPreference;
-    
+
     private JeneratePreferenceInitializer jeneratePreferenceInitializer;
 
     @Before
@@ -39,8 +41,8 @@ public class JeneratePreferenceInitializerTest {
         verify(iEclipsePreferences, times(8)).putBoolean(anyString(), anyBoolean());
         verify(iEclipsePreferences, times(2)).put(anyString(), anyString());
     }
-    
-    @Test(expected=UnsupportedOperationException.class)
+
+    @Test(expected = UnsupportedOperationException.class)
     public void testPutPreferenceWithUnsupportedPreferenceType() {
         when(pluginPreference.getType()).thenReturn(Integer.class);
         jeneratePreferenceInitializer.putPreference(iEclipsePreferences, pluginPreference);

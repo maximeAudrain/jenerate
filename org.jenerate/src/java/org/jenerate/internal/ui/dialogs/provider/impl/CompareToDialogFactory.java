@@ -14,11 +14,11 @@ import org.jenerate.internal.ui.dialogs.CompareToDialog;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
-public class CompareToDialogProvider extends AbstractDialogProvider<CompareToDialog, CompareToDialogData> {
+public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialog, CompareToDialogData> {
 
     private JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
-    public CompareToDialogProvider(PreferencesManager preferencesManager,
+    public CompareToDialogFactory(PreferencesManager preferencesManager,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
         super(preferencesManager, generatorsCommonMethodsDelegate);
@@ -26,11 +26,11 @@ public class CompareToDialogProvider extends AbstractDialogProvider<CompareToDia
     }
 
     @Override
-    public CompareToDialog getDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods)
+    public CompareToDialog createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods)
             throws Exception {
         IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
-        return new CompareToDialog(parentShell, "Generate CompareTo MethodSkeleton", objectClass, fields, excludedMethods,
+        return new CompareToDialog(parentShell, "Generate CompareTo Method", objectClass, fields, excludedMethods,
                 disableAppendSuper, preferencesManager);
     }
 
@@ -42,7 +42,7 @@ public class CompareToDialogProvider extends AbstractDialogProvider<CompareToDia
         return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "compareTo",
                 new String[] { "QObject;" }, null);
     }
-    
+
     @Override
     public UserActionIdentifier getUserActionIdentifier() {
         return UserActionIdentifier.COMPARE_TO;

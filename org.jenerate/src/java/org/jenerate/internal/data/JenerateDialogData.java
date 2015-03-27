@@ -8,6 +8,6 @@ import org.eclipse.jdt.core.IJavaElement;
  * @author maudrain
  */
 public interface JenerateDialogData {
-    
+
     IJavaElement getElementPosition();
 }

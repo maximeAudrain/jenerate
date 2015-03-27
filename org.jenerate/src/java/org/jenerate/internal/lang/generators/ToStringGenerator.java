@@ -17,7 +17,7 @@ import org.jenerate.internal.data.ToStringDialogData;
 import org.jenerate.internal.domain.method.content.tostring.CommonsLangToStringMethodContent;
 import org.jenerate.internal.domain.method.skeleton.impl.ToStringMethod;
 import org.jenerate.internal.ui.dialogs.ToStringDialog;
-import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
+import org.jenerate.internal.ui.dialogs.provider.DialogFactory;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUiCodeAppender;
@@ -32,12 +32,12 @@ public final class ToStringGenerator implements ILangGenerator {
 
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final PreferencesManager preferencesManager;
-    private final DialogProvider<ToStringDialog, ToStringDialogData> dialogProvider;
+    private final DialogFactory<ToStringDialog, ToStringDialogData> dialogProvider;
     private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
     private final GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
     public ToStringGenerator(JavaUiCodeAppender javaUiCodeAppender, PreferencesManager preferencesManager,
-            DialogProvider<ToStringDialog, ToStringDialogData> dialogProvider,
+            DialogFactory<ToStringDialog, ToStringDialogData> dialogProvider,
             JeneratePluginCodeFormatter jeneratePluginCodeFormatter,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         this.javaUiCodeAppender = javaUiCodeAppender;
@@ -52,7 +52,7 @@ public final class ToStringGenerator implements ILangGenerator {
         Set<IMethod> excludedMethods = getExcludedMethods(objectClass);
         try {
 
-            ToStringDialog dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods);
+            ToStringDialog dialog = dialogProvider.createDialog(parentShell, objectClass, excludedMethods);
             int returnCode = dialog.open();
             if (returnCode == Window.OK) {
 
@@ -89,8 +89,8 @@ public final class ToStringGenerator implements ILangGenerator {
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
         CommonsLangToStringMethodContent toStringMethodContent = null;
-//                new CommonsLangToStringMethodContent(
-//                preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3);
+        // new CommonsLangToStringMethodContent(
+        // preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3);
         String methodContent = toStringMethodContent.getMethodContent(objectClass, data);
         ToStringMethod toStringMethod = new ToStringMethod(preferencesManager, generatorsCommonMethodsDelegate);
         String source = toStringMethod.getMethod(objectClass, data, methodContent);

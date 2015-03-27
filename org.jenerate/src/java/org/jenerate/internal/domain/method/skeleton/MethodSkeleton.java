@@ -20,7 +20,7 @@ public interface MethodSkeleton<T extends JenerateDialogData> {
     Set<String> getLibrariesToImport();
 
     UserActionIdentifier getUserActionIdentifier();
-    
+
     String getMethodName();
 
 }

@@ -13,23 +13,23 @@ import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.ui.dialogs.ToStringDialog;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
-public class ToStringDialogProvider extends AbstractDialogProvider<ToStringDialog, ToStringDialogData> {
+public class ToStringDialogFactory extends AbstractDialogFactory<ToStringDialog, ToStringDialogData> {
 
-    public ToStringDialogProvider(PreferencesManager preferencesManager,
+    public ToStringDialogFactory(PreferencesManager preferencesManager,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         super(preferencesManager, generatorsCommonMethodsDelegate);
     }
 
     @Override
-    public ToStringDialog getDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods)
+    public ToStringDialog createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods)
             throws Exception {
         IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
 
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
-        return new ToStringDialog(parentShell, "Generate ToString MethodSkeleton", objectClass, fields, excludedMethods,
+        return new ToStringDialog(parentShell, "Generate ToString Method", objectClass, fields, excludedMethods,
                 disableAppendSuper, preferencesManager);
     }
-    
+
     private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
         return !isToStringConcreteInSuperclass(objectClass);
     }

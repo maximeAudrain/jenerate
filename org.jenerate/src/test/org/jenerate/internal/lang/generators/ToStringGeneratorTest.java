@@ -12,7 +12,7 @@ import org.jenerate.internal.data.ToStringDialogData;
 import org.jenerate.internal.domain.method.content.CommonsLangLibraryUtils;
 import org.jenerate.internal.domain.method.content.tostring.ToStringStyle;
 import org.jenerate.internal.ui.dialogs.ToStringDialog;
-import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
+import org.jenerate.internal.ui.dialogs.provider.DialogFactory;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
     private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.DEFAULT_STYLE;
 
     @Mock
-    private DialogProvider<ToStringDialog, ToStringDialogData> dialogProvider;
+    private DialogFactory<ToStringDialog, ToStringDialogData> dialogProvider;
     @Mock
     private ToStringDialog fieldDialog;
     @Mock
@@ -61,7 +61,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
         mockSpecificFieldDialog();
         mockToStringMethodExists(false);
         when(objectClass.createMethod(FORMATTED_CODE_1, elementPosition, true, null)).thenReturn(createdMethod1);
-        when(dialogProvider.getDialog(parentShell, objectClass, Collections.<IMethod> emptySet())).thenReturn(
+        when(dialogProvider.createDialog(parentShell, objectClass, Collections.<IMethod> emptySet())).thenReturn(
                 fieldDialog);
         toStringGenerator = new ToStringGenerator(javaUiCodeAppender, preferencesManager, dialogProvider,
                 jeneratePluginCodeFormatter, generatorsCommonMethodsDelegate);
@@ -76,7 +76,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
     @Test
     public void verifyGeneratedCodeToStringExists() throws Exception {
         mockToStringMethodExists(true);
-        when(dialogProvider.getDialog(parentShell, objectClass, Collections.singleton(toStringMethod))).thenReturn(
+        when(dialogProvider.createDialog(parentShell, objectClass, Collections.singleton(toStringMethod))).thenReturn(
                 fieldDialog);
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);

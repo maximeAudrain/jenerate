@@ -19,7 +19,7 @@ public abstract class AbstractMethodContent<T extends MethodSkeleton<U>, U exten
         this.preferencesManager = preferencesManager;
         this.generatorsCommonMethodsDelegate = generatorsCommonMethodsDelegate;
     }
-    
+
     @Override
     public final MethodContentStrategyIdentifier getMethodContentStrategyIdentifier() {
         return methodContentStrategyIdentifier;

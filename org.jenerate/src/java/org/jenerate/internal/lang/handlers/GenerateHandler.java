@@ -30,9 +30,9 @@ import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.lang.generators.MethodGenerator;
 import org.jenerate.internal.lang.generators.impl.GeneratorsCommonMethodsDelegateImpl;
 import org.jenerate.internal.manage.MethodGeneratorManager;
-import org.jenerate.internal.manage.MethodStrategyManager;
+import org.jenerate.internal.manage.MethodManager;
 import org.jenerate.internal.manage.impl.MethodGeneratorManagerImpl;
-import org.jenerate.internal.manage.impl.MethodStrategyManagerImpl;
+import org.jenerate.internal.manage.impl.MethodManagerImpl;
 import org.jenerate.internal.ui.dialogs.JenerateDialog;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.ui.preferences.impl.PreferencesManagerImpl;
@@ -59,11 +59,11 @@ public class GenerateHandler extends AbstractHandler {
     private static final GeneratorsCommonMethodsDelegate COMMON_METHODS_DELEGATE = new GeneratorsCommonMethodsDelegateImpl();
     private static final JavaInterfaceCodeAppender JAVA_INTERFACE_CODE_APPENDER = new JavaInterfaceCodeAppenderImpl();
 
-    private final MethodStrategyManager methodStrategyManager;
+    private final MethodManager methodManager;
     private final MethodGeneratorManager generatorManager;
 
     public GenerateHandler() {
-        this.methodStrategyManager = new MethodStrategyManagerImpl(PREFERENCES_MANAGER, COMMON_METHODS_DELEGATE,
+        this.methodManager = new MethodManagerImpl(PREFERENCES_MANAGER, COMMON_METHODS_DELEGATE,
                 JAVA_INTERFACE_CODE_APPENDER);
         this.generatorManager = new MethodGeneratorManagerImpl(PREFERENCES_MANAGER, COMMON_METHODS_DELEGATE,
                 JAVA_INTERFACE_CODE_APPENDER, JAVA_UI_CODE_APPENDER, CODE_FORMATTER);
@@ -98,21 +98,21 @@ public class GenerateHandler extends AbstractHandler {
 
         try {
             if (objectClass == null || !objectClass.isClass()) {
-                MessageDialog.openInformation(parentShell, "MethodSkeleton Generation",
+                MessageDialog.openInformation(parentShell, "Method Generation",
                         "Cursor not in a class, or no class has the same name with the Java file.");
             } else {
                 UserActionIdentifier userActionIdentifier = UserActionIdentifier.getUserActionIdentifierFor(commandId);
                 generateCode(parentShell, objectClass, userActionIdentifier);
             }
-        } catch (JavaModelException e) {
-            MessageDialog.openError(parentShell, "Error", e.getMessage());
+        } catch (Exception exception) {
+            MessageDialog.openError(parentShell, "Error", exception.getMessage());
         }
     }
 
     private <T extends MethodSkeleton<V>, U extends JenerateDialog<V>, V extends JenerateDialogData> void generateCode(
             Shell parentShell, IType objectClass, UserActionIdentifier userActionIdentifier) {
-        Set<Method<T, V>> methods = methodStrategyManager.getMethods(userActionIdentifier);
-        MethodGenerator<T, U, V> genericGenerator = generatorManager.getGenericGenerator(userActionIdentifier);
+        Set<Method<T, V>> methods = methodManager.getMethods(userActionIdentifier);
+        MethodGenerator<T, U, V> genericGenerator = generatorManager.getMethodGenerator(userActionIdentifier);
         genericGenerator.generate(parentShell, objectClass, methods);
     }
 }

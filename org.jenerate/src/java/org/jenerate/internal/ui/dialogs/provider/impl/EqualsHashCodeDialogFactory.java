@@ -13,27 +13,27 @@ import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
-public class EqualsHashCodeDialogProvider extends AbstractDialogProvider<EqualsHashCodeDialog, EqualsHashCodeDialogData> {
+public class EqualsHashCodeDialogFactory extends AbstractDialogFactory<EqualsHashCodeDialog, EqualsHashCodeDialogData> {
 
-    public EqualsHashCodeDialogProvider(PreferencesManager preferencesManager,
+    public EqualsHashCodeDialogFactory(PreferencesManager preferencesManager,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
         super(preferencesManager, generatorsCommonMethodsDelegate);
     }
 
     @Override
-    public EqualsHashCodeDialog getDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods)
+    public EqualsHashCodeDialog createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods)
             throws Exception {
         IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
-        return new EqualsHashCodeDialog(parentShell, "Generate Equals and HashCode", objectClass, fields,
+        return new EqualsHashCodeDialog(parentShell, "Generate Equals and HashCode Methods", objectClass, fields,
                 excludedMethods, disableAppendSuper, preferencesManager);
     }
-    
+
     private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
         return isDirectSubclassOfObject(objectClass) || !isEqualsOverriddenInSuperclass(objectClass)
                 || !isHashCodeOverriddenInSuperclass(objectClass);
     }
-    
+
     private boolean isDirectSubclassOfObject(final IType objectClass) throws JavaModelException {
         String superclass = objectClass.getSuperclassName();
 
@@ -46,7 +46,7 @@ public class EqualsHashCodeDialogProvider extends AbstractDialogProvider<EqualsH
 
         return false;
     }
-    
+
     public boolean isHashCodeOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
         return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "hashCode", new String[0],
                 "java.lang.Object");
@@ -56,7 +56,7 @@ public class EqualsHashCodeDialogProvider extends AbstractDialogProvider<EqualsH
         return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "equals",
                 new String[] { "QObject;" }, "java.lang.Object");
     }
-    
+
     @Override
     public UserActionIdentifier getUserActionIdentifier() {
         return UserActionIdentifier.EQUALS_HASH_CODE;

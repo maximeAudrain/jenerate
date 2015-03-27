@@ -11,15 +11,15 @@ import org.jenerate.internal.domain.method.skeleton.impl.EqualsMethod;
 import org.jenerate.internal.domain.method.skeleton.impl.HashCodeMethod;
 import org.jenerate.internal.domain.method.skeleton.impl.ToStringMethod;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.manage.MethodSkeletonStrategyManager;
+import org.jenerate.internal.manage.MethodSkeletonManager;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
-public class MethodSkeletonStrategyManagerImpl implements MethodSkeletonStrategyManager {
+public class MethodSkeletonManagerImpl implements MethodSkeletonManager {
 
     private final Set<MethodSkeleton<?>> methodSkeletons = new HashSet<MethodSkeleton<?>>();
 
-    public MethodSkeletonStrategyManagerImpl(PreferencesManager preferencesManager,
+    public MethodSkeletonManagerImpl(PreferencesManager preferencesManager,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
         methodSkeletons.add(new EqualsMethod(preferencesManager, generatorsCommonMethodsDelegate));

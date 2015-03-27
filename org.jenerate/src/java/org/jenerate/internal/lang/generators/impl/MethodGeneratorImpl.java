@@ -17,18 +17,18 @@ import org.jenerate.internal.domain.method.content.MethodContent;
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.lang.generators.MethodGenerator;
 import org.jenerate.internal.ui.dialogs.JenerateDialog;
-import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
+import org.jenerate.internal.ui.dialogs.provider.DialogFactory;
 import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
 public class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends JenerateDialog<V>, V extends JenerateDialogData>
         implements MethodGenerator<T, U, V> {
 
-    private final DialogProvider<U, V> dialogProvider;
+    private final DialogFactory<U, V> dialogProvider;
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
 
-    public MethodGeneratorImpl(DialogProvider<U, V> dialogProvider, JavaUiCodeAppender javaUiCodeAppender,
+    public MethodGeneratorImpl(DialogFactory<U, V> dialogProvider, JavaUiCodeAppender javaUiCodeAppender,
             JeneratePluginCodeFormatter jeneratePluginCodeFormatter) {
         this.dialogProvider = dialogProvider;
         this.javaUiCodeAppender = javaUiCodeAppender;
@@ -43,7 +43,7 @@ public class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends Jenerate
                 excludedMethods.addAll(getExcludedMethods(method.getMethodSkeleton().getMethodName(), objectClass));
             }
 
-            U dialog = dialogProvider.getDialog(parentShell, objectClass, excludedMethods);
+            U dialog = dialogProvider.createDialog(parentShell, objectClass, excludedMethods);
             int returnCode = dialog.getDialog().open();
             if (returnCode == Window.OK) {
 

@@ -12,7 +12,7 @@ import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.data.CompareToDialogData;
 import org.jenerate.internal.domain.method.content.CommonsLangLibraryUtils;
 import org.jenerate.internal.ui.dialogs.CompareToDialog;
-import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
+import org.jenerate.internal.ui.dialogs.provider.DialogFactory;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.junit.Ignore;
@@ -39,7 +39,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
     @Mock
     private JavaInterfaceCodeAppender javaInterfaceCodeAppender;
     @Mock
-    private DialogProvider<CompareToDialog, CompareToDialogData> dialogProvider;
+    private DialogFactory<CompareToDialog, CompareToDialogData> dialogProvider;
     @Mock
     private CompareToDialog fieldDialog;
     @Mock
@@ -57,7 +57,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
         mockCompareToNonGenericMethodExists(false);
         mockCompareToGenericMethodExists(false);
         when(objectClass.createMethod(FORMATTED_CODE_1, elementPosition, true, null)).thenReturn(createdMethod1);
-        when(dialogProvider.getDialog(parentShell, objectClass, Collections.<IMethod> emptySet())).thenReturn(
+        when(dialogProvider.createDialog(parentShell, objectClass, Collections.<IMethod> emptySet())).thenReturn(
                 fieldDialog);
 
         compareToGenerator = new CompareToGenerator(javaUiCodeAppender, preferencesManager, dialogProvider,
@@ -73,7 +73,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
     @Test
     public void verifyGeneratedCodeCompareToNonGenericMethodExists() throws Exception {
         mockCompareToNonGenericMethodExists(true);
-        when(dialogProvider.getDialog(parentShell, objectClass, Collections.singleton(compareToMethod))).thenReturn(
+        when(dialogProvider.createDialog(parentShell, objectClass, Collections.singleton(compareToMethod))).thenReturn(
                 fieldDialog);
         compareToGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
@@ -82,7 +82,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
     @Test
     public void verifyGeneratedCodeCompareToGenericMethodExists() throws Exception {
         mockCompareToGenericMethodExists(true);
-        when(dialogProvider.getDialog(parentShell, objectClass, Collections.singleton(compareToMethod))).thenReturn(
+        when(dialogProvider.createDialog(parentShell, objectClass, Collections.singleton(compareToMethod))).thenReturn(
                 fieldDialog);
         compareToGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);

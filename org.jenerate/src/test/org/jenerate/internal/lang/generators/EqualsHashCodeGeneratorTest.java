@@ -12,7 +12,7 @@ import org.jenerate.internal.data.EqualsHashCodeDialogData;
 import org.jenerate.internal.data.IInitMultNumbers;
 import org.jenerate.internal.domain.method.content.CommonsLangLibraryUtils;
 import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
-import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
+import org.jenerate.internal.ui.dialogs.provider.DialogFactory;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     protected IMethod createdMethod2;
 
     @Mock
-    private DialogProvider<EqualsHashCodeDialog, EqualsHashCodeDialogData> dialogProvider;
+    private DialogFactory<EqualsHashCodeDialog, EqualsHashCodeDialogData> dialogProvider;
     @Mock
     private EqualsHashCodeDialog fieldDialog;
     @Mock
@@ -68,7 +68,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
         mockEqualsMethodExists(false);
         mockAppendGeneratedCode();
 
-        when(dialogProvider.getDialog(parentShell, objectClass, Collections.<IMethod> emptySet())).thenReturn(
+        when(dialogProvider.createDialog(parentShell, objectClass, Collections.<IMethod> emptySet())).thenReturn(
                 fieldDialog);
 
         equalsHashCodeGenerator = new EqualsHashCodeGenerator(javaUiCodeAppender, preferencesManager, dialogProvider,
@@ -84,7 +84,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     @Test
     public void verifyGeneratedCodeHashCodeMethodExists() throws Exception {
         mockHashCodeMethodExists(true);
-        when(dialogProvider.getDialog(parentShell, objectClass, Collections.singleton(hashCodeMethod))).thenReturn(
+        when(dialogProvider.createDialog(parentShell, objectClass, Collections.singleton(hashCodeMethod))).thenReturn(
                 fieldDialog);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
@@ -94,7 +94,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     @Test
     public void verifyGeneratedCodeEqualsMethodExists() throws Exception {
         mockEqualsMethodExists(true);
-        when(dialogProvider.getDialog(parentShell, objectClass, Collections.singleton(equalsMethod))).thenReturn(
+        when(dialogProvider.createDialog(parentShell, objectClass, Collections.singleton(equalsMethod))).thenReturn(
                 fieldDialog);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);

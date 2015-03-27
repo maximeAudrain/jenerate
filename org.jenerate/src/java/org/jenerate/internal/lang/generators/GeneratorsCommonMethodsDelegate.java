@@ -30,8 +30,7 @@ public interface GeneratorsCommonMethodsDelegate {
     boolean areAllFinalFields(final IField[] fields) throws JavaModelException;
 
     boolean isSourceLevelGreaterThanOrEqualTo5(IType objectClass);
-    
-    IField[] getObjectClassFields(IType objectClass, PreferencesManager preferencesManager)
-            throws JavaModelException;
+
+    IField[] getObjectClassFields(IType objectClass, PreferencesManager preferencesManager) throws JavaModelException;
 
 }

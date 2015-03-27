@@ -153,7 +153,7 @@ public abstract class FieldDialog<T extends JenerateDialogData> extends Dialog i
         }
         insertPositions.add(null);
     }
-    
+
     /**
      * XXX test me?
      */

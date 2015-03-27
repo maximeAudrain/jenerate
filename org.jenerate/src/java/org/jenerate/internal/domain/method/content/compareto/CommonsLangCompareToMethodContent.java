@@ -49,7 +49,7 @@ public class CommonsLangCompareToMethodContent extends AbstractMethodContent<Com
     @Override
     public Set<String> getLibrariesToImport(CompareToDialogData data) {
         boolean useCommonsLang3 = false;
-        if(MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
+        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
             useCommonsLang3 = true;
         }
         return Collections.singleton(CommonsLangLibraryUtils.getCompareToBuilderLibrary(useCommonsLang3));

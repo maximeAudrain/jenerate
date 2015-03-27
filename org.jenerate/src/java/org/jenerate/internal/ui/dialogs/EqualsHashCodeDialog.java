@@ -33,7 +33,6 @@ import org.jenerate.internal.data.impl.EqualsHashCodeDialogDataImpl;
 import org.jenerate.internal.data.impl.InitMultNumbersCustom;
 import org.jenerate.internal.data.impl.InitMultNumbersDefault;
 import org.jenerate.internal.data.impl.InitMultNumbersRandom;
-import org.jenerate.internal.domain.UserActionIdentifier;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
 /**
