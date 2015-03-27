@@ -31,4 +31,9 @@ public class ToStringMethodSkeleton extends AbstractMethodSkeleton<ToStringGener
         return "toString";
     }
 
+    @Override
+    public String[] getMethodArguments(IType objectClass) throws Exception {
+        return new String[0];
+    }
+
 }

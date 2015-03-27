@@ -22,5 +22,7 @@ public interface MethodSkeleton<T extends MethodGenerationData> {
     UserActionIdentifier getUserActionIdentifier();
 
     String getMethodName();
+    
+    String[] getMethodArguments(IType objectClass) throws Exception;
 
 }

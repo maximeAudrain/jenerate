@@ -21,16 +21,16 @@ import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 
-public class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData>
+public final class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData>
         implements MethodGenerator<T, U, V> {
 
-    private final DialogFactory<U, V> dialogProvider;
+    private final DialogFactory<U, V> dialogFactory;
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final JavaCodeFormatter jeneratePluginCodeFormatter;
 
-    public MethodGeneratorImpl(DialogFactory<U, V> dialogProvider, JavaUiCodeAppender javaUiCodeAppender,
+    public MethodGeneratorImpl(DialogFactory<U, V> dialogFactory, JavaUiCodeAppender javaUiCodeAppender,
             JavaCodeFormatter jeneratePluginCodeFormatter) {
-        this.dialogProvider = dialogProvider;
+        this.dialogFactory = dialogFactory;
         this.javaUiCodeAppender = javaUiCodeAppender;
         this.jeneratePluginCodeFormatter = jeneratePluginCodeFormatter;
     }
@@ -38,12 +38,8 @@ public class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends FieldDia
     @Override
     public void generate(Shell parentShell, IType objectClass, Set<Method<T, V>> methods) {
         try {
-            Set<IMethod> excludedMethods = new HashSet<IMethod>();
-            for (Method<T, V> method : methods) {
-                excludedMethods.addAll(getExcludedMethods(method.getMethodSkeleton().getMethodName(), objectClass));
-            }
-
-            U dialog = dialogProvider.createDialog(parentShell, objectClass, excludedMethods);
+            Set<IMethod> excludedMethods = getExcludedMethods(objectClass, methods);
+            U dialog = dialogFactory.createDialog(parentShell, objectClass, excludedMethods);
             int returnCode = dialog.getDialog().open();
             if (returnCode == Window.OK) {
 
@@ -61,16 +57,14 @@ public class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends FieldDia
         }
     }
 
-    /**
-     * XXX NOT GOOOOD, DOES NOT WORK, NEED METHOD PARAMETERS
-     */
-    private Set<IMethod> getExcludedMethods(String methodName, IType objectClass) throws Exception {
-        Set<IMethod> excludedMethods = new HashSet<>();
-
-        IMethod[] methods = objectClass.getMethods();
-        for (IMethod iMethod : methods) {
-            if (methodName.equals(iMethod.getElementName())) {
-                excludedMethods.add(iMethod);
+    private Set<IMethod> getExcludedMethods(IType objectClass, Set<Method<T, V>> methods) throws Exception {
+        Set<IMethod> excludedMethods = new HashSet<IMethod>();
+        for (Method<T, V> method : methods) {
+            T methodSkeleton = method.getMethodSkeleton();
+            IMethod excludedMethod = objectClass.getMethod(methodSkeleton.getMethodName(),
+                    methodSkeleton.getMethodArguments(objectClass));
+            if (excludedMethod.exists()) {
+                excludedMethods.add(excludedMethod);
             }
         }
         return excludedMethods;

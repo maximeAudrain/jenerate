@@ -24,13 +24,7 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
     @Override
     public String getMethod(IType objectClass, CompareToGenerationData data, String methodContent)
             throws JavaModelException {
-        boolean implementedOrExtendedInSuperType = javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(
-                objectClass, "Comparable");
-        boolean generifyPreference = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).booleanValue();
-        boolean generify = generifyPreference
-                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)
-                && !implementedOrExtendedInSuperType;
+        boolean generify = isGenerifyCompareTo(objectClass);
         return MethodGenerations.createCompareToMethod(objectClass, data, generify, methodContent);
     }
 
@@ -44,4 +38,20 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
         return "compareTo";
     }
 
+    @Override
+    public String[] getMethodArguments(IType objectClass) throws Exception {
+        if (isGenerifyCompareTo(objectClass)) {
+            return new String[] { "Q" + objectClass.getElementName() + ";" };
+        }
+        return new String[] { "QObject;" };
+    }
+
+    private boolean isGenerifyCompareTo(IType objectClass) throws JavaModelException {
+        boolean implementedOrExtendedInSuperType = javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(
+                objectClass, "Comparable");
+        boolean generifyPreference = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).booleanValue();
+        return generifyPreference && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)
+                && !implementedOrExtendedInSuperType;
+    }
 }

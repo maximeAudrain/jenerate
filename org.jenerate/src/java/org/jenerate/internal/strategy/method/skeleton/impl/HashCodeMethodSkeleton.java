@@ -32,4 +32,9 @@ public class HashCodeMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCod
         return "hashCode";
     }
 
+    @Override
+    public String[] getMethodArguments(IType objectClass) throws Exception {
+        return new String[0];
+    }
+
 }
