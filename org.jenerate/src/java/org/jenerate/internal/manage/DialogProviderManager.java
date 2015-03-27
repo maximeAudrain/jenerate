@@ -7,7 +7,7 @@ import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 
 public interface DialogProviderManager {
 
-    DialogProvider<? extends JenerateDialog<?>, ? extends JenerateDialogData> getDialogProvider(
+    <T extends JenerateDialog<U>, U extends JenerateDialogData> DialogProvider<T, U> getDialogProvider(
             UserActionIdentifier userActionIdentifier);
 
 }

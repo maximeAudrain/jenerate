@@ -8,7 +8,7 @@ import org.jenerate.internal.ui.dialogs.JenerateDialog;
 
 public interface MethodGeneratorManager {
 
-    MethodGenerator<? extends MethodSkeleton<?>, ? extends JenerateDialog<?>, ? extends JenerateDialogData> getGenericGenerator(
+    <T extends MethodSkeleton<V>, U extends JenerateDialog<V>, V extends JenerateDialogData> MethodGenerator<T, U, V> getGenericGenerator(
             UserActionIdentifier userActionIdentifier);
 
 }

@@ -29,13 +29,14 @@ public class MethodSkeletonStrategyManagerImpl implements MethodSkeletonStrategy
                 javaInterfaceCodeAppender));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Set<MethodSkeleton<? extends JenerateDialogData>> getMethodSkeletons(
+    public <T extends JenerateDialogData> Set<MethodSkeleton<T>> getMethodSkeletons(
             UserActionIdentifier userActionIdentifier) {
-        Set<MethodSkeleton<? extends JenerateDialogData>> toReturn = new HashSet<MethodSkeleton<? extends JenerateDialogData>>();
+        Set<MethodSkeleton<T>> toReturn = new HashSet<MethodSkeleton<T>>();
         for (MethodSkeleton<? extends JenerateDialogData> methodSkeleton : methodSkeletons) {
             if (userActionIdentifier.equals(methodSkeleton.getUserActionIdentifier())) {
-                toReturn.add(methodSkeleton);
+                toReturn.add((MethodSkeleton<T>) methodSkeleton);
             }
         }
         return toReturn;

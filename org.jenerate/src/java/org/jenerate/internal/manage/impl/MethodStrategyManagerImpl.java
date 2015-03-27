@@ -34,8 +34,9 @@ public class MethodStrategyManagerImpl implements MethodStrategyManager {
                 generatorsCommonMethodsDelegate, javaInterfaceCodeAppender);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Set<Method<? extends MethodSkeleton<?>, ? extends JenerateDialogData>> getMethods(
+    public <T extends MethodSkeleton<U>, U extends JenerateDialogData> Set<Method<T, U>> getMethods(
             UserActionIdentifier userActionIdentifier) {
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
@@ -44,14 +45,13 @@ public class MethodStrategyManagerImpl implements MethodStrategyManager {
             methodContentStrategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG3;
         }
 
-        Set<MethodSkeleton<? extends JenerateDialogData>> methodSkeletons = methodSkeletonStrategyManager
-                .getMethodSkeletons(userActionIdentifier);
+        Set<MethodSkeleton<U>> methodSkeletons = methodSkeletonStrategyManager.getMethodSkeletons(userActionIdentifier);
 
-        Set<Method<? extends MethodSkeleton<?>, ? extends JenerateDialogData>> methods = new HashSet<Method<? extends MethodSkeleton<?>, ? extends JenerateDialogData>>();
-        for (MethodSkeleton<? extends JenerateDialogData> methodSkeleton : methodSkeletons) {
-            MethodContent<? extends MethodSkeleton<?>, ? extends JenerateDialogData> methodContent = methodContentStrategyManager
-                    .getStrategy(methodSkeleton, methodContentStrategyIdentifier);
-            methods.add(new MethodImpl(methodSkeleton, methodContent));
+        Set<Method<T, U>> methods = new HashSet<Method<T, U>>();
+        for (MethodSkeleton<U> methodSkeleton : methodSkeletons) {
+            MethodContent<T, U> methodContent = methodContentStrategyManager.getStrategy(methodSkeleton,
+                    methodContentStrategyIdentifier);
+            methods.add(new MethodImpl<T, U>((T) methodSkeleton, methodContent));
         }
         return methods;
     }

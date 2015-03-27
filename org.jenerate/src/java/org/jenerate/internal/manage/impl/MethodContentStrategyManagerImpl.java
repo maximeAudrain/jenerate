@@ -37,21 +37,21 @@ public class MethodContentStrategyManagerImpl implements MethodContentStrategyMa
                 preferencesManager, generatorsCommonMethodsDelegate));
         methodContents.add(new CommonsLangToStringMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
                 preferencesManager, generatorsCommonMethodsDelegate));
-        
+
         methodContents.add(new CommonsLangCompareToMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
                 preferencesManager, generatorsCommonMethodsDelegate, javaInterfaceCodeAppender));
         methodContents.add(new CommonsLangCompareToMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
                 preferencesManager, generatorsCommonMethodsDelegate, javaInterfaceCodeAppender));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public MethodContent<? extends MethodSkeleton<?>, ? extends JenerateDialogData> getStrategy(
-            MethodSkeleton<? extends JenerateDialogData> methodSkeleton,
-            MethodContentStrategyIdentifier methodContentStrategyIdentifier) {
+    public <T extends MethodSkeleton<U>, U extends JenerateDialogData> MethodContent<T, U> getStrategy(
+            MethodSkeleton<U> methodSkeleton, MethodContentStrategyIdentifier methodContentStrategyIdentifier) {
         for (MethodContent<? extends MethodSkeleton<?>, ? extends JenerateDialogData> methodContent : methodContents) {
             if (methodSkeleton.getClass().isAssignableFrom(methodContent.getRelatedMethodSkeletonClass())
                     && methodContentStrategyIdentifier.equals(methodContent.getMethodContentStrategyIdentifier())) {
-                return methodContent;
+                return (MethodContent<T, U>) methodContent;
             }
         }
         throw new IllegalStateException();

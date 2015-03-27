@@ -33,11 +33,10 @@ public class MethodGeneratorManagerImpl implements MethodGeneratorManager {
     }
 
     @Override
-    public MethodGenerator<? extends MethodSkeleton<?>, ? extends JenerateDialog<?>, ? extends JenerateDialogData> getGenericGenerator(
+    public <T extends MethodSkeleton<V>, U extends JenerateDialog<V>, V extends JenerateDialogData> MethodGenerator<T, U, V> getGenericGenerator(
             UserActionIdentifier userActionIdentifier) {
-        DialogProvider<? extends JenerateDialog<?>, ? extends JenerateDialogData> dialogProvider = dialogProviderManager
-                .getDialogProvider(userActionIdentifier);
-        return new MethodGeneratorImpl(dialogProvider, javaUiCodeAppender, jeneratePluginCodeFormatter);
+        DialogProvider<U, V> dialogProvider = dialogProviderManager.getDialogProvider(userActionIdentifier);
+        return new MethodGeneratorImpl<T, U, V>(dialogProvider, javaUiCodeAppender, jeneratePluginCodeFormatter);
     }
 
 }

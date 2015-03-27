@@ -9,7 +9,7 @@ import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 
 public interface MethodStrategyManager {
 
-    Set<Method<? extends MethodSkeleton<?>, ? extends JenerateDialogData>> getMethods(
+    <T extends MethodSkeleton<U>, U extends JenerateDialogData> Set<Method<T, U>> getMethods(
             UserActionIdentifier userActionIdentifier);
 
 }

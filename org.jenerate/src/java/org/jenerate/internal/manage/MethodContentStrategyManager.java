@@ -7,8 +7,8 @@ import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 
 public interface MethodContentStrategyManager {
 
-    MethodContent<? extends MethodSkeleton<?>, ? extends JenerateDialogData> getStrategy(
-            MethodSkeleton<? extends JenerateDialogData> methodSkeleton,
+    <T extends MethodSkeleton<U>, U extends JenerateDialogData> MethodContent<T, U> getStrategy(
+            MethodSkeleton<U> methodSkeleton,
             MethodContentStrategyIdentifier methodContentStrategyIdentifier);
 
 }

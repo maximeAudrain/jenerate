@@ -8,6 +8,6 @@ import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 
 public interface MethodSkeletonStrategyManager {
 
-    Set<MethodSkeleton<? extends JenerateDialogData>> getMethodSkeletons(UserActionIdentifier userActionIdentifier);
+    <T extends JenerateDialogData> Set<MethodSkeleton<T>> getMethodSkeletons(UserActionIdentifier userActionIdentifier);
 
 }

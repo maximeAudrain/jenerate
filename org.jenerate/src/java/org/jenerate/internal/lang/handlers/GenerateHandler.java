@@ -33,6 +33,7 @@ import org.jenerate.internal.manage.MethodGeneratorManager;
 import org.jenerate.internal.manage.MethodStrategyManager;
 import org.jenerate.internal.manage.impl.MethodGeneratorManagerImpl;
 import org.jenerate.internal.manage.impl.MethodStrategyManagerImpl;
+import org.jenerate.internal.ui.dialogs.JenerateDialog;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.ui.preferences.impl.PreferencesManagerImpl;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
@@ -108,14 +109,10 @@ public class GenerateHandler extends AbstractHandler {
         }
     }
 
-    /**
-     * XXX see if the suppress warnings can be removed
-     */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void generateCode(Shell parentShell, IType objectClass, UserActionIdentifier userActionIdentifier) {
-        Set<Method<? extends MethodSkeleton<?>, ? extends JenerateDialogData>> methods = methodStrategyManager
-                .getMethods(userActionIdentifier);
-        MethodGenerator genericGenerator = generatorManager.getGenericGenerator(userActionIdentifier);
+    private <T extends MethodSkeleton<V>, U extends JenerateDialog<V>, V extends JenerateDialogData> void generateCode(
+            Shell parentShell, IType objectClass, UserActionIdentifier userActionIdentifier) {
+        Set<Method<T, V>> methods = methodStrategyManager.getMethods(userActionIdentifier);
+        MethodGenerator<T, U, V> genericGenerator = generatorManager.getGenericGenerator(userActionIdentifier);
         genericGenerator.generate(parentShell, objectClass, methods);
     }
 }

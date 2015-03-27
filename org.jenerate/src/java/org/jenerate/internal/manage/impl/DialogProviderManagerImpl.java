@@ -28,12 +28,13 @@ public class DialogProviderManagerImpl implements DialogProviderManager {
                 javaInterfaceCodeAppender));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public DialogProvider<? extends JenerateDialog<?>, ? extends JenerateDialogData> getDialogProvider(
+    public <T extends JenerateDialog<U>, U extends JenerateDialogData> DialogProvider<T, U> getDialogProvider(
             UserActionIdentifier userActionIdentifier) {
         for (DialogProvider<? extends JenerateDialog<?>, ? extends JenerateDialogData> dialogProvider : dialogProviders) {
             if (userActionIdentifier.equals(dialogProvider.getUserActionIdentifier())) {
-                return dialogProvider;
+                return (DialogProvider<T, U>) dialogProvider;
             }
         }
         throw new IllegalStateException();
