@@ -1,5 +1,5 @@
 // $Id$
-package org.jenerate.internal.ui.dialogs;
+package org.jenerate.internal.ui.dialogs.impl;
 
 import java.util.Set;
 
@@ -26,18 +26,18 @@ import org.jenerate.internal.ui.preferences.PreferencesManager;
  * 
  * @author jiayun
  */
-public abstract class OrderableFieldDialog<T extends FieldDialogData> extends FieldDialog<T> {
+public abstract class AbstractOrderableFieldDialog<T extends FieldDialogData> extends AbstractFieldDialog<T> {
 
     private Button upButton;
 
     private Button downButton;
 
-    public OrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
+    public AbstractOrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
             Set<IMethod> excludedMethods, PreferencesManager preferencesManager) throws JavaModelException {
         this(parentShell, dialogTitle, objectClass, fields, excludedMethods, false, preferencesManager);
     }
 
-    public OrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
+    public AbstractOrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
             Set<IMethod> excludedMethods, boolean disableAppendSuper, PreferencesManager preferencesManager)
             throws JavaModelException {
         super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager);

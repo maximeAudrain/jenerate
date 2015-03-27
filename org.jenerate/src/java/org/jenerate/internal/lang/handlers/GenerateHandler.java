@@ -33,7 +33,7 @@ import org.jenerate.internal.manage.MethodGeneratorManager;
 import org.jenerate.internal.manage.MethodManager;
 import org.jenerate.internal.manage.impl.MethodGeneratorManagerImpl;
 import org.jenerate.internal.manage.impl.MethodManagerImpl;
-import org.jenerate.internal.ui.dialogs.JenerateDialog;
+import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.ui.preferences.impl.PreferencesManagerImpl;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
@@ -109,7 +109,7 @@ public class GenerateHandler extends AbstractHandler {
         }
     }
 
-    private <T extends MethodSkeleton<V>, U extends JenerateDialog<V>, V extends JenerateDialogData> void generateCode(
+    private <T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends JenerateDialogData> void generateCode(
             Shell parentShell, IType objectClass, UserActionIdentifier userActionIdentifier) {
         Set<Method<T, V>> methods = methodManager.getMethods(userActionIdentifier);
         MethodGenerator<T, U, V> genericGenerator = generatorManager.getMethodGenerator(userActionIdentifier);

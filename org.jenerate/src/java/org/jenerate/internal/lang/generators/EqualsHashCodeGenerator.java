@@ -18,8 +18,8 @@ import org.jenerate.internal.domain.method.content.equals.CommonsLangEqualsMetho
 import org.jenerate.internal.domain.method.content.hashcode.CommonsLangHashCodeMethodContent;
 import org.jenerate.internal.domain.method.skeleton.impl.EqualsMethod;
 import org.jenerate.internal.domain.method.skeleton.impl.HashCodeMethod;
-import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
-import org.jenerate.internal.ui.dialogs.provider.DialogFactory;
+import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
+import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
 import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaUiCodeAppender;

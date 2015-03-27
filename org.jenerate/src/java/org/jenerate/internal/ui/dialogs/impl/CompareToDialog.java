@@ -1,4 +1,4 @@
-package org.jenerate.internal.ui.dialogs;
+package org.jenerate.internal.ui.dialogs.impl;
 
 import java.util.Set;
 
@@ -12,7 +12,10 @@ import org.jenerate.internal.data.CompareToDialogData;
 import org.jenerate.internal.data.impl.CompareToDialogDataImpl;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
-public class CompareToDialog extends OrderableFieldDialog<CompareToDialogData> {
+/**
+ * @author maudrain
+ */
+public class CompareToDialog extends AbstractOrderableFieldDialog<CompareToDialogData> {
 
     public CompareToDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
             Set<IMethod> excludedMethods, boolean disableAppendSuper, PreferencesManager preferencesManager)

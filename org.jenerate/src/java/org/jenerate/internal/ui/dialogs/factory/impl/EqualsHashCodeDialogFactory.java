@@ -1,4 +1,4 @@
-package org.jenerate.internal.ui.dialogs.provider.impl;
+package org.jenerate.internal.ui.dialogs.factory.impl;
 
 import java.util.Set;
 
@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.data.EqualsHashCodeDialogData;
 import org.jenerate.internal.domain.UserActionIdentifier;
 import org.jenerate.internal.lang.generators.GeneratorsCommonMethodsDelegate;
-import org.jenerate.internal.ui.dialogs.EqualsHashCodeDialog;
+import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 
 public class EqualsHashCodeDialogFactory extends AbstractDialogFactory<EqualsHashCodeDialog, EqualsHashCodeDialogData> {

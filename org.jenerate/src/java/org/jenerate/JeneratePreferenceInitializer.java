@@ -8,7 +8,10 @@ import org.jenerate.internal.ui.preferences.JeneratePreference;
 import org.jenerate.internal.ui.preferences.PluginPreference;
 
 /**
+ * Jenerate plugin preferences initializer. Takes the default values for all plugin preferences and register them.
+ * 
  * @author jiayun
+ * @author maudrain
  */
 public class JeneratePreferenceInitializer extends AbstractPreferenceInitializer {
 

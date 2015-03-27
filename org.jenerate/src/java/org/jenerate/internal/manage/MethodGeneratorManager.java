@@ -4,7 +4,7 @@ import org.jenerate.internal.data.JenerateDialogData;
 import org.jenerate.internal.domain.UserActionIdentifier;
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.lang.generators.MethodGenerator;
-import org.jenerate.internal.ui.dialogs.JenerateDialog;
+import org.jenerate.internal.ui.dialogs.FieldDialog;
 
 /**
  * Manager responsible for retrieving a {@link MethodGenerator} given a unique {@link UserActionIdentifier}.
@@ -21,7 +21,7 @@ public interface MethodGeneratorManager {
      * @throws IllegalStateException if no {@link MethodGenerator} could be found for a given
      *             {@link UserActionIdentifier}
      */
-    <T extends MethodSkeleton<V>, U extends JenerateDialog<V>, V extends JenerateDialogData> MethodGenerator<T, U, V> getMethodGenerator(
+    <T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends JenerateDialogData> MethodGenerator<T, U, V> getMethodGenerator(
             UserActionIdentifier userActionIdentifier);
 
 }

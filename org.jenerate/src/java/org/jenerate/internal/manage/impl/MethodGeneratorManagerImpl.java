@@ -8,8 +8,8 @@ import org.jenerate.internal.lang.generators.MethodGenerator;
 import org.jenerate.internal.lang.generators.impl.MethodGeneratorImpl;
 import org.jenerate.internal.manage.DialogFactoryManager;
 import org.jenerate.internal.manage.MethodGeneratorManager;
-import org.jenerate.internal.ui.dialogs.JenerateDialog;
-import org.jenerate.internal.ui.dialogs.provider.DialogFactory;
+import org.jenerate.internal.ui.dialogs.FieldDialog;
+import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.preferences.PreferencesManager;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.jenerate.internal.util.JavaUiCodeAppender;
@@ -33,7 +33,7 @@ public class MethodGeneratorManagerImpl implements MethodGeneratorManager {
     }
 
     @Override
-    public <T extends MethodSkeleton<V>, U extends JenerateDialog<V>, V extends JenerateDialogData> MethodGenerator<T, U, V> getMethodGenerator(
+    public <T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends JenerateDialogData> MethodGenerator<T, U, V> getMethodGenerator(
             UserActionIdentifier userActionIdentifier) {
         try {
             DialogFactory<U, V> dialogProvider = dialogProviderManager.getDialogFactory(userActionIdentifier);

@@ -1,4 +1,4 @@
-package org.jenerate.internal.ui.dialogs;
+package org.jenerate.internal.ui.dialogs.impl;
 
 import java.util.Set;
 
@@ -38,7 +38,7 @@ import org.jenerate.internal.ui.preferences.PreferencesManager;
 /**
  * @author jiayun
  */
-public class EqualsHashCodeDialog extends FieldDialog<EqualsHashCodeDialogData> {
+public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeDialogData> {
 
     private static final String EQUALS_SETTINGS_SECTION = "EqualsDialog";
 
@@ -335,6 +335,11 @@ public class EqualsHashCodeDialog extends FieldDialog<EqualsHashCodeDialogData> 
         //@formatter:on
     }
 
+    @Override
+    public Dialog getDialog() {
+        return this;
+    }
+
     private static class IntegerVerifyListener implements VerifyListener {
 
         private Text inputText;
@@ -358,10 +363,5 @@ public class EqualsHashCodeDialog extends FieldDialog<EqualsHashCodeDialogData> 
             }
         }
 
-    }
-
-    @Override
-    public Dialog getDialog() {
-        return this;
     }
 }

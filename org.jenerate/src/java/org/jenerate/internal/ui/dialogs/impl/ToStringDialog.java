@@ -1,4 +1,4 @@
-package org.jenerate.internal.ui.dialogs;
+package org.jenerate.internal.ui.dialogs.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import org.jenerate.internal.ui.preferences.PreferencesManager;
 /**
  * @author jiayun
  */
-public class ToStringDialog extends OrderableFieldDialog<ToStringDialogData> {
+public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringDialogData> {
 
     private Combo styleCombo;
 
