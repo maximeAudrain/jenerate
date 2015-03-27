@@ -1,6 +1,5 @@
 package org.jenerate.internal.lang.generators.impl;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,20 +15,20 @@ import org.jenerate.internal.data.JenerateDialogData;
 import org.jenerate.internal.domain.method.Method;
 import org.jenerate.internal.domain.method.content.MethodContent;
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
-import org.jenerate.internal.lang.generators.GenericGenerator;
+import org.jenerate.internal.lang.generators.MethodGenerator;
 import org.jenerate.internal.ui.dialogs.JenerateDialog;
 import org.jenerate.internal.ui.dialogs.provider.DialogProvider;
 import org.jenerate.internal.util.JavaUiCodeAppender;
 import org.jenerate.internal.util.JeneratePluginCodeFormatter;
 
-public class GenericGeneratorImpl<T extends MethodSkeleton<V>, U extends JenerateDialog<V>, V extends JenerateDialogData>
-        implements GenericGenerator<T, U, V> {
+public class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends JenerateDialog<V>, V extends JenerateDialogData>
+        implements MethodGenerator<T, U, V> {
 
     private final DialogProvider<U, V> dialogProvider;
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final JeneratePluginCodeFormatter jeneratePluginCodeFormatter;
 
-    public GenericGeneratorImpl(DialogProvider<U, V> dialogProvider, JavaUiCodeAppender javaUiCodeAppender,
+    public MethodGeneratorImpl(DialogProvider<U, V> dialogProvider, JavaUiCodeAppender javaUiCodeAppender,
             JeneratePluginCodeFormatter jeneratePluginCodeFormatter) {
         this.dialogProvider = dialogProvider;
         this.javaUiCodeAppender = javaUiCodeAppender;

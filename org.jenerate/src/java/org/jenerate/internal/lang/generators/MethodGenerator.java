@@ -9,7 +9,7 @@ import org.jenerate.internal.domain.method.Method;
 import org.jenerate.internal.domain.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.ui.dialogs.JenerateDialog;
 
-public interface GenericGenerator<T extends MethodSkeleton<V>, U extends JenerateDialog<V>, V extends JenerateDialogData> {
+public interface MethodGenerator<T extends MethodSkeleton<V>, U extends JenerateDialog<V>, V extends JenerateDialogData> {
 
     void generate(Shell parentShell, IType objectClass, Set<Method<T, V>> methods);
 
