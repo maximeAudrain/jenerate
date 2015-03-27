@@ -1,7 +1,6 @@
 package org.jenerate.internal.manage.impl;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
@@ -36,7 +35,7 @@ public class MethodManagerImpl implements MethodManager {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends MethodSkeleton<U>, U extends MethodGenerationData> Set<Method<T, U>> getMethods(
+    public <T extends MethodSkeleton<U>, U extends MethodGenerationData> LinkedHashSet<Method<T, U>> getMethods(
             UserActionIdentifier userActionIdentifier) {
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
@@ -45,9 +44,9 @@ public class MethodManagerImpl implements MethodManager {
             methodContentStrategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG3;
         }
 
-        Set<MethodSkeleton<U>> methodSkeletons = methodSkeletonManager.getMethodSkeletons(userActionIdentifier);
+        LinkedHashSet<MethodSkeleton<U>> methodSkeletons = methodSkeletonManager.getMethodSkeletons(userActionIdentifier);
 
-        Set<Method<T, U>> methods = new HashSet<Method<T, U>>();
+        LinkedHashSet<Method<T, U>> methods = new LinkedHashSet<Method<T, U>>();
         for (MethodSkeleton<U> methodSkeleton : methodSkeletons) {
             MethodContent<T, U> methodContent = methodContentManager.getMethodContent(methodSkeleton,
                     methodContentStrategyIdentifier);

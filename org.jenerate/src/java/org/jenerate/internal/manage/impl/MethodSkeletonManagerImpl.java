@@ -1,7 +1,8 @@
 package org.jenerate.internal.manage.impl;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedHashSet;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
@@ -17,13 +18,13 @@ import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class MethodSkeletonManagerImpl implements MethodSkeletonManager {
 
-    private final Set<MethodSkeleton<?>> methodSkeletons = new HashSet<MethodSkeleton<?>>();
+    private final SortedSet<MethodSkeleton<?>> methodSkeletons = new TreeSet<MethodSkeleton<?>>();
 
     public MethodSkeletonManagerImpl(PreferencesManager preferencesManager,
             GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
-        methodSkeletons.add(new EqualsMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate));
         methodSkeletons.add(new HashCodeMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate));
+        methodSkeletons.add(new EqualsMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate));
         methodSkeletons.add(new ToStringMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate));
         methodSkeletons.add(new CompareToMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate,
                 javaInterfaceCodeAppender));
@@ -31,9 +32,9 @@ public class MethodSkeletonManagerImpl implements MethodSkeletonManager {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends MethodGenerationData> Set<MethodSkeleton<T>> getMethodSkeletons(
+    public <T extends MethodGenerationData> LinkedHashSet<MethodSkeleton<T>> getMethodSkeletons(
             UserActionIdentifier userActionIdentifier) {
-        Set<MethodSkeleton<T>> toReturn = new HashSet<MethodSkeleton<T>>();
+        LinkedHashSet<MethodSkeleton<T>> toReturn = new LinkedHashSet<MethodSkeleton<T>>();
         for (MethodSkeleton<? extends MethodGenerationData> methodSkeleton : methodSkeletons) {
             if (userActionIdentifier.equals(methodSkeleton.getUserActionIdentifier())) {
                 toReturn.add((MethodSkeleton<T>) methodSkeleton);

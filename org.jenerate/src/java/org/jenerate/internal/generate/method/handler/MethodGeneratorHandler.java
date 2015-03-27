@@ -4,7 +4,7 @@
 
 package org.jenerate.internal.generate.method.handler;
 
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -111,7 +111,7 @@ public class MethodGeneratorHandler extends AbstractHandler {
 
     private <T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData> void generateCode(
             Shell parentShell, IType objectClass, UserActionIdentifier userActionIdentifier) {
-        Set<Method<T, V>> methods = methodManager.getMethods(userActionIdentifier);
+        LinkedHashSet<Method<T, V>> methods = methodManager.getMethods(userActionIdentifier);
         MethodGenerator<T, U, V> genericGenerator = generatorManager.getMethodGenerator(userActionIdentifier);
         genericGenerator.generate(parentShell, objectClass, methods);
     }

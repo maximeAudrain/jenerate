@@ -87,8 +87,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         return excludedMethods;
     }
 
-    private void generateCode(Shell parentShell, IType objectClass, EqualsHashCodeGenerationData data)
-            throws JavaModelException, PartInitException {
+    private void generateCode(Shell parentShell, IType objectClass, EqualsHashCodeGenerationData data) throws Exception {
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
         IJavaElement created = generateHashCode(parentShell, objectClass, data, useCommonLang3);
@@ -106,7 +105,8 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         // new CommonsLangHashCodeMethodContent(
         // preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3);
         String methodContent = hashCodeMethodContent.getMethodContent(objectClass, data);
-        HashCodeMethodSkeleton hashCodeMethod = new HashCodeMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate);
+        HashCodeMethodSkeleton hashCodeMethod = new HashCodeMethodSkeleton(preferencesManager,
+                generatorsCommonMethodsDelegate);
         String source = hashCodeMethod.getMethod(objectClass, data, methodContent);
 
         for (String libraryToImport : hashCodeMethod.getLibrariesToImport()) {
@@ -128,7 +128,8 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
         // new CommonsLangEqualsMethodContent(preferencesManager,
         // generatorsCommonMethodsDelegate, useCommonLang3);
         String methodContent = equalsMethodContent.getMethodContent(objectClass, data);
-        EqualsMethodSkeleton equalsMethod = new EqualsMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate);
+        EqualsMethodSkeleton equalsMethod = new EqualsMethodSkeleton(preferencesManager,
+                generatorsCommonMethodsDelegate);
         String source = equalsMethod.getMethod(objectClass, data, methodContent);
 
         for (String libraryToImport : equalsMethod.getLibrariesToImport()) {
@@ -145,7 +146,7 @@ public final class EqualsHashCodeGenerator implements ILangGenerator {
     private String format(final Shell parentShell, final IType objectClass, String source) throws JavaModelException {
         try {
             return jeneratePluginCodeFormatter.formatCode(objectClass, source);
-        } catch (BadLocationException e) {
+        } catch (Exception e) {
             MessageDialog.openError(parentShell, "Error", e.getMessage());
             return "";
         }

@@ -9,10 +9,8 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
@@ -83,7 +81,7 @@ public final class ToStringGenerator implements ILangGenerator {
     }
 
     private void generateCode(final Shell parentShell, final IType objectClass, ToStringGenerationData data)
-            throws PartInitException, JavaModelException {
+            throws Exception {
 
         IJavaElement currentPosition = data.getElementPosition();
         boolean useCommonLang3 = ((Boolean) preferencesManager
@@ -92,7 +90,8 @@ public final class ToStringGenerator implements ILangGenerator {
         // new CommonsLangToStringMethodContent(
         // preferencesManager, generatorsCommonMethodsDelegate, useCommonLang3);
         String methodContent = toStringMethodContent.getMethodContent(objectClass, data);
-        ToStringMethodSkeleton toStringMethod = new ToStringMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate);
+        ToStringMethodSkeleton toStringMethod = new ToStringMethodSkeleton(preferencesManager,
+                generatorsCommonMethodsDelegate);
         String source = toStringMethod.getMethod(objectClass, data, methodContent);
         String formattedContent = format(parentShell, objectClass, source);
         IMethod created = objectClass.createMethod(formattedContent, currentPosition, true, null);
@@ -110,7 +109,7 @@ public final class ToStringGenerator implements ILangGenerator {
     private String format(final Shell parentShell, final IType objectClass, String source) throws JavaModelException {
         try {
             return jeneratePluginCodeFormatter.formatCode(objectClass, source);
-        } catch (BadLocationException e) {
+        } catch (Exception e) {
             MessageDialog.openError(parentShell, "Error", e.getMessage());
             return "";
         }

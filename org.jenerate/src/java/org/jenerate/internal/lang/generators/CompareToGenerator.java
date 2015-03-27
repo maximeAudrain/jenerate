@@ -117,7 +117,7 @@ public final class CompareToGenerator implements ILangGenerator {
     private String format(final Shell parentShell, final IType objectClass, String source) throws JavaModelException {
         try {
             return jeneratePluginCodeFormatter.formatCode(objectClass, source);
-        } catch (BadLocationException e) {
+        } catch (Exception e) {
             MessageDialog.openError(parentShell, "Error", e.getMessage());
             return "";
         }

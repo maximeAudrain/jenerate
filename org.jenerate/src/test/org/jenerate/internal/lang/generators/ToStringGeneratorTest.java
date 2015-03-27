@@ -68,7 +68,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeDefault() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeDefault() throws Exception {
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
@@ -87,7 +87,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
      */
     @Ignore
     @Test
-    public void verifyGeneratedCodeWithOverridenInSuperclass() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithOverridenInSuperclass() throws Exception {
         when(
                 generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, TO_STRING_FIELD_NAME,
                         new String[0], null)).thenReturn(true);
@@ -106,7 +106,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeWithCachedToString() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithCachedToString() throws Exception {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).thenReturn(Boolean.TRUE);
         when(generatorsCommonMethodsDelegate.areAllFinalFields(fields)).thenReturn(true);
 
@@ -122,7 +122,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeWithOverrideAnnotation() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithOverrideAnnotation() throws Exception {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).thenReturn(true);
         when(generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)).thenReturn(true);
 
@@ -131,7 +131,7 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeWithCommonsLang3() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithCommonsLang3() throws Exception {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).thenReturn(true);
 
         toStringGenerator.generate(parentShell, objectClass);
@@ -139,28 +139,28 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeWithComment() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithComment() throws Exception {
         when(data.getGenerateComment()).thenReturn(true);
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
 
     @Test
-    public void verifyGeneratedCodeWithAppendSuper() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithAppendSuper() throws Exception {
         when(data.getAppendSuper()).thenReturn(true);
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
 
     @Test
-    public void verifyGeneratedCodeWithNoStyleConstant() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithNoStyleConstant() throws Exception {
         when(data.getToStringStyle()).thenReturn(CommonsLangToStringStyle.NO_STYLE);
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
 
     @Test
-    public void verifyGeneratedCodeWithGettersInsteadOfFields() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithGettersInsteadOfFields() throws Exception {
         when(data.getUseGettersInsteadOfFields()).thenReturn(true);
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
@@ -171,14 +171,14 @@ public class ToStringGeneratorTest extends AbstractGeneratorTest {
      */
     @Ignore
     @Test
-    public void verifyGeneratedCodeFormatFails() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeFormatFails() throws Exception {
         when(generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager)).thenThrow(
                 javaModelException);
         toStringGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(true);
     }
 
-    private void verifyCodeAppended(boolean useCommonsLang3) throws JavaModelException, PartInitException {
+    private void verifyCodeAppended(boolean useCommonsLang3) throws Exception {
         verify(compilationUnit, times(1)).createImport(
                 CommonsLangMethodContentLibraries.getToStringBuilderLibrary(useCommonsLang3), null, null);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, createdMethod1);

@@ -65,7 +65,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeDefault() throws PartInitException, JavaModelException {
+    public void verifyGeneratedCodeDefault() throws Exception {
         compareToGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
@@ -93,8 +93,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
      */
     @Ignore
     @Test
-    public void verifyGeneratedCodeIsImplementedInSupertypeDisableAppendSuper() throws PartInitException,
-            JavaModelException {
+    public void verifyGeneratedCodeIsImplementedInSupertypeDisableAppendSuper() throws Exception {
         when(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable")).thenReturn(false);
         // when(
         // dialogProvider.getDialog(parentShell, objectClass, Collections.<IMethod> emptySet(), fields, true,
@@ -108,8 +107,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
      */
     @Ignore
     @Test
-    public void verifyGeneratedCodeIsOverridenInSuperclassDisableAppendSuper() throws PartInitException,
-            JavaModelException {
+    public void verifyGeneratedCodeIsOverridenInSuperclassDisableAppendSuper() throws Exception {
         mockIsOverriddenInSuperclass(true);
         // when(
         // dialogProvider.getDialog(parentShell, objectClass, Collections.<IMethod> emptySet(), fields, true,
@@ -129,8 +127,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeWithAddGenericInterface() throws PartInitException, JavaModelException,
-            MalformedTreeException, InvalidInputException {
+    public void verifyGeneratedCodeWithAddGenericInterface() throws Exception {
         when(javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable")).thenReturn(false);
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).thenReturn(true);
         when(generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)).thenReturn(true);
@@ -141,8 +138,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeWithAddNonGenericInterface() throws PartInitException, JavaModelException,
-            MalformedTreeException, InvalidInputException {
+    public void verifyGeneratedCodeWithAddNonGenericInterface() throws Exception {
         when(javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable")).thenReturn(false);
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).thenReturn(false);
         when(generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)).thenReturn(true);
@@ -155,7 +151,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
      * XXX same except the generator
      */
     @Test
-    public void verifyGeneratedCodeWithCommonsLang3() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithCommonsLang3() throws Exception {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).thenReturn(true);
         compareToGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(true);
@@ -165,7 +161,7 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
      * XXX same except the generator
      */
     @Test
-    public void verifyGeneratedCodeWithComment() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithComment() throws Exception {
         when(data.getGenerateComment()).thenReturn(true);
         compareToGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
@@ -175,13 +171,13 @@ public class CompareToGeneratorTest extends AbstractGeneratorTest {
      * XXX same except the generator
      */
     @Test
-    public void verifyGeneratedCodeWithAppendSuper() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithAppendSuper() throws Exception {
         when(data.getAppendSuper()).thenReturn(true);
         compareToGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
 
-    private void verifyCodeAppended(boolean useCommonsLang3) throws JavaModelException, PartInitException {
+    private void verifyCodeAppended(boolean useCommonsLang3) throws Exception {
         verify(compilationUnit, times(1)).createImport(
                 CommonsLangMethodContentLibraries.getCompareToBuilderLibrary(useCommonsLang3), null, null);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, createdMethod1);

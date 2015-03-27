@@ -2,12 +2,10 @@ package org.jenerate.internal.lang.generators;
 
 import java.util.Collections;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.window.Window;
-import org.eclipse.ui.PartInitException;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
@@ -76,7 +74,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeDefault() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeDefault() throws Exception {
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
@@ -112,7 +110,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeWithCachedToString() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithCachedToString() throws Exception {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).thenReturn(Boolean.TRUE);
         when(generatorsCommonMethodsDelegate.areAllFinalFields(fields)).thenReturn(true);
 
@@ -128,16 +126,14 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeDisableAppendSuperCauseDirectSubclassOfObject() throws RuntimeException,
-            CoreException {
+    public void verifyGeneratedCodeDisableAppendSuperCauseDirectSubclassOfObject() throws Exception {
         when(objectClass.getSuperclassName()).thenReturn("Object");
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
 
     @Test
-    public void verifyGeneratedCodeDisableAppendSuperCauseDirectSubclassOfJavaLangObject() throws RuntimeException,
-            CoreException {
+    public void verifyGeneratedCodeDisableAppendSuperCauseDirectSubclassOfJavaLangObject() throws Exception {
         when(objectClass.getSuperclassName()).thenReturn("java.lang.Object");
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
@@ -147,7 +143,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
      * XXX Move test to dialog provider
      */
     @Test
-    public void verifyGeneratedCodeEnableAppendSuper() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeEnableAppendSuper() throws Exception {
         when(objectClass.getSuperclassName()).thenReturn("SomeOtherObject");
         // when(
         // dialogProvider.getDialog(parentShell, objectClass, Collections.<IMethod> emptySet(), fields, false,
@@ -157,8 +153,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeDisableAppendSuperBecauseHashCodeNotOverriden() throws RuntimeException,
-            CoreException {
+    public void verifyGeneratedCodeDisableAppendSuperBecauseHashCodeNotOverriden() throws Exception {
         when(objectClass.getSuperclassName()).thenReturn("SomeOtherObject");
         when(
                 generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "hashCode", new String[0],
@@ -168,7 +163,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeDisableAppendSuperBecauseEqualsNotOverriden() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeDisableAppendSuperBecauseEqualsNotOverriden() throws Exception {
         when(objectClass.getSuperclassName()).thenReturn("SomeOtherObject");
         when(
                 generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "equals",
@@ -181,7 +176,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
      * XXX same except the generator
      */
     @Test
-    public void verifyGeneratedCodeWithOverrideAnnotation() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithOverrideAnnotation() throws Exception {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).thenReturn(true);
         when(generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)).thenReturn(true);
 
@@ -190,7 +185,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void verifyGeneratedCodeCacheHashCode() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeCacheHashCode() throws Exception {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).thenReturn(Boolean.TRUE);
         when(generatorsCommonMethodsDelegate.areAllFinalFields(fields)).thenReturn(true);
         when(hashCodeCachingField.exists()).thenReturn(true);
@@ -205,7 +200,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
      * XXX same except the generator
      */
     @Test
-    public void verifyGeneratedCodeWithCommonsLang3() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithCommonsLang3() throws Exception {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).thenReturn(true);
 
         equalsHashCodeGenerator.generate(parentShell, objectClass);
@@ -216,7 +211,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
      * XXX same except the generator
      */
     @Test
-    public void verifyGeneratedCodeWithComment() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithComment() throws Exception {
         when(data.getGenerateComment()).thenReturn(true);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
@@ -226,7 +221,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
      * XXX same except the generator
      */
     @Test
-    public void verifyGeneratedCodeWithAppendSuper() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithAppendSuper() throws Exception {
         when(data.getAppendSuper()).thenReturn(true);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
@@ -236,21 +231,21 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
      * XXX same except the generator
      */
     @Test
-    public void verifyGeneratedCodeWithGettersInsteadOfFields() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithGettersInsteadOfFields() throws Exception {
         when(data.getUseGettersInsteadOfFields()).thenReturn(true);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
 
     @Test
-    public void verifyGeneratedCodeWithCompareReferences() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithCompareReferences() throws Exception {
         when(data.getCompareReferences()).thenReturn(true);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
     }
 
     @Test
-    public void verifyGeneratedCodeWithUseBlockInIfStatements() throws RuntimeException, CoreException {
+    public void verifyGeneratedCodeWithUseBlockInIfStatements() throws Exception {
         when(data.getUseBlockInIfStatements()).thenReturn(true);
         equalsHashCodeGenerator.generate(parentShell, objectClass);
         verifyCodeAppended(false);
@@ -261,7 +256,7 @@ public class EqualsHashCodeGeneratorTest extends AbstractGeneratorTest {
         when(objectClass.createMethod(FORMATTED_CODE_2, createdMethod1, true, null)).thenReturn(createdMethod2);
     }
 
-    private void verifyCodeAppended(boolean useCommonsLang3) throws JavaModelException, PartInitException {
+    private void verifyCodeAppended(boolean useCommonsLang3) throws Exception {
         verify(compilationUnit, times(1)).createImport(
                 CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(useCommonsLang3), null, null);
         verify(compilationUnit, times(1)).createImport(

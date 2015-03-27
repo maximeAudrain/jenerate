@@ -92,7 +92,7 @@ public abstract class AbstractGeneratorTest {
         when(generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)).thenReturn(false);
     }
 
-    private void mockJeneratePluginCodeFormatter() throws JavaModelException, BadLocationException {
+    private void mockJeneratePluginCodeFormatter() throws Exception {
         when(jeneratePluginCodeFormatter.formatCode(any(IType.class), anyString())).thenReturn(FORMATTED_CODE_1,
                 FORMATTED_CODE_2);
     }
