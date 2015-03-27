@@ -8,7 +8,6 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
@@ -82,7 +81,6 @@ public abstract class AbstractGeneratorTest {
         when(field1.getTypeSignature()).thenReturn(Signature.SIG_BOOLEAN);
         fields = new IField[] { field1, field2 };
         when(objectClass.getFields()).thenReturn(fields);
-
         when(objectClass.getCompilationUnit()).thenReturn(compilationUnit);
     }
 
