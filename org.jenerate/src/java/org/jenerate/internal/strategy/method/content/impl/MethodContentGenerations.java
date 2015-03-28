@@ -15,12 +15,6 @@ public final class MethodContentGenerations {
         /* Only static helper methods */
     }
 
-    /**
-     * @param field
-     * @param useGettersInsteadOfFields
-     * @return
-     * @throws JavaModelException
-     */
     public static String generateFieldAccessor(final IField field, final boolean useGettersInsteadOfFields)
             throws JavaModelException {
         if (useGettersInsteadOfFields) {

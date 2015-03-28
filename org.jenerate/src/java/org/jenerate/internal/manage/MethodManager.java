@@ -16,7 +16,7 @@ import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 public interface MethodManager {
 
     /**
-     * Get all {@link Method}s for the provided argument
+     * Get all {@link Method}s for the provided argument. XXX see if that can be done better: SortedSet, etc...
      * 
      * @param userActionIdentifier the unique identifier of a user action
      * @return the {@link LinkedHashSet} of {@link Method}s for the provided argument, or an empty set if no {@link Method}s

@@ -1,5 +1,6 @@
 package org.jenerate.internal.strategy.method.skeleton;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IType;
@@ -16,7 +17,10 @@ public interface MethodSkeleton<T extends MethodGenerationData> {
 
     String getMethod(IType objectClass, T data, String methodContent) throws Exception;
 
-    Set<String> getLibrariesToImport();
+    /**
+     * XXX see if that can be done better: SortedSet, etc...
+     */
+    LinkedHashSet<String> getLibrariesToImport();
 
     UserActionIdentifier getUserActionIdentifier();
 

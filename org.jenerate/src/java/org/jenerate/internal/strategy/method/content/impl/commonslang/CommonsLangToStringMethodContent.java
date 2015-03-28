@@ -1,7 +1,6 @@
 package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -16,7 +15,8 @@ import org.jenerate.internal.strategy.method.content.impl.MethodContentGeneratio
 import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleton;
 import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
-public class CommonsLangToStringMethodContent extends AbstractMethodContent<ToStringMethodSkeleton, ToStringGenerationData> {
+public class CommonsLangToStringMethodContent extends
+        AbstractMethodContent<ToStringMethodSkeleton, ToStringGenerationData> {
 
     public CommonsLangToStringMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
             PreferencesManager preferencesManager, GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
@@ -47,26 +47,26 @@ public class CommonsLangToStringMethodContent extends AbstractMethodContent<ToSt
     }
 
     @Override
-    public Set<String> getLibrariesToImport(ToStringGenerationData data) {
+    public LinkedHashSet<String> getLibrariesToImport(ToStringGenerationData data) {
         boolean useCommonsLang3 = false;
         if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
             useCommonsLang3 = true;
         }
-        Set<String> libraries = new HashSet<String>();
+        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
         String toStringBuilderLibrary = CommonsLangMethodContentLibraries.getToStringBuilderLibrary(useCommonsLang3);
-        libraries.add(toStringBuilderLibrary);
+        linkedHashSet.add(toStringBuilderLibrary);
         if (!CommonsLangToStringStyle.NO_STYLE.equals(data.getToStringStyle())) {
             String styleLibrary = CommonsLangToStringStyle.getToStringStyleLibrary(useCommonsLang3);
-            libraries.add(styleLibrary);
+            linkedHashSet.add(styleLibrary);
         }
-        return libraries;
+        return linkedHashSet;
     }
 
     @Override
     public Class<ToStringMethodSkeleton> getRelatedMethodSkeletonClass() {
         return ToStringMethodSkeleton.class;
     }
-    
+
     private String createToStringMethodContent(ToStringGenerationData data, String cachingField)
             throws JavaModelException {
         StringBuffer content = new StringBuffer();
@@ -104,7 +104,8 @@ public class CommonsLangToStringMethodContent extends AbstractMethodContent<ToSt
             content.append(".append(\"");
             content.append(checkedFields[i].getElementName());
             content.append("\", ");
-            content.append(MethodContentGenerations.generateFieldAccessor(checkedFields[i], data.getUseGettersInsteadOfFields()));
+            content.append(MethodContentGenerations.generateFieldAccessor(checkedFields[i],
+                    data.getUseGettersInsteadOfFields()));
             content.append(")");
         }
         content.append(".toString();\n");

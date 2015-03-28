@@ -1,7 +1,6 @@
 package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
@@ -28,12 +27,14 @@ public class CommonsLangEqualsMethodContent extends
     }
 
     @Override
-    public Set<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
+    public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
+        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
         boolean useCommonsLang3 = false;
         if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
             useCommonsLang3 = true;
         }
-        return Collections.singleton(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(useCommonsLang3));
+        linkedHashSet.add(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(useCommonsLang3));
+        return linkedHashSet;
     }
 
     @Override

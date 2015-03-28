@@ -1,7 +1,6 @@
 package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -16,7 +15,8 @@ import org.jenerate.internal.strategy.method.content.impl.MethodContentGeneratio
 import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleton;
 import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
-public class CommonsLangHashCodeMethodContent extends AbstractMethodContent<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
+public class CommonsLangHashCodeMethodContent extends
+        AbstractMethodContent<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
 
     public CommonsLangHashCodeMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
             PreferencesManager preferencesManager, GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
@@ -35,12 +35,12 @@ public class CommonsLangHashCodeMethodContent extends AbstractMethodContent<Hash
                     .getCurrentPreferenceValue(JeneratePreference.HASHCODE_CACHING_FIELD);
         }
 
-        IJavaElement currentPosition = data.getElementPosition();
         IField field = objectClass.getField(cachingField);
         if (field.exists()) {
             field.delete(true, null);
         }
         if (isCacheable) {
+            IJavaElement currentPosition = data.getElementPosition();
             String fieldSrc = "private transient int " + cachingField + ";\n\n";
             objectClass.createField(fieldSrc, currentPosition, true, null);
         }
@@ -49,19 +49,21 @@ public class CommonsLangHashCodeMethodContent extends AbstractMethodContent<Hash
     }
 
     @Override
-    public Set<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
+    public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
+        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
         boolean useCommonsLang3 = false;
         if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
             useCommonsLang3 = true;
         }
-        return Collections.singleton(CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(useCommonsLang3));
+        linkedHashSet.add(CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(useCommonsLang3));
+        return linkedHashSet;
     }
 
     @Override
     public Class<HashCodeMethodSkeleton> getRelatedMethodSkeletonClass() {
         return HashCodeMethodSkeleton.class;
     }
-    
+
     private String createHashCodeMethodContent(EqualsHashCodeGenerationData data, String cachingField)
             throws JavaModelException {
         StringBuffer content = new StringBuffer();
@@ -91,7 +93,8 @@ public class CommonsLangHashCodeMethodContent extends AbstractMethodContent<Hash
         IField[] checkedFields = data.getCheckedFields();
         for (int i = 0; i < checkedFields.length; i++) {
             content.append(".append(");
-            content.append(MethodContentGenerations.generateFieldAccessor(checkedFields[i], data.getUseGettersInsteadOfFields()));
+            content.append(MethodContentGenerations.generateFieldAccessor(checkedFields[i],
+                    data.getUseGettersInsteadOfFields()));
             content.append(")");
         }
         content.append(".toHashCode();\n");

@@ -1,6 +1,7 @@
 package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.Signature;
 import org.jenerate.internal.domain.data.MethodGenerationData;
@@ -36,6 +37,8 @@ public abstract class AbstractMethodContentTest<T extends MethodContent<U, V>, U
 
     @Mock
     protected IType objectClass;
+    @Mock
+    protected IJavaElement elementPosition;
 
     @Mock
     private IField field1;
@@ -46,6 +49,7 @@ public abstract class AbstractMethodContentTest<T extends MethodContent<U, V>, U
 
     protected T methodContent;
     protected V data;
+
 
     @Before
     public void setUp() throws Exception {
@@ -62,6 +66,9 @@ public abstract class AbstractMethodContentTest<T extends MethodContent<U, V>, U
         when(data.getGenerateComment()).thenReturn(false);
         when(data.getCheckedFields()).thenReturn(fields);
         when(data.getAppendSuper()).thenReturn(false);
+        when(data.getUseBlockInIfStatements()).thenReturn(false);
+        when(data.getElementPosition()).thenReturn(elementPosition);
+        when(data.getUseGettersInsteadOfFields()).thenReturn(false);
     }
 
     private void mockFields() throws Exception {

@@ -223,11 +223,11 @@ public class MethodGeneratorImplTest {
     private void mockMethod1() throws Exception {
         when(method1Skeleton.getMethodName()).thenReturn(METHOD_1);
         when(method1Skeleton.getMethodArguments(objectClass)).thenReturn(METHOD_1_ARGUMENTS);
-        when(method1Skeleton.getLibrariesToImport()).thenReturn(Collections.<String> emptySet());
+        when(method1Skeleton.getLibrariesToImport()).thenReturn(new LinkedHashSet<String>());
         when(method1Skeleton.getMethod(objectClass, data, METHOD1_CONTENT)).thenReturn(METHOD1_FULL_METHOD);
         when(method1.getMethodSkeleton()).thenReturn(method1Skeleton);
 
-        when(method1Content.getLibrariesToImport(data)).thenReturn(Collections.<String> emptySet());
+        when(method1Content.getLibrariesToImport(data)).thenReturn(new LinkedHashSet<String>());
         when(method1Content.getMethodContent(objectClass, data)).thenReturn(METHOD1_CONTENT);
         when(method1.getMethodContent()).thenReturn(method1Content);
     }
@@ -235,11 +235,15 @@ public class MethodGeneratorImplTest {
     private void mockMethod2() throws Exception {
         when(method2Skeleton.getMethodName()).thenReturn(METHOD_2);
         when(method2Skeleton.getMethodArguments(objectClass)).thenReturn(METHOD_2_ARGUMENTS);
-        when(method2Skeleton.getLibrariesToImport()).thenReturn(Collections.singleton(METHOD2_LIBRARY_1));
+        LinkedHashSet<String> skeletonLibraries = new LinkedHashSet<String>();
+        skeletonLibraries.add(METHOD2_LIBRARY_1);
+        when(method2Skeleton.getLibrariesToImport()).thenReturn(skeletonLibraries);
         when(method2Skeleton.getMethod(objectClass, data, METHOD2_CONTENT)).thenReturn(METHOD2_FULL_METHOD);
         when(method2.getMethodSkeleton()).thenReturn(method2Skeleton);
 
-        when(method2Content.getLibrariesToImport(data)).thenReturn(Collections.singleton(METHOD2_LIBRARY_2));
+        LinkedHashSet<String> contentLibraries = new LinkedHashSet<String>();
+        contentLibraries.add(METHOD2_LIBRARY_2);
+        when(method2Content.getLibrariesToImport(data)).thenReturn(contentLibraries);
         when(method2Content.getMethodContent(objectClass, data)).thenReturn(METHOD2_CONTENT);
         when(method2.getMethodContent()).thenReturn(method2Content);
     }

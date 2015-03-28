@@ -1,7 +1,6 @@
 package org.jenerate.internal.strategy.method.skeleton.impl;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.MethodGenerationData;
@@ -28,11 +27,11 @@ public abstract class AbstractMethodSkeleton<T extends MethodGenerationData> imp
     }
 
     /**
-     * XXX see if this is needed
+     * XXX see if libraries for skeletons are needed.
      */
     @Override
-    public final Set<String> getLibrariesToImport() {
-        return Collections.emptySet();
+    public final LinkedHashSet<String> getLibrariesToImport() {
+        return new LinkedHashSet<String>();
     }
 
 }

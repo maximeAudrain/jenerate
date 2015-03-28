@@ -1,6 +1,6 @@
 package org.jenerate.internal.strategy.method.content;
 
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.MethodGenerationData;
@@ -15,7 +15,10 @@ public interface MethodContent<T extends MethodSkeleton<U>, U extends MethodGene
 
     String getMethodContent(IType objectClass, U data) throws Exception;
 
-    Set<String> getLibrariesToImport(U data);
+    /**
+     * XXX see if that can be done better: SortedSet, etc...
+     */
+    LinkedHashSet<String> getLibrariesToImport(U data);
 
     Class<T> getRelatedMethodSkeletonClass();
 
