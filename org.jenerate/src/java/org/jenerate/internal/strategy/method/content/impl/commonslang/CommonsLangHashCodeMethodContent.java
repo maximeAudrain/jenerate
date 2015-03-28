@@ -2,9 +2,7 @@ package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
 import java.util.LinkedHashSet;
 
-import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
@@ -25,8 +23,13 @@ public class CommonsLangHashCodeMethodContent extends
 
     @Override
     public String getMethodContent(IType objectClass, EqualsHashCodeGenerationData data) throws JavaModelException {
-        String cachingField = cacheHashCode(objectClass, data);
-        return createHashCodeMethodContent(data, cachingField);
+        boolean cacheProperty = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).booleanValue();
+        String cachingField = (String) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.HASHCODE_CACHING_FIELD);
+        boolean isCacheable = MethodContentGenerations
+                .createField(objectClass, data, cacheProperty, cachingField, int.class);
+        return createHashCodeMethodContent(data, isCacheable, cachingField);
     }
 
     @Override
@@ -45,54 +48,20 @@ public class CommonsLangHashCodeMethodContent extends
         return HashCodeMethodSkeleton.class;
     }
 
-    /**
-     * XXX same as cacheToString in the toString content strategy
-     */
-    private String cacheHashCode(IType objectClass, EqualsHashCodeGenerationData data) throws JavaModelException {
-        boolean cacheHashCode = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).booleanValue();
-        boolean isCacheable = cacheHashCode && areAllFinalFields(data.getCheckedFields());
-        String cachingField = "";
-        if (isCacheable) {
-            cachingField = (String) preferencesManager
-                    .getCurrentPreferenceValue(JeneratePreference.HASHCODE_CACHING_FIELD);
-        }
-
-        IField field = objectClass.getField(cachingField);
-        if (field.exists()) {
-            field.delete(true, null);
-        }
-        if (isCacheable) {
-            IJavaElement currentPosition = data.getElementPosition();
-            String fieldSrc = "private transient int " + cachingField + ";\n\n";
-            objectClass.createField(fieldSrc, currentPosition, true, null);
-        }
-        return cachingField;
-    }
-
-    private boolean areAllFinalFields(IField[] fields) throws JavaModelException {
-        for (int i = 0; i < fields.length; i++) {
-            if (!Flags.isFinal(fields[i].getFlags())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private String createHashCodeMethodContent(EqualsHashCodeGenerationData data, String cachingField)
-            throws JavaModelException {
+    private String createHashCodeMethodContent(EqualsHashCodeGenerationData data, boolean isCacheable,
+            String cachingField) throws JavaModelException {
         StringBuffer content = new StringBuffer();
         String hashCodeBuilderString = createHashCodeBuilderString(data);
 
-        if (cachingField.isEmpty()) {
-            content.append("return ");
-            content.append(hashCodeBuilderString);
-        } else {
+        if (isCacheable) {
             content.append("if (" + cachingField + "== 0) {\n");
             content.append(cachingField + " = ");
             content.append(hashCodeBuilderString);
             content.append("}\n");
             content.append("return " + cachingField + ";\n");
+        } else {
+            content.append("return ");
+            content.append(hashCodeBuilderString);
         }
         return content.toString();
     }
@@ -108,7 +77,7 @@ public class CommonsLangHashCodeMethodContent extends
         IField[] checkedFields = data.getCheckedFields();
         for (int i = 0; i < checkedFields.length; i++) {
             content.append(".append(");
-            content.append(MethodContentGenerations.generateFieldAccessor(checkedFields[i],
+            content.append(MethodContentGenerations.getFieldAccessorString(checkedFields[i],
                     data.getUseGettersInsteadOfFields()));
             content.append(")");
         }

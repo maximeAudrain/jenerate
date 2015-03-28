@@ -69,7 +69,7 @@ public class CommonsLangEqualsMethodContent extends
         IField[] checkedFields = data.getCheckedFields();
         for (int i = 0; i < checkedFields.length; i++) {
             content.append(".append(");
-            String fieldName = MethodContentGenerations.generateFieldAccessor(checkedFields[i],
+            String fieldName = MethodContentGenerations.getFieldAccessorString(checkedFields[i],
                     data.getUseGettersInsteadOfFields());
             content.append(fieldName);
             content.append(", castOther.");
