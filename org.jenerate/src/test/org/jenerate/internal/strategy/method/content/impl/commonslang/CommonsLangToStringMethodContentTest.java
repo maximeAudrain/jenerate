@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
@@ -43,6 +44,7 @@ public class CommonsLangToStringMethodContentTest extends
     public void callbackAfterSetUp() throws Exception {
         when(data.getToStringStyle()).thenReturn(CommonsLangToStringStyle.NO_STYLE);
         mockCacheToString(false);
+        mockFieldsFinal(false);
         when(objectClass.getField(anyString())).thenReturn(cachingField);
         when(cachingField.exists()).thenReturn(false);
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.TOSTRING_CACHING_FIELD)).thenReturn(
@@ -108,21 +110,31 @@ public class CommonsLangToStringMethodContentTest extends
         assertEquals("return new ToStringBuilder(this).append(\"field1\", field1)"
                 + ".append(\"field2\", field2).toString();\n", content);
     }
+    
+    @Test
+    public void testGetMethodWithCachingFieldAllFieldsAreNotFinal() throws Exception {
+        mockCacheToString(true);
+        String content = methodContent.getMethodContent(objectClass, data);
+        assertEquals("return new ToStringBuilder(this).append(\"field1\", field1)"
+                + ".append(\"field2\", field2).toString();\n", content);
+    }
 
     @Test
     public void testGetMethodWithCachingFieldNotAlreadyPresent() throws Exception {
         mockCacheToString(true);
+        mockFieldsFinal(true);
         String content = methodContent.getMethodContent(objectClass, data);
         verify(objectClass, times(1)).createField("private transient String " + TO_STRING_CACHING_FIELD + ";\n\n",
                 elementPosition, true, null);
         assertEquals("if (toString== null) {\ntoString = new ToStringBuilder(this).append(\"field1\", field1)"
                 + ".append(\"field2\", field2).toString();\n}\nreturn toString;\n", content);
     }
-
+    
     @Test
     public void testGetMethodWithCachingFieldAlreadyPresent() throws Exception {
         when(cachingField.exists()).thenReturn(true);
         mockCacheToString(true);
+        mockFieldsFinal(true);
         String content = methodContent.getMethodContent(objectClass, data);
         verify(cachingField, times(1)).delete(true, null);
         verify(objectClass, times(1)).createField("private transient String " + TO_STRING_CACHING_FIELD + ";\n\n",
@@ -157,6 +169,9 @@ public class CommonsLangToStringMethodContentTest extends
 
     private void mockCacheToString(boolean cacheToString) throws Exception {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).thenReturn(cacheToString);
+    }
+
+    private void mockFieldsFinal(boolean cacheToString) throws JavaModelException {
         when(field1.getFlags()).thenReturn(cacheToString ? 16 : 0);
         when(field2.getFlags()).thenReturn(cacheToString ? 16 : 0);
     }

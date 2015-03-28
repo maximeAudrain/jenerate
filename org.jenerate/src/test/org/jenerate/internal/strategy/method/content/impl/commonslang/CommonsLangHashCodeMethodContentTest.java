@@ -3,6 +3,7 @@ package org.jenerate.internal.strategy.method.content.impl.commonslang;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersCustom;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersDefault;
@@ -44,6 +45,7 @@ public class CommonsLangHashCodeMethodContentTest
     @Override
     public void callbackAfterSetUp() throws Exception {
         mockCacheHashCode(false);
+        mockFieldsFinal(false);
         when(data.getInitMultNumbers()).thenReturn(new InitMultNumbersDefault());
         when(objectClass.getField(anyString())).thenReturn(cachingField);
         when(cachingField.exists()).thenReturn(false);
@@ -87,10 +89,18 @@ public class CommonsLangHashCodeMethodContentTest
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("return new HashCodeBuilder().append(field1).append(field2).toHashCode();\n", content);
     }
+    
+    @Test
+    public void testGetMethodContentWithCachingFieldAllFieldsNotFinal() throws Exception {
+        mockCacheHashCode(true);
+        String content = methodContent.getMethodContent(objectClass, data);
+        assertEquals("return new HashCodeBuilder().append(field1).append(field2).toHashCode();\n", content);
+    }
 
     @Test
     public void testGetMethodWithCachingFieldNotAlreadyPresent() throws Exception {
         mockCacheHashCode(true);
+        mockFieldsFinal(true);
         String content = methodContent.getMethodContent(objectClass, data);
         verify(objectClass, times(1)).createField("private transient int " + HASH_CODE_CACHING_FIELD + ";\n\n",
                 elementPosition, true, null);
@@ -102,6 +112,7 @@ public class CommonsLangHashCodeMethodContentTest
     public void testGetMethodWithCachingFieldAlreadyPresent() throws Exception {
         when(cachingField.exists()).thenReturn(true);
         mockCacheHashCode(true);
+        mockFieldsFinal(true);
         String content = methodContent.getMethodContent(objectClass, data);
         verify(cachingField, times(1)).delete(true, null);
         verify(objectClass, times(1)).createField("private transient int " + HASH_CODE_CACHING_FIELD + ";\n\n",
@@ -136,7 +147,10 @@ public class CommonsLangHashCodeMethodContentTest
 
     private void mockCacheHashCode(boolean cacheHashCode) throws Exception {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).thenReturn(cacheHashCode);
-        when(field1.getFlags()).thenReturn(cacheHashCode ? 16 : 0);
-        when(field2.getFlags()).thenReturn(cacheHashCode ? 16 : 0);
+    }
+    
+    private void mockFieldsFinal(boolean cacheToString) throws JavaModelException {
+        when(field1.getFlags()).thenReturn(cacheToString ? 16 : 0);
+        when(field2.getFlags()).thenReturn(cacheToString ? 16 : 0);
     }
 }
