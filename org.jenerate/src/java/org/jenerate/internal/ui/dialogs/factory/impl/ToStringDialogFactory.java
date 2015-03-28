@@ -11,23 +11,25 @@ import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.impl.ToStringDialog;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public class ToStringDialogFactory extends AbstractDialogFactory<ToStringDialog, ToStringGenerationData> {
 
-    public ToStringDialogFactory(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
-        super(preferencesManager, generatorsCommonMethodsDelegate);
+    public ToStringDialogFactory(PreferencesManager preferencesManager) {
+        super(preferencesManager);
     }
 
     @Override
     public ToStringDialog createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods)
             throws Exception {
-        IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
-
+        IField[] fields = getObjectClassFields(objectClass);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
         return new ToStringDialog(parentShell, "Generate ToString Method", objectClass, fields, excludedMethods,
                 disableAppendSuper, preferencesManager);
+    }
+
+    @Override
+    public UserActionIdentifier getUserActionIdentifier() {
+        return UserActionIdentifier.TO_STRING;
     }
 
     private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
@@ -35,11 +37,6 @@ public class ToStringDialogFactory extends AbstractDialogFactory<ToStringDialog,
     }
 
     public boolean isToStringConcreteInSuperclass(final IType objectClass) throws JavaModelException {
-        return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "toString", new String[0], null);
-    }
-
-    @Override
-    public UserActionIdentifier getUserActionIdentifier() {
-        return UserActionIdentifier.TO_STRING;
+        return isOverriddenInSuperclass(objectClass, "toString", new String[0], null);
     }
 }

@@ -11,22 +11,26 @@ import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
-public class EqualsHashCodeDialogFactory extends AbstractDialogFactory<EqualsHashCodeDialog, EqualsHashCodeGenerationData> {
+public class EqualsHashCodeDialogFactory extends
+        AbstractDialogFactory<EqualsHashCodeDialog, EqualsHashCodeGenerationData> {
 
-    public EqualsHashCodeDialogFactory(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
-        super(preferencesManager, generatorsCommonMethodsDelegate);
+    public EqualsHashCodeDialogFactory(PreferencesManager preferencesManager) {
+        super(preferencesManager);
     }
 
     @Override
     public EqualsHashCodeDialog createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods)
             throws Exception {
-        IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
+        IField[] fields = getObjectClassFields(objectClass);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
         return new EqualsHashCodeDialog(parentShell, "Generate Equals and HashCode Methods", objectClass, fields,
                 excludedMethods, disableAppendSuper, preferencesManager);
+    }
+
+    @Override
+    public UserActionIdentifier getUserActionIdentifier() {
+        return UserActionIdentifier.EQUALS_HASH_CODE;
     }
 
     private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
@@ -48,18 +52,10 @@ public class EqualsHashCodeDialogFactory extends AbstractDialogFactory<EqualsHas
     }
 
     public boolean isHashCodeOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
-        return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "hashCode", new String[0],
-                "java.lang.Object");
+        return isOverriddenInSuperclass(objectClass, "hashCode", new String[0], "java.lang.Object");
     }
 
     public boolean isEqualsOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
-        return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "equals",
-                new String[] { "QObject;" }, "java.lang.Object");
+        return isOverriddenInSuperclass(objectClass, "equals", new String[] { "QObject;" }, "java.lang.Object");
     }
-
-    @Override
-    public UserActionIdentifier getUserActionIdentifier() {
-        return UserActionIdentifier.EQUALS_HASH_CODE;
-    }
-
 }

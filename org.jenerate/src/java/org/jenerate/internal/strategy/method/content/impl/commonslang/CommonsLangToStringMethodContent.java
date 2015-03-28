@@ -25,24 +25,7 @@ public class CommonsLangToStringMethodContent extends
 
     @Override
     public String getMethodContent(IType objectClass, ToStringGenerationData data) throws JavaModelException {
-        boolean cacheToString = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).booleanValue();
-        boolean isCacheable = cacheToString
-                && generatorsCommonMethodsDelegate.areAllFinalFields(data.getCheckedFields());
-        String cachingField = "";
-        if (isCacheable) {
-            cachingField = (String) preferencesManager
-                    .getCurrentPreferenceValue(JeneratePreference.TOSTRING_CACHING_FIELD);
-        }
-        IJavaElement currentPosition = data.getElementPosition();
-        IField field = objectClass.getField(cachingField);
-        if (field.exists()) {
-            field.delete(true, null);
-        }
-        if (isCacheable) {
-            String fieldSrc = "private transient String " + cachingField + ";\n\n";
-            objectClass.createField(fieldSrc, currentPosition, true, null);
-        }
+        String cachingField = cacheToString(objectClass, data);
         return createToStringMethodContent(data, cachingField);
     }
 
@@ -65,6 +48,32 @@ public class CommonsLangToStringMethodContent extends
     @Override
     public Class<ToStringMethodSkeleton> getRelatedMethodSkeletonClass() {
         return ToStringMethodSkeleton.class;
+    }
+    
+    /**
+     * XXX same as cacheHashCode in the hashCode content strategy
+     */
+    private String cacheToString(IType objectClass, ToStringGenerationData data) throws JavaModelException {
+        boolean cacheToString = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).booleanValue();
+        boolean isCacheable = cacheToString
+                && generatorsCommonMethodsDelegate.areAllFinalFields(data.getCheckedFields());
+        String cachingField = "";
+        if (isCacheable) {
+            cachingField = (String) preferencesManager
+                    .getCurrentPreferenceValue(JeneratePreference.TOSTRING_CACHING_FIELD);
+        }
+
+        IField field = objectClass.getField(cachingField);
+        if (field.exists()) {
+            field.delete(true, null);
+        }
+        if (isCacheable) {
+            IJavaElement currentPosition = data.getElementPosition();
+            String fieldSrc = "private transient String " + cachingField + ";\n\n";
+            objectClass.createField(fieldSrc, currentPosition, true, null);
+        }
+        return cachingField;
     }
 
     private String createToStringMethodContent(ToStringGenerationData data, String cachingField)

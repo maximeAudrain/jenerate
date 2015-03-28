@@ -12,7 +12,6 @@ import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class MethodGeneratorManagerImpl implements MethodGeneratorManager {
@@ -22,11 +21,9 @@ public class MethodGeneratorManagerImpl implements MethodGeneratorManager {
     private final DialogFactoryManager dialogProviderManager;
 
     public MethodGeneratorManagerImpl(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender, JavaUiCodeAppender javaUiCodeAppender,
             JavaCodeFormatter jeneratePluginCodeFormatter) {
-        this.dialogProviderManager = new DialogFactoryManagerImpl(preferencesManager, generatorsCommonMethodsDelegate,
-                javaInterfaceCodeAppender);
+        this.dialogProviderManager = new DialogFactoryManagerImpl(preferencesManager, javaInterfaceCodeAppender);
         this.javaUiCodeAppender = javaUiCodeAppender;
         this.jeneratePluginCodeFormatter = jeneratePluginCodeFormatter;
 

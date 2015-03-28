@@ -25,6 +25,30 @@ public class CommonsLangHashCodeMethodContent extends
 
     @Override
     public String getMethodContent(IType objectClass, EqualsHashCodeGenerationData data) throws JavaModelException {
+        String cachingField = cacheHashCode(objectClass, data);
+        return createHashCodeMethodContent(data, cachingField);
+    }
+
+    @Override
+    public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
+        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
+        boolean useCommonsLang3 = false;
+        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
+            useCommonsLang3 = true;
+        }
+        linkedHashSet.add(CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(useCommonsLang3));
+        return linkedHashSet;
+    }
+
+    @Override
+    public Class<HashCodeMethodSkeleton> getRelatedMethodSkeletonClass() {
+        return HashCodeMethodSkeleton.class;
+    }
+
+    /**
+     * XXX same as cacheToString in the toString content strategy
+     */
+    private String cacheHashCode(IType objectClass, EqualsHashCodeGenerationData data) throws JavaModelException {
         boolean cacheHashCode = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).booleanValue();
         boolean isCacheable = cacheHashCode
@@ -44,24 +68,7 @@ public class CommonsLangHashCodeMethodContent extends
             String fieldSrc = "private transient int " + cachingField + ";\n\n";
             objectClass.createField(fieldSrc, currentPosition, true, null);
         }
-
-        return createHashCodeMethodContent(data, cachingField);
-    }
-
-    @Override
-    public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
-        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
-        boolean useCommonsLang3 = false;
-        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
-            useCommonsLang3 = true;
-        }
-        linkedHashSet.add(CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(useCommonsLang3));
-        return linkedHashSet;
-    }
-
-    @Override
-    public Class<HashCodeMethodSkeleton> getRelatedMethodSkeletonClass() {
-        return HashCodeMethodSkeleton.class;
+        return cachingField;
     }
 
     private String createHashCodeMethodContent(EqualsHashCodeGenerationData data, String cachingField)

@@ -65,8 +65,8 @@ public class MethodGeneratorHandler extends AbstractHandler {
     public MethodGeneratorHandler() {
         this.methodManager = new MethodManagerImpl(PREFERENCES_MANAGER, COMMON_METHODS_DELEGATE,
                 JAVA_INTERFACE_CODE_APPENDER);
-        this.generatorManager = new MethodGeneratorManagerImpl(PREFERENCES_MANAGER, COMMON_METHODS_DELEGATE,
-                JAVA_INTERFACE_CODE_APPENDER, JAVA_UI_CODE_APPENDER, CODE_FORMATTER);
+        this.generatorManager = new MethodGeneratorManagerImpl(PREFERENCES_MANAGER, JAVA_INTERFACE_CODE_APPENDER,
+                JAVA_UI_CODE_APPENDER, CODE_FORMATTER);
     }
 
     @Override

@@ -64,6 +64,9 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
         return "Q" + elementName + ";";
     }
 
+    /**
+     * XXX already there in the skeleton, extract at one point
+     */
     private boolean isGenerifyCompareTo(IType objectClass, boolean implementedOrExtendedInSuperType) {
         boolean generifyPreference = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).booleanValue();

@@ -13,7 +13,8 @@ import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkelet
 import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
-public class CommonsLangCompareToMethodContent extends AbstractMethodContent<CompareToMethodSkeleton, CompareToGenerationData> {
+public class CommonsLangCompareToMethodContent extends
+        AbstractMethodContent<CompareToMethodSkeleton, CompareToGenerationData> {
 
     private final JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
@@ -26,13 +27,7 @@ public class CommonsLangCompareToMethodContent extends AbstractMethodContent<Com
 
     @Override
     public String getMethodContent(IType objectClass, CompareToGenerationData data) throws Exception {
-        boolean implementedOrExtendedInSuperType = javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(
-                objectClass, "Comparable");
-        boolean generifyPreference = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).booleanValue();
-        boolean generify = generifyPreference
-                && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)
-                && !implementedOrExtendedInSuperType;
+        boolean generify = isGenerifyCompareTo(objectClass, isComparableImplementedOrExtendedInSupertype(objectClass));
         return createCompareToMethodContent(data, generify, objectClass);
     }
 
@@ -51,7 +46,21 @@ public class CommonsLangCompareToMethodContent extends AbstractMethodContent<Com
     public Class<CompareToMethodSkeleton> getRelatedMethodSkeletonClass() {
         return CompareToMethodSkeleton.class;
     }
-    
+
+    /**
+     * XXX already there in the skeleton, extract at one point
+     */
+    private boolean isGenerifyCompareTo(IType objectClass, boolean implementedOrExtendedInSuperType) {
+        boolean generifyPreference = ((Boolean) preferencesManager
+                .getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).booleanValue();
+        return generifyPreference && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)
+                && !implementedOrExtendedInSuperType;
+    }
+
+    private boolean isComparableImplementedOrExtendedInSupertype(IType objectClass) throws Exception {
+        return javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable");
+    }
+
     private String createCompareToMethodContent(CompareToGenerationData data, boolean generify, IType objectClass) {
         String className = objectClass.getElementName();
         StringBuffer content = new StringBuffer();

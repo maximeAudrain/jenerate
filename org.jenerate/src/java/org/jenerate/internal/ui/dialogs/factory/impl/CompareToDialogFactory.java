@@ -11,7 +11,6 @@ import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.impl.CompareToDialog;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialog, CompareToGenerationData> {
@@ -19,28 +18,18 @@ public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialo
     private JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
     public CompareToDialogFactory(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
-        super(preferencesManager, generatorsCommonMethodsDelegate);
+        super(preferencesManager);
         this.javaInterfaceCodeAppender = javaInterfaceCodeAppender;
     }
 
     @Override
     public CompareToDialog createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods)
             throws Exception {
-        IField[] fields = generatorsCommonMethodsDelegate.getObjectClassFields(objectClass, preferencesManager);
+        IField[] fields = getObjectClassFields(objectClass);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
         return new CompareToDialog(parentShell, "Generate CompareTo Method", objectClass, fields, excludedMethods,
                 disableAppendSuper, preferencesManager);
-    }
-
-    private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
-        return !(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
-    }
-
-    public boolean isCompareToImplementedInSuperclass(final IType objectClass) throws JavaModelException {
-        return generatorsCommonMethodsDelegate.isOverriddenInSuperclass(objectClass, "compareTo",
-                new String[] { "QObject;" }, null);
     }
 
     @Override
@@ -48,4 +37,11 @@ public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialo
         return UserActionIdentifier.COMPARE_TO;
     }
 
+    private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
+        return !(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
+    }
+
+    public boolean isCompareToImplementedInSuperclass(final IType objectClass) throws JavaModelException {
+        return isOverriddenInSuperclass(objectClass, "compareTo", new String[] { "QObject;" }, null);
+    }
 }

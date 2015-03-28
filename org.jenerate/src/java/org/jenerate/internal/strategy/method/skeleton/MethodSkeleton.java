@@ -1,7 +1,6 @@
 package org.jenerate.internal.strategy.method.skeleton;
 
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.eclipse.jdt.core.IType;
 import org.jenerate.UserActionIdentifier;
