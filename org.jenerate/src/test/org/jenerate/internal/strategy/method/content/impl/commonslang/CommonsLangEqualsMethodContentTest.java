@@ -31,7 +31,7 @@ public class CommonsLangEqualsMethodContentTest extends
     public void callbackAfterSetUp() throws Exception {
         when(data.getCompareReferences()).thenReturn(false);
         methodContent = new CommonsLangEqualsMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                preferencesManager, generatorsCommonMethodsDelegate);
+                preferencesManager);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class CommonsLangEqualsMethodContentTest extends
     @Test
     public void testGetLibrariesToImportWithCommonsLang3() {
         methodContent = new CommonsLangEqualsMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
-                preferencesManager, generatorsCommonMethodsDelegate);
+                preferencesManager);
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
         assertEquals(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(true), librariesToImport.iterator()
@@ -107,7 +107,7 @@ public class CommonsLangEqualsMethodContentTest extends
                 + "\n return false;\n}\nTest castOther = (Test) other;\nreturn new EqualsBuilder()"
                 + ".append(field1, castOther.field1).append(field2, castOther.field2).isEquals();\n", content);
     }
-    
+
     @Test
     public void testGetMethodContentWithUseGettersInsteadOfFields() throws Exception {
         when(data.getUseGettersInsteadOfFields()).thenReturn(true);

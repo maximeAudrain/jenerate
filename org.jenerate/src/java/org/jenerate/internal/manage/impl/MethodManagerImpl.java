@@ -14,7 +14,6 @@ import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
 import org.jenerate.internal.strategy.method.impl.MethodImpl;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class MethodManagerImpl implements MethodManager {
@@ -23,14 +22,10 @@ public class MethodManagerImpl implements MethodManager {
     private final MethodSkeletonManager methodSkeletonManager;
     private final MethodContentManager methodContentManager;
 
-    public MethodManagerImpl(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
-            JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
+    public MethodManagerImpl(PreferencesManager preferencesManager, JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
         this.preferencesManager = preferencesManager;
-        this.methodSkeletonManager = new MethodSkeletonManagerImpl(preferencesManager, generatorsCommonMethodsDelegate,
-                javaInterfaceCodeAppender);
-        this.methodContentManager = new MethodContentManagerImpl(preferencesManager, generatorsCommonMethodsDelegate,
-                javaInterfaceCodeAppender);
+        this.methodSkeletonManager = new MethodSkeletonManagerImpl(preferencesManager, javaInterfaceCodeAppender);
+        this.methodContentManager = new MethodContentManagerImpl(preferencesManager, javaInterfaceCodeAppender);
     }
 
     @SuppressWarnings("unchecked")
@@ -44,7 +39,8 @@ public class MethodManagerImpl implements MethodManager {
             methodContentStrategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG3;
         }
 
-        LinkedHashSet<MethodSkeleton<U>> methodSkeletons = methodSkeletonManager.getMethodSkeletons(userActionIdentifier);
+        LinkedHashSet<MethodSkeleton<U>> methodSkeletons = methodSkeletonManager
+                .getMethodSkeletons(userActionIdentifier);
 
         LinkedHashSet<Method<T, U>> methods = new LinkedHashSet<Method<T, U>>();
         for (MethodSkeleton<U> methodSkeleton : methodSkeletons) {

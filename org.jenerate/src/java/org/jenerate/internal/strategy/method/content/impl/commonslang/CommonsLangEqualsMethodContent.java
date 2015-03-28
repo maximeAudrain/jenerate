@@ -11,14 +11,13 @@ import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdenti
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
 import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public class CommonsLangEqualsMethodContent extends
         AbstractMethodContent<EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
 
     public CommonsLangEqualsMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
-            PreferencesManager preferencesManager, GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
-        super(methodContentStrategyIdentifier, preferencesManager, generatorsCommonMethodsDelegate);
+            PreferencesManager preferencesManager) {
+        super(methodContentStrategyIdentifier, preferencesManager);
     }
 
     @Override

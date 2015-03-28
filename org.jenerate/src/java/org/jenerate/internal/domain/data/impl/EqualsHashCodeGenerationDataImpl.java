@@ -3,7 +3,8 @@ package org.jenerate.internal.domain.data.impl;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
 
-public class EqualsHashCodeGenerationDataImpl extends AbstractMethodGenerationData implements EqualsHashCodeGenerationData {
+public class EqualsHashCodeGenerationDataImpl extends AbstractMethodGenerationData implements
+        EqualsHashCodeGenerationData {
 
     private final boolean compareReferences;
     private final IInitMultNumbers initMultNumbers;

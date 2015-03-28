@@ -13,7 +13,6 @@ import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkelet
 import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
 import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleton;
 import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleton;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class MethodSkeletonManagerImpl implements MethodSkeletonManager {
@@ -21,13 +20,11 @@ public class MethodSkeletonManagerImpl implements MethodSkeletonManager {
     private final SortedSet<MethodSkeleton<?>> methodSkeletons = new TreeSet<MethodSkeleton<?>>();
 
     public MethodSkeletonManagerImpl(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
-        methodSkeletons.add(new HashCodeMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate));
-        methodSkeletons.add(new EqualsMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate));
-        methodSkeletons.add(new ToStringMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate));
-        methodSkeletons.add(new CompareToMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate,
-                javaInterfaceCodeAppender));
+        methodSkeletons.add(new HashCodeMethodSkeleton(preferencesManager));
+        methodSkeletons.add(new EqualsMethodSkeleton(preferencesManager));
+        methodSkeletons.add(new ToStringMethodSkeleton(preferencesManager));
+        methodSkeletons.add(new CompareToMethodSkeleton(preferencesManager, javaInterfaceCodeAppender));
     }
 
     @SuppressWarnings("unchecked")

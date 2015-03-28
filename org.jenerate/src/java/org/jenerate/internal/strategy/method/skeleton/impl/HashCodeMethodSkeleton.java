@@ -5,7 +5,6 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.manage.PreferencesManager;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public class HashCodeMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeGenerationData> {
 
@@ -14,9 +13,8 @@ public class HashCodeMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCod
      */
     public static final String HASH_CODE_METHOD_NAME = "hashCode";
 
-    public HashCodeMethodSkeleton(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
-        super(preferencesManager, generatorsCommonMethodsDelegate);
+    public HashCodeMethodSkeleton(PreferencesManager preferencesManager) {
+        super(preferencesManager);
     }
 
     @Override

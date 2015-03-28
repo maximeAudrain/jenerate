@@ -5,8 +5,8 @@ import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.manage.PreferencesManager;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
+import org.jenerate.internal.util.impl.CompilerSourceUtils;
 
 public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGenerationData> {
 
@@ -18,9 +18,8 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
     private final JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
     public CompareToMethodSkeleton(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
-        super(preferencesManager, generatorsCommonMethodsDelegate);
+        super(preferencesManager);
         this.javaInterfaceCodeAppender = javaInterfaceCodeAppender;
     }
 
@@ -70,7 +69,7 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
     private boolean isGenerifyCompareTo(IType objectClass, boolean implementedOrExtendedInSuperType) {
         boolean generifyPreference = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).booleanValue();
-        return generifyPreference && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)
+        return generifyPreference && CompilerSourceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass)
                 && !implementedOrExtendedInSuperType;
     }
 

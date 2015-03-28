@@ -2,14 +2,15 @@ package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.Signature;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -32,24 +33,23 @@ public abstract class AbstractMethodContentTest<T extends MethodContent<U, V>, U
 
     @Mock
     protected PreferencesManager preferencesManager;
-    @Mock
-    protected GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
     @Mock
     protected IType objectClass;
     @Mock
     protected IJavaElement elementPosition;
+    @Mock
+    private IJavaProject project;
 
     @Mock
-    private IField field1;
+    protected IField field1;
     @Mock
-    private IField field2;
+    protected IField field2;
 
     protected IField[] fields = new IField[] { field1, field2 };
 
     protected T methodContent;
     protected V data;
-
 
     @Before
     public void setUp() throws Exception {
@@ -83,8 +83,8 @@ public abstract class AbstractMethodContentTest<T extends MethodContent<U, V>, U
     }
 
     protected void mockIsSourceLevelAbove5(boolean sourceLevelAbove5) {
-        when(generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)).thenReturn(
-                sourceLevelAbove5);
+        when(objectClass.getJavaProject()).thenReturn(project);
+        when(project.getOption(JavaCore.COMPILER_SOURCE, true)).thenReturn(sourceLevelAbove5 ? "1.7" : "1.4");
     }
 
     protected void mockAddOverrideAnnotation(boolean addOverride) throws Exception {

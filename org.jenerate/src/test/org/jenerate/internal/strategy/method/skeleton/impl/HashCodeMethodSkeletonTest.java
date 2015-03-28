@@ -28,7 +28,7 @@ public class HashCodeMethodSkeletonTest extends
 
     @Override
     public HashCodeMethodSkeleton getConcreteClassUnderTest() {
-        return new HashCodeMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate);
+        return new HashCodeMethodSkeleton(preferencesManager);
     }
 
     @Override

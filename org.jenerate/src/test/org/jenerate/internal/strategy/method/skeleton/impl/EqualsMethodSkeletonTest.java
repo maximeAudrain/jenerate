@@ -18,8 +18,9 @@ import static org.mockito.Mockito.when;
  * @author maudrain
  */
 @RunWith(MockitoJUnitRunner.class)
-public class EqualsMethodSkeletonTest extends AbstractMethodSkeletonTest<EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
-    
+public class EqualsMethodSkeletonTest extends
+        AbstractMethodSkeletonTest<EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
+
     @Override
     public void callbackAfterSetUp() throws Exception {
         mockSpecificManagers(false);
@@ -27,14 +28,14 @@ public class EqualsMethodSkeletonTest extends AbstractMethodSkeletonTest<EqualsM
 
     @Override
     public EqualsMethodSkeleton getConcreteClassUnderTest() {
-        return new EqualsMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate);
+        return new EqualsMethodSkeleton(preferencesManager);
     }
-    
+
     @Override
     public EqualsHashCodeGenerationData getConcreteData() {
         return mock(EqualsHashCodeGenerationData.class);
     }
-    
+
     @Test
     public void testLibrariesToImport() {
         assertTrue(methodSkeleton.getLibrariesToImport().isEmpty());

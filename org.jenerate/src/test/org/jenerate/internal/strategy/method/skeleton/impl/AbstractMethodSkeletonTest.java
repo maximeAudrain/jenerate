@@ -1,11 +1,12 @@
 package org.jenerate.internal.strategy.method.skeleton.impl;
 
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -28,11 +29,11 @@ public abstract class AbstractMethodSkeletonTest<T extends MethodSkeleton<U>, U 
 
     @Mock
     protected PreferencesManager preferencesManager;
-    @Mock
-    protected GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate;
 
     @Mock
     protected IType objectClass;
+    @Mock
+    private IJavaProject project;
 
     protected U data;
     protected T methodSkeleton;
@@ -57,8 +58,8 @@ public abstract class AbstractMethodSkeletonTest<T extends MethodSkeleton<U>, U 
     }
 
     protected void mockIsSourceLevelAbove5(boolean sourceLevelAbove5) {
-        when(generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)).thenReturn(
-                sourceLevelAbove5);
+        when(objectClass.getJavaProject()).thenReturn(project);
+        when(project.getOption(JavaCore.COMPILER_SOURCE, true)).thenReturn(sourceLevelAbove5 ? "1.7" : "1.4");
     }
 
     protected void mockAddOverrideAnnotation(boolean addOverride) throws Exception {

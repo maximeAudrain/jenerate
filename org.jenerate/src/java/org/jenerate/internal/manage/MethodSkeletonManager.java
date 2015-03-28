@@ -18,9 +18,10 @@ public interface MethodSkeletonManager {
      * Get all {@link MethodSkeleton}s for the provided parameter. XXX see if that can be done better: SortedSet, etc...
      * 
      * @param userActionIdentifier the unique identifier of a certain user action
-     * @return the {@link LinkedHashSet} of {@link MethodSkeleton} for the given {@link UserActionIdentifier}, or an empty set if not
-     *         {@link MethodSkeleton}s could be found for the provided {@link UserActionIdentifier}.
+     * @return the {@link LinkedHashSet} of {@link MethodSkeleton} for the given {@link UserActionIdentifier}, or an
+     *         empty set if not {@link MethodSkeleton}s could be found for the provided {@link UserActionIdentifier}.
      */
-    <T extends MethodGenerationData> LinkedHashSet<MethodSkeleton<T>> getMethodSkeletons(UserActionIdentifier userActionIdentifier);
+    <T extends MethodGenerationData> LinkedHashSet<MethodSkeleton<T>> getMethodSkeletons(
+            UserActionIdentifier userActionIdentifier);
 
 }

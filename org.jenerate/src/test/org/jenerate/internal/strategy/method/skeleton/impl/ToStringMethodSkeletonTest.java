@@ -28,7 +28,7 @@ public class ToStringMethodSkeletonTest extends
 
     @Override
     public ToStringMethodSkeleton getConcreteClassUnderTest() {
-        return new ToStringMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate);
+        return new ToStringMethodSkeleton(preferencesManager);
     }
 
     @Override

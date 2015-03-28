@@ -2,6 +2,7 @@ package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
 import java.util.LinkedHashSet;
 
+import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
@@ -13,14 +14,13 @@ import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdenti
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
 import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleton;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public class CommonsLangHashCodeMethodContent extends
         AbstractMethodContent<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
 
     public CommonsLangHashCodeMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
-            PreferencesManager preferencesManager, GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
-        super(methodContentStrategyIdentifier, preferencesManager, generatorsCommonMethodsDelegate);
+            PreferencesManager preferencesManager) {
+        super(methodContentStrategyIdentifier, preferencesManager);
     }
 
     @Override
@@ -51,8 +51,7 @@ public class CommonsLangHashCodeMethodContent extends
     private String cacheHashCode(IType objectClass, EqualsHashCodeGenerationData data) throws JavaModelException {
         boolean cacheHashCode = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).booleanValue();
-        boolean isCacheable = cacheHashCode
-                && generatorsCommonMethodsDelegate.areAllFinalFields(data.getCheckedFields());
+        boolean isCacheable = cacheHashCode && areAllFinalFields(data.getCheckedFields());
         String cachingField = "";
         if (isCacheable) {
             cachingField = (String) preferencesManager
@@ -69,6 +68,15 @@ public class CommonsLangHashCodeMethodContent extends
             objectClass.createField(fieldSrc, currentPosition, true, null);
         }
         return cachingField;
+    }
+
+    private boolean areAllFinalFields(IField[] fields) throws JavaModelException {
+        for (int i = 0; i < fields.length; i++) {
+            if (!Flags.isFinal(fields[i].getFlags())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private String createHashCodeMethodContent(EqualsHashCodeGenerationData data, String cachingField)

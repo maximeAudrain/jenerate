@@ -50,7 +50,7 @@ public class CommonsLangHashCodeMethodContentTest
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.HASHCODE_CACHING_FIELD)).thenReturn(
                 HASH_CODE_CACHING_FIELD);
         methodContent = new CommonsLangHashCodeMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                preferencesManager, generatorsCommonMethodsDelegate);
+                preferencesManager);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class CommonsLangHashCodeMethodContentTest
     @Test
     public void testGetLibrariesToImportWithCommonsLang3() {
         methodContent = new CommonsLangHashCodeMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
-                preferencesManager, generatorsCommonMethodsDelegate);
+                preferencesManager);
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
         assertEquals(CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(true), librariesToImport.iterator()
@@ -126,7 +126,7 @@ public class CommonsLangHashCodeMethodContentTest
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("return new HashCodeBuilder(3, 37).append(field1).append(field2).toHashCode();\n", content);
     }
-    
+
     @Test
     public void testGetMethodContentWithUseGettersInsteadOfFields() throws Exception {
         when(data.getUseGettersInsteadOfFields()).thenReturn(true);
@@ -136,6 +136,7 @@ public class CommonsLangHashCodeMethodContentTest
 
     private void mockCacheHashCode(boolean cacheHashCode) throws Exception {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).thenReturn(cacheHashCode);
-        when(generatorsCommonMethodsDelegate.areAllFinalFields(fields)).thenReturn(cacheHashCode);
+        when(field1.getFlags()).thenReturn(cacheHashCode ? 16 : 0);
+        when(field2.getFlags()).thenReturn(cacheHashCode ? 16 : 0);
     }
 }

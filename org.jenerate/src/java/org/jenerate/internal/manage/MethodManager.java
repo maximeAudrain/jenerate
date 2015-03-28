@@ -8,8 +8,8 @@ import org.jenerate.internal.strategy.method.Method;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 
 /**
- * Manager responsible for retrieving a {@link LinkedHashSet} of {@link Method}s given a unique {@link UserActionIdentifier}
- * .
+ * Manager responsible for retrieving a {@link LinkedHashSet} of {@link Method}s given a unique
+ * {@link UserActionIdentifier} .
  * 
  * @author maudrain
  */
@@ -19,8 +19,8 @@ public interface MethodManager {
      * Get all {@link Method}s for the provided argument. XXX see if that can be done better: SortedSet, etc...
      * 
      * @param userActionIdentifier the unique identifier of a user action
-     * @return the {@link LinkedHashSet} of {@link Method}s for the provided argument, or an empty set if no {@link Method}s
-     *         could be found for the provided {@link UserActionIdentifier}
+     * @return the {@link LinkedHashSet} of {@link Method}s for the provided argument, or an empty set if no
+     *         {@link Method}s could be found for the provided {@link UserActionIdentifier}
      */
     <T extends MethodSkeleton<U>, U extends MethodGenerationData> LinkedHashSet<Method<T, U>> getMethods(
             UserActionIdentifier userActionIdentifier);

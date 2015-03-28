@@ -48,7 +48,7 @@ public class CommonsLangToStringMethodContentTest extends
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.TOSTRING_CACHING_FIELD)).thenReturn(
                 TO_STRING_CACHING_FIELD);
         methodContent = new CommonsLangToStringMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                preferencesManager, generatorsCommonMethodsDelegate);
+                preferencesManager);
     }
 
     @Test
@@ -83,7 +83,7 @@ public class CommonsLangToStringMethodContentTest extends
     @Test
     public void testGetLibrariesToImportWithCommonsLang3AndNoStyle() {
         methodContent = new CommonsLangToStringMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
-                preferencesManager, generatorsCommonMethodsDelegate);
+                preferencesManager);
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
         assertEquals(CommonsLangMethodContentLibraries.getToStringBuilderLibrary(true), librariesToImport.iterator()
@@ -94,7 +94,7 @@ public class CommonsLangToStringMethodContentTest extends
     public void testGetLibrariesToImportWithCommonsLang3AndStyle() {
         when(data.getToStringStyle()).thenReturn(CommonsLangToStringStyle.MULTI_LINE_STYLE);
         methodContent = new CommonsLangToStringMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
-                preferencesManager, generatorsCommonMethodsDelegate);
+                preferencesManager);
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(2, librariesToImport.size());
         Iterator<String> iterator = librariesToImport.iterator();
@@ -157,6 +157,7 @@ public class CommonsLangToStringMethodContentTest extends
 
     private void mockCacheToString(boolean cacheToString) throws Exception {
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).thenReturn(cacheToString);
-        when(generatorsCommonMethodsDelegate.areAllFinalFields(fields)).thenReturn(cacheToString);
+        when(field1.getFlags()).thenReturn(cacheToString ? 16 : 0);
+        when(field2.getFlags()).thenReturn(cacheToString ? 16 : 0);
     }
 }

@@ -10,8 +10,8 @@ import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkeleton;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
+import org.jenerate.internal.util.impl.CompilerSourceUtils;
 
 public class CommonsLangCompareToMethodContent extends
         AbstractMethodContent<CompareToMethodSkeleton, CompareToGenerationData> {
@@ -19,9 +19,8 @@ public class CommonsLangCompareToMethodContent extends
     private final JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
     public CommonsLangCompareToMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
-            PreferencesManager preferencesManager, GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
-            JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
-        super(methodContentStrategyIdentifier, preferencesManager, generatorsCommonMethodsDelegate);
+            PreferencesManager preferencesManager, JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
+        super(methodContentStrategyIdentifier, preferencesManager);
         this.javaInterfaceCodeAppender = javaInterfaceCodeAppender;
     }
 
@@ -53,7 +52,7 @@ public class CommonsLangCompareToMethodContent extends
     private boolean isGenerifyCompareTo(IType objectClass, boolean implementedOrExtendedInSuperType) {
         boolean generifyPreference = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).booleanValue();
-        return generifyPreference && generatorsCommonMethodsDelegate.isSourceLevelGreaterThanOrEqualTo5(objectClass)
+        return generifyPreference && CompilerSourceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass)
                 && !implementedOrExtendedInSuperType;
     }
 

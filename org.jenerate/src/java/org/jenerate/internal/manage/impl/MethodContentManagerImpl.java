@@ -13,7 +13,6 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLan
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangHashCodeMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringMethodContent;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 public class MethodContentManagerImpl implements MethodContentManager {
@@ -21,27 +20,26 @@ public class MethodContentManagerImpl implements MethodContentManager {
     private final Set<MethodContent<? extends MethodSkeleton<?>, ? extends MethodGenerationData>> methodContents = new HashSet<>();
 
     public MethodContentManagerImpl(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
         methodContents.add(new CommonsLangEqualsMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                preferencesManager, generatorsCommonMethodsDelegate));
+                preferencesManager));
         methodContents.add(new CommonsLangEqualsMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
-                preferencesManager, generatorsCommonMethodsDelegate));
+                preferencesManager));
 
         methodContents.add(new CommonsLangHashCodeMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                preferencesManager, generatorsCommonMethodsDelegate));
+                preferencesManager));
         methodContents.add(new CommonsLangHashCodeMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
-                preferencesManager, generatorsCommonMethodsDelegate));
+                preferencesManager));
 
         methodContents.add(new CommonsLangToStringMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                preferencesManager, generatorsCommonMethodsDelegate));
+                preferencesManager));
         methodContents.add(new CommonsLangToStringMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
-                preferencesManager, generatorsCommonMethodsDelegate));
+                preferencesManager));
 
         methodContents.add(new CommonsLangCompareToMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                preferencesManager, generatorsCommonMethodsDelegate, javaInterfaceCodeAppender));
+                preferencesManager, javaInterfaceCodeAppender));
         methodContents.add(new CommonsLangCompareToMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
-                preferencesManager, generatorsCommonMethodsDelegate, javaInterfaceCodeAppender));
+                preferencesManager, javaInterfaceCodeAppender));
     }
 
     @SuppressWarnings("unchecked")

@@ -5,7 +5,6 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.manage.PreferencesManager;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public class ToStringMethodSkeleton extends AbstractMethodSkeleton<ToStringGenerationData> {
 
@@ -14,9 +13,8 @@ public class ToStringMethodSkeleton extends AbstractMethodSkeleton<ToStringGener
      */
     public static final String TO_STRING_METHOD_NAME = "toString";
 
-    public ToStringMethodSkeleton(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
-        super(preferencesManager, generatorsCommonMethodsDelegate);
+    public ToStringMethodSkeleton(PreferencesManager preferencesManager) {
+        super(preferencesManager);
     }
 
     @Override

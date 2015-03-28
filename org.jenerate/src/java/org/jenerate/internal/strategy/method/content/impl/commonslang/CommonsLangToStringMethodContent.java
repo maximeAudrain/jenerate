@@ -2,6 +2,7 @@ package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
 import java.util.LinkedHashSet;
 
+import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
@@ -13,14 +14,13 @@ import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdenti
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
 import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleton;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public class CommonsLangToStringMethodContent extends
         AbstractMethodContent<ToStringMethodSkeleton, ToStringGenerationData> {
 
     public CommonsLangToStringMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
-            PreferencesManager preferencesManager, GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
-        super(methodContentStrategyIdentifier, preferencesManager, generatorsCommonMethodsDelegate);
+            PreferencesManager preferencesManager) {
+        super(methodContentStrategyIdentifier, preferencesManager);
     }
 
     @Override
@@ -49,15 +49,14 @@ public class CommonsLangToStringMethodContent extends
     public Class<ToStringMethodSkeleton> getRelatedMethodSkeletonClass() {
         return ToStringMethodSkeleton.class;
     }
-    
+
     /**
      * XXX same as cacheHashCode in the hashCode content strategy
      */
     private String cacheToString(IType objectClass, ToStringGenerationData data) throws JavaModelException {
         boolean cacheToString = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).booleanValue();
-        boolean isCacheable = cacheToString
-                && generatorsCommonMethodsDelegate.areAllFinalFields(data.getCheckedFields());
+        boolean isCacheable = cacheToString && areAllFinalFields(data.getCheckedFields());
         String cachingField = "";
         if (isCacheable) {
             cachingField = (String) preferencesManager
@@ -74,6 +73,16 @@ public class CommonsLangToStringMethodContent extends
             objectClass.createField(fieldSrc, currentPosition, true, null);
         }
         return cachingField;
+    }
+
+    private boolean areAllFinalFields(IField[] fields) throws JavaModelException {
+        for (int i = 0; i < fields.length; i++) {
+            if (!Flags.isFinal(fields[i].getFlags())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private String createToStringMethodContent(ToStringGenerationData data, String cachingField)

@@ -5,7 +5,6 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.manage.PreferencesManager;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 
 public class EqualsMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeGenerationData> {
 
@@ -14,9 +13,8 @@ public class EqualsMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeG
      */
     public static final String EQUALS_METHOD_NAME = "equals";
 
-    public EqualsMethodSkeleton(PreferencesManager preferencesManager,
-            GeneratorsCommonMethodsDelegate generatorsCommonMethodsDelegate) {
-        super(preferencesManager, generatorsCommonMethodsDelegate);
+    public EqualsMethodSkeleton(PreferencesManager preferencesManager) {
+        super(preferencesManager);
     }
 
     @Override

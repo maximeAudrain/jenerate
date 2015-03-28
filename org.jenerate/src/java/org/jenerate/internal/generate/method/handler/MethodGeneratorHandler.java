@@ -38,9 +38,7 @@ import org.jenerate.internal.manage.impl.PreferencesManagerImpl;
 import org.jenerate.internal.strategy.method.Method;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
-import org.jenerate.internal.util.GeneratorsCommonMethodsDelegate;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
-import org.jenerate.internal.util.impl.GeneratorsCommonMethodsDelegateImpl;
 import org.jenerate.internal.util.impl.JavaInterfaceCodeAppenderImpl;
 
 /**
@@ -56,15 +54,13 @@ public class MethodGeneratorHandler extends AbstractHandler {
     private static final JavaUiCodeAppender JAVA_UI_CODE_APPENDER = new JavaUiCodeAppenderImpl();
     private static final PreferencesManager PREFERENCES_MANAGER = new PreferencesManagerImpl();
     private static final JavaCodeFormatter CODE_FORMATTER = new JavaCodeFormatterImpl();
-    private static final GeneratorsCommonMethodsDelegate COMMON_METHODS_DELEGATE = new GeneratorsCommonMethodsDelegateImpl();
     private static final JavaInterfaceCodeAppender JAVA_INTERFACE_CODE_APPENDER = new JavaInterfaceCodeAppenderImpl();
 
     private final MethodManager methodManager;
     private final MethodGeneratorManager generatorManager;
 
     public MethodGeneratorHandler() {
-        this.methodManager = new MethodManagerImpl(PREFERENCES_MANAGER, COMMON_METHODS_DELEGATE,
-                JAVA_INTERFACE_CODE_APPENDER);
+        this.methodManager = new MethodManagerImpl(PREFERENCES_MANAGER, JAVA_INTERFACE_CODE_APPENDER);
         this.generatorManager = new MethodGeneratorManagerImpl(PREFERENCES_MANAGER, JAVA_INTERFACE_CODE_APPENDER,
                 JAVA_UI_CODE_APPENDER, CODE_FORMATTER);
     }

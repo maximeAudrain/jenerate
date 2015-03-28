@@ -37,7 +37,7 @@ public class CommonsLangCompareToMethodContentTest extends
     public void callbackAfterSetUp() throws Exception {
         mockSpecificManagers(false);
         methodContent = new CommonsLangCompareToMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                preferencesManager, generatorsCommonMethodsDelegate, javaInterfaceCodeAppender);
+                preferencesManager, javaInterfaceCodeAppender);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class CommonsLangCompareToMethodContentTest extends
     @Test
     public void testGetLibrariesToImportWithCommonsLang3() {
         methodContent = new CommonsLangCompareToMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
-                preferencesManager, generatorsCommonMethodsDelegate, javaInterfaceCodeAppender);
+                preferencesManager, javaInterfaceCodeAppender);
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
         assertEquals(CommonsLangMethodContentLibraries.getCompareToBuilderLibrary(true), librariesToImport.iterator()

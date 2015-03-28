@@ -36,10 +36,9 @@ public class CompareToMethodSkeletonTest extends
 
     @Override
     public CompareToMethodSkeleton getConcreteClassUnderTest() {
-        return new CompareToMethodSkeleton(preferencesManager, generatorsCommonMethodsDelegate,
-                javaInterfaceCodeAppender);
+        return new CompareToMethodSkeleton(preferencesManager, javaInterfaceCodeAppender);
     }
-    
+
     @Override
     public CompareToGenerationData getConcreteData() {
         return mock(CompareToGenerationData.class);
