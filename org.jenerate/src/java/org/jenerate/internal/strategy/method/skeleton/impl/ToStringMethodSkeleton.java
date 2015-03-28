@@ -2,8 +2,8 @@ package org.jenerate.internal.strategy.method.skeleton.impl;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
+import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 
 public class ToStringMethodSkeleton extends AbstractMethodSkeleton<ToStringGenerationData> {
@@ -25,8 +25,8 @@ public class ToStringMethodSkeleton extends AbstractMethodSkeleton<ToStringGener
     }
 
     @Override
-    public UserActionIdentifier getUserActionIdentifier() {
-        return UserActionIdentifier.TO_STRING;
+    public MethodsGenerationCommandIdentifier getUserActionIdentifier() {
+        return MethodsGenerationCommandIdentifier.TO_STRING;
     }
 
     @Override

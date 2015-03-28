@@ -1,7 +1,7 @@
 package org.jenerate.internal.strategy.method.skeleton.impl;
 
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
+import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.junit.Test;
@@ -51,7 +51,7 @@ public class CompareToMethodSkeletonTest extends
 
     @Test
     public void testGetUserActionIdentifier() {
-        assertEquals(UserActionIdentifier.COMPARE_TO, methodSkeleton.getUserActionIdentifier());
+        assertEquals(MethodsGenerationCommandIdentifier.COMPARE_TO, methodSkeleton.getUserActionIdentifier());
     }
 
     @Test

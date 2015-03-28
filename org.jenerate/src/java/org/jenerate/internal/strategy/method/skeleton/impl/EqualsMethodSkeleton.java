@@ -2,8 +2,8 @@ package org.jenerate.internal.strategy.method.skeleton.impl;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
+import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 
 public class EqualsMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeGenerationData> {
@@ -25,8 +25,8 @@ public class EqualsMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeG
     }
 
     @Override
-    public UserActionIdentifier getUserActionIdentifier() {
-        return UserActionIdentifier.EQUALS_HASH_CODE;
+    public MethodsGenerationCommandIdentifier getUserActionIdentifier() {
+        return MethodsGenerationCommandIdentifier.EQUALS_HASH_CODE;
     }
 
     @Override

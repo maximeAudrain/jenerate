@@ -3,8 +3,8 @@ package org.jenerate.internal.manage.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.manage.DialogFactoryManager;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
@@ -28,13 +28,13 @@ public class DialogFactoryManagerImpl implements DialogFactoryManager {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends FieldDialog<U>, U extends MethodGenerationData> DialogFactory<T, U> getDialogFactory(
-            UserActionIdentifier userActionIdentifier) {
+            CommandIdentifier commandIdentifier) {
         for (DialogFactory<? extends FieldDialog<?>, ? extends MethodGenerationData> dialogProvider : dialogProviders) {
-            if (userActionIdentifier.equals(dialogProvider.getUserActionIdentifier())) {
+            if (commandIdentifier.equals(dialogProvider.getUserActionIdentifier())) {
                 return (DialogFactory<T, U>) dialogProvider;
             }
         }
         throw new IllegalStateException("Unable to retrieve a DialogFactory for the given user action '"
-                + userActionIdentifier + "'");
+                + commandIdentifier + "'");
     }
 }

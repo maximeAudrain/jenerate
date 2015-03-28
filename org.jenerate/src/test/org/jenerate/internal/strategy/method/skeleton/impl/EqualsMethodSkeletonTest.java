@@ -1,7 +1,7 @@
 package org.jenerate.internal.strategy.method.skeleton.impl;
 
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
+import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +43,7 @@ public class EqualsMethodSkeletonTest extends
 
     @Test
     public void testGetUserActionIdentifier() {
-        assertEquals(UserActionIdentifier.EQUALS_HASH_CODE, methodSkeleton.getUserActionIdentifier());
+        assertEquals(MethodsGenerationCommandIdentifier.EQUALS_HASH_CODE, methodSkeleton.getUserActionIdentifier());
     }
 
     @Test

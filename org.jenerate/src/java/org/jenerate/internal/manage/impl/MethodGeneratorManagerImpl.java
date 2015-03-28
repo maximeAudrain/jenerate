@@ -1,7 +1,7 @@
 package org.jenerate.internal.manage.impl;
 
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.generate.method.MethodGenerator;
 import org.jenerate.internal.generate.method.impl.MethodGeneratorImpl;
 import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
@@ -31,9 +31,9 @@ public class MethodGeneratorManagerImpl implements MethodGeneratorManager {
 
     @Override
     public <T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData> MethodGenerator<T, U, V> getMethodGenerator(
-            UserActionIdentifier userActionIdentifier) {
+            CommandIdentifier commandIdentifier) {
         try {
-            DialogFactory<U, V> dialogProvider = dialogProviderManager.getDialogFactory(userActionIdentifier);
+            DialogFactory<U, V> dialogProvider = dialogProviderManager.getDialogFactory(commandIdentifier);
             return new MethodGeneratorImpl<T, U, V>(dialogProvider, javaUiCodeAppender, jeneratePluginCodeFormatter);
         } catch (IllegalStateException exception) {
             throw exception;

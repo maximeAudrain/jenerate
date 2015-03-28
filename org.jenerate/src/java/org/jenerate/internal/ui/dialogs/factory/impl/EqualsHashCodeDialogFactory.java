@@ -7,8 +7,8 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
+import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
 
@@ -29,8 +29,8 @@ public class EqualsHashCodeDialogFactory extends
     }
 
     @Override
-    public UserActionIdentifier getUserActionIdentifier() {
-        return UserActionIdentifier.EQUALS_HASH_CODE;
+    public MethodsGenerationCommandIdentifier getUserActionIdentifier() {
+        return MethodsGenerationCommandIdentifier.EQUALS_HASH_CODE;
     }
 
     private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {

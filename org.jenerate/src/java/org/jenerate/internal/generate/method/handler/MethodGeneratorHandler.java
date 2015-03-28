@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.generate.method.MethodGenerator;
 import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
 import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
@@ -97,7 +97,7 @@ public class MethodGeneratorHandler extends AbstractHandler {
                 MessageDialog.openInformation(parentShell, "Method Generation",
                         "Cursor not in a class, or no class has the same name with the Java file.");
             } else {
-                UserActionIdentifier userActionIdentifier = UserActionIdentifier.getUserActionIdentifierFor(commandId);
+                MethodsGenerationCommandIdentifier userActionIdentifier = MethodsGenerationCommandIdentifier.getUserActionIdentifierFor(commandId);
                 generateCode(parentShell, objectClass, userActionIdentifier);
             }
         } catch (Exception exception) {
@@ -106,7 +106,7 @@ public class MethodGeneratorHandler extends AbstractHandler {
     }
 
     private <T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData> void generateCode(
-            Shell parentShell, IType objectClass, UserActionIdentifier userActionIdentifier) {
+            Shell parentShell, IType objectClass, MethodsGenerationCommandIdentifier userActionIdentifier) {
         LinkedHashSet<Method<T, V>> methods = methodManager.getMethods(userActionIdentifier);
         MethodGenerator<T, U, V> genericGenerator = generatorManager.getMethodGenerator(userActionIdentifier);
         genericGenerator.generate(parentShell, objectClass, methods);

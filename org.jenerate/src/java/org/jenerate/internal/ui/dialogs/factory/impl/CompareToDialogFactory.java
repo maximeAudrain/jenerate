@@ -7,8 +7,8 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
+import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.impl.CompareToDialog;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
@@ -33,8 +33,8 @@ public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialo
     }
 
     @Override
-    public UserActionIdentifier getUserActionIdentifier() {
-        return UserActionIdentifier.COMPARE_TO;
+    public MethodsGenerationCommandIdentifier getUserActionIdentifier() {
+        return MethodsGenerationCommandIdentifier.COMPARE_TO;
     }
 
     private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {

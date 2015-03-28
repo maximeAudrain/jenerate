@@ -2,8 +2,8 @@ package org.jenerate.internal.manage.impl;
 
 import java.util.LinkedHashSet;
 
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.manage.MethodContentManager;
 import org.jenerate.internal.manage.MethodManager;
@@ -31,7 +31,7 @@ public class MethodManagerImpl implements MethodManager {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends MethodSkeleton<U>, U extends MethodGenerationData> LinkedHashSet<Method<T, U>> getMethods(
-            UserActionIdentifier userActionIdentifier) {
+            CommandIdentifier commandIdentifier) {
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
         MethodContentStrategyIdentifier methodContentStrategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG;
@@ -39,8 +39,7 @@ public class MethodManagerImpl implements MethodManager {
             methodContentStrategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG3;
         }
 
-        LinkedHashSet<MethodSkeleton<U>> methodSkeletons = methodSkeletonManager
-                .getMethodSkeletons(userActionIdentifier);
+        LinkedHashSet<MethodSkeleton<U>> methodSkeletons = methodSkeletonManager.getMethodSkeletons(commandIdentifier);
 
         LinkedHashSet<Method<T, U>> methods = new LinkedHashSet<Method<T, U>>();
         for (MethodSkeleton<U> methodSkeleton : methodSkeletons) {

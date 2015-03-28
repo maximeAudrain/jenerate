@@ -3,8 +3,8 @@ package org.jenerate.internal.strategy.method.skeleton;
 import java.util.LinkedHashSet;
 
 import org.eclipse.jdt.core.IType;
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 
 /**
  * Define a method that can be generated. The method skeleton that can be generated depends on the user specific needs
@@ -21,7 +21,7 @@ public interface MethodSkeleton<T extends MethodGenerationData> {
      */
     LinkedHashSet<String> getLibrariesToImport();
 
-    UserActionIdentifier getUserActionIdentifier();
+    MethodsGenerationCommandIdentifier getUserActionIdentifier();
 
     String getMethodName();
 

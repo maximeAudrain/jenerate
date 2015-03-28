@@ -1,12 +1,12 @@
 package org.jenerate.internal.manage;
 
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 
 /**
- * Manager responsible for retrieving a {@link DialogFactory} for a given {@link UserActionIdentifier}
+ * Manager responsible for retrieving a {@link DialogFactory} for a given {@link CommandIdentifier}
  * 
  * @author maudrain
  */
@@ -15,12 +15,11 @@ public interface DialogFactoryManager {
     /**
      * Get the {@link DialogFactory} for the given parameter
      * 
-     * @param userActionIdentifier the unique identifier of a user action
+     * @param commandIdentifier the unique identifier of a command
      * @return the {@link DialogFactory} for the provided parameter
-     * @throws IllegalStateException if no {@link DialogFactory} could be found for a provided
-     *             {@link UserActionIdentifier}
+     * @throws IllegalStateException if no {@link DialogFactory} could be found for a provided {@link CommandIdentifier}
      */
     <T extends FieldDialog<U>, U extends MethodGenerationData> DialogFactory<T, U> getDialogFactory(
-            UserActionIdentifier userActionIdentifier);
+            CommandIdentifier commandIdentifier);
 
 }

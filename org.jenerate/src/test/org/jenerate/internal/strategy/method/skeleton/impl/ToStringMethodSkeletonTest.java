@@ -1,7 +1,7 @@
 package org.jenerate.internal.strategy.method.skeleton.impl;
 
-import org.jenerate.UserActionIdentifier;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
+import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +43,7 @@ public class ToStringMethodSkeletonTest extends
 
     @Test
     public void testGetUserActionIdentifier() {
-        assertEquals(UserActionIdentifier.TO_STRING, methodSkeleton.getUserActionIdentifier());
+        assertEquals(MethodsGenerationCommandIdentifier.TO_STRING, methodSkeleton.getUserActionIdentifier());
     }
 
     @Test
