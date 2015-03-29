@@ -20,7 +20,7 @@ public enum CommonsLangToStringStyle {
     public static final String DOT_STRING = ".";
     private static final String COMMONS_LANG_PREFIX = "org.apache.commons.lang";
     private static final String BUILDER_STRING = ".builder.";
-    private static final String TO_STRING_STYLE = "CommonsLangToStringStyle";
+    private static final String TO_STRING_STYLE = "ToStringStyle";
     private static final String COMMONS_LANG3_ADDON = "3";
     private static final String EMPTY_STRING = "";
 

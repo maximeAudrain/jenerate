@@ -146,7 +146,7 @@ public class CommonsLangToStringMethodContentTest extends
     public void testGetMethodContentWithStyle() throws Exception {
         when(data.getToStringStyle()).thenReturn(CommonsLangToStringStyle.SHORT_PREFIX_STYLE);
         String content = methodContent.getMethodContent(objectClass, data);
-        assertEquals("return new ToStringBuilder(this, CommonsLangToStringStyle.SHORT_PREFIX_STYLE)"
+        assertEquals("return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)"
                 + ".append(\"field1\", field1).append(\"field2\", field2).toString();\n", content);
     }
 

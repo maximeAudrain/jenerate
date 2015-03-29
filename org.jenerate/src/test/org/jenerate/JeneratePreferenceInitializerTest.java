@@ -1,7 +1,6 @@
 package org.jenerate;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.jdt.core.Flags;
 import org.jenerate.internal.domain.preference.PluginPreference;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,10 +46,5 @@ public class JeneratePreferenceInitializerTest {
     public void testPutPreferenceWithUnsupportedPreferenceType() {
         when(pluginPreference.getType()).thenReturn(Integer.class);
         jeneratePreferenceInitializer.putPreference(iEclipsePreferences, pluginPreference);
-    }
-
-    @Test
-    public void testFlags() {
-        System.out.println(Flags.isFinal(0x10));
     }
 }
