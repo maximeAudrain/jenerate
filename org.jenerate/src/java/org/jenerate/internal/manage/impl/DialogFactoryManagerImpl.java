@@ -14,10 +14,21 @@ import org.jenerate.internal.ui.dialogs.factory.impl.EqualsHashCodeDialogFactory
 import org.jenerate.internal.ui.dialogs.factory.impl.ToStringDialogFactory;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
-public class DialogFactoryManagerImpl implements DialogFactoryManager {
+/**
+ * Default implementation of the {@link DialogFactoryManager}.
+ * 
+ * @author maudrain
+ */
+public final class DialogFactoryManagerImpl implements DialogFactoryManager {
 
     private final Set<DialogFactory<? extends FieldDialog<?>, ? extends MethodGenerationData>> dialogProviders = new HashSet<>();
 
+    /**
+     * Caches all the different dialog factories
+     * 
+     * @param preferencesManager the preference manager
+     * @param javaInterfaceCodeAppender the java interface code appender
+     */
     public DialogFactoryManagerImpl(PreferencesManager preferencesManager,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
         dialogProviders.add(new EqualsHashCodeDialogFactory(preferencesManager));
@@ -34,7 +45,7 @@ public class DialogFactoryManagerImpl implements DialogFactoryManager {
                 return (DialogFactory<T, U>) dialogProvider;
             }
         }
-        throw new IllegalStateException("Unable to retrieve a DialogFactory for the given user action '"
+        throw new IllegalStateException("Unable to retrieve a DialogFactory for the given user command '"
                 + commandIdentifier + "'");
     }
 }

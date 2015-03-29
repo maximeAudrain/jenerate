@@ -3,7 +3,7 @@ package org.jenerate.internal.strategy.method.content.impl.commonslang;
 import java.util.Set;
 
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
-import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +37,7 @@ public class CommonsLangEqualsMethodContentTest extends
     @Test
     public void testGetMethodContentStrategyIdentifier() {
         assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                methodContent.getMethodContentStrategyIdentifier());
+                methodContent.getStrategyIdentifier());
     }
 
     @Test

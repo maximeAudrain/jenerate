@@ -13,10 +13,21 @@ import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleto
 import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
-public class MethodSkeletonManagerImpl implements MethodSkeletonManager {
+/**
+ * Default implementation of the {@link MethodSkeletonManager}
+ * 
+ * @author maudrain
+ */
+public final class MethodSkeletonManagerImpl implements MethodSkeletonManager {
 
     private final LinkedHashSet<MethodSkeleton<?>> methodSkeletons = new LinkedHashSet<MethodSkeleton<?>>();
 
+    /**
+     * Caches all the different {@link MethodSkeleton} strategies
+     * 
+     * @param preferencesManager the preference manager
+     * @param javaInterfaceCodeAppender the java interface code appender
+     */
     public MethodSkeletonManagerImpl(PreferencesManager preferencesManager,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
         methodSkeletons.add(new HashCodeMethodSkeleton(preferencesManager));

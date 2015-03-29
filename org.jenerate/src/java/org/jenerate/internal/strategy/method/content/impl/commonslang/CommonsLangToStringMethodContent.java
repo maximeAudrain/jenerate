@@ -6,9 +6,10 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.manage.PreferencesManager;
-import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
 import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleton;
@@ -16,9 +17,9 @@ import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleto
 public class CommonsLangToStringMethodContent extends
         AbstractMethodContent<ToStringMethodSkeleton, ToStringGenerationData> {
 
-    public CommonsLangToStringMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
+    public CommonsLangToStringMethodContent(StrategyIdentifier strategyIdentifier,
             PreferencesManager preferencesManager) {
-        super(methodContentStrategyIdentifier, preferencesManager);
+        super(strategyIdentifier, preferencesManager);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class CommonsLangToStringMethodContent extends
     @Override
     public LinkedHashSet<String> getLibrariesToImport(ToStringGenerationData data) {
         boolean useCommonsLang3 = false;
-        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
+        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(strategyIdentifier)) {
             useCommonsLang3 = true;
         }
         LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();

@@ -7,8 +7,8 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersCustom;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersDefault;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
-import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
 import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleton;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,7 +58,7 @@ public class CommonsLangHashCodeMethodContentTest
     @Test
     public void testGetMethodContentStrategyIdentifier() {
         assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                methodContent.getMethodContentStrategyIdentifier());
+                methodContent.getStrategyIdentifier());
     }
 
     @Test

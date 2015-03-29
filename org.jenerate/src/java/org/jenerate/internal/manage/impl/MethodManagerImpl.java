@@ -4,6 +4,8 @@ import java.util.LinkedHashSet;
 
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.manage.MethodContentManager;
 import org.jenerate.internal.manage.MethodManager;
@@ -11,17 +13,29 @@ import org.jenerate.internal.manage.MethodSkeletonManager;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.Method;
 import org.jenerate.internal.strategy.method.content.MethodContent;
-import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
 import org.jenerate.internal.strategy.method.impl.MethodImpl;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
-public class MethodManagerImpl implements MethodManager {
+/**
+ * Default implementation of the {@link MethodManager}. This manager is holding the logic to determine which
+ * {@link MethodContent} strategy is currently in effect and building up all the {@link Method}s to be used for a certain
+ * {@link CommandIdentifier}
+ * 
+ * @author maudrain
+ */
+public final class MethodManagerImpl implements MethodManager {
 
     private final PreferencesManager preferencesManager;
     private final MethodSkeletonManager methodSkeletonManager;
     private final MethodContentManager methodContentManager;
 
+    /**
+     * Constructor
+     * 
+     * @param preferencesManager the preference manager
+     * @param javaInterfaceCodeAppender the java interface code appender
+     */
     public MethodManagerImpl(PreferencesManager preferencesManager, JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
         this.preferencesManager = preferencesManager;
         this.methodSkeletonManager = new MethodSkeletonManagerImpl(preferencesManager, javaInterfaceCodeAppender);
@@ -34,9 +48,9 @@ public class MethodManagerImpl implements MethodManager {
             CommandIdentifier commandIdentifier) {
         boolean useCommonLang3 = ((Boolean) preferencesManager
                 .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
-        MethodContentStrategyIdentifier methodContentStrategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG;
+        StrategyIdentifier strategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG;
         if (useCommonLang3) {
-            methodContentStrategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG3;
+            strategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG3;
         }
 
         LinkedHashSet<MethodSkeleton<U>> methodSkeletons = methodSkeletonManager.getMethodSkeletons(commandIdentifier);
@@ -44,7 +58,7 @@ public class MethodManagerImpl implements MethodManager {
         LinkedHashSet<Method<T, U>> methods = new LinkedHashSet<Method<T, U>>();
         for (MethodSkeleton<U> methodSkeleton : methodSkeletons) {
             MethodContent<T, U> methodContent = methodContentManager.getMethodContent(methodSkeleton,
-                    methodContentStrategyIdentifier);
+                    strategyIdentifier);
             methods.add(new MethodImpl<T, U>((T) methodSkeleton, methodContent));
         }
         return methods;

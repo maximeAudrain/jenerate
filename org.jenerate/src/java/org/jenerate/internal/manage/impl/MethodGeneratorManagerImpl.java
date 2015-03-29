@@ -14,19 +14,31 @@ import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
-public class MethodGeneratorManagerImpl implements MethodGeneratorManager {
+/**
+ * Default implementation of the {@link MethodGeneratorManager}
+ * 
+ * @author maudrain
+ */
+public final class MethodGeneratorManagerImpl implements MethodGeneratorManager {
 
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final JavaCodeFormatter jeneratePluginCodeFormatter;
     private final DialogFactoryManager dialogProviderManager;
 
+    /**
+     * Contructor
+     * 
+     * @param preferencesManager the preference manager
+     * @param javaInterfaceCodeAppender the java interface code appender
+     * @param javaUiCodeAppender the code appender
+     * @param javaCodeFormatter the code formatter
+     */
     public MethodGeneratorManagerImpl(PreferencesManager preferencesManager,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender, JavaUiCodeAppender javaUiCodeAppender,
-            JavaCodeFormatter jeneratePluginCodeFormatter) {
+            JavaCodeFormatter javaCodeFormatter) {
         this.dialogProviderManager = new DialogFactoryManagerImpl(preferencesManager, javaInterfaceCodeAppender);
         this.javaUiCodeAppender = javaUiCodeAppender;
-        this.jeneratePluginCodeFormatter = jeneratePluginCodeFormatter;
-
+        this.jeneratePluginCodeFormatter = javaCodeFormatter;
     }
 
     @Override

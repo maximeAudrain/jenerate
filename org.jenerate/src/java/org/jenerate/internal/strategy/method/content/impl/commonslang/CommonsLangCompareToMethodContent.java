@@ -5,9 +5,10 @@ import java.util.LinkedHashSet;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
 import org.jenerate.internal.manage.PreferencesManager;
-import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
@@ -18,9 +19,9 @@ public class CommonsLangCompareToMethodContent extends
 
     private final JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
-    public CommonsLangCompareToMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
+    public CommonsLangCompareToMethodContent(StrategyIdentifier strategyIdentifier,
             PreferencesManager preferencesManager, JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
-        super(methodContentStrategyIdentifier, preferencesManager);
+        super(strategyIdentifier, preferencesManager);
         this.javaInterfaceCodeAppender = javaInterfaceCodeAppender;
     }
 
@@ -34,7 +35,7 @@ public class CommonsLangCompareToMethodContent extends
     public LinkedHashSet<String> getLibrariesToImport(CompareToGenerationData data) {
         LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
         boolean useCommonsLang3 = false;
-        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
+        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(strategyIdentifier)) {
             useCommonsLang3 = true;
         }
         linkedHashSet.add(CommonsLangMethodContentLibraries.getCompareToBuilderLibrary(useCommonsLang3));

@@ -6,8 +6,9 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
-import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
 import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
@@ -15,9 +16,8 @@ import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
 public class CommonsLangEqualsMethodContent extends
         AbstractMethodContent<EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
 
-    public CommonsLangEqualsMethodContent(MethodContentStrategyIdentifier methodContentStrategyIdentifier,
-            PreferencesManager preferencesManager) {
-        super(methodContentStrategyIdentifier, preferencesManager);
+    public CommonsLangEqualsMethodContent(StrategyIdentifier strategyIdentifier, PreferencesManager preferencesManager) {
+        super(strategyIdentifier, preferencesManager);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class CommonsLangEqualsMethodContent extends
     public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
         LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
         boolean useCommonsLang3 = false;
-        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(methodContentStrategyIdentifier)) {
+        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(strategyIdentifier)) {
             useCommonsLang3 = true;
         }
         linkedHashSet.add(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(useCommonsLang3));

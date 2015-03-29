@@ -6,8 +6,8 @@ import java.util.Set;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreference;
-import org.jenerate.internal.strategy.method.content.MethodContentStrategyIdentifier;
 import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleton;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,7 +56,7 @@ public class CommonsLangToStringMethodContentTest extends
     @Test
     public void testGetMethodContentStrategyIdentifier() {
         assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                methodContent.getMethodContentStrategyIdentifier());
+                methodContent.getStrategyIdentifier());
     }
 
     @Test

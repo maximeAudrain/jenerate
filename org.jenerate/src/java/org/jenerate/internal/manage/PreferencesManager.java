@@ -1,14 +1,20 @@
 package org.jenerate.internal.manage;
 
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.PluginPreference;
 
 /**
- * TODO : make this guy generic if possible
+ * The preference manager for the plugin. Retrieves the current value of a certain {@link PluginPreference}
  * 
  * @author maudrain
  */
 public interface PreferencesManager {
 
-    Object getCurrentPreferenceValue(JeneratePreference preference);
+    /**
+     * Gets the current value for a specific preference
+     * 
+     * @param preference the preference to get the value from
+     * @return the value for this preference
+     */
+    <T> T getCurrentPreferenceValue(PluginPreference<T> preference);
 
 }

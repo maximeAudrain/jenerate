@@ -4,6 +4,7 @@ import java.util.LinkedHashSet;
 
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 
 /**
@@ -22,5 +23,5 @@ public interface MethodContent<T extends MethodSkeleton<U>, U extends MethodGene
 
     Class<T> getRelatedMethodSkeletonClass();
 
-    MethodContentStrategyIdentifier getMethodContentStrategyIdentifier();
+    StrategyIdentifier getStrategyIdentifier();
 }
