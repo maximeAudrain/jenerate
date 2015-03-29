@@ -12,6 +12,9 @@ import org.jenerate.internal.manage.PreferencesManager;
  */
 public final class PreferencesManagerImpl implements PreferencesManager {
 
+    /**
+     * XXX looks like PrefPage method and PrefInit method.
+     */
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getCurrentPreferenceValue(PluginPreference<T> preference) {

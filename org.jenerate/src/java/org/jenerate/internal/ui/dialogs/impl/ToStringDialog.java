@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.data.impl.ToStringGenerationDataImpl;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringStyle;
 
@@ -52,8 +52,8 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
 
         toStringStyle = settings.get(SETTINGS_STYLE);
         if (toStringStyle == null) {
-            toStringStyle = CommonsLangToStringStyle.NO_STYLE.getFullLibraryString((Boolean) getPreferencesManager()
-                    .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3));
+            toStringStyle = CommonsLangToStringStyle.NO_STYLE.getFullLibraryString(getPreferencesManager()
+                    .getCurrentPreferenceValue(JeneratePreferences.USE_COMMONS_LANG3).booleanValue());
         }
     }
 
@@ -79,8 +79,8 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
         label.setLayoutData(data);
 
         styleCombo = new Combo(composite, SWT.NONE);
-        Boolean useCommonsLang3 = (Boolean) getPreferencesManager().getCurrentPreferenceValue(
-                JeneratePreference.USE_COMMONS_LANG3);
+        boolean useCommonsLang3 = getPreferencesManager().getCurrentPreferenceValue(
+                JeneratePreferences.USE_COMMONS_LANG3).booleanValue();
         List<String> styles = new ArrayList<String>();
         for (CommonsLangToStringStyle style : CommonsLangToStringStyle.values()) {
             if (CommonsLangToStringStyle.NO_STYLE.equals(style)) {

@@ -8,7 +8,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
@@ -17,17 +17,15 @@ import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleto
 public class CommonsLangToStringMethodContent extends
         AbstractMethodContent<ToStringMethodSkeleton, ToStringGenerationData> {
 
-    public CommonsLangToStringMethodContent(StrategyIdentifier strategyIdentifier,
-            PreferencesManager preferencesManager) {
+    public CommonsLangToStringMethodContent(StrategyIdentifier strategyIdentifier, PreferencesManager preferencesManager) {
         super(strategyIdentifier, preferencesManager);
     }
 
     @Override
     public String getMethodContent(IType objectClass, ToStringGenerationData data) throws JavaModelException {
-        boolean cacheProperty = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).booleanValue();
-        String cachingField = (String) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.TOSTRING_CACHING_FIELD);
+        boolean cacheProperty = preferencesManager.getCurrentPreferenceValue(JeneratePreferences.CACHE_TOSTRING)
+                .booleanValue();
+        String cachingField = preferencesManager.getCurrentPreferenceValue(JeneratePreferences.TOSTRING_CACHING_FIELD);
         boolean isCacheable = MethodContentGenerations.createField(objectClass, data, cacheProperty, cachingField,
                 String.class);
         return createToStringMethodContent(data, isCacheable, cachingField);

@@ -7,7 +7,7 @@ import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.Method;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangEqualsMethodContent;
@@ -42,7 +42,7 @@ public class MethodManagerImplTest {
 
     @Before
     public void setUp() {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).thenReturn(
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.USE_COMMONS_LANG3)).thenReturn(
                 Boolean.FALSE);
         methodManager = new MethodManagerImpl(preferencesManager, javaInterfaceCodeAppender);
     }
@@ -66,7 +66,7 @@ public class MethodManagerImplTest {
 
     @Test
     public void testWithEqualsHashCodeCommandIdentifierAndCommansLang3() {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).thenReturn(
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.USE_COMMONS_LANG3)).thenReturn(
                 Boolean.TRUE);
         LinkedHashSet<Method<MethodSkeleton<MethodGenerationData>, MethodGenerationData>> methods = methodManager
                 .getMethods(MethodsGenerationCommandIdentifier.EQUALS_HASH_CODE);

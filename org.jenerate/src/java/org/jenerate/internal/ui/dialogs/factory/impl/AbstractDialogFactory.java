@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
@@ -66,8 +66,8 @@ public abstract class AbstractDialogFactory<T extends FieldDialog<U>, U extends 
     }
 
     protected IField[] getObjectClassFields(IType objectClass) throws JavaModelException {
-        boolean displayFieldsOfSuperClasses = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.DISPLAY_FIELDS_OF_SUPERCLASSES)).booleanValue();
+        boolean displayFieldsOfSuperClasses = preferencesManager.getCurrentPreferenceValue(
+                JeneratePreferences.DISPLAY_FIELDS_OF_SUPERCLASSES).booleanValue();
         if (displayFieldsOfSuperClasses) {
             return getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass);
         }
@@ -76,10 +76,8 @@ public abstract class AbstractDialogFactory<T extends FieldDialog<U>, U extends 
 
     private IField[] getNonStaticNonCacheFields(IType objectClass) throws JavaModelException {
         Set<String> cacheFields = new HashSet<>();
-        cacheFields.add((String) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.HASHCODE_CACHING_FIELD));
-        cacheFields.add((String) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.TOSTRING_CACHING_FIELD));
+        cacheFields.add(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.HASHCODE_CACHING_FIELD));
+        cacheFields.add(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.TOSTRING_CACHING_FIELD));
 
         IField[] fields;
         fields = objectClass.getFields();

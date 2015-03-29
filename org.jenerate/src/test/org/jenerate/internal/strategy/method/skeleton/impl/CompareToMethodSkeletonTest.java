@@ -2,7 +2,7 @@ package org.jenerate.internal.strategy.method.skeleton.impl;
 
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -108,7 +108,7 @@ public class CompareToMethodSkeletonTest extends
 
     private void mockSpecificManagers(boolean generify) throws Exception {
         mockIsSourceLevelAbove5(generify);
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).thenReturn(generify);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.GENERIFY_COMPARETO)).thenReturn(generify);
         when(javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable")).thenReturn(
                 !generify);
     }

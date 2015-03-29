@@ -36,8 +36,7 @@ public class CommonsLangEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentStrategyIdentifier() {
-        assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                methodContent.getStrategyIdentifier());
+        assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG, methodContent.getStrategyIdentifier());
     }
 
     @Test

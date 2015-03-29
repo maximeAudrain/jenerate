@@ -12,8 +12,7 @@ public abstract class AbstractMethodContent<T extends MethodSkeleton<U>, U exten
     protected final StrategyIdentifier strategyIdentifier;
     protected final PreferencesManager preferencesManager;
 
-    public AbstractMethodContent(StrategyIdentifier strategyIdentifier,
-            PreferencesManager preferencesManager) {
+    public AbstractMethodContent(StrategyIdentifier strategyIdentifier, PreferencesManager preferencesManager) {
         this.strategyIdentifier = strategyIdentifier;
         this.preferencesManager = preferencesManager;
     }

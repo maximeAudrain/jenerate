@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.junit.Test;
@@ -42,8 +42,7 @@ public class CommonsLangCompareToMethodContentTest extends
 
     @Test
     public void testGetMethodContentStrategyIdentifier() {
-        assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                methodContent.getStrategyIdentifier());
+        assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG, methodContent.getStrategyIdentifier());
     }
 
     @Test
@@ -95,7 +94,7 @@ public class CommonsLangCompareToMethodContentTest extends
 
     private void mockSpecificManagers(boolean generify) throws Exception {
         mockIsSourceLevelAbove5(generify);
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).thenReturn(generify);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.GENERIFY_COMPARETO)).thenReturn(generify);
         when(javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable")).thenReturn(
                 !generify);
     }

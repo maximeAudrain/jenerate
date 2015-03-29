@@ -1,6 +1,5 @@
 package org.jenerate.internal.domain.identifier;
 
-
 /**
  * Defines an identifier of a command
  * 

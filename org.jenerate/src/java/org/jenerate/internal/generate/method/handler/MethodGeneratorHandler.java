@@ -97,7 +97,8 @@ public class MethodGeneratorHandler extends AbstractHandler {
                 MessageDialog.openInformation(parentShell, "Method Generation",
                         "Cursor not in a class, or no class has the same name with the Java file.");
             } else {
-                MethodsGenerationCommandIdentifier userActionIdentifier = MethodsGenerationCommandIdentifier.getUserActionIdentifierFor(commandId);
+                MethodsGenerationCommandIdentifier userActionIdentifier = MethodsGenerationCommandIdentifier
+                        .getUserActionIdentifierFor(commandId);
                 generateCode(parentShell, objectClass, userActionIdentifier);
             }
         } catch (Exception exception) {

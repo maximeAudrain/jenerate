@@ -6,7 +6,7 @@ import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.MethodContentManager;
 import org.jenerate.internal.manage.MethodManager;
 import org.jenerate.internal.manage.MethodSkeletonManager;
@@ -19,8 +19,8 @@ import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 /**
  * Default implementation of the {@link MethodManager}. This manager is holding the logic to determine which
- * {@link MethodContent} strategy is currently in effect and building up all the {@link Method}s to be used for a certain
- * {@link CommandIdentifier}
+ * {@link MethodContent} strategy is currently in effect and building up all the {@link Method}s to be used for a
+ * certain {@link CommandIdentifier}
  * 
  * @author maudrain
  */
@@ -46,8 +46,8 @@ public final class MethodManagerImpl implements MethodManager {
     @Override
     public <T extends MethodSkeleton<U>, U extends MethodGenerationData> LinkedHashSet<Method<T, U>> getMethods(
             CommandIdentifier commandIdentifier) {
-        boolean useCommonLang3 = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.USE_COMMONS_LANG3)).booleanValue();
+        boolean useCommonLang3 = preferencesManager.getCurrentPreferenceValue(JeneratePreferences.USE_COMMONS_LANG3)
+                .booleanValue();
         StrategyIdentifier strategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG;
         if (useCommonLang3) {
             strategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG3;

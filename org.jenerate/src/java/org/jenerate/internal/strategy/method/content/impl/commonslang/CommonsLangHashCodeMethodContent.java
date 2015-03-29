@@ -8,7 +8,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
@@ -17,19 +17,17 @@ import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleto
 public class CommonsLangHashCodeMethodContent extends
         AbstractMethodContent<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
 
-    public CommonsLangHashCodeMethodContent(StrategyIdentifier strategyIdentifier,
-            PreferencesManager preferencesManager) {
+    public CommonsLangHashCodeMethodContent(StrategyIdentifier strategyIdentifier, PreferencesManager preferencesManager) {
         super(strategyIdentifier, preferencesManager);
     }
 
     @Override
     public String getMethodContent(IType objectClass, EqualsHashCodeGenerationData data) throws JavaModelException {
-        boolean cacheProperty = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).booleanValue();
-        String cachingField = (String) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.HASHCODE_CACHING_FIELD);
-        boolean isCacheable = MethodContentGenerations
-                .createField(objectClass, data, cacheProperty, cachingField, int.class);
+        boolean cacheProperty = preferencesManager.getCurrentPreferenceValue(JeneratePreferences.CACHE_HASHCODE)
+                .booleanValue();
+        String cachingField = preferencesManager.getCurrentPreferenceValue(JeneratePreferences.HASHCODE_CACHING_FIELD);
+        boolean isCacheable = MethodContentGenerations.createField(objectClass, data, cacheProperty, cachingField,
+                int.class);
         return createHashCodeMethodContent(data, isCacheable, cachingField);
     }
 

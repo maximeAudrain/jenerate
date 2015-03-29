@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.Signature;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
@@ -88,7 +88,7 @@ public abstract class AbstractMethodContentTest<T extends MethodContent<U, V>, U
     }
 
     protected void mockAddOverrideAnnotation(boolean addOverride) throws Exception {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).thenReturn(
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.ADD_OVERRIDE_ANNOTATION)).thenReturn(
                 addOverride);
     }
 

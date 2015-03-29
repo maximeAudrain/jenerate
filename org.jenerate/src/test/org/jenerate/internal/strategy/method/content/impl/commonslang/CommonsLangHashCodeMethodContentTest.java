@@ -8,7 +8,7 @@ import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersCustom;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersDefault;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleton;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +49,7 @@ public class CommonsLangHashCodeMethodContentTest
         when(data.getInitMultNumbers()).thenReturn(new InitMultNumbersDefault());
         when(objectClass.getField(anyString())).thenReturn(cachingField);
         when(cachingField.exists()).thenReturn(false);
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.HASHCODE_CACHING_FIELD)).thenReturn(
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.HASHCODE_CACHING_FIELD)).thenReturn(
                 HASH_CODE_CACHING_FIELD);
         methodContent = new CommonsLangHashCodeMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
                 preferencesManager);
@@ -57,8 +57,7 @@ public class CommonsLangHashCodeMethodContentTest
 
     @Test
     public void testGetMethodContentStrategyIdentifier() {
-        assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                methodContent.getStrategyIdentifier());
+        assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG, methodContent.getStrategyIdentifier());
     }
 
     @Test
@@ -89,7 +88,7 @@ public class CommonsLangHashCodeMethodContentTest
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("return new HashCodeBuilder().append(field1).append(field2).toHashCode();\n", content);
     }
-    
+
     @Test
     public void testGetMethodContentWithCachingFieldAllFieldsNotFinal() throws Exception {
         mockCacheHashCode(true);
@@ -146,9 +145,10 @@ public class CommonsLangHashCodeMethodContentTest
     }
 
     private void mockCacheHashCode(boolean cacheHashCode) throws Exception {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.CACHE_HASHCODE)).thenReturn(cacheHashCode);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.CACHE_HASHCODE))
+                .thenReturn(cacheHashCode);
     }
-    
+
     private void mockFieldsFinal(boolean cacheToString) throws JavaModelException {
         when(field1.getFlags()).thenReturn(cacheToString ? 16 : 0);
         when(field2.getFlags()).thenReturn(cacheToString ? 16 : 0);

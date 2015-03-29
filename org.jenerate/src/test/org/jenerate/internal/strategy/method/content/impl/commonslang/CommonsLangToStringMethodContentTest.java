@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleton;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +47,7 @@ public class CommonsLangToStringMethodContentTest extends
         mockFieldsFinal(false);
         when(objectClass.getField(anyString())).thenReturn(cachingField);
         when(cachingField.exists()).thenReturn(false);
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.TOSTRING_CACHING_FIELD)).thenReturn(
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.TOSTRING_CACHING_FIELD)).thenReturn(
                 TO_STRING_CACHING_FIELD);
         methodContent = new CommonsLangToStringMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
                 preferencesManager);
@@ -55,8 +55,7 @@ public class CommonsLangToStringMethodContentTest extends
 
     @Test
     public void testGetMethodContentStrategyIdentifier() {
-        assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
-                methodContent.getStrategyIdentifier());
+        assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG, methodContent.getStrategyIdentifier());
     }
 
     @Test
@@ -110,7 +109,7 @@ public class CommonsLangToStringMethodContentTest extends
         assertEquals("return new ToStringBuilder(this).append(\"field1\", field1)"
                 + ".append(\"field2\", field2).toString();\n", content);
     }
-    
+
     @Test
     public void testGetMethodWithCachingFieldAllFieldsAreNotFinal() throws Exception {
         mockCacheToString(true);
@@ -129,7 +128,7 @@ public class CommonsLangToStringMethodContentTest extends
         assertEquals("if (toString== null) {\ntoString = new ToStringBuilder(this).append(\"field1\", field1)"
                 + ".append(\"field2\", field2).toString();\n}\nreturn toString;\n", content);
     }
-    
+
     @Test
     public void testGetMethodWithCachingFieldAlreadyPresent() throws Exception {
         when(cachingField.exists()).thenReturn(true);
@@ -168,7 +167,8 @@ public class CommonsLangToStringMethodContentTest extends
     }
 
     private void mockCacheToString(boolean cacheToString) throws Exception {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.CACHE_TOSTRING)).thenReturn(cacheToString);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.CACHE_TOSTRING))
+                .thenReturn(cacheToString);
     }
 
     private void mockFieldsFinal(boolean cacheToString) throws JavaModelException {

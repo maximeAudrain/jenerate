@@ -2,7 +2,7 @@ package org.jenerate.internal.strategy.method.skeleton.impl;
 
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -81,7 +81,7 @@ public class EqualsMethodSkeletonTest extends
 
     private void mockSpecificManagers(boolean addOverride) throws Exception {
         mockIsSourceLevelAbove5(addOverride);
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreference.ADD_OVERRIDE_ANNOTATION)).thenReturn(
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.ADD_OVERRIDE_ANNOTATION)).thenReturn(
                 addOverride);
     }
 

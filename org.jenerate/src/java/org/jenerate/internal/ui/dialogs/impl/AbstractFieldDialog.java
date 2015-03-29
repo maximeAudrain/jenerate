@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 
@@ -468,8 +468,8 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
                 widgetSelected(e);
             }
         });
-        useGettersInsteadOfFields = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.USE_GETTERS_INSTEAD_OF_FIELDS)).booleanValue();
+        useGettersInsteadOfFields = preferencesManager.getCurrentPreferenceValue(
+                JeneratePreferences.USE_GETTERS_INSTEAD_OF_FIELDS).booleanValue();
         gettersButton.setSelection(useGettersInsteadOfFields);
 
         return gettersComposite;
@@ -498,8 +498,8 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
                 widgetSelected(e);
             }
         });
-        useBlockInIfStatements = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.USE_BLOCKS_IN_IF_STATEMENTS)).booleanValue();
+        useBlockInIfStatements = preferencesManager.getCurrentPreferenceValue(
+                JeneratePreferences.USE_BLOCKS_IN_IF_STATEMENTS).booleanValue();
         blocksInIfButton.setSelection(useBlockInIfStatements);
 
         return blocksInIfComposite;

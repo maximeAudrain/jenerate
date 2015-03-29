@@ -3,7 +3,7 @@ package org.jenerate.internal.strategy.method.skeleton.impl;
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.jenerate.internal.util.impl.CompilerSourceUtils;
@@ -67,8 +67,8 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
      * XXX already there in the skeleton, extract at one point
      */
     private boolean isGenerifyCompareTo(IType objectClass, boolean implementedOrExtendedInSuperType) {
-        boolean generifyPreference = ((Boolean) preferencesManager
-                .getCurrentPreferenceValue(JeneratePreference.GENERIFY_COMPARETO)).booleanValue();
+        boolean generifyPreference = preferencesManager.getCurrentPreferenceValue(
+                JeneratePreferences.GENERIFY_COMPARETO).booleanValue();
         return generifyPreference && CompilerSourceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass)
                 && !implementedOrExtendedInSuperType;
     }

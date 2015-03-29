@@ -14,7 +14,8 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.jenerate.JeneratePlugin;
-import org.jenerate.internal.domain.preference.impl.JeneratePreference;
+import org.jenerate.internal.domain.preference.PluginPreference;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 
 /**
  * @author jiayun
@@ -22,7 +23,7 @@ import org.jenerate.internal.domain.preference.impl.JeneratePreference;
  */
 public class JenerateBasePreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-    private final Map<JeneratePreference, FieldEditor> fieldEditors = new HashMap<>();
+    private final Map<PluginPreference<?>, FieldEditor> fieldEditors = new HashMap<>();
 
     public JenerateBasePreferencePage() {
         super(FieldEditorPreferencePage.GRID);
@@ -31,24 +32,31 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
 
     @Override
     protected void createFieldEditors() {
-        for (JeneratePreference jeneratePreference : JeneratePreference.values()) {
-            Class<?> type = jeneratePreference.getType();
-            String key = jeneratePreference.getKey();
-            String description = jeneratePreference.getDescription();
-            FieldEditor fieldEditor = null;
-            if (Boolean.class.isAssignableFrom(type)) {
-                fieldEditor = new BooleanFieldEditor(key, description, getFieldEditorParent());
-            } else if (String.class.isAssignableFrom(type)) {
-                fieldEditor = new StringFieldEditor(key, description, getFieldEditorParent());
-            } else {
-                throw new UnsupportedOperationException("The preference type '" + type + "' is not currently handled. ");
-            }
-            fieldEditors.put(jeneratePreference, fieldEditor);
+        for (PluginPreference<?> pluginPreference : JeneratePreferences.getAllPreferences()) {
+            FieldEditor fieldEditor = createFieldEditor(pluginPreference);
+            fieldEditors.put(pluginPreference, fieldEditor);
             addField(fieldEditor);
         }
 
         // getHashCodeCachingField().setEnabled(getCacheHashCodeField().getBooleanValue(), getFieldEditorParent());
         // getToStringCachingField().setEnabled(getCacheToStringField().getBooleanValue(), getFieldEditorParent());
+    }
+
+    /**
+     * XXX looks like PrefInit method and PrefMngr method.
+     */
+    private FieldEditor createFieldEditor(PluginPreference<?> pluginPreference) {
+        Class<?> type = pluginPreference.getType();
+        String key = pluginPreference.getKey();
+        String description = pluginPreference.getDescription();
+        if (Boolean.class.isAssignableFrom(type)) {
+            return new BooleanFieldEditor(key, description, getFieldEditorParent());
+        } else if (String.class.isAssignableFrom(type)) {
+            return new StringFieldEditor(key, description, getFieldEditorParent());
+        } else {
+            throw new UnsupportedOperationException("The preference type '" + type + "' for plugin preference '"
+                    + pluginPreference + "' is not currently handled. ");
+        }
     }
 
     @Override
@@ -100,18 +108,18 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
     }
 
     private StringFieldEditor getToStringCachingField() {
-        return (StringFieldEditor) fieldEditors.get(JeneratePreference.TOSTRING_CACHING_FIELD);
+        return (StringFieldEditor) fieldEditors.get(JeneratePreferences.TOSTRING_CACHING_FIELD);
     }
 
     private StringFieldEditor getHashCodeCachingField() {
-        return (StringFieldEditor) fieldEditors.get(JeneratePreference.HASHCODE_CACHING_FIELD);
+        return (StringFieldEditor) fieldEditors.get(JeneratePreferences.HASHCODE_CACHING_FIELD);
     }
 
     private BooleanFieldEditor getCacheToStringField() {
-        return (BooleanFieldEditor) fieldEditors.get(JeneratePreference.CACHE_TOSTRING);
+        return (BooleanFieldEditor) fieldEditors.get(JeneratePreferences.CACHE_TOSTRING);
     }
 
     private BooleanFieldEditor getCacheHashCodeField() {
-        return (BooleanFieldEditor) fieldEditors.get(JeneratePreference.CACHE_HASHCODE);
+        return (BooleanFieldEditor) fieldEditors.get(JeneratePreferences.CACHE_HASHCODE);
     }
 }
