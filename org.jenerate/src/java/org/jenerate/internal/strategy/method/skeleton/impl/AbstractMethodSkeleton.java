@@ -23,9 +23,6 @@ public abstract class AbstractMethodSkeleton<T extends MethodGenerationData> imp
         return addOverridePreference && CompilerSourceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass);
     }
 
-    /**
-     * XXX see if libraries for skeletons are needed.
-     */
     @Override
     public final LinkedHashSet<String> getLibrariesToImport() {
         return new LinkedHashSet<String>();

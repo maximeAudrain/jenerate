@@ -42,7 +42,7 @@ public final class MethodSkeletonManagerImpl implements MethodSkeletonManager {
             CommandIdentifier commandIdentifier) {
         LinkedHashSet<MethodSkeleton<T>> toReturn = new LinkedHashSet<MethodSkeleton<T>>();
         for (MethodSkeleton<? extends MethodGenerationData> methodSkeleton : methodSkeletons) {
-            if (commandIdentifier.equals(methodSkeleton.getUserActionIdentifier())) {
+            if (commandIdentifier.equals(methodSkeleton.getCommandIdentifier())) {
                 toReturn.add((MethodSkeleton<T>) methodSkeleton);
             }
         }

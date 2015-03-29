@@ -2,6 +2,11 @@ package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
 import java.util.EnumSet;
 
+/**
+ * Defines the different styles for the commons lang ToStringBuilder
+ * 
+ * @author maudrain
+ */
 public enum CommonsLangToStringStyle {
 
     NO_STYLE,

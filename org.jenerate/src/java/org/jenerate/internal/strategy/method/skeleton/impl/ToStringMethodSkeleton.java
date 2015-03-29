@@ -25,7 +25,7 @@ public class ToStringMethodSkeleton extends AbstractMethodSkeleton<ToStringGener
     }
 
     @Override
-    public MethodsGenerationCommandIdentifier getUserActionIdentifier() {
+    public MethodsGenerationCommandIdentifier getCommandIdentifier() {
         return MethodsGenerationCommandIdentifier.TO_STRING;
     }
 

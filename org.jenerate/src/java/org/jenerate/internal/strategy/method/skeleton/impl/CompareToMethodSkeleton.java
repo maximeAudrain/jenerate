@@ -38,7 +38,7 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
     }
 
     @Override
-    public MethodsGenerationCommandIdentifier getUserActionIdentifier() {
+    public MethodsGenerationCommandIdentifier getCommandIdentifier() {
         return MethodsGenerationCommandIdentifier.COMPARE_TO;
     }
 

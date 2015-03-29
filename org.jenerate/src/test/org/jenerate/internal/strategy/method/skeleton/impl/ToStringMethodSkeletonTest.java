@@ -43,7 +43,7 @@ public class ToStringMethodSkeletonTest extends
 
     @Test
     public void testGetUserActionIdentifier() {
-        assertEquals(MethodsGenerationCommandIdentifier.TO_STRING, methodSkeleton.getUserActionIdentifier());
+        assertEquals(MethodsGenerationCommandIdentifier.TO_STRING, methodSkeleton.getCommandIdentifier());
     }
 
     @Test

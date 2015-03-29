@@ -25,7 +25,7 @@ public class EqualsMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeG
     }
 
     @Override
-    public MethodsGenerationCommandIdentifier getUserActionIdentifier() {
+    public MethodsGenerationCommandIdentifier getCommandIdentifier() {
         return MethodsGenerationCommandIdentifier.EQUALS_HASH_CODE;
     }
 

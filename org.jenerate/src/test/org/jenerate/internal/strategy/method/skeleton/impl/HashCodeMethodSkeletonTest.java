@@ -43,7 +43,7 @@ public class HashCodeMethodSkeletonTest extends
 
     @Test
     public void testGetUserActionIdentifier() {
-        assertEquals(MethodsGenerationCommandIdentifier.EQUALS_HASH_CODE, methodSkeleton.getUserActionIdentifier());
+        assertEquals(MethodsGenerationCommandIdentifier.EQUALS_HASH_CODE, methodSkeleton.getCommandIdentifier());
     }
 
     @Test

@@ -51,7 +51,7 @@ public class CompareToMethodSkeletonTest extends
 
     @Test
     public void testGetUserActionIdentifier() {
-        assertEquals(MethodsGenerationCommandIdentifier.COMPARE_TO, methodSkeleton.getUserActionIdentifier());
+        assertEquals(MethodsGenerationCommandIdentifier.COMPARE_TO, methodSkeleton.getCommandIdentifier());
     }
 
     @Test

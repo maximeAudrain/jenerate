@@ -104,7 +104,7 @@ public class MethodContentManagerImplTest {
         }
 
         @Override
-        public MethodsGenerationCommandIdentifier getUserActionIdentifier() {
+        public MethodsGenerationCommandIdentifier getCommandIdentifier() {
             return null;
         }
 
