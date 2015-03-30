@@ -9,6 +9,12 @@ import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.util.impl.CompilerSourceUtils;
 
+/**
+ * Abstract implementation of the {@link MethodSkeleton}
+ * 
+ * @author maudrain
+ * @param <T> the type of {@link MethodGenerationData} related to this {@link MethodSkeleton}
+ */
 public abstract class AbstractMethodSkeleton<T extends MethodGenerationData> implements MethodSkeleton<T> {
 
     protected final PreferencesManager preferencesManager;

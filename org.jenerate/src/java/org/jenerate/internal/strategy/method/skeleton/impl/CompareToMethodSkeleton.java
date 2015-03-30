@@ -5,9 +5,15 @@ import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.jenerate.internal.util.impl.CompilerSourceUtils;
 
+/**
+ * Specific implementation of the {@link MethodSkeleton} for the compareTo method.
+ * 
+ * @author maudrain
+ */
 public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGenerationData> {
 
     /**

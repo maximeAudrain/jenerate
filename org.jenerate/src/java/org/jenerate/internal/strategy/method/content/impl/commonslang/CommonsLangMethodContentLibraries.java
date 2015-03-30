@@ -2,10 +2,11 @@ package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
+import org.jenerate.internal.strategy.method.content.MethodContent;
 
 /**
- * Helper class to ease the construction of the commons-lang library objects to be used by the generator classes. This
- * class cannot be instantiated since it only holds static constants and static helper methods.
+ * Helper class to ease the construction of the commons-lang library objects to be used by the {@link MethodContent}
+ * strategies. This class cannot be instantiated since it only holds static constants and static helper methods.
  * 
  * @author maudrain
  */

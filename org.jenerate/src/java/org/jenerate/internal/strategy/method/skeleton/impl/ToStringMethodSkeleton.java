@@ -5,7 +5,13 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 
+/**
+ * Specific implementation of the {@link MethodSkeleton} for the toString method.
+ * 
+ * @author maudrain
+ */
 public class ToStringMethodSkeleton extends AbstractMethodSkeleton<ToStringGenerationData> {
 
     /**

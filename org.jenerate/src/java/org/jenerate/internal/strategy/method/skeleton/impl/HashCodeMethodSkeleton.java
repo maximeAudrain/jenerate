@@ -5,7 +5,13 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 
+/**
+ * Specific implementation of the {@link MethodSkeleton} for the hashCode method.
+ * 
+ * @author maudrain
+ */
 public class HashCodeMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeGenerationData> {
 
     /**

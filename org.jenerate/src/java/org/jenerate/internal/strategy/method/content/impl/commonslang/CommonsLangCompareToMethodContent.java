@@ -8,11 +8,17 @@ import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.jenerate.internal.util.impl.CompilerSourceUtils;
 
+/**
+ * Specific implementation of the {@link MethodContent} for {@link CompareToMethodSkeleton} using commons-lang[3].
+ * 
+ * @author maudrain
+ */
 public class CommonsLangCompareToMethodContent extends
         AbstractMethodContent<CompareToMethodSkeleton, CompareToGenerationData> {
 

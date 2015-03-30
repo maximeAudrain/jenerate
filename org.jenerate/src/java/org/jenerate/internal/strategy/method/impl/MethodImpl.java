@@ -5,7 +5,14 @@ import org.jenerate.internal.strategy.method.Method;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 
-public class MethodImpl<T extends MethodSkeleton<U>, U extends MethodGenerationData> implements Method<T, U> {
+/**
+ * Default implementation of the {@link Method} interface
+ * 
+ * @author maudrain
+ * @param <T> the type of {@link MethodSkeleton} this {@link Method} holds
+ * @param <U> the type of {@link MethodGenerationData} for this {@link Method}
+ */
+public final class MethodImpl<T extends MethodSkeleton<U>, U extends MethodGenerationData> implements Method<T, U> {
 
     private final T methodSkeleton;
     private final MethodContent<T, U> methodContent;

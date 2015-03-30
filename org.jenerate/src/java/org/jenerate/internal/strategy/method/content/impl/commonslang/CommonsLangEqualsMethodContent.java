@@ -8,10 +8,16 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
 import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
 
+/**
+ * Specific implementation of the {@link MethodContent} for {@link EqualsMethodSkeleton} using commons-lang[3].
+ * 
+ * @author maudrain
+ */
 public class CommonsLangEqualsMethodContent extends
         AbstractMethodContent<EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
 
