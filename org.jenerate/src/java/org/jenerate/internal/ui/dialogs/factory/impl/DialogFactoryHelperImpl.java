@@ -18,6 +18,11 @@ import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
 
+/**
+ * Default implementation of the {@link DialogFactoryHelper}. XXX test me
+ * 
+ * @author maudrain
+ */
 public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
 
     @Override

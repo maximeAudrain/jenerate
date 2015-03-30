@@ -20,7 +20,7 @@ import org.eclipse.text.edits.MalformedTreeException;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 /**
- * Implementation of the {@link JavaInterfaceCodeAppender}
+ * Implementation of the {@link JavaInterfaceCodeAppender}. XXX Test me
  * 
  * @author maudrain
  */
