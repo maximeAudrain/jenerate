@@ -8,14 +8,16 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
+import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
 import org.jenerate.internal.ui.dialogs.impl.ToStringDialog;
 
 public class ToStringDialogFactory extends AbstractDialogFactory<ToStringDialog, ToStringGenerationData> {
 
-    public ToStringDialogFactory(PreferencesManager preferencesManager) {
-        super(preferencesManager);
+    public ToStringDialogFactory(DialogFactoryHelper dialogFactoryHelper, PreferencesManager preferencesManager) {
+        super(dialogFactoryHelper, preferencesManager);
     }
 
     @Override
@@ -28,7 +30,7 @@ public class ToStringDialogFactory extends AbstractDialogFactory<ToStringDialog,
     }
 
     @Override
-    public MethodsGenerationCommandIdentifier getUserActionIdentifier() {
+    public CommandIdentifier getCommandIdentifier() {
         return MethodsGenerationCommandIdentifier.TO_STRING;
     }
 
@@ -37,6 +39,6 @@ public class ToStringDialogFactory extends AbstractDialogFactory<ToStringDialog,
     }
 
     public boolean isToStringConcreteInSuperclass(final IType objectClass) throws JavaModelException {
-        return isOverriddenInSuperclass(objectClass, "toString", new String[0], null);
+        return dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "toString", new String[0], null);
     }
 }

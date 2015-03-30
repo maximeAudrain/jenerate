@@ -8,8 +8,10 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
+import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
 import org.jenerate.internal.ui.dialogs.impl.CompareToDialog;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
@@ -17,9 +19,9 @@ public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialo
 
     private JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
-    public CompareToDialogFactory(PreferencesManager preferencesManager,
+    public CompareToDialogFactory(DialogFactoryHelper dialogFactoryHelper, PreferencesManager preferencesManager,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
-        super(preferencesManager);
+        super(dialogFactoryHelper, preferencesManager);
         this.javaInterfaceCodeAppender = javaInterfaceCodeAppender;
     }
 
@@ -33,7 +35,7 @@ public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialo
     }
 
     @Override
-    public MethodsGenerationCommandIdentifier getUserActionIdentifier() {
+    public CommandIdentifier getCommandIdentifier() {
         return MethodsGenerationCommandIdentifier.COMPARE_TO;
     }
 
@@ -42,6 +44,7 @@ public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialo
     }
 
     public boolean isCompareToImplementedInSuperclass(final IType objectClass) throws JavaModelException {
-        return isOverriddenInSuperclass(objectClass, "compareTo", new String[] { "QObject;" }, null);
+        return dialogFactoryHelper
+                .isOverriddenInSuperclass(objectClass, "compareTo", new String[] { "QObject;" }, null);
     }
 }

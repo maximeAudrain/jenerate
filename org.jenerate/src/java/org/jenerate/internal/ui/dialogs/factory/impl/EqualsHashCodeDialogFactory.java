@@ -8,15 +8,17 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
+import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
 import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
 
 public class EqualsHashCodeDialogFactory extends
         AbstractDialogFactory<EqualsHashCodeDialog, EqualsHashCodeGenerationData> {
 
-    public EqualsHashCodeDialogFactory(PreferencesManager preferencesManager) {
-        super(preferencesManager);
+    public EqualsHashCodeDialogFactory(DialogFactoryHelper dialogFactoryHelper, PreferencesManager preferencesManager) {
+        super(dialogFactoryHelper, preferencesManager);
     }
 
     @Override
@@ -29,7 +31,7 @@ public class EqualsHashCodeDialogFactory extends
     }
 
     @Override
-    public MethodsGenerationCommandIdentifier getUserActionIdentifier() {
+    public CommandIdentifier getCommandIdentifier() {
         return MethodsGenerationCommandIdentifier.EQUALS_HASH_CODE;
     }
 
@@ -52,10 +54,11 @@ public class EqualsHashCodeDialogFactory extends
     }
 
     public boolean isHashCodeOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
-        return isOverriddenInSuperclass(objectClass, "hashCode", new String[0], "java.lang.Object");
+        return dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "hashCode", new String[0], "java.lang.Object");
     }
 
     public boolean isEqualsOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
-        return isOverriddenInSuperclass(objectClass, "equals", new String[] { "QObject;" }, "java.lang.Object");
+        return dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "equals", new String[] { "QObject;" },
+                "java.lang.Object");
     }
 }

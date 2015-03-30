@@ -9,7 +9,9 @@ import org.jenerate.internal.manage.DialogFactoryManager;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
+import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
 import org.jenerate.internal.ui.dialogs.factory.impl.CompareToDialogFactory;
+import org.jenerate.internal.ui.dialogs.factory.impl.DialogFactoryHelperImpl;
 import org.jenerate.internal.ui.dialogs.factory.impl.EqualsHashCodeDialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.impl.ToStringDialogFactory;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
@@ -21,6 +23,8 @@ import org.jenerate.internal.util.JavaInterfaceCodeAppender;
  */
 public final class DialogFactoryManagerImpl implements DialogFactoryManager {
 
+    private final DialogFactoryHelper dialogFactoryHelper = new DialogFactoryHelperImpl();
+
     private final Set<DialogFactory<? extends FieldDialog<?>, ? extends MethodGenerationData>> dialogProviders = new HashSet<>();
 
     /**
@@ -31,9 +35,10 @@ public final class DialogFactoryManagerImpl implements DialogFactoryManager {
      */
     public DialogFactoryManagerImpl(PreferencesManager preferencesManager,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
-        dialogProviders.add(new EqualsHashCodeDialogFactory(preferencesManager));
-        dialogProviders.add(new ToStringDialogFactory(preferencesManager));
-        dialogProviders.add(new CompareToDialogFactory(preferencesManager, javaInterfaceCodeAppender));
+        dialogProviders.add(new EqualsHashCodeDialogFactory(dialogFactoryHelper, preferencesManager));
+        dialogProviders.add(new ToStringDialogFactory(dialogFactoryHelper, preferencesManager));
+        dialogProviders.add(new CompareToDialogFactory(dialogFactoryHelper, preferencesManager,
+                javaInterfaceCodeAppender));
     }
 
     @SuppressWarnings("unchecked")
@@ -41,7 +46,7 @@ public final class DialogFactoryManagerImpl implements DialogFactoryManager {
     public <T extends FieldDialog<U>, U extends MethodGenerationData> DialogFactory<T, U> getDialogFactory(
             CommandIdentifier commandIdentifier) {
         for (DialogFactory<? extends FieldDialog<?>, ? extends MethodGenerationData> dialogProvider : dialogProviders) {
-            if (commandIdentifier.equals(dialogProvider.getUserActionIdentifier())) {
+            if (commandIdentifier.equals(dialogProvider.getCommandIdentifier())) {
                 return (DialogFactory<T, U>) dialogProvider;
             }
         }
