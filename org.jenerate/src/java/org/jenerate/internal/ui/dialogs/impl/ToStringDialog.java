@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.data.impl.ToStringGenerationDataImpl;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
@@ -40,11 +39,11 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
 
     public ToStringDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
             final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper,
-            PreferencesManager preferencesManager) throws JavaModelException {
+            PreferencesManager preferencesManager, IDialogSettings dialogSettings) throws JavaModelException {
 
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager);
+        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager,
+                dialogSettings);
 
-        IDialogSettings dialogSettings = JeneratePlugin.getDefault().getDialogSettings();
         settings = dialogSettings.getSection(SETTINGS_SECTION);
         if (settings == null) {
             settings = dialogSettings.addNewSection(SETTINGS_SECTION);

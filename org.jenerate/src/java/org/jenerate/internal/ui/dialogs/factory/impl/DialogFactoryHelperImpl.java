@@ -12,6 +12,8 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.dialogs.IDialogSettings;
+import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
@@ -105,6 +107,11 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
         result.addAll(Arrays.asList(getNonStaticNonCacheFields(objectClass, preferencesManager)));
 
         return result.toArray(new IField[result.size()]);
+    }
+
+    @Override
+    public IDialogSettings getDialogSettings() {
+        return JeneratePlugin.getDefault().getDialogSettings();
     }
 
 }

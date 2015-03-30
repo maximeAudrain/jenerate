@@ -27,7 +27,7 @@ public class EqualsHashCodeDialogFactory extends
         IField[] fields = getObjectClassFields(objectClass);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
         return new EqualsHashCodeDialog(parentShell, "Generate Equals and HashCode Methods", objectClass, fields,
-                excludedMethods, disableAppendSuper, preferencesManager);
+                excludedMethods, disableAppendSuper, preferencesManager, dialogFactoryHelper.getDialogSettings());
     }
 
     @Override
@@ -53,11 +53,11 @@ public class EqualsHashCodeDialogFactory extends
         return false;
     }
 
-    public boolean isHashCodeOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
+    private boolean isHashCodeOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
         return dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "hashCode", new String[0], "java.lang.Object");
     }
 
-    public boolean isEqualsOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
+    private boolean isEqualsOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
         return dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "equals", new String[] { "QObject;" },
                 "java.lang.Object");
     }

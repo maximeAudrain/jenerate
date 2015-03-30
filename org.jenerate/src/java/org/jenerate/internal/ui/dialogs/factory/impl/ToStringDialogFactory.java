@@ -26,7 +26,7 @@ public class ToStringDialogFactory extends AbstractDialogFactory<ToStringDialog,
         IField[] fields = getObjectClassFields(objectClass);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
         return new ToStringDialog(parentShell, "Generate ToString Method", objectClass, fields, excludedMethods,
-                disableAppendSuper, preferencesManager);
+                disableAppendSuper, preferencesManager, dialogFactoryHelper.getDialogSettings());
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ToStringDialogFactory extends AbstractDialogFactory<ToStringDialog,
         return !isToStringConcreteInSuperclass(objectClass);
     }
 
-    public boolean isToStringConcreteInSuperclass(final IType objectClass) throws JavaModelException {
+    private boolean isToStringConcreteInSuperclass(final IType objectClass) throws JavaModelException {
         return dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "toString", new String[0], null);
     }
 }

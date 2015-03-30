@@ -35,7 +35,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
@@ -48,11 +47,13 @@ import org.jenerate.internal.ui.dialogs.FieldDialog;
  */
 public abstract class AbstractFieldDialog<T extends MethodGenerationData> extends Dialog implements FieldDialog<T> {
 
-    private static final String SETTINGS_SECTION = "AbstractFieldDialog";
+    /**
+     * Used for testing
+     */
+    public static final String ABSTRACT_SETTINGS_SECTION = "AbstractFieldDialog";
+    public static final String SETTINGS_APPEND_SUPER = "AppendSuper";
 
     private static final String SETTINGS_INSERT_POSITION = "InsertPosition";
-
-    private static final String SETTINGS_APPEND_SUPER = "AppendSuper";
 
     private static final String SETTINGS_GENERATE_COMMENT = "GenerateComment";
 
@@ -89,9 +90,9 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
     private final PreferencesManager preferencesManager;
 
     public AbstractFieldDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
-            final IField[] fields, final Set<IMethod> excludedMethods, PreferencesManager preferencesManager)
-            throws JavaModelException {
-        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, false, preferencesManager);
+            final IField[] fields, final Set<IMethod> excludedMethods, PreferencesManager preferencesManager,
+            IDialogSettings dialogSettings) throws JavaModelException {
+        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, false, preferencesManager, dialogSettings);
     }
 
     /**
@@ -104,7 +105,7 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
      */
     public AbstractFieldDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
             final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper,
-            PreferencesManager preferencesManager) throws JavaModelException {
+            PreferencesManager preferencesManager, IDialogSettings dialogSettings) throws JavaModelException {
         super(parentShell);
         setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.RESIZE);
         this.title = dialogTitle;
@@ -112,10 +113,9 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         this.disableAppendSuper = disableAppendSuper;
         this.preferencesManager = preferencesManager;
 
-        IDialogSettings dialogSettings = JeneratePlugin.getDefault().getDialogSettings();
-        settings = dialogSettings.getSection(SETTINGS_SECTION);
+        settings = dialogSettings.getSection(ABSTRACT_SETTINGS_SECTION);
         if (settings == null) {
-            settings = dialogSettings.addNewSection(SETTINGS_SECTION);
+            settings = dialogSettings.addNewSection(ABSTRACT_SETTINGS_SECTION);
         }
 
         try {
@@ -531,5 +531,9 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
 
     public PreferencesManager getPreferencesManager() {
         return preferencesManager;
+    }
+
+    public IField[] getFields() {
+        return fields;
     }
 }

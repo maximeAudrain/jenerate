@@ -31,7 +31,7 @@ public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialo
         IField[] fields = getObjectClassFields(objectClass);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
         return new CompareToDialog(parentShell, "Generate CompareTo Method", objectClass, fields, excludedMethods,
-                disableAppendSuper, preferencesManager);
+                disableAppendSuper, preferencesManager, dialogFactoryHelper.getDialogSettings());
     }
 
     @Override
@@ -43,7 +43,7 @@ public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialo
         return !(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
     }
 
-    public boolean isCompareToImplementedInSuperclass(final IType objectClass) throws JavaModelException {
+    private boolean isCompareToImplementedInSuperclass(final IType objectClass) throws JavaModelException {
         return dialogFactoryHelper
                 .isOverriddenInSuperclass(objectClass, "compareTo", new String[] { "QObject;" }, null);
     }

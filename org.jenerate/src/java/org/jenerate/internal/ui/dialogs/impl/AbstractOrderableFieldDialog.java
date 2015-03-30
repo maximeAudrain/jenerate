@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -33,14 +34,16 @@ public abstract class AbstractOrderableFieldDialog<T extends MethodGenerationDat
     private Button downButton;
 
     public AbstractOrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
-            Set<IMethod> excludedMethods, PreferencesManager preferencesManager) throws JavaModelException {
-        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, false, preferencesManager);
+            Set<IMethod> excludedMethods, PreferencesManager preferencesManager, IDialogSettings dialogSettings)
+            throws JavaModelException {
+        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, false, preferencesManager, dialogSettings);
     }
 
     public AbstractOrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
-            Set<IMethod> excludedMethods, boolean disableAppendSuper, PreferencesManager preferencesManager)
-            throws JavaModelException {
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager);
+            Set<IMethod> excludedMethods, boolean disableAppendSuper, PreferencesManager preferencesManager,
+            IDialogSettings dialogSettings) throws JavaModelException {
+        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager,
+                dialogSettings);
     }
 
     @Override

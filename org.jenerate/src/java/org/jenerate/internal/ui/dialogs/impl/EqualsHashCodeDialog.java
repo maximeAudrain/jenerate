@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.jenerate.JeneratePlugin;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.data.impl.EqualsHashCodeGenerationDataImpl;
 import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
@@ -75,11 +74,11 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
 
     public EqualsHashCodeDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
             final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper,
-            PreferencesManager preferencesManager) throws JavaModelException {
+            PreferencesManager preferencesManager, IDialogSettings dialogSettings) throws JavaModelException {
 
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager);
+        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager,
+                dialogSettings);
 
-        IDialogSettings dialogSettings = JeneratePlugin.getDefault().getDialogSettings();
         equalsSettings = dialogSettings.getSection(EQUALS_SETTINGS_SECTION);
         if (equalsSettings == null) {
             equalsSettings = dialogSettings.addNewSection(EQUALS_SETTINGS_SECTION);

@@ -3,6 +3,7 @@ package org.jenerate.internal.ui.dialogs.factory;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.jenerate.internal.manage.PreferencesManager;
 
 public interface DialogFactoryHelper {
@@ -23,4 +24,6 @@ public interface DialogFactoryHelper {
 
     public IField[] getObjectClassFields(IType objectClass, PreferencesManager preferencesManager)
             throws JavaModelException;
+    
+    public IDialogSettings getDialogSettings();
 }
