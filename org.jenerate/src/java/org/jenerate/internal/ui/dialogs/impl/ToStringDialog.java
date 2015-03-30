@@ -26,16 +26,16 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLan
  * @author jiayun
  */
 public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerationData> {
+    
+    public static final String SETTINGS_SECTION = "ToStringDialog";
+    
+    private static final String SETTINGS_STYLE = "CommonsLangToStringStyle";
 
     private Combo styleCombo;
 
     private String toStringStyle;
 
     private IDialogSettings settings;
-
-    private static final String SETTINGS_SECTION = "ToStringDialog";
-
-    private static final String SETTINGS_STYLE = "CommonsLangToStringStyle";
 
     public ToStringDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
             final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper,

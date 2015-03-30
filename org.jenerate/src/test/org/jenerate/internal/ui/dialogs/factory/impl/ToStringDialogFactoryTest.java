@@ -3,11 +3,10 @@ package org.jenerate.internal.ui.dialogs.factory.impl;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
-import org.jenerate.internal.ui.dialogs.impl.CompareToDialog;
-import org.jenerate.internal.util.JavaInterfaceCodeAppender;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
+import org.jenerate.internal.ui.dialogs.impl.ToStringDialog;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -15,28 +14,27 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 /**
- * Unit tests for the {@link CompareToDialogFactory}
+ * Unit tests for the {@link ToStringDialogFactory}
  * 
  * @author maudrain
  */
 @RunWith(MockitoJUnitRunner.class)
-public class CompareToDialogFactoryTest extends AbstractDialogFactoryTest {
+public class ToStringDialogFactoryTest extends AbstractDialogFactoryTest {
 
-    @Mock
-    private JavaInterfaceCodeAppender javaInterfaceCodeAppender;
-
-    private CompareToDialogFactory compareToDialogFactory;
+    private ToStringDialogFactory toStringDialogFactory;
 
     @Override
     public void callbackAfterSetUp() throws Exception {
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.USE_COMMONS_LANG3)).thenReturn(
+                Boolean.FALSE);
+        when(dialogSettings.getSection(ToStringDialog.SETTINGS_SECTION)).thenReturn(dialogSettings);
         mockDisableAppendSuper(false);
-        compareToDialogFactory = new CompareToDialogFactory(dialogFactoryHelper, preferencesManager,
-                javaInterfaceCodeAppender);
+        toStringDialogFactory = new ToStringDialogFactory(dialogFactoryHelper, preferencesManager);
     }
 
     @Test
     public void testGetCommandIdentifier() {
-        assertEquals(MethodsGenerationCommandIdentifier.COMPARE_TO, compareToDialogFactory.getCommandIdentifier());
+        assertEquals(MethodsGenerationCommandIdentifier.TO_STRING, toStringDialogFactory.getCommandIdentifier());
     }
 
     @Test
@@ -50,7 +48,7 @@ public class CompareToDialogFactoryTest extends AbstractDialogFactoryTest {
     }
 
     @Test
-    public void testCreateDialogWithFieldsAndDisableAppendSuper() throws Exception {
+    public void testCreateDialogWithFieldsAndDisableAppendSuperWithJavaLangObject() throws Exception {
         mockDisableAppendSuper(true);
         validateDialogCreation(createFields(field1, field2), true);
     }
@@ -58,16 +56,13 @@ public class CompareToDialogFactoryTest extends AbstractDialogFactoryTest {
     private void validateDialogCreation(IField[] iFields, boolean disableAppendSuper) throws JavaModelException,
             Exception {
         when(dialogFactoryHelper.getObjectClassFields(objectClass, preferencesManager)).thenReturn(iFields);
-        CompareToDialog compareToDialog = compareToDialogFactory
-                .createDialog(parentShell, objectClass, excludedMethods);
-        assertArrayEquals(iFields, compareToDialog.getFields());
-        assertEquals(disableAppendSuper, !compareToDialog.getAppendSuper());
+        ToStringDialog toStringDialog = toStringDialogFactory.createDialog(parentShell, objectClass, excludedMethods);
+        assertArrayEquals(iFields, toStringDialog.getFields());
+        assertEquals(disableAppendSuper, !toStringDialog.getAppendSuper());
     }
 
     private void mockDisableAppendSuper(boolean isDisableAppendSuper) throws JavaModelException {
-        when(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "compareTo", new String[] { "QObject;" }, null))
-                .thenReturn(!isDisableAppendSuper);
-        when(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable")).thenReturn(
+        when(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "toString", new String[0], null)).thenReturn(
                 !isDisableAppendSuper);
     }
 }

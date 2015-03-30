@@ -39,9 +39,9 @@ import org.jenerate.internal.manage.PreferencesManager;
  */
 public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGenerationData> {
 
-    private static final String EQUALS_SETTINGS_SECTION = "EqualsDialog";
+    public static final String EQUALS_SETTINGS_SECTION = "EqualsDialog";
 
-    private static final String HASHCODE_SETTINGS_SECTION = "HashCodeDialog";
+    public static final String HASHCODE_SETTINGS_SECTION = "HashCodeDialog";
 
     private static final String SETTINGS_COMPARE_REFERENCES = "CompareReferences";
 
