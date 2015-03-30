@@ -64,7 +64,7 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
     }
 
     /**
-     * XXX already there in the skeleton, extract at one point
+     * XXX already there in the content, extract at one point
      */
     private boolean isGenerifyCompareTo(IType objectClass, boolean implementedOrExtendedInSuperType) {
         boolean generifyPreference = preferencesManager.getCurrentPreferenceValue(

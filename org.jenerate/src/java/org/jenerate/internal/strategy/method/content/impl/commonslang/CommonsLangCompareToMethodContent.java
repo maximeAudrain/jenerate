@@ -6,7 +6,6 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
-import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
@@ -34,11 +33,7 @@ public class CommonsLangCompareToMethodContent extends
     @Override
     public LinkedHashSet<String> getLibrariesToImport(CompareToGenerationData data) {
         LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
-        boolean useCommonsLang3 = false;
-        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(strategyIdentifier)) {
-            useCommonsLang3 = true;
-        }
-        linkedHashSet.add(CommonsLangMethodContentLibraries.getCompareToBuilderLibrary(useCommonsLang3));
+        linkedHashSet.add(CommonsLangMethodContentLibraries.getCompareToBuilderLibrary(getStrategyIdentifier()));
         return linkedHashSet;
     }
 

@@ -48,8 +48,10 @@ public class CommonsLangEqualsMethodContentTest extends
     public void testGetLibrariesToImportWithCommonsLang() {
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
-        assertEquals(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(false), librariesToImport.iterator()
-                .next());
+        assertEquals(
+                CommonsLangMethodContentLibraries
+                        .getEqualsBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG),
+                librariesToImport.iterator().next());
     }
 
     @Test
@@ -58,8 +60,10 @@ public class CommonsLangEqualsMethodContentTest extends
                 preferencesManager);
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
-        assertEquals(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(true), librariesToImport.iterator()
-                .next());
+        assertEquals(
+                CommonsLangMethodContentLibraries
+                        .getEqualsBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG3),
+                librariesToImport.iterator().next());
     }
 
     @Test

@@ -155,9 +155,6 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         insertPositions.add(null);
     }
 
-    /**
-     * XXX test me?
-     */
     private String getMethodLabel(final IMethod method) {
         StringBuffer result = new StringBuffer("`");
 

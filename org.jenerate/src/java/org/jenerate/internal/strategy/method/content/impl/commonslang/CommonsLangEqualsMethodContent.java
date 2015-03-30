@@ -7,7 +7,6 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
-import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
@@ -28,11 +27,7 @@ public class CommonsLangEqualsMethodContent extends
     @Override
     public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
         LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
-        boolean useCommonsLang3 = false;
-        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(strategyIdentifier)) {
-            useCommonsLang3 = true;
-        }
-        linkedHashSet.add(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(useCommonsLang3));
+        linkedHashSet.add(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(getStrategyIdentifier()));
         return linkedHashSet;
     }
 

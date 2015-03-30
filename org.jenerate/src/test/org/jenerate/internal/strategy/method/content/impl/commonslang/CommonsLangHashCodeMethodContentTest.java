@@ -69,8 +69,10 @@ public class CommonsLangHashCodeMethodContentTest
     public void testGetLibrariesToImportWithCommonsLang() {
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
-        assertEquals(CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(false), librariesToImport.iterator()
-                .next());
+        assertEquals(
+                CommonsLangMethodContentLibraries
+                        .getHashCodeBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG),
+                librariesToImport.iterator().next());
     }
 
     @Test
@@ -79,8 +81,10 @@ public class CommonsLangHashCodeMethodContentTest
                 preferencesManager);
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
-        assertEquals(CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(true), librariesToImport.iterator()
-                .next());
+        assertEquals(
+                CommonsLangMethodContentLibraries
+                        .getHashCodeBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG3),
+                librariesToImport.iterator().next());
     }
 
     @Test

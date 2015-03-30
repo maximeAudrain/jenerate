@@ -17,25 +17,16 @@ public enum CommonsLangToStringStyle {
     SHORT_PREFIX_STYLE,
     SIMPLE_STYLE;
 
-    public static final String DOT_STRING = ".";
-    private static final String COMMONS_LANG_PREFIX = "org.apache.commons.lang";
-    private static final String BUILDER_STRING = ".builder.";
-    private static final String TO_STRING_STYLE = "ToStringStyle";
-    private static final String COMMONS_LANG3_ADDON = "3";
-    private static final String EMPTY_STRING = "";
-
     public String getFullStyle() {
-        return TO_STRING_STYLE + DOT_STRING + name();
+        return CommonsLangMethodContentLibraries.TO_STRING_STYLE + CommonsLangMethodContentLibraries.DOT_STRING
+                + name();
     }
 
     public String getFullLibraryString(boolean useCommonsLang3) {
-        return COMMONS_LANG_PREFIX + (useCommonsLang3 ? COMMONS_LANG3_ADDON : EMPTY_STRING) + BUILDER_STRING
-                + getFullStyle();
-    }
-
-    public static String getToStringStyleLibrary(boolean useCommonsLang3) {
-        return COMMONS_LANG_PREFIX + (useCommonsLang3 ? COMMONS_LANG3_ADDON : EMPTY_STRING) + BUILDER_STRING
-                + TO_STRING_STYLE;
+        return CommonsLangMethodContentLibraries.COMMONS_LANG_PREFIX
+                + (useCommonsLang3 ? CommonsLangMethodContentLibraries.COMMONS_LANG3_ADDON
+                        : CommonsLangMethodContentLibraries.EMPTY_STRING)
+                + CommonsLangMethodContentLibraries.BUILDER_STRING + getFullStyle();
     }
 
     public static CommonsLangToStringStyle getToStringStyle(String fullLibraryString) {

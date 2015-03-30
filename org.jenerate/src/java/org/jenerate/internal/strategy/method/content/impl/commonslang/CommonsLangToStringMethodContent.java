@@ -7,7 +7,6 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
-import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
@@ -33,15 +32,12 @@ public class CommonsLangToStringMethodContent extends
 
     @Override
     public LinkedHashSet<String> getLibrariesToImport(ToStringGenerationData data) {
-        boolean useCommonsLang3 = false;
-        if (MethodContentStrategyIdentifier.USE_COMMONS_LANG3.equals(strategyIdentifier)) {
-            useCommonsLang3 = true;
-        }
         LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
-        String toStringBuilderLibrary = CommonsLangMethodContentLibraries.getToStringBuilderLibrary(useCommonsLang3);
+        String toStringBuilderLibrary = CommonsLangMethodContentLibraries
+                .getToStringBuilderLibrary(getStrategyIdentifier());
         linkedHashSet.add(toStringBuilderLibrary);
         if (!CommonsLangToStringStyle.NO_STYLE.equals(data.getToStringStyle())) {
-            String styleLibrary = CommonsLangToStringStyle.getToStringStyleLibrary(useCommonsLang3);
+            String styleLibrary = CommonsLangMethodContentLibraries.getToStringStyleLibrary(getStrategyIdentifier());
             linkedHashSet.add(styleLibrary);
         }
         return linkedHashSet;
