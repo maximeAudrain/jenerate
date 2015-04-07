@@ -10,6 +10,6 @@ public interface CommandIdentifier {
     /**
      * @return the unique string identifier of a command
      */
-    public String getIdentifier();
+    String getIdentifier();
 
 }

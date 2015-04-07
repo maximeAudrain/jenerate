@@ -12,21 +12,21 @@ public interface PluginPreference<T> {
     /**
      * @return the key for this preference
      */
-    public String getKey();
+    String getKey();
 
     /**
      * @return the description of this preference
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * @return the type for the preference default value
      */
-    public Class<T> getType();
+    Class<T> getType();
 
     /**
      * @return the default value of this preference
      */
-    public T getDefaultValue();
+    T getDefaultValue();
 
 }
