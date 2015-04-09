@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
@@ -72,8 +73,9 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
     private List<IJavaElement> insertPositions;
 
     private List<String> insertPositionLabels;
-
     private int currentPositionIndex;
+
+    private MethodContentStrategyIdentifier currentStrategy;
 
     private boolean disableAppendSuper;
 
@@ -248,6 +250,11 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         data.widthHint = 150;
         buttonComposite.setLayoutData(data);
 
+        Composite strategySelectionComposite = createStrategySelectionComposite(composite);
+        data = new GridData(GridData.FILL_HORIZONTAL);
+        data.horizontalSpan = 2;
+        strategySelectionComposite.setLayoutData(data);
+
         Composite optionComposite = createOptionComposite(composite);
         data = new GridData(GridData.FILL_HORIZONTAL);
         data.horizontalSpan = 2;
@@ -347,6 +354,49 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         });
         data = new GridData(GridData.FILL_HORIZONTAL);
         deselectAllButton.setLayoutData(data);
+    }
+
+    protected Composite createStrategySelectionComposite(final Composite composite) {
+        Composite optionComposite = new Composite(composite, SWT.NONE);
+        GridLayout layout = new GridLayout();
+        layout.marginHeight = 0;
+        layout.marginWidth = 0;
+        optionComposite.setLayout(layout);
+
+        addStrategySelectionChoices(optionComposite);
+
+        return optionComposite;
+    }
+
+    private Composite addStrategySelectionChoices(final Composite composite) {
+        Label label = new Label(composite, SWT.NONE);
+        label.setText("&Content strategy to use:");
+
+        GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+        label.setLayoutData(data);
+
+        final Combo combo = new Combo(composite, SWT.READ_ONLY);
+        MethodContentStrategyIdentifier[] identifiers = MethodContentStrategyIdentifier.values();
+        String[] identifierNames = new String[identifiers.length];
+        for (int i = 0; i < identifiers.length; i++) {
+            identifierNames[i] = identifiers[i].name();
+        }
+        combo.setItems(identifierNames);
+
+        data = new GridData(GridData.FILL_HORIZONTAL);
+        combo.setLayoutData(data);
+        combo.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                currentStrategy = MethodContentStrategyIdentifier.values()[combo.getSelectionIndex()];
+            }
+        });
+
+        MethodContentStrategyIdentifier preferedStrategy = preferencesManager
+                .getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
+        combo.select(preferedStrategy.ordinal());
+        return composite;
     }
 
     protected Composite createOptionComposite(final Composite composite) {
@@ -512,6 +562,13 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
 
     public boolean getGenerateComment() {
         return generateComment;
+    }
+
+    /*
+     * Determine which strategy to use for the method content generation
+     */
+    public MethodContentStrategyIdentifier getMethodContentStrategyIdentifier() {
+        return currentStrategy;
     }
 
     /*
