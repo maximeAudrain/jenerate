@@ -7,8 +7,7 @@ import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 
 /**
- * Manager responsible for retrieving a {@link LinkedHashSet} of {@link MethodSkeleton} definitions for a specific
- * {@link CommandIdentifier}.
+ * Manager responsible for the {@link MethodSkeleton} strategies.
  * 
  * @author maudrain
  */

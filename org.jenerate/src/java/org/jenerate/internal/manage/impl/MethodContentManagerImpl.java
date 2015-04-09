@@ -55,29 +55,31 @@ public final class MethodContentManagerImpl implements MethodContentManager {
                 preferencesManager, javaInterfaceCodeAppender));
     }
 
+    /**
+     * XXX TEST ME BETTER
+     */
     @Override
-    public <V extends MethodGenerationData> LinkedHashSet<StrategyIdentifier> getPossibleStrategies(
+    public <V extends MethodGenerationData> LinkedHashSet<StrategyIdentifier> getStrategiesIntersection(
             LinkedHashSet<MethodSkeleton<V>> methodSkeletons) {
-        LinkedHashSet<StrategyIdentifier> strategyIdentifiers = new LinkedHashSet<StrategyIdentifier>();
+        LinkedHashSet<StrategyIdentifier> strategyIdentifiersUnion = new LinkedHashSet<StrategyIdentifier>();
         for (MethodSkeleton<V> methodSkeleton : methodSkeletons) {
-            LinkedHashSet<StrategyIdentifier> methodSkeletonStrategyIdentifiers = getAllStrategyIdentifiers(methodSkeleton);
-            if (strategyIdentifiers.isEmpty()) {
-                strategyIdentifiers.addAll(methodSkeletonStrategyIdentifiers);
-            } else {
-                strategyIdentifiers.retainAll(methodSkeletonStrategyIdentifiers);
-            }
+            strategyIdentifiersUnion.addAll(getAllStrategyIdentifiers(methodSkeleton));
         }
-        return strategyIdentifiers;
+        LinkedHashSet<StrategyIdentifier> strategyIdentifiersIntersection = new LinkedHashSet<StrategyIdentifier>(
+                strategyIdentifiersUnion);
+        for (MethodSkeleton<V> methodSkeleton : methodSkeletons) {
+            strategyIdentifiersIntersection.retainAll(getAllStrategyIdentifiers(methodSkeleton));
+        }
+        return strategyIdentifiersIntersection;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public <T extends MethodSkeleton<V>, V extends MethodGenerationData> LinkedHashSet<Method<T, V>> getAllMethods(
             LinkedHashSet<MethodSkeleton<V>> methodSkeletons, StrategyIdentifier selectedContentStrategy) {
         LinkedHashSet<Method<T, V>> methods = new LinkedHashSet<Method<T, V>>();
         for (MethodSkeleton<V> methodSkeleton : methodSkeletons) {
-            MethodContent<T, V> methodContent = getMethodContent(methodSkeleton,
-                    selectedContentStrategy);
+            MethodContent<T, V> methodContent = getMethodContent(methodSkeleton, selectedContentStrategy);
             methods.add(new MethodImpl<T, V>((T) methodSkeleton, methodContent));
         }
         return methods;

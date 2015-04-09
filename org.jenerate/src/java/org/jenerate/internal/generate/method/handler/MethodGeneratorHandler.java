@@ -44,7 +44,7 @@ import org.jenerate.internal.util.impl.JavaInterfaceCodeAppenderImpl;
 
 /**
  * Handler that determine which generation should be performed depending on the event commandId. It also ensures that
- * the currently selected object in the editor is a class in order to be able to perform the generation. The
+ * the currently selected object in the editor is a java class in order to be able to perform the generation. The
  * {@link MethodGeneratorHandler#generate(String, ISelection, ICompilationUnit, Shell)} method is extracted from the
  * {@link IEditorActionDelegate} written by jiayun previously in the plugin.
  * 
@@ -61,6 +61,9 @@ public class MethodGeneratorHandler extends AbstractHandler {
     private final MethodContentManager methodContentManager;
     private final DialogFactoryManager dialogFactoryManager;
 
+    /**
+     * Default contructor
+     */
     public MethodGeneratorHandler() {
         this.dialogFactoryManager = new DialogFactoryManagerImpl(PREFERENCES_MANAGER, JAVA_INTERFACE_CODE_APPENDER);
         this.methodSkeletonManager = new MethodSkeletonManagerImpl(PREFERENCES_MANAGER, JAVA_INTERFACE_CODE_APPENDER);

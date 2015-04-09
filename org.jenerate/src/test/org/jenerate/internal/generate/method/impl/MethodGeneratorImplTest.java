@@ -267,7 +267,7 @@ public class MethodGeneratorImplTest {
         for (StrategyIdentifier strategyIdentifier : identifiers) {
             possibleStrategies.add(strategyIdentifier);
         }
-        when(methodContentManager.getPossibleStrategies(skeletons)).thenReturn(possibleStrategies);
+        when(methodContentManager.getStrategiesIntersection(skeletons)).thenReturn(possibleStrategies);
         return possibleStrategies;
     }
 

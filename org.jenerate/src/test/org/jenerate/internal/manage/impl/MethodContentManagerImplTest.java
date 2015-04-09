@@ -1,17 +1,22 @@
 package org.jenerate.internal.manage.impl;
 
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.Method;
+import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.strategy.method.skeleton.impl.AbstractMethodSkeleton;
 import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkeleton;
+import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
+import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit test for {@link MethodContentManagerImpl}
@@ -52,38 +58,82 @@ public class MethodContentManagerImplTest {
         methodContentManager = new MethodContentManagerImpl(preferencesManager, javaInterfaceCodeAppender);
     }
 
+    @Test
+    public void testGetPossibleStrategiesWithUnknownSkeleton() {
+        methodSkeletons.add(methodSkeleton1);
+        LinkedHashSet<StrategyIdentifier> possibleStrategies = methodContentManager
+                .getStrategiesIntersection(methodSkeletons);
+        assertTrue(possibleStrategies.isEmpty());
+    }
+
+    @Test
+    public void testGetPossibleStrategiesWithSkeletonSubclass() {
+        methodSkeletons.add(new TestMethodSkeleton(preferencesManager, javaInterfaceCodeAppender));
+        LinkedHashSet<StrategyIdentifier> possibleStrategies = methodContentManager
+                .getStrategiesIntersection(methodSkeletons);
+        assertTrue(possibleStrategies.isEmpty());
+    }
+
+    @Test
+    public void testGetPossibleStrategiesWithSkeletonAbstractClass() {
+        methodSkeletons.add(new TestAbstractMethodSkeleton(preferencesManager));
+        LinkedHashSet<StrategyIdentifier> possibleStrategies = methodContentManager
+                .getStrategiesIntersection(methodSkeletons);
+        assertTrue(possibleStrategies.isEmpty());
+    }
+
+    @Test
+    public void testGetPossibleStrategiesWithOneSkeleton() {
+        methodSkeletons.add(new CompareToMethodSkeleton(preferencesManager, javaInterfaceCodeAppender));
+        LinkedHashSet<StrategyIdentifier> possibleStrategies = methodContentManager
+                .getStrategiesIntersection(methodSkeletons);
+        assertEquals(2, possibleStrategies.size());
+    }
+    
+    @Test
+    public void testGetPossibleStrategiesWithTwoSkeletons() {
+        LinkedHashSet<MethodSkeleton<EqualsHashCodeGenerationData>> skeletons = new LinkedHashSet<>();
+        EqualsMethodSkeleton skeleton1 = new EqualsMethodSkeleton(preferencesManager);
+        HashCodeMethodSkeleton skeleton2 = new HashCodeMethodSkeleton(preferencesManager);
+        skeletons.add(skeleton1);
+        skeletons.add(skeleton2);
+        LinkedHashSet<StrategyIdentifier> possibleStrategies = methodContentManager
+                .getStrategiesIntersection(skeletons);
+        assertEquals(2, possibleStrategies.size());
+    }
+
     @Test(expected = IllegalStateException.class)
-    public void testWithUnknownSkeletonAndIdentifier() {
+    public void testGetAllMethodsWithUnknownSkeletonAndIdentifier() {
         methodSkeletons.add(methodSkeleton1);
         methodContentManager.getAllMethods(methodSkeletons, strategyIdentifier);
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testWithUnknownSkeleton() {
+    public void testGetAllMethodsWithUnknownSkeleton() {
         methodSkeletons.add(methodSkeleton1);
         methodContentManager.getAllMethods(methodSkeletons, MethodContentStrategyIdentifier.USE_COMMONS_LANG);
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testWithUnknownIdentifier() {
+    public void testGetAllMethodsWithUnknownIdentifier() {
         methodSkeletons.add(new CompareToMethodSkeleton(preferencesManager, javaInterfaceCodeAppender));
         methodContentManager.getAllMethods(methodSkeletons, strategyIdentifier);
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testWithSkeletonSubclass() {
+    public void testGetAllMethodsWithSkeletonSubclass() {
         methodSkeletons.add(new TestMethodSkeleton(preferencesManager, javaInterfaceCodeAppender));
         methodContentManager.getAllMethods(methodSkeletons, MethodContentStrategyIdentifier.USE_COMMONS_LANG);
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testWithSkeletonAbstractClass() {
+    public void testGetAllMethodsWithSkeletonAbstractClass() {
         methodSkeletons.add(new TestAbstractMethodSkeleton(preferencesManager));
         methodContentManager.getAllMethods(methodSkeletons, MethodContentStrategyIdentifier.USE_COMMONS_LANG);
     }
 
     @Test
-    public void testWithCompareToMethodSkeletonAndLang3Identifier() {
+    public void testGetAllMethodsWithCompareToMethodSkeletonAndLang3Identifier() {
         methodSkeletons.add(new CompareToMethodSkeleton(preferencesManager, javaInterfaceCodeAppender));
         LinkedHashSet<Method<MethodSkeleton<CompareToGenerationData>, CompareToGenerationData>> methods = methodContentManager
                 .getAllMethods(methodSkeletons, MethodContentStrategyIdentifier.USE_COMMONS_LANG3);
@@ -92,6 +142,31 @@ public class MethodContentManagerImplTest {
         assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG3, method.getMethodContent()
                 .getStrategyIdentifier());
         assertEquals(CompareToMethodSkeleton.class, method.getMethodContent().getRelatedMethodSkeletonClass());
+    }
+
+    @Test
+    public void testGetAllMethodsWithTwoSkeletonsAndLangIdentifier() {
+        LinkedHashSet<MethodSkeleton<EqualsHashCodeGenerationData>> skeletons = new LinkedHashSet<>();
+        EqualsMethodSkeleton skeleton1 = new EqualsMethodSkeleton(preferencesManager);
+        HashCodeMethodSkeleton skeleton2 = new HashCodeMethodSkeleton(preferencesManager);
+        skeletons.add(skeleton1);
+        skeletons.add(skeleton2);
+        LinkedHashSet<Method<MethodSkeleton<EqualsHashCodeGenerationData>, EqualsHashCodeGenerationData>> methods = methodContentManager
+                .getAllMethods(skeletons, MethodContentStrategyIdentifier.USE_COMMONS_LANG);
+
+        assertEquals(2, methods.size());
+        Iterator<Method<MethodSkeleton<EqualsHashCodeGenerationData>, EqualsHashCodeGenerationData>> iterator = methods
+                .iterator();
+
+        MethodContent<MethodSkeleton<EqualsHashCodeGenerationData>, EqualsHashCodeGenerationData> methodContent = iterator
+                .next().getMethodContent();
+        assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG, methodContent.getStrategyIdentifier());
+        assertEquals(EqualsMethodSkeleton.class, methodContent.getRelatedMethodSkeletonClass());
+
+        MethodContent<MethodSkeleton<EqualsHashCodeGenerationData>, EqualsHashCodeGenerationData> methodContent2 = iterator
+                .next().getMethodContent();
+        assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG, methodContent2.getStrategyIdentifier());
+        assertEquals(HashCodeMethodSkeleton.class, methodContent2.getRelatedMethodSkeletonClass());
     }
 
     private class TestMethodSkeleton extends CompareToMethodSkeleton {

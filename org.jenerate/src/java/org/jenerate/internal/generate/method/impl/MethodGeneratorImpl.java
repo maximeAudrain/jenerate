@@ -24,6 +24,14 @@ import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 
+/**
+ * Default implementation of the {@link MethodGenerator}
+ * 
+ * @author maudrain
+ * @param <T> the type of {@link MethodSkeleton} for this method generator
+ * @param <U> the type of {@link FieldDialog} for this method generator
+ * @param <V> the type of {@link MethodGenerationData} this generator handles
+ */
 public final class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData>
         implements MethodGenerator<T, U, V> {
 
@@ -47,7 +55,7 @@ public final class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends Fi
     public void generate(Shell parentShell, IType objectClass, CommandIdentifier commandIdentifier) {
         LinkedHashSet<MethodSkeleton<V>> methodSkeletons = methodSkeletonManager.getMethodSkeletons(commandIdentifier);
         LinkedHashSet<StrategyIdentifier> strategyIdentifiers = methodContentManager
-                .getPossibleStrategies(methodSkeletons);
+                .getStrategiesIntersection(methodSkeletons);
 
         try {
             Set<IMethod> excludedMethods = getExcludedMethods(objectClass, methodSkeletons);
