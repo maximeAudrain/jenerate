@@ -55,7 +55,6 @@ EqualsHashCodeGenerationData {
 
 		public Builder withClassComparison(boolean classComparison) {
 			this.classComparison = classComparison;
-			// TODO Auto-generated method stub
 			return getThis();
 		}
 
