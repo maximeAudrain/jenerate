@@ -145,6 +145,8 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         insertPositions = new ArrayList<>();
         insertPositionLabels = new ArrayList<>();
 
+        // XXX transform and provide a map<Label, Position> for the dialog to use : will remove the objectClass and
+        // excludedMethods parameters!!!!
         IJavaElement[] members = filterOutExcludedElements(objectClass.getChildren(), excludedMethods).toArray(
                 new IJavaElement[0]);
         IMethod[] methods = filterOutExcludedElements(objectClass.getMethods(), excludedMethods)

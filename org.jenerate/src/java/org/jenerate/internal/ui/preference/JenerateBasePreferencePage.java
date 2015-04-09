@@ -40,6 +40,7 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
             addField(fieldEditor);
         }
 
+        // XXX fix me : at initialization, does not enable/disable the caching fields preferences
         // getHashCodeCachingField().setEnabled(getCacheHashCodeField().getBooleanValue(), getFieldEditorParent());
         // getToStringCachingField().setEnabled(getCacheToStringField().getBooleanValue(), getFieldEditorParent());
     }
