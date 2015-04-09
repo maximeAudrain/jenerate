@@ -29,7 +29,7 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLan
  */
 public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerationData> {
 
-    public static final String SETTINGS_SECTION = "ToStringDialog";
+	public static final String SETTINGS_SECTION = "ToStringDialog";
 
 	private static final String SETTINGS_STYLE = "CommonsLangToStringStyle";
 
@@ -51,11 +51,12 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
 			settings = dialogSettings.addNewSection(SETTINGS_SECTION);
 		}
 
-        toStringStyle = settings.get(SETTINGS_STYLE);
-        if (toStringStyle == null) {
-            toStringStyle = CommonsLangToStringStyle.NO_STYLE.getFullLibraryString(getPreferencesManager()
-                    .getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY));
-
+		toStringStyle = settings.get(SETTINGS_STYLE);
+		if (toStringStyle == null) {
+			toStringStyle = CommonsLangToStringStyle.NO_STYLE.getFullLibraryString(getPreferencesManager()
+					.getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY));
+		}
+	}
 	@Override
 	public boolean close() {
 		toStringStyle = styleCombo.getText();
@@ -77,13 +78,23 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
 		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		label.setLayoutData(data);
 
-        styleCombo = new Combo(composite, SWT.NONE);
-        MethodContentStrategyIdentifier preferedStrategy = getPreferencesManager().getCurrentPreferenceValue(
-                JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
-                styles.add(style.getFullLibraryString(preferedStrategy));
+		styleCombo = new Combo(composite, SWT.NONE);
+		MethodContentStrategyIdentifier preferedStrategy = getPreferencesManager().getCurrentPreferenceValue(
+				JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
+		List<String> styles = new ArrayList<String>();
+		for (CommonsLangToStringStyle style : CommonsLangToStringStyle.values()) {
+			if (CommonsLangToStringStyle.NO_STYLE.equals(style)) {
+				styles.add(CommonsLangToStringStyle.NO_STYLE.name());
+			} else {
+				styles.add(style.getFullLibraryString(preferedStrategy));
+			}
+		}
+		styleCombo.setItems(styles.toArray(new String[styles.size()]));
+		styleCombo.setText(toStringStyle);
 
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		styleCombo.setLayoutData(data);
+
 		styleCombo.setToolTipText(CommonsLangToStringStyle.getToStringStyle(toStringStyle).getToolTip());
 
 		styleCombo.addModifyListener(new ModifyListener() {
