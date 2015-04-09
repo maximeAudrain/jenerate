@@ -4,6 +4,7 @@ package org.jenerate;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.PluginPreference;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 
@@ -42,6 +43,8 @@ public class JeneratePreferenceInitializer extends AbstractPreferenceInitializer
             iEclipsePreferences.putBoolean(key, ((Boolean) defaultValue).booleanValue());
         } else if (String.class.isAssignableFrom(type)) {
             iEclipsePreferences.put(key, ((String) defaultValue));
+        } else if (MethodContentStrategyIdentifier.class.isAssignableFrom(type)) {
+            iEclipsePreferences.put(key, ((MethodContentStrategyIdentifier) defaultValue).name());
         } else {
             throw new UnsupportedOperationException("The preference type '" + type + "' for plugin preference '"
                     + pluginPreference + "' is not currently handled. ");

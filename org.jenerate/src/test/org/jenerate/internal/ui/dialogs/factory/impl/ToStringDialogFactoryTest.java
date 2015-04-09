@@ -2,6 +2,7 @@ package org.jenerate.internal.ui.dialogs.factory.impl;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.ui.dialogs.impl.ToStringDialog;
@@ -25,8 +26,8 @@ public class ToStringDialogFactoryTest extends AbstractDialogFactoryTest {
 
     @Override
     public void callbackAfterSetUp() throws Exception {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.USE_COMMONS_LANG3)).thenReturn(
-                Boolean.FALSE);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY))
+                .thenReturn(MethodContentStrategyIdentifier.USE_COMMONS_LANG);
         when(dialogSettings.getSection(ToStringDialog.SETTINGS_SECTION)).thenReturn(dialogSettings);
         mockDisableAppendSuper(false);
         toStringDialogFactory = new ToStringDialogFactory(dialogFactoryHelper, preferencesManager);

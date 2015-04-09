@@ -2,6 +2,7 @@ package org.jenerate.internal.domain.preference.impl;
 
 import java.util.LinkedHashSet;
 
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.PluginPreference;
 
 /**
@@ -15,8 +16,9 @@ public final class JeneratePreferences {
         /* Only static constants */
     }
 
-    public static final PluginPreference<Boolean> USE_COMMONS_LANG3 = new PluginPreferenceImpl<Boolean>(
-            "useCommonsLang3", "&Import commons-lang3 for all code generation", Boolean.class, Boolean.FALSE);
+    public static final PluginPreference<MethodContentStrategyIdentifier> PREFERED_COMMON_METHODS_CONTENT_STRATEGY = new PluginPreferenceImpl<MethodContentStrategyIdentifier>(
+            "preferedContentStrategy", "Prefered common methods content strategy",
+            MethodContentStrategyIdentifier.class, MethodContentStrategyIdentifier.USE_COMMONS_LANG);
 
     public static final PluginPreference<Boolean> CACHE_HASHCODE = new PluginPreferenceImpl<Boolean>("cacheHashCode",
             "Cache &hashCode when all selected fields are final", Boolean.class, Boolean.TRUE);
@@ -53,7 +55,7 @@ public final class JeneratePreferences {
      */
     public static LinkedHashSet<PluginPreference<?>> getAllPreferences() {
         LinkedHashSet<PluginPreference<?>> allPreferences = new LinkedHashSet<PluginPreference<?>>();
-        allPreferences.add(USE_COMMONS_LANG3);
+        allPreferences.add(PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
         allPreferences.add(CACHE_HASHCODE);
         allPreferences.add(HASHCODE_CACHING_FIELD);
         allPreferences.add(CACHE_TOSTRING);

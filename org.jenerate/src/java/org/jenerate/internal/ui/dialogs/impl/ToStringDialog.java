@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.data.impl.ToStringGenerationDataImpl;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringStyle;
@@ -26,9 +27,9 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLan
  * @author jiayun
  */
 public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerationData> {
-    
+
     public static final String SETTINGS_SECTION = "ToStringDialog";
-    
+
     private static final String SETTINGS_STYLE = "CommonsLangToStringStyle";
 
     private Combo styleCombo;
@@ -52,7 +53,7 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
         toStringStyle = settings.get(SETTINGS_STYLE);
         if (toStringStyle == null) {
             toStringStyle = CommonsLangToStringStyle.NO_STYLE.getFullLibraryString(getPreferencesManager()
-                    .getCurrentPreferenceValue(JeneratePreferences.USE_COMMONS_LANG3).booleanValue());
+                    .getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY));
         }
     }
 
@@ -78,14 +79,14 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
         label.setLayoutData(data);
 
         styleCombo = new Combo(composite, SWT.NONE);
-        boolean useCommonsLang3 = getPreferencesManager().getCurrentPreferenceValue(
-                JeneratePreferences.USE_COMMONS_LANG3).booleanValue();
+        MethodContentStrategyIdentifier preferedStrategy = getPreferencesManager().getCurrentPreferenceValue(
+                JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
         List<String> styles = new ArrayList<String>();
         for (CommonsLangToStringStyle style : CommonsLangToStringStyle.values()) {
             if (CommonsLangToStringStyle.NO_STYLE.equals(style)) {
                 styles.add(CommonsLangToStringStyle.NO_STYLE.name());
             } else {
-                styles.add(style.getFullLibraryString(useCommonsLang3));
+                styles.add(style.getFullLibraryString(preferedStrategy));
             }
         }
         styleCombo.setItems(styles.toArray(new String[styles.size()]));

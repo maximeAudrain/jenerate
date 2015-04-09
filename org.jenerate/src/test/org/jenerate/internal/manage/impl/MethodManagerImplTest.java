@@ -42,8 +42,8 @@ public class MethodManagerImplTest {
 
     @Before
     public void setUp() {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.USE_COMMONS_LANG3)).thenReturn(
-                Boolean.FALSE);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY))
+                .thenReturn(MethodContentStrategyIdentifier.USE_COMMONS_LANG);
         methodManager = new MethodManagerImpl(preferencesManager, javaInterfaceCodeAppender);
     }
 
@@ -66,8 +66,8 @@ public class MethodManagerImplTest {
 
     @Test
     public void testWithEqualsHashCodeCommandIdentifierAndCommansLang3() {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.USE_COMMONS_LANG3)).thenReturn(
-                Boolean.TRUE);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY))
+                .thenReturn(MethodContentStrategyIdentifier.USE_COMMONS_LANG3);
         LinkedHashSet<Method<MethodSkeleton<MethodGenerationData>, MethodGenerationData>> methods = methodManager
                 .getMethods(MethodsGenerationCommandIdentifier.EQUALS_HASH_CODE);
         assertEquals(2, methods.size());
