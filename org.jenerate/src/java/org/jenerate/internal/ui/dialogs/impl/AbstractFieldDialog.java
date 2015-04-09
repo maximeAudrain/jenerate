@@ -4,6 +4,7 @@ package org.jenerate.internal.ui.dialogs.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +37,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
@@ -75,7 +77,9 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
     private List<String> insertPositionLabels;
     private int currentPositionIndex;
 
-    private MethodContentStrategyIdentifier currentStrategy;
+    private StrategyIdentifier currentStrategy;
+
+    private LinkedHashSet<StrategyIdentifier> possibleStrategies;
 
     private boolean disableAppendSuper;
 
@@ -91,10 +95,11 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
 
     private final PreferencesManager preferencesManager;
 
-    public AbstractFieldDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
-            final IField[] fields, final Set<IMethod> excludedMethods, PreferencesManager preferencesManager,
-            IDialogSettings dialogSettings) throws JavaModelException {
-        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, false, preferencesManager, dialogSettings);
+    public AbstractFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
+            Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies,
+            PreferencesManager preferencesManager, IDialogSettings dialogSettings) throws JavaModelException {
+        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, possibleStrategies, false,
+                preferencesManager, dialogSettings);
     }
 
     /**
@@ -105,15 +110,17 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
      * @param excludedMethods methods not to be listed in the insertion point combo
      * @throws JavaModelException
      */
-    public AbstractFieldDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
-            final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper,
-            PreferencesManager preferencesManager, IDialogSettings dialogSettings) throws JavaModelException {
+    public AbstractFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
+            Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies,
+            boolean disableAppendSuper, PreferencesManager preferencesManager, IDialogSettings dialogSettings)
+            throws JavaModelException {
         super(parentShell);
         setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.RESIZE);
         this.title = dialogTitle;
         this.fields = fields;
         this.disableAppendSuper = disableAppendSuper;
         this.preferencesManager = preferencesManager;
+        this.possibleStrategies = possibleStrategies;
 
         settings = dialogSettings.getSection(ABSTRACT_SETTINGS_SECTION);
         if (settings == null) {
@@ -376,10 +383,11 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         label.setLayoutData(data);
 
         final Combo combo = new Combo(composite, SWT.READ_ONLY);
-        MethodContentStrategyIdentifier[] identifiers = MethodContentStrategyIdentifier.values();
+        final StrategyIdentifier[] identifiers = possibleStrategies
+                .toArray(new StrategyIdentifier[possibleStrategies.size()]);
         String[] identifierNames = new String[identifiers.length];
         for (int i = 0; i < identifiers.length; i++) {
-            identifierNames[i] = identifiers[i].name();
+            identifierNames[i] = identifiers[i].toString();
         }
         combo.setItems(identifierNames);
 
@@ -389,12 +397,13 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                currentStrategy = MethodContentStrategyIdentifier.values()[combo.getSelectionIndex()];
+                currentStrategy = identifiers[combo.getSelectionIndex()];
             }
         });
 
         MethodContentStrategyIdentifier preferedStrategy = preferencesManager
                 .getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
+        currentStrategy = preferedStrategy;
         combo.select(preferedStrategy.ordinal());
         return composite;
     }
@@ -567,7 +576,7 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
     /*
      * Determine which strategy to use for the method content generation
      */
-    public MethodContentStrategyIdentifier getMethodContentStrategyIdentifier() {
+    public StrategyIdentifier getStrategyIdentifier() {
         return currentStrategy;
     }
 

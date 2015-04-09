@@ -1,5 +1,6 @@
 package org.jenerate.internal.ui.dialogs.impl;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
@@ -11,6 +12,7 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.data.impl.CompareToGenerationDataImpl;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 
 /**
@@ -19,10 +21,11 @@ import org.jenerate.internal.manage.PreferencesManager;
 public class CompareToDialog extends AbstractOrderableFieldDialog<CompareToGenerationData> {
 
     public CompareToDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
-            Set<IMethod> excludedMethods, boolean disableAppendSuper, PreferencesManager preferencesManager,
-            IDialogSettings dialogSettings) throws JavaModelException {
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager,
-                dialogSettings);
+            Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies,
+            boolean disableAppendSuper, PreferencesManager preferencesManager, IDialogSettings dialogSettings)
+            throws JavaModelException {
+        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, possibleStrategies, disableAppendSuper,
+                preferencesManager, dialogSettings);
     }
 
     @Override
@@ -30,6 +33,7 @@ public class CompareToDialog extends AbstractOrderableFieldDialog<CompareToGener
         //@formatter:off
         return new CompareToGenerationDataImpl.Builder()
                 .withCheckedFields(getCheckedFields())
+                .withSelectedContentStrategy(getStrategyIdentifier())
                 .withElementPosition(getElementPosition())
                 .withAppendSuper(getAppendSuper())
                 .withGenerateComment(getGenerateComment())

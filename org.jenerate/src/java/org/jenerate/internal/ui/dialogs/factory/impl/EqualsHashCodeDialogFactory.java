@@ -1,5 +1,6 @@
 package org.jenerate.internal.ui.dialogs.factory.impl;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
@@ -9,6 +10,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
@@ -22,12 +24,13 @@ public class EqualsHashCodeDialogFactory extends
     }
 
     @Override
-    public EqualsHashCodeDialog createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods)
-            throws Exception {
+    public EqualsHashCodeDialog createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods,
+            LinkedHashSet<StrategyIdentifier> possibleStrategies) throws Exception {
         IField[] fields = getObjectClassFields(objectClass);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
         return new EqualsHashCodeDialog(parentShell, "Generate Equals and HashCode Methods", objectClass, fields,
-                excludedMethods, disableAppendSuper, preferencesManager, dialogFactoryHelper.getDialogSettings());
+                excludedMethods, possibleStrategies, disableAppendSuper, preferencesManager,
+                dialogFactoryHelper.getDialogSettings());
     }
 
     @Override

@@ -58,8 +58,8 @@ public class CompareToDialogFactoryTest extends AbstractDialogFactoryTest {
     private void validateDialogCreation(IField[] iFields, boolean disableAppendSuper) throws JavaModelException,
             Exception {
         when(dialogFactoryHelper.getObjectClassFields(objectClass, preferencesManager)).thenReturn(iFields);
-        CompareToDialog compareToDialog = compareToDialogFactory
-                .createDialog(parentShell, objectClass, excludedMethods);
+        CompareToDialog compareToDialog = compareToDialogFactory.createDialog(parentShell, objectClass,
+                excludedMethods, possibleStrategyIdentifiers);
         assertArrayEquals(iFields, compareToDialog.getFields());
         assertEquals(disableAppendSuper, !compareToDialog.getAppendSuper());
     }

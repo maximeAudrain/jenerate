@@ -57,7 +57,8 @@ public class ToStringDialogFactoryTest extends AbstractDialogFactoryTest {
     private void validateDialogCreation(IField[] iFields, boolean disableAppendSuper) throws JavaModelException,
             Exception {
         when(dialogFactoryHelper.getObjectClassFields(objectClass, preferencesManager)).thenReturn(iFields);
-        ToStringDialog toStringDialog = toStringDialogFactory.createDialog(parentShell, objectClass, excludedMethods);
+        ToStringDialog toStringDialog = toStringDialogFactory.createDialog(parentShell, objectClass, excludedMethods,
+                possibleStrategyIdentifiers);
         assertArrayEquals(iFields, toStringDialog.getFields());
         assertEquals(disableAppendSuper, !toStringDialog.getAppendSuper());
     }

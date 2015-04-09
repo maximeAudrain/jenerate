@@ -1,5 +1,6 @@
 package org.jenerate.internal.ui.dialogs.factory.impl;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
@@ -9,6 +10,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
@@ -21,12 +23,12 @@ public class ToStringDialogFactory extends AbstractDialogFactory<ToStringDialog,
     }
 
     @Override
-    public ToStringDialog createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods)
-            throws Exception {
+    public ToStringDialog createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods,
+            LinkedHashSet<StrategyIdentifier> possibleStrategies) throws Exception {
         IField[] fields = getObjectClassFields(objectClass);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
         return new ToStringDialog(parentShell, "Generate ToString Method", objectClass, fields, excludedMethods,
-                disableAppendSuper, preferencesManager, dialogFactoryHelper.getDialogSettings());
+                possibleStrategies, disableAppendSuper, preferencesManager, dialogFactoryHelper.getDialogSettings());
     }
 
     @Override

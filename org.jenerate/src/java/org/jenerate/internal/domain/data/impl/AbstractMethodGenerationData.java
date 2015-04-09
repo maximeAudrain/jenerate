@@ -3,10 +3,12 @@ package org.jenerate.internal.domain.data.impl;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 
 public abstract class AbstractMethodGenerationData implements MethodGenerationData {
 
     private final IField[] checkedFields;
+    private final StrategyIdentifier selectedContentStrategy;
     private final IJavaElement elementPosition;
     private final boolean appendSuper;
     private final boolean generateComment;
@@ -15,6 +17,7 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
 
     protected AbstractMethodGenerationData(@SuppressWarnings("rawtypes") Builder builder) {
         this.checkedFields = builder.builderCheckedFields;
+        this.selectedContentStrategy = builder.builderSelectedContentStrategy;
         this.elementPosition = builder.builderElementPosition;
         this.appendSuper = builder.builderAppendSuper;
         this.generateComment = builder.builderGenerateComment;
@@ -25,6 +28,11 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
     @Override
     public IField[] getCheckedFields() {
         return checkedFields;
+    }
+
+    @Override
+    public StrategyIdentifier getSelectedContentStrategy() {
+        return selectedContentStrategy;
     }
 
     @Override
@@ -55,6 +63,7 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
     public abstract static class Builder<T extends Builder<T>> {
 
         private IField[] builderCheckedFields;
+        private StrategyIdentifier builderSelectedContentStrategy;
         private IJavaElement builderElementPosition;
         private boolean builderAppendSuper;
         private boolean builderGenerateComment;
@@ -63,6 +72,11 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
 
         public T withCheckedFields(IField[] checkedFields) {
             this.builderCheckedFields = checkedFields;
+            return getThis();
+        }
+
+        public T withSelectedContentStrategy(StrategyIdentifier selectedContentStrategy) {
+            this.builderSelectedContentStrategy = selectedContentStrategy;
             return getThis();
         }
 

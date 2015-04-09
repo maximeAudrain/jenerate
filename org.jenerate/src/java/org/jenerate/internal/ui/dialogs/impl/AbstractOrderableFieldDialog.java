@@ -1,6 +1,7 @@
 // $Id$
 package org.jenerate.internal.ui.dialogs.impl;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 
 /**
@@ -34,16 +36,18 @@ public abstract class AbstractOrderableFieldDialog<T extends MethodGenerationDat
     private Button downButton;
 
     public AbstractOrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
-            Set<IMethod> excludedMethods, PreferencesManager preferencesManager, IDialogSettings dialogSettings)
-            throws JavaModelException {
-        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, false, preferencesManager, dialogSettings);
+            Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies,
+            PreferencesManager preferencesManager, IDialogSettings dialogSettings) throws JavaModelException {
+        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, possibleStrategies, false,
+                preferencesManager, dialogSettings);
     }
 
     public AbstractOrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
-            Set<IMethod> excludedMethods, boolean disableAppendSuper, PreferencesManager preferencesManager,
-            IDialogSettings dialogSettings) throws JavaModelException {
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager,
-                dialogSettings);
+            Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies,
+            boolean disableAppendSuper, PreferencesManager preferencesManager, IDialogSettings dialogSettings)
+            throws JavaModelException {
+        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, possibleStrategies, disableAppendSuper,
+                preferencesManager, dialogSettings);
     }
 
     @Override

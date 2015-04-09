@@ -4,8 +4,6 @@
 
 package org.jenerate.internal.generate.method.handler;
 
-import java.util.LinkedHashSet;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -25,19 +23,22 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.generate.method.MethodGenerator;
+import org.jenerate.internal.generate.method.impl.MethodGeneratorImpl;
 import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
 import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
 import org.jenerate.internal.generate.method.util.impl.JavaCodeFormatterImpl;
 import org.jenerate.internal.generate.method.util.impl.JavaUiCodeAppenderImpl;
-import org.jenerate.internal.manage.MethodGeneratorManager;
-import org.jenerate.internal.manage.MethodManager;
+import org.jenerate.internal.manage.DialogFactoryManager;
+import org.jenerate.internal.manage.MethodContentManager;
+import org.jenerate.internal.manage.MethodSkeletonManager;
 import org.jenerate.internal.manage.PreferencesManager;
-import org.jenerate.internal.manage.impl.MethodGeneratorManagerImpl;
-import org.jenerate.internal.manage.impl.MethodManagerImpl;
+import org.jenerate.internal.manage.impl.DialogFactoryManagerImpl;
+import org.jenerate.internal.manage.impl.MethodContentManagerImpl;
+import org.jenerate.internal.manage.impl.MethodSkeletonManagerImpl;
 import org.jenerate.internal.manage.impl.PreferencesManagerImpl;
-import org.jenerate.internal.strategy.method.Method;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
+import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.jenerate.internal.util.impl.JavaInterfaceCodeAppenderImpl;
 
@@ -56,13 +57,14 @@ public class MethodGeneratorHandler extends AbstractHandler {
     private static final JavaCodeFormatter CODE_FORMATTER = new JavaCodeFormatterImpl();
     private static final JavaInterfaceCodeAppender JAVA_INTERFACE_CODE_APPENDER = new JavaInterfaceCodeAppenderImpl();
 
-    private final MethodManager methodManager;
-    private final MethodGeneratorManager generatorManager;
+    private final MethodSkeletonManager methodSkeletonManager;
+    private final MethodContentManager methodContentManager;
+    private final DialogFactoryManager dialogFactoryManager;
 
     public MethodGeneratorHandler() {
-        this.methodManager = new MethodManagerImpl(PREFERENCES_MANAGER, JAVA_INTERFACE_CODE_APPENDER);
-        this.generatorManager = new MethodGeneratorManagerImpl(PREFERENCES_MANAGER, JAVA_INTERFACE_CODE_APPENDER,
-                JAVA_UI_CODE_APPENDER, CODE_FORMATTER);
+        this.dialogFactoryManager = new DialogFactoryManagerImpl(PREFERENCES_MANAGER, JAVA_INTERFACE_CODE_APPENDER);
+        this.methodSkeletonManager = new MethodSkeletonManagerImpl(PREFERENCES_MANAGER, JAVA_INTERFACE_CODE_APPENDER);
+        this.methodContentManager = new MethodContentManagerImpl(PREFERENCES_MANAGER, JAVA_INTERFACE_CODE_APPENDER);
     }
 
     @Override
@@ -97,9 +99,9 @@ public class MethodGeneratorHandler extends AbstractHandler {
                 MessageDialog.openInformation(parentShell, "Method Generation",
                         "Cursor not in a class, or no class has the same name with the Java file.");
             } else {
-                MethodsGenerationCommandIdentifier userActionIdentifier = MethodsGenerationCommandIdentifier
+                MethodsGenerationCommandIdentifier commandIdentifier = MethodsGenerationCommandIdentifier
                         .getUserActionIdentifierFor(commandId);
-                generateCode(parentShell, objectClass, userActionIdentifier);
+                generateCode(parentShell, objectClass, commandIdentifier);
             }
         } catch (Exception exception) {
             MessageDialog.openError(parentShell, "Error", exception.getMessage());
@@ -107,9 +109,10 @@ public class MethodGeneratorHandler extends AbstractHandler {
     }
 
     private <T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData> void generateCode(
-            Shell parentShell, IType objectClass, MethodsGenerationCommandIdentifier userActionIdentifier) {
-        LinkedHashSet<Method<T, V>> methods = methodManager.getMethods(userActionIdentifier);
-        MethodGenerator<T, U, V> genericGenerator = generatorManager.getMethodGenerator(userActionIdentifier);
-        genericGenerator.generate(parentShell, objectClass, methods);
+            Shell parentShell, IType objectClass, MethodsGenerationCommandIdentifier commandIdentifier) {
+        DialogFactory<U, V> dialogFactory = dialogFactoryManager.getDialogFactory(commandIdentifier);
+        MethodGenerator<T, U, V> methodGenerator = new MethodGeneratorImpl<T, U, V>(dialogFactory,
+                JAVA_UI_CODE_APPENDER, CODE_FORMATTER, methodSkeletonManager, methodContentManager);
+        methodGenerator.generate(parentShell, objectClass, commandIdentifier);
     }
 }

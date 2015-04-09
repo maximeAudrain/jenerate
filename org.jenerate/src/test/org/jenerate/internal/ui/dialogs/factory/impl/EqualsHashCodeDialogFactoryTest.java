@@ -73,7 +73,7 @@ public class EqualsHashCodeDialogFactoryTest extends AbstractDialogFactoryTest {
             Exception {
         when(dialogFactoryHelper.getObjectClassFields(objectClass, preferencesManager)).thenReturn(iFields);
         EqualsHashCodeDialog equalsHashCodeDialog = equalsHashCodeDialogFactory.createDialog(parentShell, objectClass,
-                excludedMethods);
+                excludedMethods, possibleStrategyIdentifiers);
         assertArrayEquals(iFields, equalsHashCodeDialog.getFields());
         assertEquals(disableAppendSuper, !equalsHashCodeDialog.getAppendSuper());
     }

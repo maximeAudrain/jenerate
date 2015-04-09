@@ -1,6 +1,7 @@
 package org.jenerate.internal.ui.dialogs.impl;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.data.impl.ToStringGenerationDataImpl;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
@@ -39,11 +41,12 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
     private IDialogSettings settings;
 
     public ToStringDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
-            final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper,
+            final IField[] fields, final Set<IMethod> excludedMethods,
+            LinkedHashSet<StrategyIdentifier> possibleStrategies, final boolean disableAppendSuper,
             PreferencesManager preferencesManager, IDialogSettings dialogSettings) throws JavaModelException {
 
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager,
-                dialogSettings);
+        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, possibleStrategies, disableAppendSuper,
+                preferencesManager, dialogSettings);
 
         settings = dialogSettings.getSection(SETTINGS_SECTION);
         if (settings == null) {
@@ -103,6 +106,7 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
         //@formatter:off
         return new ToStringGenerationDataImpl.Builder()
                 .withCheckedFields(getCheckedFields())
+                .withSelectedContentStrategy(getStrategyIdentifier())
                 .withElementPosition(getElementPosition())
                 .withAppendSuper(getAppendSuper())
                 .withGenerateComment(getGenerateComment())

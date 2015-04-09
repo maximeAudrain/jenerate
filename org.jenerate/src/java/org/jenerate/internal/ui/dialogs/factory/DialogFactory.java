@@ -1,5 +1,6 @@
 package org.jenerate.internal.ui.dialogs.factory;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IMethod;
@@ -8,6 +9,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 
@@ -30,7 +32,8 @@ public interface DialogFactory<T extends FieldDialog<U>, U extends MethodGenerat
      * @return the fully formed {@link FieldDialog} for the provided parameters
      * @throws Exception if a problem occur when creating the {@link FieldDialog}
      */
-    T createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods) throws Exception;
+    T createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods,
+            LinkedHashSet<StrategyIdentifier> possibleStrategies) throws Exception;
 
     /**
      * @return the related {@link CommandIdentifier} for this {@link DialogFactory}

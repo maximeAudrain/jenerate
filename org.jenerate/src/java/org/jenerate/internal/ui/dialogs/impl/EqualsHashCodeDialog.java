@@ -1,5 +1,6 @@
 package org.jenerate.internal.ui.dialogs.impl;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
@@ -32,6 +33,7 @@ import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersCustom;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersDefault;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersRandom;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 
 /**
@@ -73,11 +75,12 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
     private IDialogSettings hashCodeSettings;
 
     public EqualsHashCodeDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
-            final IField[] fields, final Set<IMethod> excludedMethods, final boolean disableAppendSuper,
+            final IField[] fields, final Set<IMethod> excludedMethods,
+            LinkedHashSet<StrategyIdentifier> possibleStrategies, final boolean disableAppendSuper,
             PreferencesManager preferencesManager, IDialogSettings dialogSettings) throws JavaModelException {
 
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, disableAppendSuper, preferencesManager,
-                dialogSettings);
+        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, possibleStrategies, disableAppendSuper,
+                preferencesManager, dialogSettings);
 
         equalsSettings = dialogSettings.getSection(EQUALS_SETTINGS_SECTION);
         if (equalsSettings == null) {
@@ -323,6 +326,7 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
         //@formatter:off
         return new EqualsHashCodeGenerationDataImpl.Builder()
                 .withCheckedFields(getCheckedFields())
+                .withSelectedContentStrategy(getStrategyIdentifier())
                 .withElementPosition(getElementPosition())
                 .withAppendSuper(getAppendSuper())
                 .withGenerateComment(getGenerateComment())

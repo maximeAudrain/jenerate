@@ -1,6 +1,7 @@
 package org.jenerate.internal.ui.dialogs.factory.impl;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
@@ -10,6 +11,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.widgets.Shell;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
@@ -52,6 +54,12 @@ public abstract class AbstractDialogFactoryTest {
     @Mock
     protected IField field2;
 
+    protected LinkedHashSet<StrategyIdentifier> possibleStrategyIdentifiers;
+    @Mock
+    protected StrategyIdentifier identifier1;
+    @Mock
+    protected StrategyIdentifier identifier2;
+
     @Before
     public void setUp() throws Exception {
         mockDialogSettings();
@@ -59,6 +67,9 @@ public abstract class AbstractDialogFactoryTest {
         excludedMethods = new HashSet<IMethod>();
         excludedMethods.add(method1);
         excludedMethods.add(method2);
+        possibleStrategyIdentifiers = new LinkedHashSet<StrategyIdentifier>();
+        possibleStrategyIdentifiers.add(identifier1);
+        possibleStrategyIdentifiers.add(identifier2);
         callbackAfterSetUp();
     }
 

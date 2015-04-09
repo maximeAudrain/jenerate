@@ -2,6 +2,7 @@ package org.jenerate.internal.domain.data;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 
 /**
  * Defines data used when generating method code. It holds common information for all method code generation. The
@@ -11,9 +12,11 @@ import org.eclipse.jdt.core.IJavaElement;
  */
 public interface MethodGenerationData {
 
-    IJavaElement getElementPosition();
-
     IField[] getCheckedFields();
+
+    StrategyIdentifier getSelectedContentStrategy();
+
+    IJavaElement getElementPosition();
 
     boolean getAppendSuper();
 

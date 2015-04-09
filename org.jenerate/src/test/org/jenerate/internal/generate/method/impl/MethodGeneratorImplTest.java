@@ -13,8 +13,12 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.CommandIdentifier;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
 import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
+import org.jenerate.internal.manage.MethodContentManager;
+import org.jenerate.internal.manage.MethodSkeletonManager;
 import org.jenerate.internal.strategy.method.Method;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
@@ -30,6 +34,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -57,9 +62,9 @@ public class MethodGeneratorImplTest {
     private static final String METHOD2_CONTENT = "method2Content";
 
     @Mock
-    private DialogFactory<TestDialog, TestMethodGenerationData> dialogFactory;
+    private DialogFactory<FieldDialog<MethodGenerationData>, MethodGenerationData> dialogFactory;
     @Mock
-    private TestDialog testDialog;
+    private FieldDialog<MethodGenerationData> testDialog;
     @Mock
     private Dialog dialog;
 
@@ -69,13 +74,24 @@ public class MethodGeneratorImplTest {
     private JavaCodeFormatter jeneratePluginCodeFormatter;
 
     @Mock
+    private MethodSkeletonManager methodSkeletonManager;
+    @Mock
+    private MethodContentManager methodContentManager;
+
+    @Mock
+    private StrategyIdentifier strategyIdentifier1;
+    @Mock
+    private StrategyIdentifier strategyIdentifier2;
+    @Mock
+    private CommandIdentifier commandIdentifier;
+    @Mock
     private Shell parentShell;
     @Mock
     private IType objectClass;
     @Mock
     private ICompilationUnit compilationUnit;
     @Mock
-    private TestMethodGenerationData data;
+    private MethodGenerationData data;
     @Mock
     private IJavaElement elementPosition;
     @Mock
@@ -88,60 +104,87 @@ public class MethodGeneratorImplTest {
     private IMethod excludedMethod2;
 
     @Mock
-    private Method<TestMethodSkeleton, TestMethodGenerationData> method1;
+    private MethodSkeleton<MethodGenerationData> method1Skeleton;
     @Mock
-    private TestMethodSkeleton method1Skeleton;
-    @Mock
-    private MethodContent<TestMethodSkeleton, TestMethodGenerationData> method1Content;
+    private MethodSkeleton<MethodGenerationData> method2Skeleton;
 
     @Mock
-    private Method<TestMethodSkeleton, TestMethodGenerationData> method2;
+    private MethodContent<MethodSkeleton<MethodGenerationData>, MethodGenerationData> method1Content;
     @Mock
-    private TestMethodSkeleton method2Skeleton;
-    @Mock
-    private MethodContent<TestMethodSkeleton, TestMethodGenerationData> method2Content;
+    private MethodContent<MethodSkeleton<MethodGenerationData>, MethodGenerationData> method2Content;
 
-    private MethodGeneratorImpl<TestMethodSkeleton, TestDialog, TestMethodGenerationData> methodGenerator;
+    @Mock
+    private Method<MethodSkeleton<MethodGenerationData>, MethodGenerationData> method1;
+    @Mock
+    private Method<MethodSkeleton<MethodGenerationData>, MethodGenerationData> method2;
+
+    private MethodGeneratorImpl<MethodSkeleton<MethodGenerationData>, FieldDialog<MethodGenerationData>, MethodGenerationData> methodGenerator;
 
     @Before
     public void setUp() throws Exception {
         mockJavaFormatter();
         mockObjectClass();
-        mockDialog();
         mockData();
         mockMethod1();
         mockMethod2();
-        methodGenerator = new MethodGeneratorImpl<TestMethodSkeleton, TestDialog, TestMethodGenerationData>(
-                dialogFactory, javaUiCodeAppender, jeneratePluginCodeFormatter);
+        methodGenerator = new MethodGeneratorImpl<MethodSkeleton<MethodGenerationData>, FieldDialog<MethodGenerationData>, MethodGenerationData>(
+                dialogFactory, javaUiCodeAppender, jeneratePluginCodeFormatter, methodSkeletonManager,
+                methodContentManager);
     }
 
     @Test
-    public void testGenerateWithEmptyMethods() throws Exception {
-        methodGenerator.generate(parentShell, objectClass, createSortedSet());
+    public void testGenerateWithUnknownIdentifier() throws Exception {
+        CommandIdentifier unknownCommandIdentifier = mock(CommandIdentifier.class);
+        LinkedHashSet<MethodSkeleton<MethodGenerationData>> methodSkeletons = mockGetMethodSkeletons(unknownCommandIdentifier);
+        LinkedHashSet<StrategyIdentifier> possibleStrategies = mockGetPossibleStrategies(methodSkeletons);
+        mockDialog(Collections.<IMethod> emptySet(), possibleStrategies);
+        mockGetMethods(methodSkeletons);
+
+        methodGenerator.generate(parentShell, objectClass, unknownCommandIdentifier);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, elementPosition);
     }
 
     @Test
     public void testGenerateDialogResultIsNotOk() throws Exception {
+        LinkedHashSet<MethodSkeleton<MethodGenerationData>> methodSkeletons = mockGetMethodSkeletons(commandIdentifier,
+                method1Skeleton);
+        LinkedHashSet<StrategyIdentifier> possibleStrategies = mockGetPossibleStrategies(methodSkeletons,
+                strategyIdentifier1);
+        mockDialog(Collections.<IMethod> emptySet(), possibleStrategies);
+
         when(dialog.open()).thenReturn(Window.CANCEL);
-        methodGenerator.generate(parentShell, objectClass, createSortedSet(method1));
+        methodGenerator.generate(parentShell, objectClass, commandIdentifier);
         verifyNoMoreInteractions(javaUiCodeAppender, compilationUnit);
     }
 
     @Test
     public void testGenerateWithMethod1() throws Exception {
+        LinkedHashSet<MethodSkeleton<MethodGenerationData>> methodSkeletons = mockGetMethodSkeletons(commandIdentifier,
+                method1Skeleton);
+        LinkedHashSet<StrategyIdentifier> possibleStrategies = mockGetPossibleStrategies(methodSkeletons,
+                strategyIdentifier1);
+        mockDialog(Collections.<IMethod> emptySet(), possibleStrategies);
+        mockGetMethods(methodSkeletons, method1);
+
         when(objectClass.createMethod(METHOD1_FULL_METHOD, elementPosition, true, null)).thenReturn(
                 newPositionAfterMethod1);
-        methodGenerator.generate(parentShell, objectClass, createSortedSet(method1));
+        methodGenerator.generate(parentShell, objectClass, commandIdentifier);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, newPositionAfterMethod1);
         verifyNoMoreInteractions(compilationUnit);
     }
 
     @Test
     public void testGenerateWithMethod2() throws Exception {
+        LinkedHashSet<MethodSkeleton<MethodGenerationData>> methodSkeletons = mockGetMethodSkeletons(commandIdentifier,
+                method2Skeleton);
+        LinkedHashSet<StrategyIdentifier> possibleStrategies = mockGetPossibleStrategies(methodSkeletons,
+                strategyIdentifier1);
+        mockDialog(Collections.<IMethod> emptySet(), possibleStrategies);
+        mockGetMethods(methodSkeletons, method2);
+
         when(objectClass.createMethod(METHOD2_FULL_METHOD, elementPosition, true, null)).thenReturn(
                 newPositionAfterMethod2);
-        methodGenerator.generate(parentShell, objectClass, createSortedSet(method2));
+        methodGenerator.generate(parentShell, objectClass, commandIdentifier);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, newPositionAfterMethod2);
         verify(compilationUnit, times(1)).createImport(METHOD2_LIBRARY_1, null, null);
         verify(compilationUnit, times(1)).createImport(METHOD2_LIBRARY_2, null, null);
@@ -149,11 +192,18 @@ public class MethodGeneratorImplTest {
 
     @Test
     public void testGenerateWithTwoMethods() throws Exception {
+        LinkedHashSet<MethodSkeleton<MethodGenerationData>> methodSkeletons = mockGetMethodSkeletons(commandIdentifier,
+                method1Skeleton, method2Skeleton);
+        LinkedHashSet<StrategyIdentifier> possibleStrategies = mockGetPossibleStrategies(methodSkeletons,
+                strategyIdentifier1);
+        mockDialog(Collections.<IMethod> emptySet(), possibleStrategies);
+        mockGetMethods(methodSkeletons, method1, method2);
+
         when(objectClass.createMethod(METHOD1_FULL_METHOD, elementPosition, true, null)).thenReturn(
                 newPositionAfterMethod1);
         when(objectClass.createMethod(METHOD2_FULL_METHOD, newPositionAfterMethod1, true, null)).thenReturn(
                 newPositionAfterMethod2);
-        methodGenerator.generate(parentShell, objectClass, createSortedSet(method1, method2));
+        methodGenerator.generate(parentShell, objectClass, commandIdentifier);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, newPositionAfterMethod2);
         verify(compilationUnit, times(1)).createImport(METHOD2_LIBRARY_1, null, null);
         verify(compilationUnit, times(1)).createImport(METHOD2_LIBRARY_2, null, null);
@@ -161,6 +211,13 @@ public class MethodGeneratorImplTest {
 
     @Test
     public void testGenerateWithTwoMethodsAlreadyExists() throws Exception {
+        LinkedHashSet<MethodSkeleton<MethodGenerationData>> methodSkeletons = mockGetMethodSkeletons(commandIdentifier,
+                method1Skeleton, method2Skeleton);
+        LinkedHashSet<StrategyIdentifier> possibleStrategies = mockGetPossibleStrategies(methodSkeletons,
+                strategyIdentifier1);
+        mockDialog(Collections.<IMethod> emptySet(), possibleStrategies);
+        mockGetMethods(methodSkeletons, method1, method2);
+
         Set<IMethod> excludedMethods = new HashSet<IMethod>();
         excludedMethods.add(excludedMethod1);
         excludedMethods.add(excludedMethod2);
@@ -170,8 +227,9 @@ public class MethodGeneratorImplTest {
                 newPositionAfterMethod1);
         when(objectClass.createMethod(METHOD2_FULL_METHOD, newPositionAfterMethod1, true, null)).thenReturn(
                 newPositionAfterMethod2);
-        when(dialogFactory.createDialog(parentShell, objectClass, excludedMethods)).thenReturn(testDialog);
-        methodGenerator.generate(parentShell, objectClass, createSortedSet(method1, method2));
+        when(dialogFactory.createDialog(parentShell, objectClass, excludedMethods, possibleStrategies)).thenReturn(
+                testDialog);
+        methodGenerator.generate(parentShell, objectClass, commandIdentifier);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, newPositionAfterMethod2);
         verify(compilationUnit, times(1)).createImport(METHOD2_LIBRARY_1, null, null);
         verify(compilationUnit, times(1)).createImport(METHOD2_LIBRARY_2, null, null);
@@ -180,18 +238,42 @@ public class MethodGeneratorImplTest {
     }
 
     @SafeVarargs
-    private final LinkedHashSet<Method<TestMethodSkeleton, TestMethodGenerationData>> createSortedSet(
-            Method<TestMethodSkeleton, TestMethodGenerationData>... methods) {
-        LinkedHashSet<Method<TestMethodSkeleton, TestMethodGenerationData>> sortedSet = new LinkedHashSet<>();
-        for (Method<TestMethodSkeleton, TestMethodGenerationData> method : methods) {
-            sortedSet.add(method);
+    private final LinkedHashSet<MethodSkeleton<MethodGenerationData>> mockGetMethodSkeletons(
+            CommandIdentifier identifier, MethodSkeleton<MethodGenerationData>... skeletons) {
+        LinkedHashSet<MethodSkeleton<MethodGenerationData>> methodSkeletons = new LinkedHashSet<>();
+        for (MethodSkeleton<MethodGenerationData> skeleton : skeletons) {
+            methodSkeletons.add(skeleton);
         }
-        return sortedSet;
-
+        when(methodSkeletonManager.getMethodSkeletons(identifier)).thenReturn(methodSkeletons);
+        return methodSkeletons;
     }
 
-    private void mockDialog() throws Exception {
-        when(dialogFactory.createDialog(parentShell, objectClass, Collections.<IMethod> emptySet())).thenReturn(
+    @SafeVarargs
+    private final LinkedHashSet<Method<MethodSkeleton<MethodGenerationData>, MethodGenerationData>> mockGetMethods(
+            LinkedHashSet<MethodSkeleton<MethodGenerationData>> skeletons,
+            Method<MethodSkeleton<MethodGenerationData>, MethodGenerationData>... methods) {
+        LinkedHashSet<Method<MethodSkeleton<MethodGenerationData>, MethodGenerationData>> allMethods = new LinkedHashSet<>();
+        for (Method<MethodSkeleton<MethodGenerationData>, MethodGenerationData> method : methods) {
+            allMethods.add(method);
+        }
+        when(methodContentManager.getAllMethods(skeletons, strategyIdentifier1)).thenReturn(allMethods);
+        return allMethods;
+    }
+
+    @SafeVarargs
+    private final LinkedHashSet<StrategyIdentifier> mockGetPossibleStrategies(
+            LinkedHashSet<MethodSkeleton<MethodGenerationData>> skeletons, StrategyIdentifier... identifiers) {
+        LinkedHashSet<StrategyIdentifier> possibleStrategies = new LinkedHashSet<StrategyIdentifier>();
+        for (StrategyIdentifier strategyIdentifier : identifiers) {
+            possibleStrategies.add(strategyIdentifier);
+        }
+        when(methodContentManager.getPossibleStrategies(skeletons)).thenReturn(possibleStrategies);
+        return possibleStrategies;
+    }
+
+    private void mockDialog(Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies)
+            throws Exception {
+        when(dialogFactory.createDialog(parentShell, objectClass, excludedMethods, possibleStrategies)).thenReturn(
                 testDialog);
         when(dialog.open()).thenReturn(Window.OK);
         when(testDialog.getDialog()).thenReturn(dialog);
@@ -209,6 +291,7 @@ public class MethodGeneratorImplTest {
     }
 
     private void mockData() {
+        when(data.getSelectedContentStrategy()).thenReturn(strategyIdentifier1);
         when(data.getElementPosition()).thenReturn(elementPosition);
     }
 
@@ -246,18 +329,6 @@ public class MethodGeneratorImplTest {
         when(method2Content.getLibrariesToImport(data)).thenReturn(contentLibraries);
         when(method2Content.getMethodContent(objectClass, data)).thenReturn(METHOD2_CONTENT);
         when(method2.getMethodContent()).thenReturn(method2Content);
-    }
-
-    private interface TestMethodGenerationData extends MethodGenerationData {
-        /* Marker interface for this test */
-    }
-
-    private interface TestMethodSkeleton extends MethodSkeleton<TestMethodGenerationData> {
-        /* Marker interface for this test */
-    }
-
-    private interface TestDialog extends FieldDialog<TestMethodGenerationData> {
-        /* Marker interface for this test */
     }
 
 }
