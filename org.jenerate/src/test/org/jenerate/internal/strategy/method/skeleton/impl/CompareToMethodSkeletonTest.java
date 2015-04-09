@@ -86,7 +86,7 @@ public class CompareToMethodSkeletonTest extends
         when(data.getGenerateComment()).thenReturn(true);
         String method = methodSkeleton.getMethod(objectClass, data, METHOD_CONTENT);
         verify(javaInterfaceCodeAppender, never()).addSuperInterface(objectClass, "Comparable");
-        assertEquals("/* (non-Javadoc)\n * @see java.lang.Comparable#compareTo(java.lang.Object)\n */\n"
+        assertEquals("/**\n * {@inheritDoc}\n */\n"
                 + "public int compareTo(final Object other) {\nCONTENT}\n\n", method);
     }
 

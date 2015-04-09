@@ -67,7 +67,7 @@ public class ToStringMethodSkeletonTest extends
     public void testGetMethodGenerateComment() throws Exception {
         when(data.getGenerateComment()).thenReturn(true);
         String method = methodSkeleton.getMethod(objectClass, data, METHOD_CONTENT);
-        assertEquals("/* (non-Javadoc)\n * @see java.lang.Object#toString()\n */\n"
+        assertEquals("/**\n * {@inheritDoc}\n */\n"
                 + "public String toString() {\nCONTENT}\n\n", method);
     }
 
