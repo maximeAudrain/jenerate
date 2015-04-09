@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.data.impl.ToStringGenerationDataImpl;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
-import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringStyle;
@@ -82,23 +81,28 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
         label.setLayoutData(data);
 
         styleCombo = new Combo(composite, SWT.NONE);
-        MethodContentStrategyIdentifier preferedStrategy = getPreferencesManager().getCurrentPreferenceValue(
-                JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
-        List<String> styles = new ArrayList<String>();
-        for (CommonsLangToStringStyle style : CommonsLangToStringStyle.values()) {
-            if (CommonsLangToStringStyle.NO_STYLE.equals(style)) {
-                styles.add(CommonsLangToStringStyle.NO_STYLE.name());
-            } else {
-                styles.add(style.getFullLibraryString(preferedStrategy));
-            }
-        }
-        styleCombo.setItems(styles.toArray(new String[styles.size()]));
+        String[] stylesArray = getStyles();
+        styleCombo.setItems(stylesArray);
         styleCombo.setText(toStringStyle);
 
         data = new GridData(GridData.FILL_HORIZONTAL);
         styleCombo.setLayoutData(data);
 
         return composite;
+    }
+
+    private String[] getStyles() {
+        StrategyIdentifier currentStrategy = getStrategyIdentifier();
+        List<String> styles = new ArrayList<String>();
+        for (CommonsLangToStringStyle style : CommonsLangToStringStyle.values()) {
+            if (CommonsLangToStringStyle.NO_STYLE.equals(style)) {
+                styles.add(CommonsLangToStringStyle.NO_STYLE.name());
+            } else {
+                styles.add(style.getFullLibraryString(currentStrategy));
+            }
+        }
+        String[] stylesArray = styles.toArray(new String[styles.size()]);
+        return stylesArray;
     }
 
     @Override

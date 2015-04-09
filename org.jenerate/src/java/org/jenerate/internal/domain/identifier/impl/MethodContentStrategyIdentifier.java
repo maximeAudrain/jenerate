@@ -10,5 +10,6 @@ import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 public enum MethodContentStrategyIdentifier implements StrategyIdentifier {
 
     USE_COMMONS_LANG,
-    USE_COMMONS_LANG3;
+    USE_COMMONS_LANG3,
+    USE_GUAVA;
 }

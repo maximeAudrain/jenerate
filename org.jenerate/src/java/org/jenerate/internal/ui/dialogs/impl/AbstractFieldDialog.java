@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.swt.SWT;
@@ -79,7 +80,7 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
 
     private StrategyIdentifier currentStrategy;
 
-    private LinkedHashSet<StrategyIdentifier> possibleStrategies;
+    private final LinkedHashSet<StrategyIdentifier> possibleStrategies;
 
     private boolean disableAppendSuper;
 
@@ -383,8 +384,8 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         label.setLayoutData(data);
 
         final Combo combo = new Combo(composite, SWT.READ_ONLY);
-        final StrategyIdentifier[] identifiers = possibleStrategies
-                .toArray(new StrategyIdentifier[possibleStrategies.size()]);
+        final StrategyIdentifier[] identifiers = possibleStrategies.toArray(new StrategyIdentifier[possibleStrategies
+                .size()]);
         String[] identifierNames = new String[identifiers.length];
         for (int i = 0; i < identifiers.length; i++) {
             identifierNames[i] = identifiers[i].toString();
@@ -403,8 +404,16 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
 
         MethodContentStrategyIdentifier preferedStrategy = preferencesManager
                 .getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
-        currentStrategy = preferedStrategy;
-        combo.select(preferedStrategy.ordinal());
+        if (possibleStrategies.contains(preferedStrategy)) {
+            combo.select(preferedStrategy.ordinal());
+            currentStrategy = preferedStrategy;
+        } else {
+            MessageDialog.openWarning(getParentShell(), "Warning", "The prefered method content strategy '"
+                    + preferedStrategy + "' is not defined for the current method generation. "
+                    + "Setting to the first possible method content strategy.");
+            combo.select(0);
+            currentStrategy = possibleStrategies.iterator().next();
+        }
         return composite;
     }
 
@@ -601,5 +610,9 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
 
     public IField[] getFields() {
         return fields;
+    }
+
+    public LinkedHashSet<StrategyIdentifier> getPossibleStrategies() {
+        return possibleStrategies;
     }
 }
