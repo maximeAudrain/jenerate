@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.data.impl.ToStringGenerationDataImpl;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringStyle;
@@ -28,7 +29,7 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLan
  */
 public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerationData> {
 
-	public static final String SETTINGS_SECTION = "ToStringDialog";
+    public static final String SETTINGS_SECTION = "ToStringDialog";
 
 	private static final String SETTINGS_STYLE = "CommonsLangToStringStyle";
 
@@ -50,12 +51,10 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
 			settings = dialogSettings.addNewSection(SETTINGS_SECTION);
 		}
 
-		toStringStyle = settings.get(SETTINGS_STYLE);
-		if (toStringStyle == null) {
-			toStringStyle = CommonsLangToStringStyle.NO_STYLE.getFullLibraryString(getPreferencesManager()
-					.getCurrentPreferenceValue(JeneratePreferences.USE_COMMONS_LANG3).booleanValue());
-		}
-	}
+        toStringStyle = settings.get(SETTINGS_STYLE);
+        if (toStringStyle == null) {
+            toStringStyle = CommonsLangToStringStyle.NO_STYLE.getFullLibraryString(getPreferencesManager()
+                    .getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY));
 
 	@Override
 	public boolean close() {
@@ -78,19 +77,10 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
 		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		label.setLayoutData(data);
 
-		styleCombo = new Combo(composite, SWT.NONE);
-		boolean useCommonsLang3 = getPreferencesManager().getCurrentPreferenceValue(
-				JeneratePreferences.USE_COMMONS_LANG3).booleanValue();
-		List<String> styles = new ArrayList<String>();
-		for (CommonsLangToStringStyle style : CommonsLangToStringStyle.values()) {
-			if (CommonsLangToStringStyle.NO_STYLE.equals(style)) {
-				styles.add(CommonsLangToStringStyle.NO_STYLE.name());
-			} else {
-				styles.add(style.getFullLibraryString(useCommonsLang3));
-			}
-		}
-		styleCombo.setItems(styles.toArray(new String[styles.size()]));
-		styleCombo.setText(toStringStyle);
+        styleCombo = new Combo(composite, SWT.NONE);
+        MethodContentStrategyIdentifier preferedStrategy = getPreferencesManager().getCurrentPreferenceValue(
+                JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
+                styles.add(style.getFullLibraryString(preferedStrategy));
 
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		styleCombo.setLayoutData(data);

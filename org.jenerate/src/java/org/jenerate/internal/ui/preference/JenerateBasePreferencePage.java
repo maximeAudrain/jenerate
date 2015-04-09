@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -14,6 +15,7 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.jenerate.JeneratePlugin;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.PluginPreference;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 
@@ -53,6 +55,13 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
             return new BooleanFieldEditor(key, description, getFieldEditorParent());
         } else if (String.class.isAssignableFrom(type)) {
             return new StringFieldEditor(key, description, getFieldEditorParent());
+        } else if (MethodContentStrategyIdentifier.class.isAssignableFrom(type)) {
+            MethodContentStrategyIdentifier[] values = MethodContentStrategyIdentifier.values();
+            String[][] comboValues = new String[values.length][2];
+            for (int i = 0; i < values.length; i++) {
+                comboValues[i] = new String[] { values[i].name(), values[i].name() };
+            }
+            return new ComboFieldEditor(key, description, comboValues, getFieldEditorParent());
         } else {
             throw new UnsupportedOperationException("The preference type '" + type + "' for plugin preference '"
                     + pluginPreference + "' is not currently handled. ");

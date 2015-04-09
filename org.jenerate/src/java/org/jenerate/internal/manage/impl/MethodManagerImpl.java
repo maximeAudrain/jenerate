@@ -4,7 +4,6 @@ import java.util.LinkedHashSet;
 
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
-import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.MethodContentManager;
@@ -46,19 +45,14 @@ public final class MethodManagerImpl implements MethodManager {
     @Override
     public <T extends MethodSkeleton<U>, U extends MethodGenerationData> LinkedHashSet<Method<T, U>> getMethods(
             CommandIdentifier commandIdentifier) {
-        boolean useCommonLang3 = preferencesManager.getCurrentPreferenceValue(JeneratePreferences.USE_COMMONS_LANG3)
-                .booleanValue();
-        StrategyIdentifier strategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG;
-        if (useCommonLang3) {
-            strategyIdentifier = MethodContentStrategyIdentifier.USE_COMMONS_LANG3;
-        }
+        MethodContentStrategyIdentifier preferedStrategy = preferencesManager
+                .getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
 
         LinkedHashSet<MethodSkeleton<U>> methodSkeletons = methodSkeletonManager.getMethodSkeletons(commandIdentifier);
 
         LinkedHashSet<Method<T, U>> methods = new LinkedHashSet<Method<T, U>>();
         for (MethodSkeleton<U> methodSkeleton : methodSkeletons) {
-            MethodContent<T, U> methodContent = methodContentManager.getMethodContent(methodSkeleton,
-                    strategyIdentifier);
+            MethodContent<T, U> methodContent = methodContentManager.getMethodContent(methodSkeleton, preferedStrategy);
             methods.add(new MethodImpl<T, U>((T) methodSkeleton, methodContent));
         }
         return methods;
