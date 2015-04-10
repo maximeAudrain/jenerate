@@ -50,20 +50,11 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
         if (!isValid())
             return;
 
-        String hashCodeFieldStringValue = getHashCodeCachingField().getStringValue();
-        String toStringFieldStringValue = getToStringCachingField().getStringValue();
-
-        IStatus status = JavaConventions.validateIdentifier(hashCodeFieldStringValue);
-        if (!status.isOK()) {
-            setErrorMessage(status.getMessage());
-            setValid(false);
+        if (!isFieldStringValueValid(getHashCodeCachingField().getStringValue())) {
             return;
         }
 
-        status = JavaConventions.validateIdentifier(toStringFieldStringValue);
-        if (!status.isOK()) {
-            setErrorMessage(status.getMessage());
-            setValid(false);
+        if (!isFieldStringValueValid(getToStringCachingField().getStringValue())) {
             return;
         }
     }
@@ -105,5 +96,15 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
 
     private BooleanFieldEditor getCacheHashCodeField() {
         return (BooleanFieldEditor) fieldEditors.get(JeneratePreferences.CACHE_HASHCODE);
+    }
+
+    private boolean isFieldStringValueValid(String value) {
+        IStatus status = JavaConventions.validateIdentifier(value);
+        if (status.isOK()) {
+            return true;
+        }
+        setErrorMessage(status.getMessage());
+        setValid(false);
+        return false;
     }
 }

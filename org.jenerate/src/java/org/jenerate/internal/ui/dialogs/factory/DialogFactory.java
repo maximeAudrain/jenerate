@@ -27,7 +27,7 @@ public interface DialogFactory<T extends FieldDialog<U>, U extends MethodGenerat
      * 
      * @param parentShell the shell where the dialog is opened from.
      * @param objectClass the current class on which the code generation process is in effect
-     * @param excludedMethods a set of excluded methods XXX see why this guy needs this
+     * @param excludedMethods a set of excluded methods
      * @return the fully formed {@link FieldDialog} for the provided parameters
      * @throws Exception if a problem occur when creating the {@link FieldDialog}
      */
