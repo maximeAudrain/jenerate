@@ -1,21 +1,16 @@
 // $Id$
 package org.jenerate.internal.ui.dialogs.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IMember;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -43,95 +38,83 @@ import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentif
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
+import org.jenerate.internal.ui.dialogs.factory.impl.DialogFactoryHelperImpl;
 
 /**
- * This class contains some code from org.eclipse.jdt.internal.ui.dialogs.SourceActionDialog
+ * An abstract {@link Dialog} allowing configuration of the different parameters for the method generation. It contains
+ * for example the different fields present in the class where code will be generated. This class contains some code from
+ * org.eclipse.jdt.internal.ui.dialogs.SourceActionDialog
  * 
- * @author jiayun
+ * @author jiayun, maudrain
  */
 public abstract class AbstractFieldDialog<T extends MethodGenerationData> extends Dialog implements FieldDialog<T> {
 
     /**
-     * Used for testing
+     * Dialog settings
      */
     public static final String ABSTRACT_SETTINGS_SECTION = "AbstractFieldDialog";
     public static final String SETTINGS_APPEND_SUPER = "AppendSuper";
-
     private static final String SETTINGS_INSERT_POSITION = "InsertPosition";
-
     private static final String SETTINGS_GENERATE_COMMENT = "GenerateComment";
-
     private static final String SETTINGS_USE_GETTERS = "UseGetters";
 
-    protected CLabel messageLabel;
-
-    private String title;
-
-    protected CheckboxTableViewer fieldViewer;
-
-    private IField[] fields;
-
-    private IField[] checkedFields;
-
-    private List<IJavaElement> insertPositions;
-
-    private List<String> insertPositionLabels;
-    private int currentPositionIndex;
-
-    private StrategyIdentifier currentStrategy;
-
-    private final LinkedHashSet<StrategyIdentifier> possibleStrategies;
-
-    private boolean disableAppendSuper;
-
-    private boolean appendSuper;
-
-    private boolean generateComment;
-
-    private boolean useGettersInsteadOfFields;
-
-    private boolean useBlockInIfStatements;
-
-    private IDialogSettings settings;
-
+    /**
+     * Immutable parameters
+     */
+    private final String title;
+    private final IField[] allFields;
+    private final boolean disableAppendSuper;
     private final PreferencesManager preferencesManager;
-
-    public AbstractFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
-            Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies,
-            PreferencesManager preferencesManager, IDialogSettings dialogSettings) throws JavaModelException {
-        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, possibleStrategies, false,
-                preferencesManager, dialogSettings);
-    }
+    private final LinkedHashSet<StrategyIdentifier> possibleStrategies;
+    private final LinkedHashMap<String, IJavaElement> insertPositions;
+    private final IDialogSettings dialogSettings;
 
     /**
-     * @param parentShell
-     * @param dialogTitle
-     * @param objectClass
-     * @param fields
-     * @param excludedMethods methods not to be listed in the insertion point combo
-     * @throws JavaModelException
+     * User configurable generation data
      */
-    public AbstractFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
-            Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies,
-            boolean disableAppendSuper, PreferencesManager preferencesManager, IDialogSettings dialogSettings)
-            throws JavaModelException {
+    private IField[] selectedFields;
+    private StrategyIdentifier currentStrategy;
+    private String currentPosition;
+    private boolean appendSuper;
+    private boolean generateComment;
+    private boolean useGettersInsteadOfFields;
+    private boolean useBlockInIfStatements;
+
+    /**
+     * GUI components
+     */
+    protected CLabel messageLabel;
+    protected CheckboxTableViewer fieldViewer;
+
+    public AbstractFieldDialog(Shell parentShell, String dialogTitle, IField[] fields,
+            LinkedHashSet<StrategyIdentifier> possibleStrategies, PreferencesManager preferencesManager,
+            IDialogSettings dialogSettings, LinkedHashMap<String, IJavaElement> insertPositions) {
+        this(parentShell, dialogTitle, fields, possibleStrategies, false, preferencesManager, dialogSettings,
+                insertPositions);
+    }
+
+    public AbstractFieldDialog(Shell parentShell, String dialogTitle, IField[] fields,
+            LinkedHashSet<StrategyIdentifier> possibleStrategies, boolean disableAppendSuper,
+            PreferencesManager preferencesManager, IDialogSettings dialogSettings,
+            LinkedHashMap<String, IJavaElement> insertPositions) {
         super(parentShell);
         setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.RESIZE);
         this.title = dialogTitle;
-        this.fields = fields;
+        this.allFields = fields;
         this.disableAppendSuper = disableAppendSuper;
         this.preferencesManager = preferencesManager;
         this.possibleStrategies = possibleStrategies;
+        this.insertPositions = insertPositions;
 
-        settings = dialogSettings.getSection(ABSTRACT_SETTINGS_SECTION);
+        IDialogSettings settings = dialogSettings.getSection(ABSTRACT_SETTINGS_SECTION);
         if (settings == null) {
             settings = dialogSettings.addNewSection(ABSTRACT_SETTINGS_SECTION);
         }
+        this.dialogSettings = settings;
 
-        try {
-            currentPositionIndex = settings.getInt(SETTINGS_INSERT_POSITION);
-        } catch (NumberFormatException e) {
-            currentPositionIndex = 0;
+        currentPosition = settings.get(SETTINGS_INSERT_POSITION);
+        if (currentPosition == null || currentPosition.isEmpty()) {
+            currentPosition = DialogFactoryHelperImpl.FIRST_METHOD_POSITION;
         }
 
         if (disableAppendSuper) {
@@ -142,91 +125,23 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         generateComment = settings.getBoolean(SETTINGS_GENERATE_COMMENT);
         useGettersInsteadOfFields = settings.getBoolean(SETTINGS_USE_GETTERS);
 
-        insertPositions = new ArrayList<>();
-        insertPositionLabels = new ArrayList<>();
-
-        // XXX transform and provide a map<Label, Position> for the dialog to use : will remove the objectClass and
-        // excludedMethods parameters!!!!
-        IJavaElement[] members = filterOutExcludedElements(objectClass.getChildren(), excludedMethods).toArray(
-                new IJavaElement[0]);
-        IMethod[] methods = filterOutExcludedElements(objectClass.getMethods(), excludedMethods)
-                .toArray(new IMethod[0]);
-
-        insertPositions.add(methods.length > 0 ? methods[0] : null); // first
-        insertPositions.add(null); // last
-
-        insertPositionLabels.add("First method");
-        insertPositionLabels.add("Last method");
-
-        for (int i = 0; i < methods.length; i++) {
-            IMethod curr = methods[i];
-            String methodLabel = getMethodLabel(curr);
-            insertPositionLabels.add("After " + methodLabel);
-            insertPositions.add(findSibling(curr, members));
-        }
-        insertPositions.add(null);
-    }
-
-    private String getMethodLabel(final IMethod method) {
-        StringBuffer result = new StringBuffer("`");
-
-        String[] params = method.getParameterTypes();
-
-        result.append(method.getElementName());
-        result.append("(");
-        for (int i = 0; i < params.length; i++) {
-            if (i != 0) {
-                result.append(", ");
-            }
-            result.append(Signature.toString(params[i]));
-        }
-        result.append(")`");
-
-        return result.toString();
-    }
-
-    private Collection<IJavaElement> filterOutExcludedElements(IJavaElement[] src, Set<IMethod> excludedElements) {
-
-        if (excludedElements == null || excludedElements.size() == 0)
-            return Arrays.asList(src);
-
-        Collection<IJavaElement> result = new ArrayList<>();
-        for (int i = 0, size = src.length; i < size; i++) {
-            if (!excludedElements.contains(src[i])) {
-                result.add(src[i]);
-            }
-        }
-
-        return result;
-    }
-
-    private IJavaElement findSibling(final IMethod curr, final IJavaElement[] members) throws JavaModelException {
-        IJavaElement res = null;
-        int methodStart = curr.getSourceRange().getOffset();
-        for (int i = members.length - 1; i >= 0; i--) {
-            IMember member = (IMember) members[i];
-            if (methodStart >= member.getSourceRange().getOffset()) {
-                return res;
-            }
-            res = member;
-        }
-        return null;
     }
 
     @Override
     public boolean close() {
         List<Object> list = Arrays.asList(fieldViewer.getCheckedElements());
-        checkedFields = list.toArray(new IField[list.size()]);
+        selectedFields = list.toArray(new IField[list.size()]);
 
-        if (currentPositionIndex == 0 || currentPositionIndex == 1) {
-            settings.put(SETTINGS_INSERT_POSITION, currentPositionIndex);
+        if (DialogFactoryHelperImpl.FIRST_METHOD_POSITION.equals(currentPosition)
+                || DialogFactoryHelperImpl.LAST_METHOD_POSITION.equals(currentPosition)) {
+            dialogSettings.put(SETTINGS_INSERT_POSITION, currentPosition);
         }
 
         if (!disableAppendSuper) {
-            settings.put(SETTINGS_APPEND_SUPER, appendSuper);
+            dialogSettings.put(SETTINGS_APPEND_SUPER, appendSuper);
         }
-        settings.put(SETTINGS_GENERATE_COMMENT, generateComment);
-        settings.put(SETTINGS_USE_GETTERS, useGettersInsteadOfFields);
+        dialogSettings.put(SETTINGS_GENERATE_COMMENT, generateComment);
+        dialogSettings.put(SETTINGS_USE_GETTERS, useGettersInsteadOfFields);
 
         return super.close();
     }
@@ -244,7 +159,7 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         layout.numColumns = 2;
 
         Label fieldSelectionLabel = new Label(composite, SWT.LEFT);
-        fieldSelectionLabel.setText("&Select fields to use in the generated method:");
+        fieldSelectionLabel.setText("&Select allFields to use in the generated method:");
         GridData data = new GridData();
         data.horizontalSpan = 2;
         fieldSelectionLabel.setLayoutData(data);
@@ -265,7 +180,7 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         data.horizontalSpan = 2;
         strategySelectionComposite.setLayoutData(data);
 
-        Composite optionComposite = createOptionComposite(composite);
+        Composite optionComposite = createInsertPositionsComposite(composite);
         data = new GridData(GridData.FILL_HORIZONTAL);
         data.horizontalSpan = 2;
         optionComposite.setLayoutData(data);
@@ -308,7 +223,7 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
 
         fieldViewer.setLabelProvider(new JavaElementLabelProvider());
         fieldViewer.setContentProvider(new ArrayContentProvider());
-        fieldViewer.setInput(fields);
+        fieldViewer.setInput(allFields);
         selectAllNonTransientFields();
         return fieldComposite;
     }
@@ -419,7 +334,7 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         return composite;
     }
 
-    protected Composite createOptionComposite(final Composite composite) {
+    protected Composite createInsertPositionsComposite(final Composite composite) {
         Composite optionComposite = new Composite(composite, SWT.NONE);
         GridLayout layout = new GridLayout();
         layout.marginHeight = 0;
@@ -438,17 +353,19 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
         label.setLayoutData(data);
 
-        final Combo combo = new Combo(composite, SWT.READ_ONLY);
+        Combo combo = new Combo(composite, SWT.READ_ONLY);
+        Collection<String> insertPositionLabels = insertPositions.keySet();
         combo.setItems(insertPositionLabels.toArray(new String[insertPositionLabels.size()]));
-        combo.select(currentPositionIndex);
+        combo.select(combo.indexOf(currentPosition));
 
         data = new GridData(GridData.FILL_HORIZONTAL);
         combo.setLayoutData(data);
         combo.addSelectionListener(new SelectionAdapter() {
 
             @Override
-            public void widgetSelected(SelectionEvent e) {
-                currentPositionIndex = combo.getSelectionIndex();
+            public void widgetSelected(SelectionEvent event) {
+                Combo combobox = (Combo) event.widget;
+                currentPosition = combobox.getItem(combobox.getSelectionIndex());
             }
         });
 
@@ -520,7 +437,7 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         gettersComposite.setLayout(layout);
 
         Button gettersButton = new Button(gettersComposite, SWT.CHECK);
-        gettersButton.setText("Use &getters instead of fields");
+        gettersButton.setText("Use &getters instead of allFields");
         gettersButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
         gettersButton.addSelectionListener(new SelectionListener() {
@@ -573,7 +490,7 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
     }
 
     public IField[] getCheckedFields() {
-        return checkedFields;
+        return selectedFields;
     }
 
     public boolean getAppendSuper() {
@@ -584,18 +501,12 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         return generateComment;
     }
 
-    /*
-     * Determine which strategy to use for the method content generation
-     */
     public StrategyIdentifier getStrategyIdentifier() {
         return currentStrategy;
     }
 
-    /*
-     * Determine where in the file to enter the newly created methods.
-     */
     public IJavaElement getElementPosition() {
-        return insertPositions.get(currentPositionIndex);
+        return insertPositions.get(currentPosition);
     }
 
     public boolean getUseGettersInsteadOfFields() {
@@ -611,7 +522,7 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
     }
 
     public IField[] getFields() {
-        return fields;
+        return allFields;
     }
 
     public LinkedHashSet<StrategyIdentifier> getPossibleStrategies() {

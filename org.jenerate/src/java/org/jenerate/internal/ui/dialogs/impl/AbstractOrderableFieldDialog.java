@@ -1,13 +1,12 @@
 // $Id$
 package org.jenerate.internal.ui.dialogs.impl;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,29 +24,30 @@ import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 
 /**
- * This class contains some code from org.eclipse.ui.externaltools.internal.ui.BuilderPropertyPage
+ * An abstract {@link Dialog} allowing configuration of the different parameters for the method generation. It allows to
+ * reorganize the fields present in the {@link AbstractFieldDialog} moving them up or down. This class contains some
+ * code from org.eclipse.ui.externaltools.internal.ui.BuilderPropertyPage
  * 
  * @author jiayun
  */
 public abstract class AbstractOrderableFieldDialog<T extends MethodGenerationData> extends AbstractFieldDialog<T> {
 
     private Button upButton;
-
     private Button downButton;
 
-    public AbstractOrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
-            Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies,
-            PreferencesManager preferencesManager, IDialogSettings dialogSettings) throws JavaModelException {
-        this(parentShell, dialogTitle, objectClass, fields, excludedMethods, possibleStrategies, false,
-                preferencesManager, dialogSettings);
+    public AbstractOrderableFieldDialog(Shell parentShell, String dialogTitle, IField[] fields,
+            LinkedHashSet<StrategyIdentifier> possibleStrategies, PreferencesManager preferencesManager,
+            IDialogSettings dialogSettings, LinkedHashMap<String, IJavaElement> insertPositions) {
+        this(parentShell, dialogTitle, fields, possibleStrategies, false, preferencesManager, dialogSettings,
+                insertPositions);
     }
 
-    public AbstractOrderableFieldDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
-            Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies,
-            boolean disableAppendSuper, PreferencesManager preferencesManager, IDialogSettings dialogSettings)
-            throws JavaModelException {
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, possibleStrategies, disableAppendSuper,
-                preferencesManager, dialogSettings);
+    public AbstractOrderableFieldDialog(Shell parentShell, String dialogTitle, IField[] fields,
+            LinkedHashSet<StrategyIdentifier> possibleStrategies, boolean disableAppendSuper,
+            PreferencesManager preferencesManager, IDialogSettings dialogSettings,
+            LinkedHashMap<String, IJavaElement> insertPositions) {
+        super(parentShell, dialogTitle, fields, possibleStrategies, disableAppendSuper, preferencesManager,
+                dialogSettings, insertPositions);
     }
 
     @Override

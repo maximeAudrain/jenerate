@@ -10,21 +10,20 @@ import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
-import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 
 /**
  * Defines a {@link DialogFactory} that allows to create {@link FieldDialog} given certain parameters. The
- * {@link DialogFactory} has a 1 to 1 relationship with a {@link MethodsGenerationCommandIdentifier}.
+ * {@link DialogFactory} has a 1 to 1 relationship with a {@link CommandIdentifier}.
  * 
  * @author maudrain
- * @param <T> the type of {@link FieldDialog} this provider provides.
+ * @param <T> the type of {@link FieldDialog} this factory provides.
  * @param <U> the type of {@link MethodGenerationData} provided by this {@link FieldDialog}
  */
 public interface DialogFactory<T extends FieldDialog<U>, U extends MethodGenerationData> {
 
     /**
-     * Create a {@link Dialog} from the provided parameters
+     * Creates a {@link Dialog} from the provided parameters
      * 
      * @param parentShell the shell where the dialog is opened from.
      * @param objectClass the current class on which the code generation process is in effect

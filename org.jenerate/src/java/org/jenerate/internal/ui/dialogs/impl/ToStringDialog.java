@@ -1,14 +1,12 @@
 package org.jenerate.internal.ui.dialogs.impl;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
@@ -25,34 +23,36 @@ import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringStyle;
 
 /**
+ * Default implementation of the dialog for the generation of the toString method. Defines specific GUI components for
+ * the customization of the toStringStyle for the ToStringBuilder.
+ * 
  * @author jiayun
  */
 public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerationData> {
 
     public static final String SETTINGS_SECTION = "ToStringDialog";
-
     private static final String SETTINGS_STYLE = "CommonsLangToStringStyle";
 
-    private Combo styleCombo;
+    private final IDialogSettings toStringDialogSettings;
 
+    private Combo styleCombo;
     private String toStringStyle;
 
-    private IDialogSettings settings;
-
-    public ToStringDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
-            final IField[] fields, final Set<IMethod> excludedMethods,
+    public ToStringDialog(final Shell parentShell, final String dialogTitle, final IField[] fields,
             LinkedHashSet<StrategyIdentifier> possibleStrategies, final boolean disableAppendSuper,
-            PreferencesManager preferencesManager, IDialogSettings dialogSettings) throws JavaModelException {
+            PreferencesManager preferencesManager, IDialogSettings dialogSettings,
+            LinkedHashMap<String, IJavaElement> insertPositions) {
 
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, possibleStrategies, disableAppendSuper,
-                preferencesManager, dialogSettings);
+        super(parentShell, dialogTitle, fields, possibleStrategies, disableAppendSuper, preferencesManager,
+                dialogSettings, insertPositions);
 
-        settings = dialogSettings.getSection(SETTINGS_SECTION);
-        if (settings == null) {
-            settings = dialogSettings.addNewSection(SETTINGS_SECTION);
+        IDialogSettings toStringSettings = dialogSettings.getSection(SETTINGS_SECTION);
+        if (toStringSettings == null) {
+            toStringSettings = dialogSettings.addNewSection(SETTINGS_SECTION);
         }
+        this.toStringDialogSettings = toStringSettings;
 
-        toStringStyle = settings.get(SETTINGS_STYLE);
+        toStringStyle = toStringSettings.get(SETTINGS_STYLE);
         if (toStringStyle == null) {
             toStringStyle = CommonsLangToStringStyle.NO_STYLE.getFullLibraryString(getPreferencesManager()
                     .getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY));
@@ -62,13 +62,13 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
     @Override
     public boolean close() {
         toStringStyle = styleCombo.getText();
-        settings.put(SETTINGS_STYLE, toStringStyle);
+        toStringDialogSettings.put(SETTINGS_STYLE, toStringStyle);
         return super.close();
     }
 
     @Override
-    protected Composite createOptionComposite(Composite composite) {
-        Composite optionComposite = super.createOptionComposite(composite);
+    protected Composite createInsertPositionsComposite(Composite composite) {
+        Composite optionComposite = super.createInsertPositionsComposite(composite);
         addStyleChoices(optionComposite);
         return optionComposite;
     }

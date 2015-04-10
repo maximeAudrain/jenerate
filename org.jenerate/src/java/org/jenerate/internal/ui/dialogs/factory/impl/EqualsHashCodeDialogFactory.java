@@ -1,9 +1,11 @@
 package org.jenerate.internal.ui.dialogs.factory.impl;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -13,12 +15,24 @@ import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
 import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
 
+/**
+ * {@link DialogFactory} implementation for the {@link EqualsHashCodeDialog}
+ * 
+ * @author maudrain
+ */
 public class EqualsHashCodeDialogFactory extends
         AbstractDialogFactory<EqualsHashCodeDialog, EqualsHashCodeGenerationData> {
 
+    /**
+     * Constructor
+     * 
+     * @param dialogFactoryHelper the dialog factory helper
+     * @param preferencesManager the preference manager
+     */
     public EqualsHashCodeDialogFactory(DialogFactoryHelper dialogFactoryHelper, PreferencesManager preferencesManager) {
         super(dialogFactoryHelper, preferencesManager);
     }
@@ -28,9 +42,11 @@ public class EqualsHashCodeDialogFactory extends
             LinkedHashSet<StrategyIdentifier> possibleStrategies) throws Exception {
         IField[] fields = getObjectClassFields(objectClass);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
-        return new EqualsHashCodeDialog(parentShell, "Generate Equals and HashCode Methods", objectClass, fields,
-                excludedMethods, possibleStrategies, disableAppendSuper, preferencesManager,
-                dialogFactoryHelper.getDialogSettings());
+        LinkedHashMap<String, IJavaElement> insertPositions = dialogFactoryHelper.getInsertPositions(objectClass,
+                excludedMethods);
+        return new EqualsHashCodeDialog(parentShell, "Generate Equals and HashCode Methods", fields,
+                possibleStrategies, disableAppendSuper, preferencesManager, dialogFactoryHelper.getDialogSettings(),
+                insertPositions);
     }
 
     @Override
@@ -52,7 +68,6 @@ public class EqualsHashCodeDialogFactory extends
         if (superclass.equals("Object") || superclass.equals("java.lang.Object")) {
             return true;
         }
-
         return false;
     }
 

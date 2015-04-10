@@ -1,12 +1,10 @@
 package org.jenerate.internal.ui.dialogs.impl;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.widgets.Shell;
@@ -16,16 +14,19 @@ import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 
 /**
+ * Default implementation of the dialog for the generation of the compareTo method. Does not define any additional GUI
+ * components than the {@link AbstractOrderableFieldDialog}
+ * 
  * @author maudrain
  */
 public class CompareToDialog extends AbstractOrderableFieldDialog<CompareToGenerationData> {
 
-    public CompareToDialog(Shell parentShell, String dialogTitle, IType objectClass, IField[] fields,
-            Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies,
-            boolean disableAppendSuper, PreferencesManager preferencesManager, IDialogSettings dialogSettings)
-            throws JavaModelException {
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, possibleStrategies, disableAppendSuper,
-                preferencesManager, dialogSettings);
+    public CompareToDialog(Shell parentShell, String dialogTitle, IField[] fields,
+            LinkedHashSet<StrategyIdentifier> possibleStrategies, boolean disableAppendSuper,
+            PreferencesManager preferencesManager, IDialogSettings dialogSettings,
+            LinkedHashMap<String, IJavaElement> insertPositions) {
+        super(parentShell, dialogTitle, fields, possibleStrategies, disableAppendSuper, preferencesManager,
+                dialogSettings, insertPositions);
     }
 
     @Override

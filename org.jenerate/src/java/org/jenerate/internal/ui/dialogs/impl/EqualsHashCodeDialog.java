@@ -1,12 +1,10 @@
 package org.jenerate.internal.ui.dialogs.impl;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -37,62 +35,59 @@ import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 
 /**
+ * Default implementation of the dialog for the generation of the equals and hashCode methods. Defines specific GUI
+ * components for the customization of the HashCodeBuilder odd numbers, and the comparison of references for the equals
+ * method.
+ * 
  * @author jiayun
  */
 public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGenerationData> {
 
+    /**
+     * Dialog settings
+     */
     public static final String EQUALS_SETTINGS_SECTION = "EqualsDialog";
-
     public static final String HASHCODE_SETTINGS_SECTION = "HashCodeDialog";
-
     private static final String SETTINGS_COMPARE_REFERENCES = "CompareReferences";
-
     private static final String SETTINGS_INIT_MULT_TYPE = "InitMultType";
-
     private static final String SETTINGS_INITIAL_NUMBER = "InitialNumber";
-
     private static final String SETTINGS_MULTIPLIER_NUMBER = "MultiplierNumber";
+
+    private final IDialogSettings equalsDialogSettings;
+    private final IDialogSettings hashCodeDialogSettings;
+    private final Button imButtons[] = new Button[3];
+
+    private Text initText;
+    private Text multText;
+    private IInitMultNumbers imNumbers[] = new IInitMultNumbers[] { new InitMultNumbersDefault(),
+            new InitMultNumbersRandom(), new InitMultNumbersCustom() };
+    private int initMultType;
+    private int initialNumber;
+    private int multiplierNumber;
 
     private boolean compareReferences;
 
-    private Button imButtons[] = new Button[3];
-
-    private Text initText;
-
-    private Text multText;
-
-    private IInitMultNumbers imNumbers[] = new IInitMultNumbers[] { new InitMultNumbersDefault(),
-            new InitMultNumbersRandom(), new InitMultNumbersCustom() };
-
-    private int initMultType;
-
-    private int initialNumber;
-
-    private int multiplierNumber;
-
-    private IDialogSettings equalsSettings;
-
-    private IDialogSettings hashCodeSettings;
-
-    public EqualsHashCodeDialog(final Shell parentShell, final String dialogTitle, final IType objectClass,
-            final IField[] fields, final Set<IMethod> excludedMethods,
+    public EqualsHashCodeDialog(final Shell parentShell, final String dialogTitle, final IField[] fields,
             LinkedHashSet<StrategyIdentifier> possibleStrategies, final boolean disableAppendSuper,
-            PreferencesManager preferencesManager, IDialogSettings dialogSettings) throws JavaModelException {
+            PreferencesManager preferencesManager, IDialogSettings dialogSettings,
+            LinkedHashMap<String, IJavaElement> insertPositions) {
 
-        super(parentShell, dialogTitle, objectClass, fields, excludedMethods, possibleStrategies, disableAppendSuper,
-                preferencesManager, dialogSettings);
+        super(parentShell, dialogTitle, fields, possibleStrategies, disableAppendSuper, preferencesManager,
+                dialogSettings, insertPositions);
 
-        equalsSettings = dialogSettings.getSection(EQUALS_SETTINGS_SECTION);
+        IDialogSettings equalsSettings = dialogSettings.getSection(EQUALS_SETTINGS_SECTION);
         if (equalsSettings == null) {
             equalsSettings = dialogSettings.addNewSection(EQUALS_SETTINGS_SECTION);
         }
+        this.equalsDialogSettings = equalsSettings;
 
         compareReferences = equalsSettings.getBoolean(SETTINGS_COMPARE_REFERENCES);
 
-        hashCodeSettings = dialogSettings.getSection(HASHCODE_SETTINGS_SECTION);
+        IDialogSettings hashCodeSettings = dialogSettings.getSection(HASHCODE_SETTINGS_SECTION);
         if (hashCodeSettings == null) {
             hashCodeSettings = dialogSettings.addNewSection(HASHCODE_SETTINGS_SECTION);
         }
+        this.hashCodeDialogSettings = hashCodeSettings;
 
         try {
             initMultType = hashCodeSettings.getInt(SETTINGS_INIT_MULT_TYPE);
@@ -115,11 +110,11 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
 
     @Override
     public boolean close() {
-        equalsSettings.put(SETTINGS_COMPARE_REFERENCES, compareReferences);
+        equalsDialogSettings.put(SETTINGS_COMPARE_REFERENCES, compareReferences);
         imNumbers[initMultType].setNumbers(initialNumber, multiplierNumber);
-        hashCodeSettings.put(SETTINGS_INIT_MULT_TYPE, initMultType);
-        hashCodeSettings.put(SETTINGS_INITIAL_NUMBER, initialNumber);
-        hashCodeSettings.put(SETTINGS_MULTIPLIER_NUMBER, multiplierNumber);
+        hashCodeDialogSettings.put(SETTINGS_INIT_MULT_TYPE, initMultType);
+        hashCodeDialogSettings.put(SETTINGS_INITIAL_NUMBER, initialNumber);
+        hashCodeDialogSettings.put(SETTINGS_MULTIPLIER_NUMBER, multiplierNumber);
         return super.close();
     }
 
@@ -138,8 +133,8 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
     }
 
     @Override
-    protected Composite createOptionComposite(Composite composite) {
-        Composite optionComposite = super.createOptionComposite(composite);
+    protected Composite createInsertPositionsComposite(Composite composite) {
+        Composite optionComposite = super.createInsertPositionsComposite(composite);
         addCompareReferencesOption(optionComposite);
         addInitialMultiplierOptions(optionComposite);
         return optionComposite;

@@ -1,6 +1,11 @@
 package org.jenerate.internal.ui.dialogs.factory;
 
+import java.util.LinkedHashMap;
+import java.util.Set;
+
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -24,8 +29,8 @@ public interface DialogFactoryHelper {
      * @return {@code true} if the method is overriden in the superclass, {@code false} otherwise
      * @throws JavaModelException if a problem occurs
      */
-    public boolean isOverriddenInSuperclass(IType objectClass, String methodName,
-            String[] methodParameterTypeSignatures, String originalClassFullyQualifiedName) throws JavaModelException;
+    boolean isOverriddenInSuperclass(IType objectClass, String methodName, String[] methodParameterTypeSignatures,
+            String originalClassFullyQualifiedName) throws JavaModelException;
 
     /**
      * Gets the fields of a class identifier by the {@link IType} objectClass.
@@ -35,11 +40,21 @@ public interface DialogFactoryHelper {
      * @return all fields to be used by the {@link DialogFactory}
      * @throws JavaModelException if a problem occurs retrieving the class fields
      */
-    public IField[] getObjectClassFields(IType objectClass, PreferencesManager preferencesManager)
-            throws JavaModelException;
+    IField[] getObjectClassFields(IType objectClass, PreferencesManager preferencesManager) throws JavaModelException;
 
     /**
      * @return the current {@link IDialogSettings}
      */
-    public IDialogSettings getDialogSettings();
+    IDialogSettings getDialogSettings();
+
+    /**
+     * Get all the positions where generated code can be inserted in a provided java class.
+     * 
+     * @param objectClass the class where generated code will be inserted
+     * @param excludedMethods the method to exclude from the possible position of insertion
+     * @return the map of String insertion labels -> insertion positions
+     * @throws JavaModelException if a problem occurs while computing the insertion positions
+     */
+    LinkedHashMap<String, IJavaElement> getInsertPositions(IType objectClass, Set<IMethod> excludedMethods)
+            throws JavaModelException;
 }
