@@ -34,7 +34,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
-import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
@@ -42,8 +41,8 @@ import org.jenerate.internal.ui.dialogs.factory.impl.DialogFactoryHelperImpl;
 
 /**
  * An abstract {@link Dialog} allowing configuration of the different parameters for the method generation. It contains
- * for example the different fields present in the class where code will be generated. This class contains some code from
- * org.eclipse.jdt.internal.ui.dialogs.SourceActionDialog
+ * for example the different fields present in the class where code will be generated. This class contains some code
+ * from org.eclipse.jdt.internal.ui.dialogs.SourceActionDialog
  * 
  * @author jiayun, maudrain
  */
@@ -319,10 +318,10 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
             }
         });
 
-        MethodContentStrategyIdentifier preferedStrategy = preferencesManager
+        StrategyIdentifier preferedStrategy = preferencesManager
                 .getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
         if (possibleStrategies.contains(preferedStrategy)) {
-            combo.select(preferedStrategy.ordinal());
+            combo.select(combo.indexOf(preferedStrategy.getName()));
             currentStrategy = preferedStrategy;
         } else {
             MessageDialog.openWarning(getParentShell(), "Warning", "The prefered method content strategy '"

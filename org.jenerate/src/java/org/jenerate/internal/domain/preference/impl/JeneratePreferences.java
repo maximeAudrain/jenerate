@@ -2,11 +2,7 @@ package org.jenerate.internal.domain.preference.impl;
 
 import java.util.LinkedHashSet;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.FieldEditor;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.widgets.Composite;
+import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.PluginPreference;
 
@@ -21,29 +17,9 @@ public final class JeneratePreferences {
         /* Only static constants */
     }
 
-    public static final PluginPreference<MethodContentStrategyIdentifier> PREFERED_COMMON_METHODS_CONTENT_STRATEGY = new AbstractPluginPreference<MethodContentStrategyIdentifier>(
+    public static final PluginPreference<StrategyIdentifier> PREFERED_COMMON_METHODS_CONTENT_STRATEGY = new StrategyIdentifierPluginPreference(
             "preferedContentStrategy", "Prefered common methods content strategy",
-            MethodContentStrategyIdentifier.USE_COMMONS_LANG) {
-        @Override
-        public MethodContentStrategyIdentifier getCurrentPreferenceValue(IPreferenceStore preferenceStore) {
-            return MethodContentStrategyIdentifier.valueOf(preferenceStore.getString(this.getKey()));
-        }
-
-        @Override
-        public FieldEditor createFieldEditor(Composite parent) {
-            MethodContentStrategyIdentifier[] values = MethodContentStrategyIdentifier.values();
-            String[][] comboValues = new String[values.length][2];
-            for (int i = 0; i < values.length; i++) {
-                comboValues[i] = new String[] { values[i].name(), values[i].name() };
-            }
-            return new ComboFieldEditor(this.getKey(), this.getDescription(), comboValues, parent);
-        }
-
-        @Override
-        public void putDefaultValue(IEclipsePreferences preferences) {
-            preferences.put(this.getKey(), this.getDefaultValue().name());
-        }
-    };
+            MethodContentStrategyIdentifier.USE_COMMONS_LANG);
 
     public static final PluginPreference<Boolean> CACHE_HASHCODE = new BooleanPluginPreference("cacheHashCode",
             "Cache &hashCode when all selected fields are final", Boolean.TRUE);
