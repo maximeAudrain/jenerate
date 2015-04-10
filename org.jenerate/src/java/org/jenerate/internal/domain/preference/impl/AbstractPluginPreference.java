@@ -3,16 +3,15 @@ package org.jenerate.internal.domain.preference.impl;
 import org.jenerate.internal.domain.preference.PluginPreference;
 
 /**
- * Default impelementation of the {@link PluginPreference}
+ * Abstract implementation of the {@link PluginPreference}
  * 
  * @author maudrain
  * @param <T> the type of preference value
  */
-public final class PluginPreferenceImpl<T> implements PluginPreference<T> {
+public abstract class AbstractPluginPreference<T> implements PluginPreference<T> {
 
     private final String key;
     private final String description;
-    private final Class<T> type;
     private final T defaultValue;
 
     /**
@@ -20,13 +19,11 @@ public final class PluginPreferenceImpl<T> implements PluginPreference<T> {
      * 
      * @param key the key for this preference
      * @param description the description for this preference
-     * @param type the type of this preference
      * @param defaultValue the default value of this preference
      */
-    public PluginPreferenceImpl(String key, String description, Class<T> type, T defaultValue) {
+    public AbstractPluginPreference(String key, String description, T defaultValue) {
         this.key = key;
         this.description = description;
-        this.type = type;
         this.defaultValue = defaultValue;
     }
 
@@ -41,12 +38,7 @@ public final class PluginPreferenceImpl<T> implements PluginPreference<T> {
     }
 
     @Override
-    public Class<T> getType() {
-        return type;
-    }
-
-    @Override
-    public T getDefaultValue() {
+    public final T getDefaultValue() {
         return defaultValue;
     }
 }
