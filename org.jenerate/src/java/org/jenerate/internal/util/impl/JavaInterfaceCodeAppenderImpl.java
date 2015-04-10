@@ -119,7 +119,7 @@ public final class JavaInterfaceCodeAppenderImpl implements JavaInterfaceCodeApp
             parser.setResolveBindings(true);
             CompilationUnit cuNode = (CompilationUnit) parser.createAST(null);
             TypeDeclaration classNode = (TypeDeclaration) cuNode.findDeclaringNode(objectClass.getKey());
-            List ifTypes = classNode.superInterfaceTypes();
+            List<?> ifTypes = classNode.superInterfaceTypes();
             Type targetIf = null;
             for (int i = 0; i < ifTypes.size(); i++) {
                 targetIf = (Type) ifTypes.get(i);
@@ -128,7 +128,9 @@ public final class JavaInterfaceCodeAppenderImpl implements JavaInterfaceCodeApp
                 }
             }
 
-            buffer.replace(targetIf.getStartPosition(), targetIf.getLength(), interfaceName);
+            if (targetIf != null) {
+                buffer.replace(targetIf.getStartPosition(), targetIf.getLength(), interfaceName);
+            }
 
         } else {
 

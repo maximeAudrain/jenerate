@@ -1,4 +1,3 @@
-// $Id$
 package org.jenerate.internal.ui.preference;
 
 import java.util.HashMap;
@@ -18,6 +17,8 @@ import org.jenerate.internal.domain.preference.PluginPreference;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 
 /**
+ * The Preference page for the Jenerate plugin
+ * 
  * @author jiayun
  * @author maudrain
  */
@@ -37,15 +38,14 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
             fieldEditors.put(pluginPreference, fieldEditor);
             addField(fieldEditor);
         }
-
-        // XXX fix me : at initialization, does not enable/disable the caching fields preferences
-        // getHashCodeCachingField().setEnabled(getCacheHashCodeField().getBooleanValue(), getFieldEditorParent());
-        // getToStringCachingField().setEnabled(getCacheToStringField().getBooleanValue(), getFieldEditorParent());
     }
 
     @Override
     protected void checkState() {
         super.checkState();
+
+        getHashCodeCachingField().setEnabled(getCacheHashCodeField().getBooleanValue(), getFieldEditorParent());
+        getToStringCachingField().setEnabled(getCacheToStringField().getBooleanValue(), getFieldEditorParent());
 
         if (!isValid())
             return;
