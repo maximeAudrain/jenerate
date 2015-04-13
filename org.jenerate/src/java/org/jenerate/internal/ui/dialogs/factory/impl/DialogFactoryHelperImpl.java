@@ -34,7 +34,7 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
      * First method insertion position label
      */
     public static final String FIRST_METHOD_POSITION = "First method";
-    
+
     /**
      * Last method insertion position label
      */
@@ -50,18 +50,14 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
             return false;
         }
 
-        for (int i = 0; i < superclasses.length; i++) {
-            if (superclasses[i].getFullyQualifiedName().equals(originalClassFullyQualifiedName)) {
+        for (IType superclass : superclasses) {
+            if (superclass.getFullyQualifiedName().equals(originalClassFullyQualifiedName)) {
                 return false;
             }
 
-            IMethod method = superclasses[i].getMethod(methodName, methodParameterTypeSignatures);
+            IMethod method = superclass.getMethod(methodName, methodParameterTypeSignatures);
             if (method.exists()) {
-                if (Flags.isAbstract(method.getFlags())) {
-                    return false;
-                } else {
-                    return true;
-                }
+                return !Flags.isAbstract(method.getFlags());
             }
         }
 
@@ -175,8 +171,9 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
 
     private Collection<IJavaElement> filterOutExcludedElements(IJavaElement[] src, Set<IMethod> excludedElements) {
 
-        if (excludedElements == null || excludedElements.size() == 0)
+        if (excludedElements == null || excludedElements.size() == 0) {
             return Arrays.asList(src);
+        }
 
         Collection<IJavaElement> result = new ArrayList<>();
         for (int i = 0, size = src.length; i < size; i++) {
