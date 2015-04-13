@@ -1,3 +1,5 @@
+
+
 package org.jenerate.internal.ui.dialogs.impl;
 
 import java.util.ArrayList;
@@ -10,6 +12,8 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -87,6 +91,16 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
 
         data = new GridData(GridData.FILL_HORIZONTAL);
         styleCombo.setLayoutData(data);
+        styleCombo.setToolTipText(CommonsLangToStringStyle.getToStringStyle(toStringStyle).getToolTip());
+
+        styleCombo.addModifyListener(new ModifyListener() {
+
+            @Override
+            public void modifyText(ModifyEvent event) {
+                Combo combo = (Combo)event.getSource();
+                combo.setToolTipText(CommonsLangToStringStyle.getToStringStyle(combo.getText()).getToolTip());
+            }
+        });
 
         return composite;
     }

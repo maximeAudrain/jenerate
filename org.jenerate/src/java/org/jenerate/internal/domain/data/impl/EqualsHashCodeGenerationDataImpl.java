@@ -4,51 +4,64 @@ import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
 
 public class EqualsHashCodeGenerationDataImpl extends AbstractMethodGenerationData implements
-        EqualsHashCodeGenerationData {
+EqualsHashCodeGenerationData {
 
-    private final boolean compareReferences;
-    private final IInitMultNumbers initMultNumbers;
+	private final boolean compareReferences;
+	private final IInitMultNumbers initMultNumbers;
+	private final boolean classComparison;
 
-    private EqualsHashCodeGenerationDataImpl(Builder builder) {
-        super(builder);
-        this.compareReferences = builder.builderCompareReferences;
-        this.initMultNumbers = builder.builderInitMultNumbers;
-    }
+	private EqualsHashCodeGenerationDataImpl(Builder builder) {
+		super(builder);
+		this.compareReferences = builder.builderCompareReferences;
+		this.classComparison = builder.classComparison;
+		this.initMultNumbers = builder.builderInitMultNumbers;
+	}
 
-    @Override
-    public boolean getCompareReferences() {
-        return compareReferences;
-    }
+	@Override
+	public boolean getCompareReferences() {
+		return compareReferences;
+	}
 
-    @Override
-    public IInitMultNumbers getInitMultNumbers() {
-        return initMultNumbers;
-    }
+	@Override
+	public IInitMultNumbers getInitMultNumbers() {
+		return initMultNumbers;
+	}
 
-    public static class Builder extends AbstractMethodGenerationData.Builder<Builder> {
+	@Override
+	public boolean getClassComparison() {
+		return classComparison;
+	}
 
-        private boolean builderCompareReferences;
-        private IInitMultNumbers builderInitMultNumbers;
+	public static class Builder extends AbstractMethodGenerationData.Builder<Builder> {
 
-        @Override
-        public Builder getThis() {
-            return this;
-        }
+		private boolean builderCompareReferences;
+		private IInitMultNumbers builderInitMultNumbers;
+		private boolean classComparison;
 
-        public Builder withCompareReferences(boolean compareReferences) {
-            this.builderCompareReferences = compareReferences;
-            return getThis();
-        }
+		@Override
+		public Builder getThis() {
+			return this;
+		}
 
-        public Builder withInitMultNumbers(IInitMultNumbers initMultNumbers) {
-            this.builderInitMultNumbers = initMultNumbers;
-            return getThis();
-        }
+		public Builder withCompareReferences(boolean compareReferences) {
+			this.builderCompareReferences = compareReferences;
+			return getThis();
+		}
 
-        public EqualsHashCodeGenerationData build() {
-            return new EqualsHashCodeGenerationDataImpl(getThis());
-        }
+		public Builder withInitMultNumbers(IInitMultNumbers initMultNumbers) {
+			this.builderInitMultNumbers = initMultNumbers;
+			return getThis();
+		}
 
-    }
+		public Builder withClassComparison(boolean classComparison) {
+			this.classComparison = classComparison;
+			return getThis();
+		}
+
+		public EqualsHashCodeGenerationData build() {
+			return new EqualsHashCodeGenerationDataImpl(getThis());
+		}
+
+	}
 
 }

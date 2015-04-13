@@ -52,6 +52,7 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
     private static final String SETTINGS_INIT_MULT_TYPE = "InitMultType";
     private static final String SETTINGS_INITIAL_NUMBER = "InitialNumber";
     private static final String SETTINGS_MULTIPLIER_NUMBER = "MultiplierNumber";
+    private static final String SETTINGS_CLASS_COMPARISON = "ClassComparison";
 
     private final IDialogSettings equalsDialogSettings;
     private final IDialogSettings hashCodeDialogSettings;
@@ -66,6 +67,7 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
     private int multiplierNumber;
 
     private boolean compareReferences;
+    private boolean classComparison;
 
     public EqualsHashCodeDialog(final Shell parentShell, final String dialogTitle, final IField[] fields,
             LinkedHashSet<StrategyIdentifier> possibleStrategies, final boolean disableAppendSuper,
@@ -82,6 +84,8 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
         this.equalsDialogSettings = equalsSettings;
 
         compareReferences = equalsSettings.getBoolean(SETTINGS_COMPARE_REFERENCES);
+        
+        classComparison = equalsSettings.getBoolean(SETTINGS_CLASS_COMPARISON);
 
         IDialogSettings hashCodeSettings = dialogSettings.getSection(HASHCODE_SETTINGS_SECTION);
         if (hashCodeSettings == null) {
@@ -111,6 +115,7 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
     @Override
     public boolean close() {
         equalsDialogSettings.put(SETTINGS_COMPARE_REFERENCES, compareReferences);
+        equalsDialogSettings.put(SETTINGS_CLASS_COMPARISON, classComparison);
         imNumbers[initMultType].setNumbers(initialNumber, multiplierNumber);
         hashCodeDialogSettings.put(SETTINGS_INIT_MULT_TYPE, initMultType);
         hashCodeDialogSettings.put(SETTINGS_INITIAL_NUMBER, initialNumber);
@@ -135,18 +140,25 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
     @Override
     protected Composite createInsertPositionsComposite(Composite composite) {
         Composite optionComposite = super.createInsertPositionsComposite(composite);
-        addCompareReferencesOption(optionComposite);
+        addEqualsOptions(optionComposite);
         addInitialMultiplierOptions(optionComposite);
         return optionComposite;
     }
 
-    private Composite addCompareReferencesOption(final Composite composite) {
+    private Composite addEqualsOptions(final Composite composite) {
         Group group = new Group(composite, SWT.NONE);
         group.setText("Equals");
         group.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
         GridLayout layout = new GridLayout(1, false);
         group.setLayout(layout);
 
+        createAndAddCompareReferencesButton(group);
+        createAndAddClassComparisonButton(group);
+
+        return composite;
+    }
+
+    private void createAndAddCompareReferencesButton(Group group) {
         Button button = new Button(group, SWT.CHECK);
         button.setText("Compare object &references");
         button.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
@@ -164,8 +176,26 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
             }
         });
         button.setSelection(compareReferences);
+    }
 
-        return composite;
+    private void createAndAddClassComparisonButton(Group group) {
+        Button button = new Button(group, SWT.CHECK);
+        button.setText("Use c&lass comparison");
+        button.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+
+        button.addSelectionListener(new SelectionListener() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                classComparison = (((Button) e.widget).getSelection());
+            }
+
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e) {
+                widgetSelected(e);
+            }
+        });
+        button.setSelection(classComparison);
     }
 
     private void addInitialMultiplierOptions(final Composite composite) {
@@ -328,6 +358,7 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
                 .withUseBlockInIfStatements(getUseBlockInIfStatements())
                 .withUseGettersInsteadOfFields(getUseGettersInsteadOfFields())
                 .withCompareReferences(compareReferences)
+                .withClassComparison(classComparison)
                 .withInitMultNumbers(imNumbers[initMultType])
                 .build();
         //@formatter:on
