@@ -180,7 +180,7 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
 
     private void createAndAddClassComparisonButton(Group group) {
         Button button = new Button(group, SWT.CHECK);
-        button.setText("Use c&lass comparison");
+        button.setText("Use c&lass comparison instead of instanceOf");
         button.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
         button.addSelectionListener(new SelectionListener() {
