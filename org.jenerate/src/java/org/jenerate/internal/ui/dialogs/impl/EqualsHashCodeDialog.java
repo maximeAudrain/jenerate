@@ -393,4 +393,10 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
         }
 
     }
+
+    @Override
+    public void callbackAfterStrategyChanged(StrategyIdentifier currentStrategy) {
+        // TODO Auto-generated method stub
+        
+    }
 }

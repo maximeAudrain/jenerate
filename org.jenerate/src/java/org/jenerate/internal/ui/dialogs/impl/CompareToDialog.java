@@ -48,4 +48,10 @@ public class CompareToDialog extends AbstractOrderableFieldDialog<CompareToGener
     public Dialog getDialog() {
         return this;
     }
+
+    @Override
+    public void callbackAfterStrategyChanged(StrategyIdentifier currentStrategy) {
+        // TODO Auto-generated method stub
+        
+    }
 }

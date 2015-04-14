@@ -1,5 +1,3 @@
-
-
 package org.jenerate.internal.ui.dialogs.impl;
 
 import java.util.ArrayList;
@@ -14,6 +12,7 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -22,6 +21,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.data.impl.ToStringGenerationDataImpl;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringStyle;
@@ -41,6 +41,8 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
 
     private Combo styleCombo;
     private String toStringStyle;
+    private Composite optionComposite;
+    private Label label;
 
     public ToStringDialog(final Shell parentShell, final String dialogTitle, final IField[] fields,
             LinkedHashSet<StrategyIdentifier> possibleStrategies, final boolean disableAppendSuper,
@@ -65,20 +67,22 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
 
     @Override
     public boolean close() {
-        toStringStyle = styleCombo.getText();
-        toStringDialogSettings.put(SETTINGS_STYLE, toStringStyle);
+        if (styleCombo != null) {
+            toStringStyle = styleCombo.getText();
+            toStringDialogSettings.put(SETTINGS_STYLE, toStringStyle);
+        }
         return super.close();
     }
 
     @Override
     protected Composite createInsertPositionsComposite(Composite composite) {
-        Composite optionComposite = super.createInsertPositionsComposite(composite);
-        addStyleChoices(optionComposite);
+        optionComposite = super.createInsertPositionsComposite(composite);
+        addStyleComboIfPossible(getStrategyIdentifier());
         return optionComposite;
     }
 
     private Composite addStyleChoices(final Composite composite) {
-        Label label = new Label(composite, SWT.NONE);
+        label = new Label(composite, SWT.NONE);
         label.setText("&ToString style:");
 
         GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
@@ -97,7 +101,7 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
 
             @Override
             public void modifyText(ModifyEvent event) {
-                Combo combo = (Combo)event.getSource();
+                Combo combo = (Combo) event.getSource();
                 combo.setToolTipText(CommonsLangToStringStyle.getToStringStyle(combo.getText()).getToolTip());
             }
         });
@@ -138,5 +142,32 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
     @Override
     public Dialog getDialog() {
         return this;
+    }
+
+    @Override
+    public void callbackAfterStrategyChanged(StrategyIdentifier currentStrategy) {
+        addStyleComboIfPossible(currentStrategy);
+        redrawShell();
+    }
+
+    private void redrawShell() {
+        getShell().layout(true, true);
+        Point newSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+        getShell().setSize(newSize);
+    }
+
+    private void addStyleComboIfPossible(StrategyIdentifier currentStrategy) {
+        if (!MethodContentStrategyIdentifier.USE_GUAVA.equals(currentStrategy)) {
+            if (label == null && styleCombo == null) {
+                addStyleChoices(optionComposite);
+            }
+        } else {
+            if (label != null && styleCombo != null) {
+                label.dispose();
+                styleCombo.dispose();
+                label = null;
+                styleCombo = null;
+            }
+        }
     }
 }

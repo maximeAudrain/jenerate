@@ -183,7 +183,11 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         data = new GridData(GridData.FILL_HORIZONTAL);
         data.horizontalSpan = 2;
         optionComposite.setLayoutData(data);
-        addAppendSuperOption(optionComposite);
+
+        Composite superComposite = addAppendSuperOption(composite);
+        data = new GridData(GridData.FILL_HORIZONTAL);
+        data.horizontalSpan = 2;
+        superComposite.setLayoutData(data);
 
         Composite commentComposite = createCommentSelection(composite);
         data = new GridData(GridData.FILL_HORIZONTAL);
@@ -315,6 +319,7 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
             @Override
             public void widgetSelected(SelectionEvent e) {
                 currentStrategy = identifiers[combo.getSelectionIndex()];
+                callbackAfterStrategyChanged(currentStrategy);
             }
         });
 
@@ -487,6 +492,14 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
 
         return blocksInIfComposite;
     }
+
+    /**
+     * Callback after the strategy changed to enable change of dialog UI dynamically depending on the newly selected
+     * strategy
+     * 
+     * @param newStrategy the new strategy selected in the dialog
+     */
+    public abstract void callbackAfterStrategyChanged(StrategyIdentifier newStrategy);
 
     public IField[] getCheckedFields() {
         return selectedFields;
