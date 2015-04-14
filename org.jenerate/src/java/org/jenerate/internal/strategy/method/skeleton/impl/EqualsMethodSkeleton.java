@@ -49,8 +49,8 @@ public class EqualsMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeG
 
         StringBuffer content = new StringBuffer();
         if (data.getGenerateComment()) {
-            content.append("/* (non-Javadoc)\n");
-            content.append(" * @see java.lang.Object#equals(java.lang.Object)\n");
+            content.append("/**\n");
+            content.append(" * {@inheritDoc}\n");
             content.append(" */\n");
         }
         if (addOverride) {

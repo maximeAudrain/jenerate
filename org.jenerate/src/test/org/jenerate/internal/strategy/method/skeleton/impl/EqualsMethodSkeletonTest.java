@@ -68,7 +68,7 @@ public class EqualsMethodSkeletonTest extends
     public void testGetMethodGenerateComment() throws Exception {
         when(data.getGenerateComment()).thenReturn(true);
         String method = methodSkeleton.getMethod(objectClass, data, METHOD_CONTENT);
-        assertEquals("/* (non-Javadoc)\n * @see java.lang.Object#equals(java.lang.Object)\n */\n"
+        assertEquals("/**\n * {@inheritDoc}\n */\n"
                 + "public boolean equals(final Object other) {\nCONTENT}\n\n", method);
     }
 
