@@ -21,6 +21,13 @@ public final class MethodContentGenerations {
         /* Only static helper methods */
     }
 
+    /**
+     * Creates the equals method content prefix
+     * 
+     * @param data the data to extract configuration from
+     * @param objectClass the class where the equals method is being generated
+     * @return the equals method prefix
+     */
     public static String createEqualsContentPrefix(EqualsHashCodeGenerationData data, IType objectClass) {
         StringBuffer content = new StringBuffer();
         boolean useBlockInIfStatements = data.getUseBlockInIfStatements();
