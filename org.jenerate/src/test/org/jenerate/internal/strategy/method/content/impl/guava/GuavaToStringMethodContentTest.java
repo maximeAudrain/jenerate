@@ -30,7 +30,7 @@ public class GuavaToStringMethodContentTest extends
 
     @Override
     public void callbackAfterSetUp() throws Exception {
-        methodContent = new GuavaToStringMethodContent(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager);
+        methodContent = new GuavaToStringMethodContent(preferencesManager);
     }
 
     @Test

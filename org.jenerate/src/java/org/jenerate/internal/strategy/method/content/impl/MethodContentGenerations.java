@@ -6,6 +6,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 
@@ -18,6 +19,36 @@ public final class MethodContentGenerations {
 
     public MethodContentGenerations() {
         /* Only static helper methods */
+    }
+
+    public static String createEqualsContentPrefix(EqualsHashCodeGenerationData data, IType objectClass) {
+        StringBuffer content = new StringBuffer();
+        boolean useBlockInIfStatements = data.getUseBlockInIfStatements();
+        if (data.getCompareReferences()) {
+            content.append("if (this == other)");
+            content.append(useBlockInIfStatements ? "{\n" : "");
+            content.append(" return true;");
+            content.append(useBlockInIfStatements ? "\n}\n" : "");
+        }
+
+        if (data.getClassComparison()) {
+            content.append("if (other == null)");
+            content.append(useBlockInIfStatements ? "{\n" : "");
+            content.append(" return false;");
+            content.append(useBlockInIfStatements ? "\n}\n" : "");
+            content.append("if ( !getClass().equals(other.getClass()))");
+            content.append(useBlockInIfStatements ? "{\n" : "");
+            content.append(" return false;");
+            content.append(useBlockInIfStatements ? "\n}\n" : "");
+        } else {
+            content.append("if ( !(other instanceof ");
+            content.append(objectClass.getElementName());
+            content.append(") )");
+            content.append(useBlockInIfStatements ? "{\n" : "");
+            content.append(" return false;");
+            content.append(useBlockInIfStatements ? "\n}\n" : "");
+        }
+        return content.toString();
     }
 
     /**

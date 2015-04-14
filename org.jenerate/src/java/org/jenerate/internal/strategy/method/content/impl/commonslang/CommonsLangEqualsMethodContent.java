@@ -44,34 +44,9 @@ public class CommonsLangEqualsMethodContent extends
 
     private String createEqualsMethodContent(EqualsHashCodeGenerationData data, IType objectClass)
             throws JavaModelException {
-        String elementName = objectClass.getElementName();
-        boolean useBlockInIfStatements = data.getUseBlockInIfStatements();
         StringBuffer content = new StringBuffer();
-        if (data.getCompareReferences()) {
-            content.append("if (this == other)");
-            content.append(useBlockInIfStatements ? "{\n" : "");
-            content.append(" return true;");
-            content.append(useBlockInIfStatements ? "\n}\n" : "");
-        }
-
-        if (data.getClassComparison()) {
-            content.append("if (other == null)");
-            content.append(useBlockInIfStatements ? "{\n" : "");
-            content.append(" return false;");
-            content.append(useBlockInIfStatements ? "\n}\n" : "");
-            content.append("if ( !getClass().equals(other.getClass()))");
-            content.append(useBlockInIfStatements ? "{\n" : "");
-            content.append(" return false;");
-            content.append(useBlockInIfStatements ? "\n}\n" : "");
-        } else {
-            content.append("if ( !(other instanceof ");
-            content.append(elementName);
-            content.append(") )");
-            content.append(useBlockInIfStatements ? "{\n" : "");
-            content.append(" return false;");
-            content.append(useBlockInIfStatements ? "\n}\n" : "");
-        }
-
+        String elementName = objectClass.getElementName();
+        content.append(MethodContentGenerations.createEqualsContentPrefix(data, objectClass));
         content.append(elementName);
         content.append(" castOther = (");
         content.append(elementName);

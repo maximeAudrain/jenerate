@@ -57,13 +57,9 @@ public final class MethodContentManagerImpl implements MethodContentManager {
         methodContents.add(new CommonsLangCompareToMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
                 preferencesManager, javaInterfaceCodeAppender));
 
-        methodContents
-                .add(new GuavaToStringMethodContent(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager));
-
-        methodContents.add(new GuavaEqualsMethodContent(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager));
-
-        methodContents
-                .add(new GuavaHashCodeMethodContent(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager));
+        methodContents.add(new GuavaToStringMethodContent(preferencesManager));
+        methodContents.add(new GuavaEqualsMethodContent(preferencesManager));
+        methodContents.add(new GuavaHashCodeMethodContent(preferencesManager));
     }
 
     /**

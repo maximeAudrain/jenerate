@@ -5,7 +5,7 @@ import java.util.LinkedHashSet;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
-import org.jenerate.internal.domain.identifier.StrategyIdentifier;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
@@ -25,8 +25,8 @@ public class GuavaHashCodeMethodContent extends
      */
     public static final String LIBRARY_TO_IMPORT = "com.google.common.base.Objects";
 
-    public GuavaHashCodeMethodContent(StrategyIdentifier strategyIdentifier, PreferencesManager preferencesManager) {
-        super(strategyIdentifier, preferencesManager);
+    public GuavaHashCodeMethodContent(PreferencesManager preferencesManager) {
+        super(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager);
     }
 
     @Override

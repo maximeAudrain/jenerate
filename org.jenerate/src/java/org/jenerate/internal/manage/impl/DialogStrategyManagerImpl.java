@@ -4,11 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jenerate.internal.domain.data.CompareToGenerationData;
-import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.data.impl.CompareToGenerationDataImpl;
-import org.jenerate.internal.domain.data.impl.EqualsHashCodeGenerationDataImpl;
 import org.jenerate.internal.domain.data.impl.ToStringGenerationDataImpl;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
@@ -20,6 +18,7 @@ import org.jenerate.internal.ui.dialogs.strategy.DefaultDialogStrategy;
 import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
 import org.jenerate.internal.ui.dialogs.strategy.commonslang.CommonsLangEqualsHashCodeDialogStrategy;
 import org.jenerate.internal.ui.dialogs.strategy.commonslang.CommonsLangToStringDialogStrategy;
+import org.jenerate.internal.ui.dialogs.strategy.commonslang.GuavaEqualsHashCodeDialogStrategy;
 
 public class DialogStrategyManagerImpl implements DialogStrategyManager {
 
@@ -38,9 +37,7 @@ public class DialogStrategyManagerImpl implements DialogStrategyManager {
                 MethodContentStrategyIdentifier.USE_COMMONS_LANG));
         dialogStrategies.add(new CommonsLangEqualsHashCodeDialogStrategy(
                 MethodContentStrategyIdentifier.USE_COMMONS_LANG3));
-        dialogStrategies.add(new DefaultDialogStrategy<EqualsHashCodeGenerationData>(
-                new EqualsHashCodeGenerationDataImpl.Builder(), MethodsGenerationCommandIdentifier.EQUALS_HASH_CODE,
-                MethodContentStrategyIdentifier.USE_GUAVA));
+        dialogStrategies.add(new GuavaEqualsHashCodeDialogStrategy());
 
         dialogStrategies.add(new DefaultDialogStrategy<CompareToGenerationData>(
                 new CompareToGenerationDataImpl.Builder(), MethodsGenerationCommandIdentifier.COMPARE_TO,
@@ -48,6 +45,9 @@ public class DialogStrategyManagerImpl implements DialogStrategyManager {
         dialogStrategies.add(new DefaultDialogStrategy<CompareToGenerationData>(
                 new CompareToGenerationDataImpl.Builder(), MethodsGenerationCommandIdentifier.COMPARE_TO,
                 MethodContentStrategyIdentifier.USE_COMMONS_LANG3));
+        dialogStrategies.add(new DefaultDialogStrategy<CompareToGenerationData>(
+                new CompareToGenerationDataImpl.Builder(), MethodsGenerationCommandIdentifier.COMPARE_TO,
+                MethodContentStrategyIdentifier.USE_GUAVA));
     }
 
     @SuppressWarnings("unchecked")

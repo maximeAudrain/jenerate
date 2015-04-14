@@ -30,7 +30,7 @@ public class GuavaHashCodeMethodContentTest extends
 
     @Override
     public void callbackAfterSetUp() throws Exception {
-        methodContent = new GuavaHashCodeMethodContent(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager);
+        methodContent = new GuavaHashCodeMethodContent(preferencesManager);
     }
 
     @Test
