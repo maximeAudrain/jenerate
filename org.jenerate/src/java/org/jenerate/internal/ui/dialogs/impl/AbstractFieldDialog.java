@@ -22,6 +22,7 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -338,15 +339,14 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         return composite;
     }
 
-    protected Composite createInsertPositionsComposite(final Composite composite) {
+    private final Composite createInsertPositionsComposite(final Composite composite) {
         Composite optionComposite = new Composite(composite, SWT.NONE);
         GridLayout layout = new GridLayout();
         layout.marginHeight = 0;
         layout.marginWidth = 0;
         optionComposite.setLayout(layout);
-
         addPositionChoices(optionComposite);
-
+        callbackAfterInsertPositions(optionComposite);
         return optionComposite;
     }
 
@@ -493,6 +493,12 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         return blocksInIfComposite;
     }
 
+    protected void redrawShell() {
+        getShell().layout(true, true);
+        Point newSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+        getShell().setSize(newSize);
+    }
+
     /**
      * Callback after the strategy changed to enable change of dialog UI dynamically depending on the newly selected
      * strategy
@@ -500,6 +506,13 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
      * @param newStrategy the new strategy selected in the dialog
      */
     public abstract void callbackAfterStrategyChanged(StrategyIdentifier newStrategy);
+
+    /**
+     * A callback to add additional UI components after the insert position combobox
+     * 
+     * @param parentComposite the composite to add the components to
+     */
+    public abstract void callbackAfterInsertPositions(Composite parentComposite);
 
     public IField[] getCheckedFields() {
         return selectedFields;

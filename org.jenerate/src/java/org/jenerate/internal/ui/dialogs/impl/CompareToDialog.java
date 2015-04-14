@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.data.impl.CompareToGenerationDataImpl;
@@ -51,7 +52,11 @@ public class CompareToDialog extends AbstractOrderableFieldDialog<CompareToGener
 
     @Override
     public void callbackAfterStrategyChanged(StrategyIdentifier currentStrategy) {
-        // TODO Auto-generated method stub
-        
+        /* Nothing special to be done here */
+    }
+
+    @Override
+    public void callbackAfterInsertPositions(Composite parentComposite) {
+        /* Nothing special to be done here */
     }
 }

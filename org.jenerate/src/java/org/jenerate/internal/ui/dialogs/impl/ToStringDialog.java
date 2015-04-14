@@ -12,7 +12,6 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -72,13 +71,6 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
             toStringDialogSettings.put(SETTINGS_STYLE, toStringStyle);
         }
         return super.close();
-    }
-
-    @Override
-    protected Composite createInsertPositionsComposite(Composite composite) {
-        optionComposite = super.createInsertPositionsComposite(composite);
-        addStyleComboIfPossible(getStrategyIdentifier());
-        return optionComposite;
     }
 
     private Composite addStyleChoices(final Composite composite) {
@@ -150,12 +142,6 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
         redrawShell();
     }
 
-    private void redrawShell() {
-        getShell().layout(true, true);
-        Point newSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
-        getShell().setSize(newSize);
-    }
-
     private void addStyleComboIfPossible(StrategyIdentifier currentStrategy) {
         if (!MethodContentStrategyIdentifier.USE_GUAVA.equals(currentStrategy)) {
             if (label == null && styleCombo == null) {
@@ -170,4 +156,11 @@ public class ToStringDialog extends AbstractOrderableFieldDialog<ToStringGenerat
             }
         }
     }
+
+    @Override
+    public void callbackAfterInsertPositions(Composite parentComposite) {
+        this.optionComposite = parentComposite;    
+        addStyleComboIfPossible(getStrategyIdentifier());
+    }
+
 }

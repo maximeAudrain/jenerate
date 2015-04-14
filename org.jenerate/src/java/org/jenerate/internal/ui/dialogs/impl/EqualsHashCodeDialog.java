@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -32,6 +33,7 @@ import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersCustom;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersDefault;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersRandom;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
+import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
 
 /**
@@ -57,6 +59,7 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
     private final IDialogSettings equalsDialogSettings;
     private final IDialogSettings hashCodeDialogSettings;
     private final Button imButtons[] = new Button[3];
+    private Composite optionComposite;
 
     private Text initText;
     private Text multText;
@@ -68,6 +71,8 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
 
     private boolean compareReferences;
     private boolean classComparison;
+    private Group equalsGroup;
+    private Group hashCodeGroup;
 
     public EqualsHashCodeDialog(final Shell parentShell, final String dialogTitle, final IField[] fields,
             LinkedHashSet<StrategyIdentifier> possibleStrategies, final boolean disableAppendSuper,
@@ -84,7 +89,7 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
         this.equalsDialogSettings = equalsSettings;
 
         compareReferences = equalsSettings.getBoolean(SETTINGS_COMPARE_REFERENCES);
-        
+
         classComparison = equalsSettings.getBoolean(SETTINGS_CLASS_COMPARISON);
 
         IDialogSettings hashCodeSettings = dialogSettings.getSection(HASHCODE_SETTINGS_SECTION);
@@ -126,44 +131,44 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
     @Override
     public void create() {
         super.create();
-
-        imButtons[initMultType].setSelection(true);
-        initText.setText(String.valueOf(initialNumber));
-        multText.setText(String.valueOf(multiplierNumber));
-        if (initMultType != 2) {
-            initText.setEnabled(false);
-            multText.setEnabled(false);
-        }
+        setInitialValues();
         fieldViewer.getTable().setFocus();
     }
 
-    @Override
-    protected Composite createInsertPositionsComposite(Composite composite) {
-        Composite optionComposite = super.createInsertPositionsComposite(composite);
-        addEqualsOptions(optionComposite);
-        addInitialMultiplierOptions(optionComposite);
-        return optionComposite;
+    private void setInitialValues() {
+        Display.getDefault().asyncExec(new Runnable() {
+            @Override
+            public void run() {
+                imButtons[initMultType].setSelection(true);
+                initText.setText(String.valueOf(initialNumber));
+                multText.setText(String.valueOf(multiplierNumber));
+                if (initMultType != 2) {
+                    initText.setEnabled(false);
+                    multText.setEnabled(false);
+                }
+            }
+        });
     }
 
     private Composite addEqualsOptions(final Composite composite) {
-        Group group = new Group(composite, SWT.NONE);
-        group.setText("Equals");
-        group.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+        equalsGroup = new Group(composite, SWT.NONE);
+        equalsGroup.setText("Equals");
+        equalsGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
         GridLayout layout = new GridLayout(1, false);
-        group.setLayout(layout);
+        equalsGroup.setLayout(layout);
 
-        createAndAddCompareReferencesButton(group);
-        createAndAddClassComparisonButton(group);
+        createAndAddCompareReferencesButton(equalsGroup);
+        createAndAddClassComparisonButton(equalsGroup);
 
         return composite;
     }
 
     private void createAndAddCompareReferencesButton(Group group) {
-        Button button = new Button(group, SWT.CHECK);
-        button.setText("Compare object &references");
-        button.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+        Button referencesButton = new Button(group, SWT.CHECK);
+        referencesButton.setText("Compare object &references");
+        referencesButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
-        button.addSelectionListener(new SelectionListener() {
+        referencesButton.addSelectionListener(new SelectionListener() {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -175,15 +180,15 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
                 widgetSelected(e);
             }
         });
-        button.setSelection(compareReferences);
+        referencesButton.setSelection(compareReferences);
     }
 
     private void createAndAddClassComparisonButton(Group group) {
-        Button button = new Button(group, SWT.CHECK);
-        button.setText("Use c&lass comparison instead of instanceOf");
-        button.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+        Button comparisonButton = new Button(group, SWT.CHECK);
+        comparisonButton.setText("Use c&lass comparison instead of instanceOf");
+        comparisonButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
-        button.addSelectionListener(new SelectionListener() {
+        comparisonButton.addSelectionListener(new SelectionListener() {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -195,41 +200,41 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
                 widgetSelected(e);
             }
         });
-        button.setSelection(classComparison);
+        comparisonButton.setSelection(classComparison);
     }
 
     private void addInitialMultiplierOptions(final Composite composite) {
-        Group group = new Group(composite, SWT.NONE);
-        group.setText("HashCode - Initial and multiplier numbers");
-        group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        hashCodeGroup = new Group(composite, SWT.NONE);
+        hashCodeGroup.setText("HashCode - Initial and multiplier numbers");
+        hashCodeGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         GridLayout layout = new GridLayout(4, false);
-        group.setLayout(layout);
+        hashCodeGroup.setLayout(layout);
 
-        imButtons[0] = new Button(group, SWT.RADIO);
+        imButtons[0] = new Button(hashCodeGroup, SWT.RADIO);
         imButtons[0].setText("D&efault");
         GridData data = new GridData();
         data.horizontalSpan = 4;
         imButtons[0].setLayoutData(data);
 
-        imButtons[1] = new Button(group, SWT.RADIO);
+        imButtons[1] = new Button(hashCodeGroup, SWT.RADIO);
         imButtons[1].setText("&Random generate");
         data = new GridData();
         data.horizontalSpan = 4;
         imButtons[1].setLayoutData(data);
 
-        imButtons[2] = new Button(group, SWT.RADIO);
+        imButtons[2] = new Button(hashCodeGroup, SWT.RADIO);
         imButtons[2].setText("C&ustom:");
         data = new GridData();
         data.horizontalSpan = 4;
         imButtons[2].setLayoutData(data);
 
-        Label initLabel = new Label(group, SWT.NONE);
+        Label initLabel = new Label(hashCodeGroup, SWT.NONE);
         initLabel.setText("Initial:");
         data = new GridData();
         data.horizontalIndent = 30;
         initLabel.setLayoutData(data);
 
-        initText = new Text(group, SWT.SINGLE | SWT.RIGHT | SWT.BORDER);
+        initText = new Text(hashCodeGroup, SWT.SINGLE | SWT.RIGHT | SWT.BORDER);
         initText.addVerifyListener(new IntegerVerifyListener(initText));
         initText.addModifyListener(new ModifyListener() {
 
@@ -242,13 +247,13 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
         data = new GridData(GridData.FILL_HORIZONTAL);
         initText.setLayoutData(data);
 
-        Label multLabel = new Label(group, SWT.NONE);
+        Label multLabel = new Label(hashCodeGroup, SWT.NONE);
         multLabel.setText("Multiplier:");
         data = new GridData();
         data.horizontalIndent = 20;
         multLabel.setLayoutData(data);
 
-        multText = new Text(group, SWT.SINGLE | SWT.RIGHT | SWT.BORDER);
+        multText = new Text(hashCodeGroup, SWT.SINGLE | SWT.RIGHT | SWT.BORDER);
         multText.addVerifyListener(new IntegerVerifyListener(multText));
         multText.addModifyListener(new ModifyListener() {
 
@@ -298,7 +303,7 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
                 }
             }
         });
-
+        setInitialValues();
     }
 
     private void checkInput() {
@@ -394,9 +399,31 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
 
     }
 
+    private void addGroupsIfPossible(StrategyIdentifier currentStrategy) {
+        if (!MethodContentStrategyIdentifier.USE_GUAVA.equals(currentStrategy)) {
+            if (equalsGroup == null && hashCodeGroup == null) {
+                addEqualsOptions(optionComposite);
+                addInitialMultiplierOptions(optionComposite);
+            }
+        } else {
+            if (equalsGroup != null && hashCodeGroup != null) {
+                equalsGroup.dispose();
+                hashCodeGroup.dispose();
+                equalsGroup = null;
+                hashCodeGroup = null;
+            }
+        }
+    }
+
     @Override
     public void callbackAfterStrategyChanged(StrategyIdentifier currentStrategy) {
-        // TODO Auto-generated method stub
-        
+        addGroupsIfPossible(currentStrategy);
+        redrawShell();
+    }
+
+    @Override
+    public void callbackAfterInsertPositions(Composite parentComposite) {
+        this.optionComposite = parentComposite;
+        addGroupsIfPossible(getStrategyIdentifier());
     }
 }
