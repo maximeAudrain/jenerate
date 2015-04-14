@@ -2,7 +2,6 @@ package org.jenerate.internal.manage;
 
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
-import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 
 /**
@@ -19,7 +18,6 @@ public interface DialogFactoryManager {
      * @return the {@link DialogFactory} for the provided parameter
      * @throws IllegalStateException if no {@link DialogFactory} could be found for a provided {@link CommandIdentifier}
      */
-    <T extends FieldDialog<U>, U extends MethodGenerationData> DialogFactory<T, U> getDialogFactory(
-            CommandIdentifier commandIdentifier);
+    <U extends MethodGenerationData> DialogFactory<U> getDialogFactory(CommandIdentifier commandIdentifier);
 
 }

@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.manage.DialogStrategyManager;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
@@ -14,14 +15,13 @@ import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
  * implementations
  * 
  * @author maudrain
- * @param <T> the type of {@link FieldDialog} this factory provides.
  * @param <U> the type of {@link MethodGenerationData} provided by this {@link FieldDialog}
  */
-public abstract class AbstractDialogFactory<T extends FieldDialog<U>, U extends MethodGenerationData> implements
-        DialogFactory<T, U> {
+public abstract class AbstractDialogFactory<U extends MethodGenerationData> implements DialogFactory<U> {
 
     protected final DialogFactoryHelper dialogFactoryHelper;
     protected final PreferencesManager preferencesManager;
+    protected final DialogStrategyManager dialogStrategyManager;
 
     /**
      * Constructor
@@ -29,9 +29,11 @@ public abstract class AbstractDialogFactory<T extends FieldDialog<U>, U extends 
      * @param dialogFactoryHelper the dialog factory helper
      * @param preferencesManager the preference manager
      */
-    public AbstractDialogFactory(DialogFactoryHelper dialogFactoryHelper, PreferencesManager preferencesManager) {
+    public AbstractDialogFactory(DialogStrategyManager dialogStrategyManager, DialogFactoryHelper dialogFactoryHelper,
+            PreferencesManager preferencesManager) {
         this.dialogFactoryHelper = dialogFactoryHelper;
         this.preferencesManager = preferencesManager;
+        this.dialogStrategyManager = dialogStrategyManager;
     }
 
     protected IField[] getObjectClassFields(IType objectClass) throws JavaModelException {

@@ -2,8 +2,11 @@ package org.jenerate.internal.ui.dialogs.factory.impl;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
+import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
-import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
+import org.jenerate.internal.ui.dialogs.FieldDialog;
+import org.jenerate.internal.ui.dialogs.impl.FieldDialogImpl;
+import org.jenerate.internal.ui.dialogs.strategy.commonslang.CommonsLangEqualsHashCodeDialogStrategy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -24,10 +27,13 @@ public class EqualsHashCodeDialogFactoryTest extends AbstractDialogFactoryTest {
 
     @Override
     public void callbackAfterSetUp() throws Exception {
-        when(dialogSettings.getSection(EqualsHashCodeDialog.EQUALS_SETTINGS_SECTION)).thenReturn(dialogSettings);
-        when(dialogSettings.getSection(EqualsHashCodeDialog.HASHCODE_SETTINGS_SECTION)).thenReturn(dialogSettings);
+        when(dialogSettings.getSection(CommonsLangEqualsHashCodeDialogStrategy.EQUALS_SETTINGS_SECTION)).thenReturn(
+                dialogSettings);
+        when(dialogSettings.getSection(CommonsLangEqualsHashCodeDialogStrategy.HASHCODE_SETTINGS_SECTION)).thenReturn(
+                dialogSettings);
         mockDisableAppendSuper(false);
-        equalsHashCodeDialogFactory = new EqualsHashCodeDialogFactory(dialogFactoryHelper, preferencesManager);
+        equalsHashCodeDialogFactory = new EqualsHashCodeDialogFactory(dialogStrategyManager, dialogFactoryHelper,
+                preferencesManager);
     }
 
     @Test
@@ -72,10 +78,11 @@ public class EqualsHashCodeDialogFactoryTest extends AbstractDialogFactoryTest {
     private void validateDialogCreation(IField[] iFields, boolean disableAppendSuper) throws JavaModelException,
             Exception {
         when(dialogFactoryHelper.getObjectClassFields(objectClass, preferencesManager)).thenReturn(iFields);
-        EqualsHashCodeDialog equalsHashCodeDialog = equalsHashCodeDialogFactory.createDialog(parentShell, objectClass,
-                excludedMethods, possibleStrategyIdentifiers);
-        assertArrayEquals(iFields, equalsHashCodeDialog.getFields());
-        assertEquals(disableAppendSuper, !equalsHashCodeDialog.getAppendSuper());
+        FieldDialog<EqualsHashCodeGenerationData> equalsHashCodeDialog = equalsHashCodeDialogFactory.createDialog(
+                parentShell, objectClass, excludedMethods, possibleStrategyIdentifiers);
+        assertArrayEquals(iFields, ((FieldDialogImpl<EqualsHashCodeGenerationData>) equalsHashCodeDialog).getFields());
+        assertEquals(disableAppendSuper,
+                !((FieldDialogImpl<EqualsHashCodeGenerationData>) equalsHashCodeDialog).getAppendSuper());
     }
 
     private void mockDisableAppendSuper(boolean isDisableAppendSuper) throws JavaModelException {

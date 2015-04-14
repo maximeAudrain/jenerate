@@ -13,8 +13,10 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.swt.SWT;
@@ -34,11 +36,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.data.impl.MethodGenerationDataImpl;
+import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
+import org.jenerate.internal.manage.DialogStrategyManager;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.impl.DialogFactoryHelperImpl;
+import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
 
 /**
  * An abstract {@link Dialog} allowing configuration of the different parameters for the method generation. It contains
@@ -47,7 +53,7 @@ import org.jenerate.internal.ui.dialogs.factory.impl.DialogFactoryHelperImpl;
  * 
  * @author jiayun, maudrain
  */
-public abstract class AbstractFieldDialog<T extends MethodGenerationData> extends Dialog implements FieldDialog<T> {
+public class FieldDialogImpl<U extends MethodGenerationData> extends Dialog implements FieldDialog<U> {
 
     /**
      * Dialog settings
@@ -67,7 +73,8 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
     private final PreferencesManager preferencesManager;
     private final LinkedHashSet<StrategyIdentifier> possibleStrategies;
     private final LinkedHashMap<String, IJavaElement> insertPositions;
-    private final IDialogSettings dialogSettings;
+    private final IDialogSettings generalDialogSettings;
+    private final IDialogSettings fieldDialogSettings;
 
     /**
      * User configurable generation data
@@ -83,21 +90,22 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
     /**
      * GUI components
      */
-    protected CLabel messageLabel;
+    private CLabel messageLabel;
     protected CheckboxTableViewer fieldViewer;
+    private DialogStrategyManager dialogStrategyManager;
 
-    public AbstractFieldDialog(Shell parentShell, String dialogTitle, IField[] fields,
-            LinkedHashSet<StrategyIdentifier> possibleStrategies, PreferencesManager preferencesManager,
-            IDialogSettings dialogSettings, LinkedHashMap<String, IJavaElement> insertPositions) {
-        this(parentShell, dialogTitle, fields, possibleStrategies, false, preferencesManager, dialogSettings,
-                insertPositions);
-    }
+    private DialogStrategy<U> currentDialogStrategy;
+    private Composite optionComposite;
+    private CommandIdentifier commandIdentifier;
 
-    public AbstractFieldDialog(Shell parentShell, String dialogTitle, IField[] fields,
+    public FieldDialogImpl(CommandIdentifier commandIdentifier, Shell parentShell, String dialogTitle, IField[] fields,
             LinkedHashSet<StrategyIdentifier> possibleStrategies, boolean disableAppendSuper,
             PreferencesManager preferencesManager, IDialogSettings dialogSettings,
-            LinkedHashMap<String, IJavaElement> insertPositions) {
+            LinkedHashMap<String, IJavaElement> insertPositions, DialogStrategyManager dialogStrategyManager) {
         super(parentShell);
+        this.commandIdentifier = commandIdentifier;
+        this.generalDialogSettings = dialogSettings;
+        this.dialogStrategyManager = dialogStrategyManager;
         setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.RESIZE);
         this.title = dialogTitle;
         this.allFields = fields;
@@ -105,12 +113,30 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         this.preferencesManager = preferencesManager;
         this.possibleStrategies = possibleStrategies;
         this.insertPositions = insertPositions;
+        this.fieldDialogSettings = initFieldDialogSettings();
+        initCurrentStrategy();
+        currentDialogStrategy.configureSpecificDialogSettings(generalDialogSettings);
+    }
 
-        IDialogSettings settings = dialogSettings.getSection(ABSTRACT_SETTINGS_SECTION);
-        if (settings == null) {
-            settings = dialogSettings.addNewSection(ABSTRACT_SETTINGS_SECTION);
+    private void initCurrentStrategy() {
+        StrategyIdentifier preferedStrategy = preferencesManager
+                .getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
+        if (possibleStrategies.contains(preferedStrategy)) {
+            currentStrategy = preferedStrategy;
+        } else {
+            MessageDialog.openWarning(getParentShell(), "Warning", "The prefered method content strategy '"
+                    + preferedStrategy + "' is not defined for the current method generation. "
+                    + "Setting to the first possible method content strategy.");
+            currentStrategy = possibleStrategies.iterator().next();
         }
-        this.dialogSettings = settings;
+        currentDialogStrategy = dialogStrategyManager.getDialogStrategy(commandIdentifier, currentStrategy);
+    }
+
+    private IDialogSettings initFieldDialogSettings() {
+        IDialogSettings settings = generalDialogSettings.getSection(ABSTRACT_SETTINGS_SECTION);
+        if (settings == null) {
+            settings = generalDialogSettings.addNewSection(ABSTRACT_SETTINGS_SECTION);
+        }
 
         currentPosition = settings.get(SETTINGS_INSERT_POSITION);
         if (currentPosition == null || currentPosition.isEmpty()) {
@@ -124,7 +150,7 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         }
         generateComment = settings.getBoolean(SETTINGS_GENERATE_COMMENT);
         useGettersInsteadOfFields = settings.getBoolean(SETTINGS_USE_GETTERS);
-
+        return settings;
     }
 
     @Override
@@ -134,15 +160,17 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
 
         if (DialogFactoryHelperImpl.FIRST_METHOD_POSITION.equals(currentPosition)
                 || DialogFactoryHelperImpl.LAST_METHOD_POSITION.equals(currentPosition)) {
-            dialogSettings.put(SETTINGS_INSERT_POSITION, currentPosition);
+            fieldDialogSettings.put(SETTINGS_INSERT_POSITION, currentPosition);
         }
 
         if (!disableAppendSuper) {
-            dialogSettings.put(SETTINGS_APPEND_SUPER, appendSuper);
+            fieldDialogSettings.put(SETTINGS_APPEND_SUPER, appendSuper);
         }
-        dialogSettings.put(SETTINGS_GENERATE_COMMENT, generateComment);
-        dialogSettings.put(SETTINGS_USE_GETTERS, useGettersInsteadOfFields);
+        fieldDialogSettings.put(SETTINGS_GENERATE_COMMENT, generateComment);
+        fieldDialogSettings.put(SETTINGS_USE_GETTERS, useGettersInsteadOfFields);
 
+        currentDialogStrategy.callbackBeforeDialogClosing();
+        currentDialogStrategy.disposeSpecificComponents();
         return super.close();
     }
 
@@ -180,10 +208,11 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         data.horizontalSpan = 2;
         strategySelectionComposite.setLayoutData(data);
 
-        Composite optionComposite = createInsertPositionsComposite(composite);
+        optionComposite = createInsertPositionsComposite(composite);
         data = new GridData(GridData.FILL_HORIZONTAL);
         data.horizontalSpan = 2;
         optionComposite.setLayoutData(data);
+        callbackAfterInsertPositions();
 
         Composite superComposite = addAppendSuperOption(composite);
         data = new GridData(GridData.FILL_HORIZONTAL);
@@ -286,15 +315,13 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
     }
 
     protected Composite createStrategySelectionComposite(final Composite composite) {
-        Composite optionComposite = new Composite(composite, SWT.NONE);
+        Composite comp = new Composite(composite, SWT.NONE);
         GridLayout layout = new GridLayout();
         layout.marginHeight = 0;
         layout.marginWidth = 0;
-        optionComposite.setLayout(layout);
-
-        addStrategySelectionChoices(optionComposite);
-
-        return optionComposite;
+        comp.setLayout(layout);
+        addStrategySelectionChoices(comp);
+        return comp;
     }
 
     private Composite addStrategySelectionChoices(final Composite composite) {
@@ -319,35 +346,30 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                currentStrategy = identifiers[combo.getSelectionIndex()];
-                callbackAfterStrategyChanged(currentStrategy);
+                StrategyIdentifier newlySelectedStrategy = identifiers[combo.getSelectionIndex()];
+                if (!newlySelectedStrategy.equals(currentStrategy)) {
+                    currentStrategy = newlySelectedStrategy;
+                    currentDialogStrategy.disposeSpecificComponents();
+                    currentDialogStrategy = dialogStrategyManager.getDialogStrategy(commandIdentifier, currentStrategy);
+                    currentDialogStrategy.configureSpecificDialogSettings(generalDialogSettings);
+                    currentDialogStrategy.createSpecificComponents(FieldDialogImpl.this);
+                    redrawShell();
+                }
             }
         });
 
-        StrategyIdentifier preferedStrategy = preferencesManager
-                .getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY);
-        if (possibleStrategies.contains(preferedStrategy)) {
-            combo.select(combo.indexOf(preferedStrategy.getName()));
-            currentStrategy = preferedStrategy;
-        } else {
-            MessageDialog.openWarning(getParentShell(), "Warning", "The prefered method content strategy '"
-                    + preferedStrategy + "' is not defined for the current method generation. "
-                    + "Setting to the first possible method content strategy.");
-            combo.select(0);
-            currentStrategy = possibleStrategies.iterator().next();
-        }
+        combo.select(combo.indexOf(currentStrategy.getName()));
         return composite;
     }
 
     private final Composite createInsertPositionsComposite(final Composite composite) {
-        Composite optionComposite = new Composite(composite, SWT.NONE);
+        Composite comp = new Composite(composite, SWT.NONE);
         GridLayout layout = new GridLayout();
         layout.marginHeight = 0;
         layout.marginWidth = 0;
-        optionComposite.setLayout(layout);
-        addPositionChoices(optionComposite);
-        callbackAfterInsertPositions(optionComposite);
-        return optionComposite;
+        comp.setLayout(layout);
+        addPositionChoices(comp);
+        return comp;
     }
 
     private Composite addPositionChoices(final Composite composite) {
@@ -493,26 +515,57 @@ public abstract class AbstractFieldDialog<T extends MethodGenerationData> extend
         return blocksInIfComposite;
     }
 
-    protected void redrawShell() {
+    @Override
+    public void showErrorMessage(String message) {
+        messageLabel.setImage(JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_ERROR));
+        messageLabel.setText(message);
+        messageLabel.setVisible(true);
+        getButton(IDialogConstants.OK_ID).setEnabled(false);
+    }
+
+    @Override
+    public void clearErrorMessage() {
+        messageLabel.setImage(null);
+        messageLabel.setText(null);
+        messageLabel.setVisible(false);
+        getButton(IDialogConstants.OK_ID).setEnabled(true);
+    }
+
+    @Override
+    public U getData() {
+        //@formatter:off
+        MethodGenerationData methodGenerationData = new MethodGenerationDataImpl.Builder()
+                .withCheckedFields(getCheckedFields())
+                .withSelectedContentStrategy(getStrategyIdentifier())
+                .withElementPosition(getElementPosition())
+                .withAppendSuper(getAppendSuper())
+                .withGenerateComment(getGenerateComment())
+                .withUseBlockInIfStatements(getUseBlockInIfStatements())
+                .withUseGettersInsteadOfFields(getUseGettersInsteadOfFields())
+                .build();
+        //@formatter:on
+        return currentDialogStrategy.getData(methodGenerationData);
+    }
+
+    @Override
+    public Dialog getDialog() {
+        return this;
+    }
+
+    @Override
+    public Composite getEditableComposite() {
+        return optionComposite;
+    }
+
+    private void redrawShell() {
         getShell().layout(true, true);
         Point newSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
         getShell().setSize(newSize);
     }
 
-    /**
-     * Callback after the strategy changed to enable change of dialog UI dynamically depending on the newly selected
-     * strategy
-     * 
-     * @param newStrategy the new strategy selected in the dialog
-     */
-    public abstract void callbackAfterStrategyChanged(StrategyIdentifier newStrategy);
-
-    /**
-     * A callback to add additional UI components after the insert position combobox
-     * 
-     * @param parentComposite the composite to add the components to
-     */
-    public abstract void callbackAfterInsertPositions(Composite parentComposite);
+    private void callbackAfterInsertPositions() {
+        currentDialogStrategy.createSpecificComponents(this);
+    }
 
     public IField[] getCheckedFields() {
         return selectedFields;

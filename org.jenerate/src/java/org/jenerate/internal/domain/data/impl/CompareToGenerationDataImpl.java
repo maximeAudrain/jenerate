@@ -15,6 +15,8 @@ public class CompareToGenerationDataImpl extends AbstractMethodGenerationData im
             return this;
         }
 
+        @SuppressWarnings("unchecked")
+        @Override
         public CompareToGenerationData build() {
             return new CompareToGenerationDataImpl(getThis());
         }

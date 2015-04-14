@@ -16,7 +16,7 @@ import org.jenerate.internal.ui.dialogs.FieldDialog;
  * @param <U> the type of {@link FieldDialog} for this method generator
  * @param <V> the type of {@link MethodGenerationData} this generator handles
  */
-public interface MethodGenerator<T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData> {
+public interface MethodGenerator<T extends MethodSkeleton<V>, V extends MethodGenerationData> {
 
     /**
      * Generate the methods for in the provided objectClass for the provided {@link CommandIdentifier}

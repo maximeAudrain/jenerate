@@ -62,7 +62,7 @@ public class MethodGeneratorImplTest {
     private static final String METHOD2_CONTENT = "method2Content";
 
     @Mock
-    private DialogFactory<FieldDialog<MethodGenerationData>, MethodGenerationData> dialogFactory;
+    private DialogFactory<MethodGenerationData> dialogFactory;
     @Mock
     private FieldDialog<MethodGenerationData> testDialog;
     @Mock
@@ -118,7 +118,7 @@ public class MethodGeneratorImplTest {
     @Mock
     private Method<MethodSkeleton<MethodGenerationData>, MethodGenerationData> method2;
 
-    private MethodGeneratorImpl<MethodSkeleton<MethodGenerationData>, FieldDialog<MethodGenerationData>, MethodGenerationData> methodGenerator;
+    private MethodGeneratorImpl<MethodSkeleton<MethodGenerationData>, MethodGenerationData> methodGenerator;
 
     @Before
     public void setUp() throws Exception {
@@ -127,7 +127,7 @@ public class MethodGeneratorImplTest {
         mockData();
         mockMethod1();
         mockMethod2();
-        methodGenerator = new MethodGeneratorImpl<MethodSkeleton<MethodGenerationData>, FieldDialog<MethodGenerationData>, MethodGenerationData>(
+        methodGenerator = new MethodGeneratorImpl<MethodSkeleton<MethodGenerationData>, MethodGenerationData>(
                 dialogFactory, javaUiCodeAppender, jeneratePluginCodeFormatter, methodSkeletonManager,
                 methodContentManager);
     }

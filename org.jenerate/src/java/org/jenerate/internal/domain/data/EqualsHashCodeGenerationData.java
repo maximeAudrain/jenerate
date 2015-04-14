@@ -4,10 +4,10 @@ import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
 
 public interface EqualsHashCodeGenerationData extends MethodGenerationData {
 
-	boolean getCompareReferences();
+    boolean getCompareReferences();
 
-	IInitMultNumbers getInitMultNumbers();
+    IInitMultNumbers getInitMultNumbers();
 
-	boolean getClassComparison();
+    boolean getClassComparison();
 
 }

@@ -17,10 +17,9 @@ import org.jenerate.internal.ui.dialogs.FieldDialog;
  * {@link DialogFactory} has a 1 to 1 relationship with a {@link CommandIdentifier}.
  * 
  * @author maudrain
- * @param <T> the type of {@link FieldDialog} this factory provides.
  * @param <U> the type of {@link MethodGenerationData} provided by this {@link FieldDialog}
  */
-public interface DialogFactory<T extends FieldDialog<U>, U extends MethodGenerationData> {
+public interface DialogFactory<U extends MethodGenerationData> {
 
     /**
      * Creates a {@link Dialog} from the provided parameters
@@ -31,7 +30,7 @@ public interface DialogFactory<T extends FieldDialog<U>, U extends MethodGenerat
      * @return the fully formed {@link FieldDialog} for the provided parameters
      * @throws Exception if a problem occur when creating the {@link FieldDialog}
      */
-    T createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods,
+    FieldDialog<U> createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods,
             LinkedHashSet<StrategyIdentifier> possibleStrategies) throws Exception;
 
     /**

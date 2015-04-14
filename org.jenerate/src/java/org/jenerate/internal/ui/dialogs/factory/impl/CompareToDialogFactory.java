@@ -14,10 +14,11 @@ import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
+import org.jenerate.internal.manage.DialogStrategyManager;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
-import org.jenerate.internal.ui.dialogs.impl.CompareToDialog;
+import org.jenerate.internal.ui.dialogs.impl.OrderableFieldDialogImpl;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 /**
@@ -25,7 +26,7 @@ import org.jenerate.internal.util.JavaInterfaceCodeAppender;
  * 
  * @author maudrain
  */
-public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialog, CompareToGenerationData> {
+public class CompareToDialogFactory extends AbstractDialogFactory<CompareToGenerationData> {
 
     private JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
@@ -36,21 +37,22 @@ public class CompareToDialogFactory extends AbstractDialogFactory<CompareToDialo
      * @param preferencesManager the preference manager
      * @param javaInterfaceCodeAppender the java interface code appender
      */
-    public CompareToDialogFactory(DialogFactoryHelper dialogFactoryHelper, PreferencesManager preferencesManager,
-            JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
-        super(dialogFactoryHelper, preferencesManager);
+    public CompareToDialogFactory(DialogStrategyManager dialogStrategyManager, DialogFactoryHelper dialogFactoryHelper,
+            PreferencesManager preferencesManager, JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
+        super(dialogStrategyManager, dialogFactoryHelper, preferencesManager);
         this.javaInterfaceCodeAppender = javaInterfaceCodeAppender;
     }
 
     @Override
-    public CompareToDialog createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods,
-            LinkedHashSet<StrategyIdentifier> possibleStrategies) throws Exception {
+    public OrderableFieldDialogImpl<CompareToGenerationData> createDialog(Shell parentShell, IType objectClass,
+            Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies) throws Exception {
         IField[] fields = getObjectClassFields(objectClass);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
         LinkedHashMap<String, IJavaElement> insertPositions = dialogFactoryHelper.getInsertPositions(objectClass,
                 excludedMethods);
-        return new CompareToDialog(parentShell, "Generate CompareTo Method", fields, possibleStrategies,
-                disableAppendSuper, preferencesManager, dialogFactoryHelper.getDialogSettings(), insertPositions);
+        return new OrderableFieldDialogImpl<CompareToGenerationData>(MethodsGenerationCommandIdentifier.COMPARE_TO,
+                parentShell, "Generate CompareTo Method", fields, possibleStrategies, disableAppendSuper,
+                preferencesManager, dialogFactoryHelper.getDialogSettings(), insertPositions, dialogStrategyManager);
     }
 
     @Override

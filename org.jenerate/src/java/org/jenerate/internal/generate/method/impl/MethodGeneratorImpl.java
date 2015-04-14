@@ -32,16 +32,16 @@ import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
  * @param <U> the type of {@link FieldDialog} for this method generator
  * @param <V> the type of {@link MethodGenerationData} this generator handles
  */
-public final class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData>
-        implements MethodGenerator<T, U, V> {
+public final class MethodGeneratorImpl<T extends MethodSkeleton<V>, V extends MethodGenerationData> implements
+        MethodGenerator<T, V> {
 
-    private final DialogFactory<U, V> dialogFactory;
+    private final DialogFactory<V> dialogFactory;
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final JavaCodeFormatter jeneratePluginCodeFormatter;
     private final MethodSkeletonManager methodSkeletonManager;
     private final MethodContentManager methodContentManager;
 
-    public MethodGeneratorImpl(DialogFactory<U, V> dialogFactory, JavaUiCodeAppender javaUiCodeAppender,
+    public MethodGeneratorImpl(DialogFactory<V> dialogFactory, JavaUiCodeAppender javaUiCodeAppender,
             JavaCodeFormatter jeneratePluginCodeFormatter, MethodSkeletonManager methodSkeletonManager,
             MethodContentManager methodContentManager) {
         this.dialogFactory = dialogFactory;
@@ -59,7 +59,8 @@ public final class MethodGeneratorImpl<T extends MethodSkeleton<V>, U extends Fi
 
         try {
             Set<IMethod> excludedMethods = getExcludedMethods(objectClass, methodSkeletons);
-            U dialog = dialogFactory.createDialog(parentShell, objectClass, excludedMethods, strategyIdentifiers);
+            FieldDialog<V> dialog = dialogFactory.createDialog(parentShell, objectClass, excludedMethods,
+                    strategyIdentifiers);
             int returnCode = dialog.getDialog().open();
             if (returnCode == Window.OK) {
 

@@ -1,14 +1,6 @@
-package org.jenerate.internal.ui.dialogs.impl;
+package org.jenerate.internal.ui.dialogs.strategy.commonslang;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-
-import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -24,26 +16,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
+import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.data.impl.EqualsHashCodeGenerationDataImpl;
 import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersCustom;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersDefault;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersRandom;
+import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
-import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
-import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
+import org.jenerate.internal.ui.dialogs.FieldDialog;
+import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
 
-/**
- * Default implementation of the dialog for the generation of the equals and hashCode methods. Defines specific GUI
- * components for the customization of the HashCodeBuilder odd numbers, and the comparison of references for the equals
- * method.
- * 
- * @author jiayun
- */
-public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGenerationData> {
+public class CommonsLangEqualsHashCodeDialogStrategy implements DialogStrategy<EqualsHashCodeGenerationData> {
 
     /**
      * Dialog settings
@@ -56,10 +43,11 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
     private static final String SETTINGS_MULTIPLIER_NUMBER = "MultiplierNumber";
     private static final String SETTINGS_CLASS_COMPARISON = "ClassComparison";
 
-    private final IDialogSettings equalsDialogSettings;
-    private final IDialogSettings hashCodeDialogSettings;
+    private final StrategyIdentifier strategyIdentifier;
+
+    private IDialogSettings equalsDialogSettings;
+    private IDialogSettings hashCodeDialogSettings;
     private final Button imButtons[] = new Button[3];
-    private Composite optionComposite;
 
     private Text initText;
     private Text multText;
@@ -74,14 +62,22 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
     private Group equalsGroup;
     private Group hashCodeGroup;
 
-    public EqualsHashCodeDialog(final Shell parentShell, final String dialogTitle, final IField[] fields,
-            LinkedHashSet<StrategyIdentifier> possibleStrategies, final boolean disableAppendSuper,
-            PreferencesManager preferencesManager, IDialogSettings dialogSettings,
-            LinkedHashMap<String, IJavaElement> insertPositions) {
+    public CommonsLangEqualsHashCodeDialogStrategy(StrategyIdentifier strategyIdentifier) {
+        this.strategyIdentifier = strategyIdentifier;
+    }
 
-        super(parentShell, dialogTitle, fields, possibleStrategies, disableAppendSuper, preferencesManager,
-                dialogSettings, insertPositions);
+    @Override
+    public CommandIdentifier getCommandIdentifier() {
+        return MethodsGenerationCommandIdentifier.EQUALS_HASH_CODE;
+    }
 
+    @Override
+    public StrategyIdentifier getStrategyIdentifier() {
+        return strategyIdentifier;
+    }
+
+    @Override
+    public void configureSpecificDialogSettings(IDialogSettings dialogSettings) {
         IDialogSettings equalsSettings = dialogSettings.getSection(EQUALS_SETTINGS_SECTION);
         if (equalsSettings == null) {
             equalsSettings = dialogSettings.addNewSection(EQUALS_SETTINGS_SECTION);
@@ -118,40 +114,54 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
     }
 
     @Override
-    public boolean close() {
+    public void callbackBeforeDialogClosing() {
         equalsDialogSettings.put(SETTINGS_COMPARE_REFERENCES, compareReferences);
         equalsDialogSettings.put(SETTINGS_CLASS_COMPARISON, classComparison);
         imNumbers[initMultType].setNumbers(initialNumber, multiplierNumber);
         hashCodeDialogSettings.put(SETTINGS_INIT_MULT_TYPE, initMultType);
         hashCodeDialogSettings.put(SETTINGS_INITIAL_NUMBER, initialNumber);
         hashCodeDialogSettings.put(SETTINGS_MULTIPLIER_NUMBER, multiplierNumber);
-        return super.close();
     }
 
     @Override
-    public void create() {
-        super.create();
-        setInitialValues();
-        fieldViewer.getTable().setFocus();
+    public void createSpecificComponents(FieldDialog<EqualsHashCodeGenerationData> fieldDialog) {
+        if (equalsGroup == null && hashCodeGroup == null) {
+            addEqualsOptions(fieldDialog);
+            addInitialMultiplierOptions(fieldDialog);
+        }
     }
 
-    private void setInitialValues() {
-        Display.getDefault().asyncExec(new Runnable() {
-            @Override
-            public void run() {
-                imButtons[initMultType].setSelection(true);
-                initText.setText(String.valueOf(initialNumber));
-                multText.setText(String.valueOf(multiplierNumber));
-                if (initMultType != 2) {
-                    initText.setEnabled(false);
-                    multText.setEnabled(false);
-                }
-            }
-        });
+    @Override
+    public void disposeSpecificComponents() {
+        if (equalsGroup != null && hashCodeGroup != null) {
+            equalsGroup.dispose();
+            hashCodeGroup.dispose();
+            equalsGroup = null;
+            hashCodeGroup = null;
+        }
     }
 
-    private Composite addEqualsOptions(final Composite composite) {
-        equalsGroup = new Group(composite, SWT.NONE);
+    @Override
+    public EqualsHashCodeGenerationData getData(MethodGenerationData methodGenerationData) {
+        //@formatter:off
+        return new EqualsHashCodeGenerationDataImpl.Builder()
+                .withCheckedFields(methodGenerationData.getCheckedFields())
+                .withSelectedContentStrategy(methodGenerationData.getSelectedContentStrategy())
+                .withElementPosition(methodGenerationData.getElementPosition())
+                .withAppendSuper(methodGenerationData.getAppendSuper())
+                .withGenerateComment(methodGenerationData.getGenerateComment())
+                .withUseBlockInIfStatements(methodGenerationData.getUseBlockInIfStatements())
+                .withUseGettersInsteadOfFields(methodGenerationData.getUseGettersInsteadOfFields())
+                .withCompareReferences(compareReferences)
+                .withClassComparison(classComparison)
+                .withInitMultNumbers(imNumbers[initMultType])
+                .build();
+        //@formatter:on
+    }
+
+    private Composite addEqualsOptions(FieldDialog<EqualsHashCodeGenerationData> fieldDialog) {
+        Composite editableComposite = fieldDialog.getEditableComposite();
+        equalsGroup = new Group(editableComposite, SWT.NONE);
         equalsGroup.setText("Equals");
         equalsGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
         GridLayout layout = new GridLayout(1, false);
@@ -160,7 +170,7 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
         createAndAddCompareReferencesButton(equalsGroup);
         createAndAddClassComparisonButton(equalsGroup);
 
-        return composite;
+        return editableComposite;
     }
 
     private void createAndAddCompareReferencesButton(Group group) {
@@ -203,8 +213,8 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
         comparisonButton.setSelection(classComparison);
     }
 
-    private void addInitialMultiplierOptions(final Composite composite) {
-        hashCodeGroup = new Group(composite, SWT.NONE);
+    private void addInitialMultiplierOptions(final FieldDialog<EqualsHashCodeGenerationData> fieldDialog) {
+        hashCodeGroup = new Group(fieldDialog.getEditableComposite(), SWT.NONE);
         hashCodeGroup.setText("HashCode - Initial and multiplier numbers");
         hashCodeGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         GridLayout layout = new GridLayout(4, false);
@@ -240,7 +250,7 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
 
             @Override
             public void modifyText(ModifyEvent e) {
-                checkInput();
+                checkInput(fieldDialog);
             }
 
         });
@@ -259,7 +269,7 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
 
             @Override
             public void modifyText(ModifyEvent e) {
-                checkInput();
+                checkInput(fieldDialog);
             }
 
         });
@@ -306,17 +316,32 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
         setInitialValues();
     }
 
-    private void checkInput() {
+    private void setInitialValues() {
+        Display.getDefault().asyncExec(new Runnable() {
+            @Override
+            public void run() {
+                imButtons[initMultType].setSelection(true);
+                initText.setText(String.valueOf(initialNumber));
+                multText.setText(String.valueOf(multiplierNumber));
+                if (initMultType != 2) {
+                    initText.setEnabled(false);
+                    multText.setEnabled(false);
+                }
+            }
+        });
+    }
+
+    private void checkInput(FieldDialog<EqualsHashCodeGenerationData> fieldDialog) {
         String text = initText.getText();
         int init;
         try {
             init = Integer.parseInt(text);
         } catch (NumberFormatException e) {
-            showNotOddMessage("Initial number");
+            fieldDialog.showErrorMessage("Initial number must be an odd number.");
             return;
         }
         if (init % 2 == 0) {
-            showNotOddMessage("Initial Number");
+            fieldDialog.showErrorMessage("Initial Number must be an odd number.");
             return;
         }
         initialNumber = init;
@@ -326,52 +351,15 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
         try {
             mult = Integer.parseInt(text);
         } catch (NumberFormatException e) {
-            showNotOddMessage("Multiplier number");
+            fieldDialog.showErrorMessage("Multiplier number must be an odd number.");
             return;
         }
         if (mult % 2 == 0) {
-            showNotOddMessage("Multiplier Number");
+            fieldDialog.showErrorMessage("Multiplier Number must be an odd number.");
             return;
         }
         multiplierNumber = mult;
-        clearMessage();
-    }
-
-    private void showNotOddMessage(String title) {
-        messageLabel.setImage(JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_ERROR));
-        messageLabel.setText(title + " must be an odd number.");
-        messageLabel.setVisible(true);
-        getButton(IDialogConstants.OK_ID).setEnabled(false);
-    }
-
-    private void clearMessage() {
-        messageLabel.setImage(null);
-        messageLabel.setText(null);
-        messageLabel.setVisible(false);
-        getButton(IDialogConstants.OK_ID).setEnabled(true);
-    }
-
-    @Override
-    public EqualsHashCodeGenerationData getData() {
-        //@formatter:off
-        return new EqualsHashCodeGenerationDataImpl.Builder()
-                .withCheckedFields(getCheckedFields())
-                .withSelectedContentStrategy(getStrategyIdentifier())
-                .withElementPosition(getElementPosition())
-                .withAppendSuper(getAppendSuper())
-                .withGenerateComment(getGenerateComment())
-                .withUseBlockInIfStatements(getUseBlockInIfStatements())
-                .withUseGettersInsteadOfFields(getUseGettersInsteadOfFields())
-                .withCompareReferences(compareReferences)
-                .withClassComparison(classComparison)
-                .withInitMultNumbers(imNumbers[initMultType])
-                .build();
-        //@formatter:on
-    }
-
-    @Override
-    public Dialog getDialog() {
-        return this;
+        fieldDialog.clearErrorMessage();
     }
 
     private static class IntegerVerifyListener implements VerifyListener {
@@ -397,33 +385,5 @@ public class EqualsHashCodeDialog extends AbstractFieldDialog<EqualsHashCodeGene
             }
         }
 
-    }
-
-    private void addGroupsIfPossible(StrategyIdentifier currentStrategy) {
-        if (!MethodContentStrategyIdentifier.USE_GUAVA.equals(currentStrategy)) {
-            if (equalsGroup == null && hashCodeGroup == null) {
-                addEqualsOptions(optionComposite);
-                addInitialMultiplierOptions(optionComposite);
-            }
-        } else {
-            if (equalsGroup != null && hashCodeGroup != null) {
-                equalsGroup.dispose();
-                hashCodeGroup.dispose();
-                equalsGroup = null;
-                hashCodeGroup = null;
-            }
-        }
-    }
-
-    @Override
-    public void callbackAfterStrategyChanged(StrategyIdentifier currentStrategy) {
-        addGroupsIfPossible(currentStrategy);
-        redrawShell();
-    }
-
-    @Override
-    public void callbackAfterInsertPositions(Composite parentComposite) {
-        this.optionComposite = parentComposite;
-        addGroupsIfPossible(getStrategyIdentifier());
     }
 }

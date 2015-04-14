@@ -106,5 +106,7 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
         }
 
         public abstract T getThis();
+
+        public abstract <U extends MethodGenerationData> U build();
     }
 }

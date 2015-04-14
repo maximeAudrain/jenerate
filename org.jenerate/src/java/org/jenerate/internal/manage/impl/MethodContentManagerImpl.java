@@ -13,6 +13,9 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLan
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangEqualsMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangHashCodeMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringMethodContent;
+import org.jenerate.internal.strategy.method.content.impl.guava.GuavaEqualsMethodContent;
+import org.jenerate.internal.strategy.method.content.impl.guava.GuavaHashCodeMethodContent;
+import org.jenerate.internal.strategy.method.content.impl.guava.GuavaToStringMethodContent;
 import org.jenerate.internal.strategy.method.impl.MethodImpl;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
@@ -53,6 +56,14 @@ public final class MethodContentManagerImpl implements MethodContentManager {
                 preferencesManager, javaInterfaceCodeAppender));
         methodContents.add(new CommonsLangCompareToMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
                 preferencesManager, javaInterfaceCodeAppender));
+
+        methodContents
+                .add(new GuavaToStringMethodContent(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager));
+
+        methodContents.add(new GuavaEqualsMethodContent(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager));
+
+        methodContents
+                .add(new GuavaHashCodeMethodContent(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager));
     }
 
     /**

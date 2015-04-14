@@ -89,7 +89,7 @@ public class MethodContentManagerImplTest {
                 .getStrategiesIntersection(methodSkeletons);
         assertEquals(2, possibleStrategies.size());
     }
-    
+
     @Test
     public void testGetPossibleStrategiesWithTwoSkeletons() {
         LinkedHashSet<MethodSkeleton<EqualsHashCodeGenerationData>> skeletons = new LinkedHashSet<>();

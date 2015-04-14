@@ -20,7 +20,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
+import org.jenerate.internal.manage.DialogStrategyManager;
 import org.jenerate.internal.manage.PreferencesManager;
 
 /**
@@ -30,24 +32,17 @@ import org.jenerate.internal.manage.PreferencesManager;
  * 
  * @author jiayun
  */
-public abstract class AbstractOrderableFieldDialog<T extends MethodGenerationData> extends AbstractFieldDialog<T> {
+public class OrderableFieldDialogImpl<U extends MethodGenerationData> extends FieldDialogImpl<U> {
 
     private Button upButton;
     private Button downButton;
 
-    public AbstractOrderableFieldDialog(Shell parentShell, String dialogTitle, IField[] fields,
-            LinkedHashSet<StrategyIdentifier> possibleStrategies, PreferencesManager preferencesManager,
-            IDialogSettings dialogSettings, LinkedHashMap<String, IJavaElement> insertPositions) {
-        this(parentShell, dialogTitle, fields, possibleStrategies, false, preferencesManager, dialogSettings,
-                insertPositions);
-    }
-
-    public AbstractOrderableFieldDialog(Shell parentShell, String dialogTitle, IField[] fields,
-            LinkedHashSet<StrategyIdentifier> possibleStrategies, boolean disableAppendSuper,
+    public OrderableFieldDialogImpl(CommandIdentifier commandIdentifier, Shell parentShell, String dialogTitle,
+            IField[] fields, LinkedHashSet<StrategyIdentifier> possibleStrategies, boolean disableAppendSuper,
             PreferencesManager preferencesManager, IDialogSettings dialogSettings,
-            LinkedHashMap<String, IJavaElement> insertPositions) {
-        super(parentShell, dialogTitle, fields, possibleStrategies, disableAppendSuper, preferencesManager,
-                dialogSettings, insertPositions);
+            LinkedHashMap<String, IJavaElement> insertPositions, DialogStrategyManager dialogStrategyManager) {
+        super(commandIdentifier, parentShell, dialogTitle, fields, possibleStrategies, disableAppendSuper,
+                preferencesManager, dialogSettings, insertPositions, dialogStrategyManager);
     }
 
     @Override

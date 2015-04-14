@@ -1,6 +1,7 @@
 package org.jenerate.internal.ui.dialogs;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.swt.widgets.Composite;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 
 /**
@@ -11,15 +12,21 @@ import org.jenerate.internal.domain.data.MethodGenerationData;
  * @author maudrain
  * @param <T> the type of user data provided by this dialog
  */
-public interface FieldDialog<T extends MethodGenerationData> {
+public interface FieldDialog<U extends MethodGenerationData> {
 
     /**
      * @return the data which will be used for the code generation
      */
-    T getData();
+    U getData();
 
     /**
      * @return the concrete {@link Dialog} instance for this {@link FieldDialog}
      */
     Dialog getDialog();
+
+    void showErrorMessage(String message);
+
+    void clearErrorMessage();
+
+    Composite getEditableComposite();
 }

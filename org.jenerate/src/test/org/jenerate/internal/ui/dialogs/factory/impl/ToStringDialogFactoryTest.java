@@ -2,10 +2,11 @@ package org.jenerate.internal.ui.dialogs.factory.impl;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
+import org.jenerate.internal.domain.data.ToStringGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
-import org.jenerate.internal.ui.dialogs.impl.ToStringDialog;
+import org.jenerate.internal.ui.dialogs.FieldDialog;
+import org.jenerate.internal.ui.dialogs.impl.OrderableFieldDialogImpl;
+import org.jenerate.internal.ui.dialogs.strategy.commonslang.CommonsLangToStringDialogStrategy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -26,11 +27,10 @@ public class ToStringDialogFactoryTest extends AbstractDialogFactoryTest {
 
     @Override
     public void callbackAfterSetUp() throws Exception {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY))
-                .thenReturn(MethodContentStrategyIdentifier.USE_COMMONS_LANG);
-        when(dialogSettings.getSection(ToStringDialog.SETTINGS_SECTION)).thenReturn(dialogSettings);
+        when(dialogSettings.getSection(CommonsLangToStringDialogStrategy.SETTINGS_SECTION)).thenReturn(dialogSettings);
         mockDisableAppendSuper(false);
-        toStringDialogFactory = new ToStringDialogFactory(dialogFactoryHelper, preferencesManager);
+        toStringDialogFactory = new ToStringDialogFactory(dialogStrategyManager, dialogFactoryHelper,
+                preferencesManager);
     }
 
     @Test
@@ -57,10 +57,11 @@ public class ToStringDialogFactoryTest extends AbstractDialogFactoryTest {
     private void validateDialogCreation(IField[] iFields, boolean disableAppendSuper) throws JavaModelException,
             Exception {
         when(dialogFactoryHelper.getObjectClassFields(objectClass, preferencesManager)).thenReturn(iFields);
-        ToStringDialog toStringDialog = toStringDialogFactory.createDialog(parentShell, objectClass, excludedMethods,
-                possibleStrategyIdentifiers);
-        assertArrayEquals(iFields, toStringDialog.getFields());
-        assertEquals(disableAppendSuper, !toStringDialog.getAppendSuper());
+        FieldDialog<ToStringGenerationData> toStringDialog = toStringDialogFactory.createDialog(parentShell,
+                objectClass, excludedMethods, possibleStrategyIdentifiers);
+        assertArrayEquals(iFields, ((OrderableFieldDialogImpl<ToStringGenerationData>) toStringDialog).getFields());
+        assertEquals(disableAppendSuper,
+                !((OrderableFieldDialogImpl<ToStringGenerationData>) toStringDialog).getAppendSuper());
     }
 
     private void mockDisableAppendSuper(boolean isDisableAppendSuper) throws JavaModelException {

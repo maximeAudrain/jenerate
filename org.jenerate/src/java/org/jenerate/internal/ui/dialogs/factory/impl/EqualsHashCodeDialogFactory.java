@@ -14,18 +14,19 @@ import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
+import org.jenerate.internal.manage.DialogStrategyManager;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
-import org.jenerate.internal.ui.dialogs.impl.EqualsHashCodeDialog;
+import org.jenerate.internal.ui.dialogs.impl.FieldDialogImpl;
 
 /**
  * {@link DialogFactory} implementation for the {@link EqualsHashCodeDialog}
  * 
  * @author maudrain
  */
-public class EqualsHashCodeDialogFactory extends
-        AbstractDialogFactory<EqualsHashCodeDialog, EqualsHashCodeGenerationData> {
+public class EqualsHashCodeDialogFactory extends AbstractDialogFactory<EqualsHashCodeGenerationData> {
 
     /**
      * Constructor
@@ -33,20 +34,21 @@ public class EqualsHashCodeDialogFactory extends
      * @param dialogFactoryHelper the dialog factory helper
      * @param preferencesManager the preference manager
      */
-    public EqualsHashCodeDialogFactory(DialogFactoryHelper dialogFactoryHelper, PreferencesManager preferencesManager) {
-        super(dialogFactoryHelper, preferencesManager);
+    public EqualsHashCodeDialogFactory(DialogStrategyManager dialogStrategyManager,
+            DialogFactoryHelper dialogFactoryHelper, PreferencesManager preferencesManager) {
+        super(dialogStrategyManager, dialogFactoryHelper, preferencesManager);
     }
 
     @Override
-    public EqualsHashCodeDialog createDialog(Shell parentShell, IType objectClass, Set<IMethod> excludedMethods,
-            LinkedHashSet<StrategyIdentifier> possibleStrategies) throws Exception {
+    public FieldDialog<EqualsHashCodeGenerationData> createDialog(Shell parentShell, IType objectClass,
+            Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies) throws Exception {
         IField[] fields = getObjectClassFields(objectClass);
         boolean disableAppendSuper = getDisableAppendSuper(objectClass);
         LinkedHashMap<String, IJavaElement> insertPositions = dialogFactoryHelper.getInsertPositions(objectClass,
                 excludedMethods);
-        return new EqualsHashCodeDialog(parentShell, "Generate Equals and HashCode Methods", fields,
-                possibleStrategies, disableAppendSuper, preferencesManager, dialogFactoryHelper.getDialogSettings(),
-                insertPositions);
+        return new FieldDialogImpl<EqualsHashCodeGenerationData>(MethodsGenerationCommandIdentifier.EQUALS_HASH_CODE,
+                parentShell, "Generate Equals and HashCode Methods", fields, possibleStrategies, disableAppendSuper,
+                preferencesManager, dialogFactoryHelper.getDialogSettings(), insertPositions, dialogStrategyManager);
     }
 
     @Override

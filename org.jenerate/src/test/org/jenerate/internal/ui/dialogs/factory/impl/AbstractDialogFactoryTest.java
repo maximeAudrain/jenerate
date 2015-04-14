@@ -11,16 +11,22 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.widgets.Shell;
+import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
+import org.jenerate.internal.manage.DialogStrategyManager;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
-import org.jenerate.internal.ui.dialogs.impl.AbstractFieldDialog;
+import org.jenerate.internal.ui.dialogs.impl.FieldDialogImpl;
+import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 /**
@@ -31,6 +37,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public abstract class AbstractDialogFactoryTest {
 
+    @Mock
+    protected DialogStrategyManager dialogStrategyManager;
     @Mock
     protected DialogFactoryHelper dialogFactoryHelper;
     @Mock
@@ -60,6 +68,9 @@ public abstract class AbstractDialogFactoryTest {
     @Mock
     protected StrategyIdentifier identifier2;
 
+    @Mock
+    private DialogStrategy<MethodGenerationData> dialogStrategy;
+
     @Before
     public void setUp() throws Exception {
         mockDialogSettings();
@@ -70,6 +81,10 @@ public abstract class AbstractDialogFactoryTest {
         possibleStrategyIdentifiers = new LinkedHashSet<StrategyIdentifier>();
         possibleStrategyIdentifiers.add(identifier1);
         possibleStrategyIdentifiers.add(identifier2);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.PREFERED_COMMON_METHODS_CONTENT_STRATEGY))
+                .thenReturn(identifier1);
+        when(dialogStrategyManager.getDialogStrategy(any(CommandIdentifier.class), any(StrategyIdentifier.class)))
+                .thenReturn(dialogStrategy);
         callbackAfterSetUp();
     }
 
@@ -79,8 +94,8 @@ public abstract class AbstractDialogFactoryTest {
     }
 
     private void mockDialogSettings() {
-        when(dialogSettings.getBoolean(AbstractFieldDialog.SETTINGS_APPEND_SUPER)).thenReturn(true);
-        when(dialogSettings.getSection(AbstractFieldDialog.ABSTRACT_SETTINGS_SECTION)).thenReturn(dialogSettings);
+        when(dialogSettings.getBoolean(FieldDialogImpl.SETTINGS_APPEND_SUPER)).thenReturn(true);
+        when(dialogSettings.getSection(FieldDialogImpl.ABSTRACT_SETTINGS_SECTION)).thenReturn(dialogSettings);
         when(dialogFactoryHelper.getDialogSettings()).thenReturn(dialogSettings);
     }
 

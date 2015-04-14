@@ -113,9 +113,9 @@ public class MethodGeneratorHandler extends AbstractHandler {
 
     private <T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData> void generateCode(
             Shell parentShell, IType objectClass, MethodsGenerationCommandIdentifier commandIdentifier) {
-        DialogFactory<U, V> dialogFactory = dialogFactoryManager.getDialogFactory(commandIdentifier);
-        MethodGenerator<T, U, V> methodGenerator = new MethodGeneratorImpl<T, U, V>(dialogFactory,
-                JAVA_UI_CODE_APPENDER, CODE_FORMATTER, methodSkeletonManager, methodContentManager);
+        DialogFactory<V> dialogFactory = dialogFactoryManager.getDialogFactory(commandIdentifier);
+        MethodGenerator<T, V> methodGenerator = new MethodGeneratorImpl<T, V>(dialogFactory, JAVA_UI_CODE_APPENDER,
+                CODE_FORMATTER, methodSkeletonManager, methodContentManager);
         methodGenerator.generate(parentShell, objectClass, commandIdentifier);
     }
 }

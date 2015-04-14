@@ -31,6 +31,8 @@ public class ToStringGenerationDataImpl extends AbstractMethodGenerationData imp
             return getThis();
         }
 
+        @SuppressWarnings("unchecked")
+        @Override
         public ToStringGenerationData build() {
             return new ToStringGenerationDataImpl(getThis());
         }

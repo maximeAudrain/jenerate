@@ -2,8 +2,10 @@ package org.jenerate.internal.ui.dialogs.factory.impl;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
+import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
-import org.jenerate.internal.ui.dialogs.impl.CompareToDialog;
+import org.jenerate.internal.ui.dialogs.FieldDialog;
+import org.jenerate.internal.ui.dialogs.impl.OrderableFieldDialogImpl;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +32,8 @@ public class CompareToDialogFactoryTest extends AbstractDialogFactoryTest {
     @Override
     public void callbackAfterSetUp() throws Exception {
         mockDisableAppendSuper(false);
-        compareToDialogFactory = new CompareToDialogFactory(dialogFactoryHelper, preferencesManager,
-                javaInterfaceCodeAppender);
+        compareToDialogFactory = new CompareToDialogFactory(dialogStrategyManager, dialogFactoryHelper,
+                preferencesManager, javaInterfaceCodeAppender);
     }
 
     @Test
@@ -58,10 +60,11 @@ public class CompareToDialogFactoryTest extends AbstractDialogFactoryTest {
     private void validateDialogCreation(IField[] iFields, boolean disableAppendSuper) throws JavaModelException,
             Exception {
         when(dialogFactoryHelper.getObjectClassFields(objectClass, preferencesManager)).thenReturn(iFields);
-        CompareToDialog compareToDialog = compareToDialogFactory.createDialog(parentShell, objectClass,
-                excludedMethods, possibleStrategyIdentifiers);
-        assertArrayEquals(iFields, compareToDialog.getFields());
-        assertEquals(disableAppendSuper, !compareToDialog.getAppendSuper());
+        FieldDialog<CompareToGenerationData> compareToDialog = compareToDialogFactory.createDialog(parentShell,
+                objectClass, excludedMethods, possibleStrategyIdentifiers);
+        assertArrayEquals(iFields, ((OrderableFieldDialogImpl<CompareToGenerationData>) compareToDialog).getFields());
+        assertEquals(disableAppendSuper,
+                !((OrderableFieldDialogImpl<CompareToGenerationData>) compareToDialog).getAppendSuper());
     }
 
     private void mockDisableAppendSuper(boolean isDisableAppendSuper) throws JavaModelException {

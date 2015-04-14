@@ -1,6 +1,7 @@
 package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
 import java.util.LinkedHashSet;
+
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -18,78 +19,78 @@ import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
  * @author maudrain
  */
 public class CommonsLangEqualsMethodContent extends
-AbstractMethodContent<EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
+        AbstractMethodContent<EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
 
-	public CommonsLangEqualsMethodContent(StrategyIdentifier strategyIdentifier, PreferencesManager preferencesManager) {
-		super(strategyIdentifier, preferencesManager);
-	}
+    public CommonsLangEqualsMethodContent(StrategyIdentifier strategyIdentifier, PreferencesManager preferencesManager) {
+        super(strategyIdentifier, preferencesManager);
+    }
 
-	@Override
-	public String getMethodContent(IType objectClass, EqualsHashCodeGenerationData data) throws JavaModelException {
-		return createEqualsMethodContent(data, objectClass);
-	}
+    @Override
+    public String getMethodContent(IType objectClass, EqualsHashCodeGenerationData data) throws JavaModelException {
+        return createEqualsMethodContent(data, objectClass);
+    }
 
-	@Override
-	public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
-		LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
-		linkedHashSet.add(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(getStrategyIdentifier()));
-		return linkedHashSet;
-	}
+    @Override
+    public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
+        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
+        linkedHashSet.add(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(getStrategyIdentifier()));
+        return linkedHashSet;
+    }
 
-	@Override
-	public Class<EqualsMethodSkeleton> getRelatedMethodSkeletonClass() {
-		return EqualsMethodSkeleton.class;
-	}
+    @Override
+    public Class<EqualsMethodSkeleton> getRelatedMethodSkeletonClass() {
+        return EqualsMethodSkeleton.class;
+    }
 
-	private String createEqualsMethodContent(EqualsHashCodeGenerationData data, IType objectClass)
-			throws JavaModelException {
-		String elementName = objectClass.getElementName();
-		boolean useBlockInIfStatements = data.getUseBlockInIfStatements();
-		StringBuffer content = new StringBuffer();
-		if (data.getCompareReferences()) {
-			content.append("if (this == other)");
-			content.append(useBlockInIfStatements ? "{\n" : "");
-			content.append(" return true;");
-			content.append(useBlockInIfStatements ? "\n}\n" : "");
-		}
+    private String createEqualsMethodContent(EqualsHashCodeGenerationData data, IType objectClass)
+            throws JavaModelException {
+        String elementName = objectClass.getElementName();
+        boolean useBlockInIfStatements = data.getUseBlockInIfStatements();
+        StringBuffer content = new StringBuffer();
+        if (data.getCompareReferences()) {
+            content.append("if (this == other)");
+            content.append(useBlockInIfStatements ? "{\n" : "");
+            content.append(" return true;");
+            content.append(useBlockInIfStatements ? "\n}\n" : "");
+        }
 
-		if (data.getClassComparison()) {
-			content.append("if (other == null)");
-			content.append(useBlockInIfStatements ? "{\n" : "");
-			content.append(" return false;");
-			content.append(useBlockInIfStatements ? "\n}\n" : "");
-			content.append("if ( !getClass().equals(other.getClass()))");
-			content.append(useBlockInIfStatements ? "{\n" : "");
-			content.append(" return false;");
-			content.append(useBlockInIfStatements ? "\n}\n" : "");
-		} else {
-			content.append("if ( !(other instanceof ");
-			content.append(elementName);
-			content.append(") )");
-			content.append(useBlockInIfStatements ? "{\n" : "");
-			content.append(" return false;");
-			content.append(useBlockInIfStatements ? "\n}\n" : "");
-		}
+        if (data.getClassComparison()) {
+            content.append("if (other == null)");
+            content.append(useBlockInIfStatements ? "{\n" : "");
+            content.append(" return false;");
+            content.append(useBlockInIfStatements ? "\n}\n" : "");
+            content.append("if ( !getClass().equals(other.getClass()))");
+            content.append(useBlockInIfStatements ? "{\n" : "");
+            content.append(" return false;");
+            content.append(useBlockInIfStatements ? "\n}\n" : "");
+        } else {
+            content.append("if ( !(other instanceof ");
+            content.append(elementName);
+            content.append(") )");
+            content.append(useBlockInIfStatements ? "{\n" : "");
+            content.append(" return false;");
+            content.append(useBlockInIfStatements ? "\n}\n" : "");
+        }
 
-		content.append(elementName);
-		content.append(" castOther = (");
-		content.append(elementName);
-		content.append(") other;\n");
-		content.append("return new EqualsBuilder()");
-		if (data.getAppendSuper()) {
-			content.append(".appendSuper(super.equals(other))");
-		}
-		IField[] checkedFields = data.getCheckedFields();
-		for (int i = 0; i < checkedFields.length; i++) {
-			content.append(".append(");
-			String fieldName = MethodContentGenerations.getFieldAccessorString(checkedFields[i],
-					data.getUseGettersInsteadOfFields());
-			content.append(fieldName);
-			content.append(", castOther.");
-			content.append(fieldName);
-			content.append(")");
-		}
-		content.append(".isEquals();\n");
-		return content.toString();
-	}
+        content.append(elementName);
+        content.append(" castOther = (");
+        content.append(elementName);
+        content.append(") other;\n");
+        content.append("return new EqualsBuilder()");
+        if (data.getAppendSuper()) {
+            content.append(".appendSuper(super.equals(other))");
+        }
+        IField[] checkedFields = data.getCheckedFields();
+        for (int i = 0; i < checkedFields.length; i++) {
+            content.append(".append(");
+            String fieldName = MethodContentGenerations.getFieldAccessorString(checkedFields[i],
+                    data.getUseGettersInsteadOfFields());
+            content.append(fieldName);
+            content.append(", castOther.");
+            content.append(fieldName);
+            content.append(")");
+        }
+        content.append(".isEquals();\n");
+        return content.toString();
+    }
 }
