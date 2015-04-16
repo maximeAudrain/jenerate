@@ -7,7 +7,13 @@ import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 
-public class DefaultDialogStrategy<U extends MethodGenerationData> implements DialogStrategy<U> {
+/**
+ * Default implementation defining no additional behavior for the dialog.
+ * 
+ * @author maudrain
+ * @param <U> the type of {@link MethodGenerationData} for this {@link DialogStrategy}
+ */
+public final class DefaultDialogStrategy<U extends MethodGenerationData> implements DialogStrategy<U> {
 
     private CommandIdentifier commandIdentifier;
     private final StrategyIdentifier strategyIdentifier;
@@ -53,11 +59,11 @@ public class DefaultDialogStrategy<U extends MethodGenerationData> implements Di
     @Override
     public U getData(MethodGenerationData methodGenerationData) {
         return dataBuilder.withCheckedFields(methodGenerationData.getCheckedFields())
-                .withSelectedContentStrategy(methodGenerationData.getSelectedContentStrategy())
+                .withSelectedContentStrategy(methodGenerationData.getSelectedStrategyIdentifier())
                 .withElementPosition(methodGenerationData.getElementPosition())
-                .withAppendSuper(methodGenerationData.getAppendSuper())
-                .withGenerateComment(methodGenerationData.getGenerateComment())
-                .withUseBlockInIfStatements(methodGenerationData.getUseBlockInIfStatements())
-                .withUseGettersInsteadOfFields(methodGenerationData.getUseGettersInsteadOfFields()).build();
+                .withAppendSuper(methodGenerationData.appendSuper())
+                .withGenerateComment(methodGenerationData.generateComment())
+                .withUseBlockInIfStatements(methodGenerationData.useBlockInIfStatements())
+                .withUseGettersInsteadOfFields(methodGenerationData.useGettersInsteadOfFields()).build();
     }
 }

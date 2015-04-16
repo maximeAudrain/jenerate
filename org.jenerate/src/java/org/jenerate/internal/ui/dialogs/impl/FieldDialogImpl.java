@@ -47,7 +47,7 @@ import org.jenerate.internal.ui.dialogs.factory.impl.DialogFactoryHelperImpl;
 import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
 
 /**
- * An abstract {@link Dialog} allowing configuration of the different parameters for the method generation. It contains
+ * A {@link Dialog} allowing configuration of the different parameters for the method generation. It contains
  * for example the different fields present in the class where code will be generated. This class contains some code
  * from org.eclipse.jdt.internal.ui.dialogs.SourceActionDialog
  * 

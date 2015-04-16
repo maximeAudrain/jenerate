@@ -50,7 +50,7 @@ public abstract class AbstractMethodSkeletonTest<T extends MethodSkeleton<U>, U 
     }
 
     private void mockData() {
-        when(data.getGenerateComment()).thenReturn(false);
+        when(data.generateComment()).thenReturn(false);
     }
 
     private void mockObjectClass() {

@@ -59,7 +59,7 @@ public class GuavaToStringMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithAppendSuper() throws Exception {
-        when(data.getAppendSuper()).thenReturn(true);
+        when(data.appendSuper()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("return MoreObjects.toStringHelper(this).add(\"super\", super.toString())"
                 + ".add(\"field1\", field1).add(\"field2\", field2).toString();\n", content);
@@ -67,7 +67,7 @@ public class GuavaToStringMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithUseGettersInsteadOfFields() throws Exception {
-        when(data.getUseGettersInsteadOfFields()).thenReturn(true);
+        when(data.useGettersInsteadOfFields()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("return MoreObjects.toStringHelper(this).add(\"field1\", isField1())"
                 + ".add(\"field2\", getField2()).toString();\n", content);

@@ -65,7 +65,7 @@ public class HashCodeMethodSkeletonTest extends
 
     @Test
     public void testGetMethodGenerateComment() throws Exception {
-        when(data.getGenerateComment()).thenReturn(true);
+        when(data.generateComment()).thenReturn(true);
         String method = methodSkeleton.getMethod(objectClass, data, METHOD_CONTENT);
         assertEquals("/**\n * {@inheritDoc}\n */\n" + "public int hashCode() {\nCONTENT}\n\n", method);
     }

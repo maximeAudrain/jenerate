@@ -6,7 +6,8 @@ import java.util.Map;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
 
 /**
- * Default enum implementation of a {@link CommandIdentifier} specified for methods generation
+ * Default enum implementation of a {@link CommandIdentifier} specified for methods generation. The String identifier
+ * corresponds to the command id as defined in the plugin.xml.
  * 
  * @author maudrain
  */

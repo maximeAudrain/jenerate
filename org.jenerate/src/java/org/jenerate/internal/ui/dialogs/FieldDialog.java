@@ -7,7 +7,8 @@ import org.jenerate.internal.domain.data.MethodGenerationData;
 /**
  * Defines a dialog of the Jenerate plugin. It is called {@link FieldDialog} because it knows about the current fields
  * of the class where the code generation is ongoing. This dialog holds data filled up by the user that is then used to
- * act on the code generation.
+ * act on the code generation. It also exposes utility methods for error message displaying and a part of it's internals
+ * to be able to add specific UI depending on the strategy to be used.
  * 
  * @author maudrain
  * @param <T> the type of user data provided by this dialog
@@ -24,9 +25,21 @@ public interface FieldDialog<U extends MethodGenerationData> {
      */
     Dialog getDialog();
 
+    /**
+     * Shows an error message in the dialog
+     * 
+     * @param message the message to show in error in the dialog
+     */
     void showErrorMessage(String message);
 
+    /**
+     * Clears the error message in the dialog
+     */
     void clearErrorMessage();
 
+    /**
+     * @return the editable composite where UI can be added depending on the currently selected method content strategy
+     *         in the dialog
+     */
     Composite getEditableComposite();
 }

@@ -71,7 +71,7 @@ public class GuavaCompareToMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithGettersInsteadOfFields() throws Exception {
-        when(data.getUseGettersInsteadOfFields()).thenReturn(true);
+        when(data.useGettersInsteadOfFields()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("Test castOther = (Test) other;\nreturn ComparisonChain.start()"
                 + ".compare(isField1(), castOther.isField1())"

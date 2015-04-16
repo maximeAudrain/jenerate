@@ -52,14 +52,14 @@ public class CommonsLangEqualsMethodContent extends
         content.append(elementName);
         content.append(") other;\n");
         content.append("return new EqualsBuilder()");
-        if (data.getAppendSuper()) {
+        if (data.appendSuper()) {
             content.append(".appendSuper(super.equals(other))");
         }
         IField[] checkedFields = data.getCheckedFields();
         for (int i = 0; i < checkedFields.length; i++) {
             content.append(".append(");
             String fieldName = MethodContentGenerations.getFieldAccessorString(checkedFields[i],
-                    data.getUseGettersInsteadOfFields());
+                    data.useGettersInsteadOfFields());
             content.append(fieldName);
             content.append(", castOther.");
             content.append(fieldName);

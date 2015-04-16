@@ -23,6 +23,12 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLan
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
 
+/**
+ * Defines specific dialog behaviors for the toString method generation using the commons-lang[3] method content
+ * strategies.
+ * 
+ * @author maudrain
+ */
 public class CommonsLangToStringDialogStrategy implements DialogStrategy<ToStringGenerationData> {
 
     public static final String SETTINGS_SECTION = "ToStringDialog";
@@ -98,12 +104,12 @@ public class CommonsLangToStringDialogStrategy implements DialogStrategy<ToStrin
         //@formatter:off
         return new ToStringGenerationDataImpl.Builder()
                 .withCheckedFields(methodGenerationData.getCheckedFields())
-                .withSelectedContentStrategy(methodGenerationData.getSelectedContentStrategy())
+                .withSelectedContentStrategy(methodGenerationData.getSelectedStrategyIdentifier())
                 .withElementPosition(methodGenerationData.getElementPosition())
-                .withAppendSuper(methodGenerationData.getAppendSuper())
-                .withGenerateComment(methodGenerationData.getGenerateComment())
-                .withUseBlockInIfStatements(methodGenerationData.getUseBlockInIfStatements())
-                .withUseGettersInsteadOfFields(methodGenerationData.getUseGettersInsteadOfFields())
+                .withAppendSuper(methodGenerationData.appendSuper())
+                .withGenerateComment(methodGenerationData.generateComment())
+                .withUseBlockInIfStatements(methodGenerationData.useBlockInIfStatements())
+                .withUseGettersInsteadOfFields(methodGenerationData.useGettersInsteadOfFields())
                 .withToStringStyle(CommonsLangToStringStyle.getToStringStyle(toStringStyle))
                 .build();
         //@formatter:on

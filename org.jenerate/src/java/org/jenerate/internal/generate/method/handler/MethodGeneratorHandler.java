@@ -37,7 +37,6 @@ import org.jenerate.internal.manage.impl.MethodContentManagerImpl;
 import org.jenerate.internal.manage.impl.MethodSkeletonManagerImpl;
 import org.jenerate.internal.manage.impl.PreferencesManagerImpl;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
-import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.jenerate.internal.util.impl.JavaInterfaceCodeAppenderImpl;
@@ -111,10 +110,10 @@ public class MethodGeneratorHandler extends AbstractHandler {
         }
     }
 
-    private <T extends MethodSkeleton<V>, U extends FieldDialog<V>, V extends MethodGenerationData> void generateCode(
-            Shell parentShell, IType objectClass, MethodsGenerationCommandIdentifier commandIdentifier) {
-        DialogFactory<V> dialogFactory = dialogFactoryManager.getDialogFactory(commandIdentifier);
-        MethodGenerator<T, V> methodGenerator = new MethodGeneratorImpl<T, V>(dialogFactory, JAVA_UI_CODE_APPENDER,
+    private <T extends MethodSkeleton<U>, U extends MethodGenerationData> void generateCode(Shell parentShell,
+            IType objectClass, MethodsGenerationCommandIdentifier commandIdentifier) {
+        DialogFactory<U> dialogFactory = dialogFactoryManager.getDialogFactory(commandIdentifier);
+        MethodGenerator<T, U> methodGenerator = new MethodGeneratorImpl<T, U>(dialogFactory, JAVA_UI_CODE_APPENDER,
                 CODE_FORMATTER, methodSkeletonManager, methodContentManager);
         methodGenerator.generate(parentShell, objectClass, commandIdentifier);
     }

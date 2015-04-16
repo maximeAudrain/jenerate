@@ -33,7 +33,7 @@ public class GuavaHashCodeMethodContent extends
     public String getMethodContent(IType objectClass, EqualsHashCodeGenerationData data) throws Exception {
         StringBuffer content = new StringBuffer();
         content.append("return Objects.hashCode(");
-        if (data.getAppendSuper()) {
+        if (data.appendSuper()) {
             content.append("super.hashCode(), ");
         }
         IField[] checkedFields = data.getCheckedFields();
@@ -42,7 +42,7 @@ public class GuavaHashCodeMethodContent extends
             content.append(prefix);
             prefix = ", ";
             content.append(MethodContentGenerations.getFieldAccessorString(checkedField,
-                    data.getUseGettersInsteadOfFields()));
+                    data.useGettersInsteadOfFields()));
         }
         content.append(");\n");
         return content.toString();

@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.eclipse.text.edits.MalformedTreeException;
 
 /**
- * Defines utility methods modifying the object class to to append java interface code
+ * Defines utility methods modifying an object class to append java interface code
  * 
  * @author maudrain
  */

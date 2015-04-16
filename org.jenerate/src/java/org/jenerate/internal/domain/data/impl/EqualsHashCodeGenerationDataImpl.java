@@ -3,6 +3,11 @@ package org.jenerate.internal.domain.data.impl;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
 
+/**
+ * Specific implementation of the {@link EqualsHashCodeGenerationData}  
+ * 
+ * @author maudrain
+ */
 public class EqualsHashCodeGenerationDataImpl extends AbstractMethodGenerationData implements
         EqualsHashCodeGenerationData {
 
@@ -18,7 +23,7 @@ public class EqualsHashCodeGenerationDataImpl extends AbstractMethodGenerationDa
     }
 
     @Override
-    public boolean getCompareReferences() {
+    public boolean compareReferences() {
         return compareReferences;
     }
 
@@ -28,7 +33,7 @@ public class EqualsHashCodeGenerationDataImpl extends AbstractMethodGenerationDa
     }
 
     @Override
-    public boolean getClassComparison() {
+    public boolean useClassComparison() {
         return classComparison;
     }
 

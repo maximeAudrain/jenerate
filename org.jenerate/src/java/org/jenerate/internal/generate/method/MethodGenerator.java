@@ -5,7 +5,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
-import org.jenerate.internal.ui.dialogs.FieldDialog;
 
 /**
  * A method generator that can generate any number of methods in the current opened file. It determines which methods to
@@ -13,10 +12,9 @@ import org.jenerate.internal.ui.dialogs.FieldDialog;
  * 
  * @author maudrain
  * @param <T> the type of {@link MethodSkeleton} for this method generator
- * @param <U> the type of {@link FieldDialog} for this method generator
- * @param <V> the type of {@link MethodGenerationData} this generator handles
+ * @param <U> the type of {@link MethodGenerationData} this generator handles
  */
-public interface MethodGenerator<T extends MethodSkeleton<V>, V extends MethodGenerationData> {
+public interface MethodGenerator<T extends MethodSkeleton<U>, U extends MethodGenerationData> {
 
     /**
      * Generate the methods for in the provided objectClass for the provided {@link CommandIdentifier}

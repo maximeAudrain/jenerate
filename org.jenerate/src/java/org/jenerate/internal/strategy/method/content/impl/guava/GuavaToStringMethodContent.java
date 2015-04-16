@@ -32,7 +32,7 @@ public class GuavaToStringMethodContent extends AbstractMethodContent<ToStringMe
     public String getMethodContent(IType objectClass, ToStringGenerationData data) throws Exception {
         StringBuffer content = new StringBuffer();
         content.append("return MoreObjects.toStringHelper(this)");
-        if (data.getAppendSuper()) {
+        if (data.appendSuper()) {
             content.append(".add(\"super\", super.toString())");
         }
         IField[] checkedFields = data.getCheckedFields();
@@ -41,7 +41,7 @@ public class GuavaToStringMethodContent extends AbstractMethodContent<ToStringMe
             content.append(checkedField.getElementName());
             content.append("\", ");
             content.append(MethodContentGenerations.getFieldAccessorString(checkedField,
-                    data.getUseGettersInsteadOfFields()));
+                    data.useGettersInsteadOfFields()));
             content.append(")");
         }
         content.append(".toString();\n");

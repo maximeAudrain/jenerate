@@ -168,7 +168,7 @@ public class CommonsLangToStringMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithAppendSuper() throws Exception {
-        when(data.getAppendSuper()).thenReturn(true);
+        when(data.appendSuper()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("return new ToStringBuilder(this).appendSuper(super.toString())"
                 + ".append(\"field1\", field1).append(\"field2\", field2).toString();\n", content);
@@ -176,7 +176,7 @@ public class CommonsLangToStringMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithUseGettersInsteadOfFields() throws Exception {
-        when(data.getUseGettersInsteadOfFields()).thenReturn(true);
+        when(data.useGettersInsteadOfFields()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("return new ToStringBuilder(this).append(\"field1\", isField1())"
                 + ".append(\"field2\", getField2()).toString();\n", content);

@@ -5,6 +5,12 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 
+/**
+ * Abstract implementation of the {@link MethodGenerationData}. Contains an abstract builder to be subclassed by child
+ * of this {@link AbstractMethodGenerationData}.
+ * 
+ * @author maudrain
+ */
 public abstract class AbstractMethodGenerationData implements MethodGenerationData {
 
     private final IField[] checkedFields;
@@ -31,7 +37,7 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
     }
 
     @Override
-    public StrategyIdentifier getSelectedContentStrategy() {
+    public StrategyIdentifier getSelectedStrategyIdentifier() {
         return selectedContentStrategy;
     }
 
@@ -41,22 +47,22 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
     }
 
     @Override
-    public boolean getAppendSuper() {
+    public boolean appendSuper() {
         return appendSuper;
     }
 
     @Override
-    public boolean getGenerateComment() {
+    public boolean generateComment() {
         return generateComment;
     }
 
     @Override
-    public boolean getUseGettersInsteadOfFields() {
+    public boolean useGettersInsteadOfFields() {
         return useGettersInsteadOfFields;
     }
 
     @Override
-    public boolean getUseBlockInIfStatements() {
+    public boolean useBlockInIfStatements() {
         return useBlockInIfStatements;
     }
 
@@ -105,8 +111,14 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
             return getThis();
         }
 
+        /**
+         * @return the concrete instance of this
+         */
         public abstract T getThis();
 
+        /**
+         * @return the fully built {@link MethodGenerationData}
+         */
         public abstract <U extends MethodGenerationData> U build();
     }
 }

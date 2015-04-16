@@ -2,6 +2,11 @@ package org.jenerate.internal.domain.data.impl;
 
 import org.jenerate.internal.domain.data.MethodGenerationData;
 
+/**
+ * Default implementation of the {@link MethodGenerationData}
+ * 
+ * @author maudrain
+ */
 public class MethodGenerationDataImpl extends AbstractMethodGenerationData {
 
     private MethodGenerationDataImpl(Builder builder) {

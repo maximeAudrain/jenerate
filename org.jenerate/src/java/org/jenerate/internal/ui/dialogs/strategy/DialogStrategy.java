@@ -10,7 +10,7 @@ import org.jenerate.internal.ui.dialogs.FieldDialog;
  * Defines the specific behavior of a dialog depending on the currently selected {@link StrategyIdentifier}.
  * 
  * @author maudrain
- * @param <U> the type of {@link MethodGenerationData} for this {@link DialogStrategy}s
+ * @param <U> the type of {@link MethodGenerationData} for this {@link DialogStrategy}
  */
 public interface DialogStrategy<U extends MethodGenerationData> {
 

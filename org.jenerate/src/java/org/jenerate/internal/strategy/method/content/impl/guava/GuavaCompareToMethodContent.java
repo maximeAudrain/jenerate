@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.strategy.method.MethodGenerations;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
@@ -36,7 +37,7 @@ public class GuavaCompareToMethodContent extends
 
     @Override
     public String getMethodContent(IType objectClass, CompareToGenerationData data) throws Exception {
-        boolean generify = MethodContentGenerations.isGenerifyCompareTo(objectClass,
+        boolean generify = MethodGenerations.generifyCompareTo(objectClass,
                 isComparableImplementedOrExtendedInSupertype(objectClass), preferencesManager);
         StringBuffer content = new StringBuffer();
         String other = "other";
@@ -54,7 +55,7 @@ public class GuavaCompareToMethodContent extends
         for (IField checkedField : checkedFields) {
             content.append(".compare(");
             String fieldName = MethodContentGenerations.getFieldAccessorString(checkedField,
-                    data.getUseGettersInsteadOfFields());
+                    data.useGettersInsteadOfFields());
             content.append(fieldName);
             content.append(", ");
             content.append(other);

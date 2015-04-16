@@ -126,7 +126,7 @@ public class CommonsLangHashCodeMethodContentTest
 
     @Test
     public void testGetMethodContentWithAppendSuper() throws Exception {
-        when(data.getAppendSuper()).thenReturn(true);
+        when(data.appendSuper()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("return new HashCodeBuilder().appendSuper(super.hashCode())"
                 + ".append(field1).append(field2).toHashCode();\n", content);
@@ -143,7 +143,7 @@ public class CommonsLangHashCodeMethodContentTest
 
     @Test
     public void testGetMethodContentWithUseGettersInsteadOfFields() throws Exception {
-        when(data.getUseGettersInsteadOfFields()).thenReturn(true);
+        when(data.useGettersInsteadOfFields()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("return new HashCodeBuilder().append(isField1()).append(getField2()).toHashCode();\n", content);
     }

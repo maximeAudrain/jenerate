@@ -291,7 +291,7 @@ public class MethodGeneratorImplTest {
     }
 
     private void mockData() {
-        when(data.getSelectedContentStrategy()).thenReturn(strategyIdentifier1);
+        when(data.getSelectedStrategyIdentifier()).thenReturn(strategyIdentifier1);
         when(data.getElementPosition()).thenReturn(elementPosition);
     }
 

@@ -48,7 +48,7 @@ public class HashCodeMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCod
     private String createHashCodeMethod(EqualsHashCodeGenerationData data, boolean addOverride, String methodContent) {
 
         StringBuffer content = new StringBuffer();
-        if (data.getGenerateComment()) {
+        if (data.generateComment()) {
             content.append("/**\n");
             content.append(" * {@inheritDoc}\n");
             content.append(" */\n");

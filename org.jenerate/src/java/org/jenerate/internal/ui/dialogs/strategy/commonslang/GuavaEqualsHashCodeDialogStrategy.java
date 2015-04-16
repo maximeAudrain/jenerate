@@ -20,7 +20,8 @@ import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
 
 /**
- * XXX copy pasted... See what can be extracted to remove code redundancy
+ * Defines specific dialog behaviors for the equals and hashCode methods generation using the guava method content
+ * strategies. XXX copy pasted... See what can be extracted to remove code redundancy
  * 
  * @author maudrain
  */
@@ -87,12 +88,12 @@ public class GuavaEqualsHashCodeDialogStrategy implements DialogStrategy<EqualsH
         //@formatter:off
         return new EqualsHashCodeGenerationDataImpl.Builder()
                 .withCheckedFields(methodGenerationData.getCheckedFields())
-                .withSelectedContentStrategy(methodGenerationData.getSelectedContentStrategy())
+                .withSelectedContentStrategy(methodGenerationData.getSelectedStrategyIdentifier())
                 .withElementPosition(methodGenerationData.getElementPosition())
-                .withAppendSuper(methodGenerationData.getAppendSuper())
-                .withGenerateComment(methodGenerationData.getGenerateComment())
-                .withUseBlockInIfStatements(methodGenerationData.getUseBlockInIfStatements())
-                .withUseGettersInsteadOfFields(methodGenerationData.getUseGettersInsteadOfFields())
+                .withAppendSuper(methodGenerationData.appendSuper())
+                .withGenerateComment(methodGenerationData.generateComment())
+                .withUseBlockInIfStatements(methodGenerationData.useBlockInIfStatements())
+                .withUseGettersInsteadOfFields(methodGenerationData.useGettersInsteadOfFields())
                 .withCompareReferences(compareReferences)
                 .withClassComparison(classComparison)
                 .build();

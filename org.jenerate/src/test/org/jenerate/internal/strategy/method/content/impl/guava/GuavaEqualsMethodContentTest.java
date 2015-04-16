@@ -60,7 +60,7 @@ public class GuavaEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithAppendSuper() throws Exception {
-        when(data.getAppendSuper()).thenReturn(true);
+        when(data.appendSuper()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if ( !(other instanceof Test) ) return false;"
                 + "if (!super.equals(other)) return false;Test castOther = (Test) other;\n"
@@ -70,7 +70,7 @@ public class GuavaEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithUseGettersInsteadOfFields() throws Exception {
-        when(data.getUseGettersInsteadOfFields()).thenReturn(true);
+        when(data.useGettersInsteadOfFields()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if ( !(other instanceof Test) ) return false;Test castOther = (Test) other;\n"
                 + "return Objects.equal(isField1(), castOther.isField1()) && "
@@ -79,7 +79,7 @@ public class GuavaEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithUseBlocksInIfStatements() throws Exception {
-        when(data.getUseBlockInIfStatements()).thenReturn(true);
+        when(data.useBlockInIfStatements()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if ( !(other instanceof Test) ){\n return false;\n}\n"
                 + "Test castOther = (Test) other;\nreturn Objects.equal(field1, castOther.field1) && "
@@ -88,8 +88,8 @@ public class GuavaEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithUseBlocksInIfStatementsAndAppendSuper() throws Exception {
-        when(data.getUseBlockInIfStatements()).thenReturn(true);
-        when(data.getAppendSuper()).thenReturn(true);
+        when(data.useBlockInIfStatements()).thenReturn(true);
+        when(data.appendSuper()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if ( !(other instanceof Test) ){\n return false;\n}\n"
                 + "if (!super.equals(other)){\n return false;\n}\nTest castOther = (Test) other;\n"
@@ -99,7 +99,7 @@ public class GuavaEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithCompareReferences() throws Exception {
-        when(data.getCompareReferences()).thenReturn(true);
+        when(data.compareReferences()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if (this == other) return true;if ( !(other instanceof Test) ) return false;"
                 + "Test castOther = (Test) other;\nreturn Objects.equal(field1, castOther.field1) && "
@@ -108,7 +108,7 @@ public class GuavaEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithClassComparison() throws Exception {
-        when(data.getClassComparison()).thenReturn(true);
+        when(data.useClassComparison()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if (other == null) return false;if ( !getClass().equals(other.getClass())) return false;"
                 + "Test castOther = (Test) other;\nreturn Objects.equal(field1, castOther.field1) && "
@@ -117,8 +117,8 @@ public class GuavaEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithCompareReferencesAndUseBlocksInIfStatements() throws Exception {
-        when(data.getCompareReferences()).thenReturn(true);
-        when(data.getUseBlockInIfStatements()).thenReturn(true);
+        when(data.compareReferences()).thenReturn(true);
+        when(data.useBlockInIfStatements()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if (this == other){\n return true;\n}\nif ( !(other instanceof Test) ){\n return false;\n}\n"
                 + "Test castOther = (Test) other;\nreturn Objects.equal(field1, castOther.field1) && "
@@ -127,8 +127,8 @@ public class GuavaEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithClassComparisonAndUseBlocksInIfStatements() throws Exception {
-        when(data.getClassComparison()).thenReturn(true);
-        when(data.getUseBlockInIfStatements()).thenReturn(true);
+        when(data.useClassComparison()).thenReturn(true);
+        when(data.useBlockInIfStatements()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if (other == null){\n return false;\n}\nif ( !getClass().equals(other.getClass()))"
                 + "{\n return false;\n}\nTest castOther = (Test) other;\nreturn "

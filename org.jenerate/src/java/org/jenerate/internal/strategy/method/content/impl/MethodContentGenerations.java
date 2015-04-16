@@ -8,10 +8,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
-import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.MethodContent;
-import org.jenerate.internal.util.impl.CompilerSourceUtils;
 
 /**
  * Utility class that contains common methods for the {@link MethodContent} code generation
@@ -25,17 +22,6 @@ public final class MethodContentGenerations {
     }
 
     /**
-     * XXX already there in the skeleton, extract at one point
-     */
-    public static boolean isGenerifyCompareTo(IType objectClass, boolean implementedOrExtendedInSuperType,
-            PreferencesManager preferencesManager) {
-        boolean generifyPreference = preferencesManager.getCurrentPreferenceValue(
-                JeneratePreferences.GENERIFY_COMPARETO).booleanValue();
-        return generifyPreference && CompilerSourceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass)
-                && !implementedOrExtendedInSuperType;
-    }
-
-    /**
      * Creates the equals method content prefix
      * 
      * @param data the data to extract configuration from
@@ -44,15 +30,15 @@ public final class MethodContentGenerations {
      */
     public static String createEqualsContentPrefix(EqualsHashCodeGenerationData data, IType objectClass) {
         StringBuffer content = new StringBuffer();
-        boolean useBlockInIfStatements = data.getUseBlockInIfStatements();
-        if (data.getCompareReferences()) {
+        boolean useBlockInIfStatements = data.useBlockInIfStatements();
+        if (data.compareReferences()) {
             content.append("if (this == other)");
             content.append(useBlockInIfStatements ? "{\n" : "");
             content.append(" return true;");
             content.append(useBlockInIfStatements ? "\n}\n" : "");
         }
 
-        if (data.getClassComparison()) {
+        if (data.useClassComparison()) {
             content.append("if (other == null)");
             content.append(useBlockInIfStatements ? "{\n" : "");
             content.append(" return false;");

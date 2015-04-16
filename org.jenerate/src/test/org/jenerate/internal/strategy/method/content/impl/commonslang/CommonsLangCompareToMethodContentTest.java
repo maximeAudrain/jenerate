@@ -89,7 +89,7 @@ public class CommonsLangCompareToMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithAppendSuper() throws Exception {
-        when(data.getAppendSuper()).thenReturn(true);
+        when(data.appendSuper()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("Test castOther = (Test) other;\nreturn new CompareToBuilder()"
                 + ".appendSuper(super.compareTo(other)).append(field1, castOther.field1)"

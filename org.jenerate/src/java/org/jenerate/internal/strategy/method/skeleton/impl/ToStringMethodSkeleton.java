@@ -48,7 +48,7 @@ public class ToStringMethodSkeleton extends AbstractMethodSkeleton<ToStringGener
     private String createToStringMethod(ToStringGenerationData data, boolean addOverride, String methodContent) {
 
         StringBuffer content = new StringBuffer();
-        if (data.getGenerateComment()) {
+        if (data.generateComment()) {
             content.append("/**\n");
             content.append(" * {@inheritDoc}\n");
             content.append(" */\n");

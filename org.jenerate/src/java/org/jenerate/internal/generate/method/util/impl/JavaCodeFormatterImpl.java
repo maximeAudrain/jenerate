@@ -16,12 +16,17 @@ import org.eclipse.swt.SWT;
 import org.eclipse.text.edits.TextEdit;
 import org.jenerate.internal.generate.method.util.JavaCodeFormatter;
 
+/**
+ * Default implementation of the {@link JavaCodeFormatter}
+ * 
+ * @author jiayun
+ */
 public final class JavaCodeFormatterImpl implements JavaCodeFormatter {
 
     @Override
     public String formatCode(IType objectClass, String source) throws JavaModelException, BadLocationException {
         String lineDelim = getLineDelimiterUsed(objectClass);
-        int indent = getIndentUsed(objectClass) + 1;
+        int indent = getUsedIndentation(objectClass) + 1;
         TextEdit textEdit = ToolFactory.createCodeFormatter(null).format(CodeFormatter.K_CLASS_BODY_DECLARATIONS,
                 source, 0, source.length(), indent, lineDelim);
         if (textEdit == null) {
@@ -45,22 +50,22 @@ public final class JavaCodeFormatterImpl implements JavaCodeFormatter {
                 if (ch == SWT.CR) {
                     if (i + 1 < length) {
                         if (buf.getChar(i + 1) == SWT.LF) {
-                            return "\r\n"; //$NON-NLS-1$
+                            return "\r\n";
                         }
                     }
-                    return "\r"; //$NON-NLS-1$
+                    return "\r";
                 } else if (ch == SWT.LF) {
-                    return "\n"; //$NON-NLS-1$
+                    return "\n";
                 }
             }
         }
-        return System.getProperty("line.separator", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+        return System.getProperty("line.separator", "\n");
     }
 
     /**
-     * Evaluates the indention used by a Java element. (in tabulators)
+     * Evaluates the indentation used by a Java element. (in tabulators)
      */
-    private int getIndentUsed(IJavaElement elem) throws JavaModelException {
+    private int getUsedIndentation(IJavaElement elem) throws JavaModelException {
         if (elem instanceof ISourceReference) {
             ICompilationUnit cu = (ICompilationUnit) elem.getAncestor(IJavaElement.COMPILATION_UNIT);
             if (cu != null) {

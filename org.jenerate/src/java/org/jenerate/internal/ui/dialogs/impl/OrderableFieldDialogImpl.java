@@ -1,4 +1,3 @@
-// $Id$
 package org.jenerate.internal.ui.dialogs.impl;
 
 import java.util.LinkedHashMap;
@@ -26,8 +25,8 @@ import org.jenerate.internal.manage.DialogStrategyManager;
 import org.jenerate.internal.manage.PreferencesManager;
 
 /**
- * An abstract {@link Dialog} allowing configuration of the different parameters for the method generation. It allows to
- * reorganize the fields present in the {@link AbstractFieldDialog} moving them up or down. This class contains some
+ * A {@link Dialog} allowing configuration of the different parameters for the method generation. It allows to
+ * reorganize the fields present in the {@link FieldDialogImpl} moving them up or down. This class contains some
  * code from org.eclipse.ui.externaltools.internal.ui.BuilderPropertyPage
  * 
  * @author jiayun

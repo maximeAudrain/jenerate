@@ -29,19 +29,18 @@ import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
  * 
  * @author maudrain
  * @param <T> the type of {@link MethodSkeleton} for this method generator
- * @param <U> the type of {@link FieldDialog} for this method generator
  * @param <V> the type of {@link MethodGenerationData} this generator handles
  */
-public final class MethodGeneratorImpl<T extends MethodSkeleton<V>, V extends MethodGenerationData> implements
-        MethodGenerator<T, V> {
+public final class MethodGeneratorImpl<T extends MethodSkeleton<U>, U extends MethodGenerationData> implements
+        MethodGenerator<T, U> {
 
-    private final DialogFactory<V> dialogFactory;
+    private final DialogFactory<U> dialogFactory;
     private final JavaUiCodeAppender javaUiCodeAppender;
     private final JavaCodeFormatter jeneratePluginCodeFormatter;
     private final MethodSkeletonManager methodSkeletonManager;
     private final MethodContentManager methodContentManager;
 
-    public MethodGeneratorImpl(DialogFactory<V> dialogFactory, JavaUiCodeAppender javaUiCodeAppender,
+    public MethodGeneratorImpl(DialogFactory<U> dialogFactory, JavaUiCodeAppender javaUiCodeAppender,
             JavaCodeFormatter jeneratePluginCodeFormatter, MethodSkeletonManager methodSkeletonManager,
             MethodContentManager methodContentManager) {
         this.dialogFactory = dialogFactory;
@@ -53,13 +52,13 @@ public final class MethodGeneratorImpl<T extends MethodSkeleton<V>, V extends Me
 
     @Override
     public void generate(Shell parentShell, IType objectClass, CommandIdentifier commandIdentifier) {
-        LinkedHashSet<MethodSkeleton<V>> methodSkeletons = methodSkeletonManager.getMethodSkeletons(commandIdentifier);
+        LinkedHashSet<MethodSkeleton<U>> methodSkeletons = methodSkeletonManager.getMethodSkeletons(commandIdentifier);
         LinkedHashSet<StrategyIdentifier> strategyIdentifiers = methodContentManager
                 .getStrategiesIntersection(methodSkeletons);
 
         try {
             Set<IMethod> excludedMethods = getExcludedMethods(objectClass, methodSkeletons);
-            FieldDialog<V> dialog = dialogFactory.createDialog(parentShell, objectClass, excludedMethods,
+            FieldDialog<U> dialog = dialogFactory.createDialog(parentShell, objectClass, excludedMethods,
                     strategyIdentifiers);
             int returnCode = dialog.getDialog().open();
             if (returnCode == Window.OK) {
@@ -68,9 +67,9 @@ public final class MethodGeneratorImpl<T extends MethodSkeleton<V>, V extends Me
                     excludedMethod.delete(true, null);
                 }
 
-                V data = dialog.getData();
-                StrategyIdentifier selectedContentStrategy = data.getSelectedContentStrategy();
-                LinkedHashSet<Method<T, V>> methods = methodContentManager.getAllMethods(methodSkeletons,
+                U data = dialog.getData();
+                StrategyIdentifier selectedContentStrategy = data.getSelectedStrategyIdentifier();
+                LinkedHashSet<Method<T, U>> methods = methodContentManager.getAllMethods(methodSkeletons,
                         selectedContentStrategy);
                 generateCode(parentShell, objectClass, data, methods);
             }
@@ -80,10 +79,10 @@ public final class MethodGeneratorImpl<T extends MethodSkeleton<V>, V extends Me
         }
     }
 
-    private Set<IMethod> getExcludedMethods(IType objectClass, LinkedHashSet<MethodSkeleton<V>> methodSkeletons)
+    private Set<IMethod> getExcludedMethods(IType objectClass, LinkedHashSet<MethodSkeleton<U>> methodSkeletons)
             throws Exception {
         Set<IMethod> excludedMethods = new HashSet<IMethod>();
-        for (MethodSkeleton<V> methodSkeleton : methodSkeletons) {
+        for (MethodSkeleton<U> methodSkeleton : methodSkeletons) {
             IMethod excludedMethod = objectClass.getMethod(methodSkeleton.getMethodName(),
                     methodSkeleton.getMethodArguments(objectClass));
             if (excludedMethod.exists()) {
@@ -93,11 +92,11 @@ public final class MethodGeneratorImpl<T extends MethodSkeleton<V>, V extends Me
         return excludedMethods;
     }
 
-    private void generateCode(Shell parentShell, IType objectClass, V data, LinkedHashSet<Method<T, V>> methods)
+    private void generateCode(Shell parentShell, IType objectClass, U data, LinkedHashSet<Method<T, U>> methods)
             throws Exception {
         IJavaElement currentPosition = data.getElementPosition();
-        for (Method<T, V> method : methods) {
-            MethodContent<T, V> methodContent = method.getMethodContent();
+        for (Method<T, U> method : methods) {
+            MethodContent<T, U> methodContent = method.getMethodContent();
             T methodSkeleton = method.getMethodSkeleton();
             String methodContentString = methodContent.getMethodContent(objectClass, data);
             String source = methodSkeleton.getMethod(objectClass, data, methodContentString);

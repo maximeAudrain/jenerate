@@ -82,7 +82,7 @@ public class CommonsLangToStringMethodContent extends
             content.append(toStringStyle.getFullStyle());
             content.append(")");
         }
-        if (data.getAppendSuper()) {
+        if (data.appendSuper()) {
             content.append(".appendSuper(super.toString())");
         }
         IField[] checkedFields = data.getCheckedFields();
@@ -91,7 +91,7 @@ public class CommonsLangToStringMethodContent extends
             content.append(checkedFields[i].getElementName());
             content.append("\", ");
             content.append(MethodContentGenerations.getFieldAccessorString(checkedFields[i],
-                    data.getUseGettersInsteadOfFields()));
+                    data.useGettersInsteadOfFields()));
             content.append(")");
         }
         content.append(".toString();\n");

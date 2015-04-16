@@ -53,8 +53,9 @@ public final class JavaInterfaceCodeAppenderImpl implements JavaInterfaceCodeApp
     public boolean isImplementedOrExtendedInSupertype(final IType objectClass, final String interfaceName)
             throws JavaModelException {
 
-        if (isImplementedInSupertype(objectClass, interfaceName))
+        if (isImplementedInSupertype(objectClass, interfaceName)) {
             return true;
+        }
 
         String simpleName = getSimpleInterfaceName(interfaceName);
 
@@ -79,8 +80,9 @@ public final class JavaInterfaceCodeAppenderImpl implements JavaInterfaceCodeApp
     public void addSuperInterface(final IType objectClass, final String interfaceName) throws JavaModelException,
             InvalidInputException, MalformedTreeException {
 
-        if (isImplementedOrExtendedInSupertype(objectClass, interfaceName))
+        if (isImplementedOrExtendedInSupertype(objectClass, interfaceName)) {
             return;
+        }
 
         String[] interfaces = objectClass.getSuperInterfaceNames();
         String simpleName = getSimpleInterfaceName(interfaceName);
@@ -150,9 +152,8 @@ public final class JavaInterfaceCodeAppenderImpl implements JavaInterfaceCodeApp
     private String getSimpleInterfaceName(final String interfaceName) {
         if (interfaceName.indexOf('<') == -1) {
             return interfaceName;
-        } else {
-            return interfaceName.substring(0, interfaceName.indexOf('<'));
         }
+        return interfaceName.substring(0, interfaceName.indexOf('<'));
     }
 
 }

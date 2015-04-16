@@ -3,11 +3,10 @@ package org.jenerate.internal.strategy.method.skeleton.impl;
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.strategy.method.MethodGenerations;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
-import org.jenerate.internal.util.impl.CompilerSourceUtils;
 
 /**
  * Specific implementation of the {@link MethodSkeleton} for the compareTo method.
@@ -32,7 +31,8 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
     @Override
     public String getMethod(IType objectClass, CompareToGenerationData data, String methodContent) throws Exception {
         boolean implementedOrExtendedInSuperType = isComparableImplementedOrExtendedInSupertype(objectClass);
-        boolean generify = isGenerifyCompareTo(objectClass, implementedOrExtendedInSuperType);
+        boolean generify = MethodGenerations.generifyCompareTo(objectClass, implementedOrExtendedInSuperType,
+                preferencesManager);
         if (!implementedOrExtendedInSuperType) {
             String interfaceName = "Comparable";
             if (generify) {
@@ -55,7 +55,8 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
 
     @Override
     public String[] getMethodArguments(IType objectClass) throws Exception {
-        if (isGenerifyCompareTo(objectClass, isComparableImplementedOrExtendedInSupertype(objectClass))) {
+        if (MethodGenerations.generifyCompareTo(objectClass,
+                isComparableImplementedOrExtendedInSupertype(objectClass), preferencesManager)) {
             String elementName = objectClass.getElementName();
             return new String[] { createArgument(elementName) };
         }
@@ -69,16 +70,6 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
         return "Q" + elementName + ";";
     }
 
-    /**
-     * XXX already there in the content, extract at one point
-     */
-    private boolean isGenerifyCompareTo(IType objectClass, boolean implementedOrExtendedInSuperType) {
-        boolean generifyPreference = preferencesManager.getCurrentPreferenceValue(
-                JeneratePreferences.GENERIFY_COMPARETO).booleanValue();
-        return generifyPreference && CompilerSourceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass)
-                && !implementedOrExtendedInSuperType;
-    }
-
     private boolean isComparableImplementedOrExtendedInSupertype(IType objectClass) throws Exception {
         return javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable");
     }
@@ -87,7 +78,7 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
             String methodContent) {
 
         StringBuffer content = new StringBuffer();
-        if (data.getGenerateComment()) {
+        if (data.generateComment()) {
             content.append("/**\n");
             content.append(" * {@inheritDoc}\n");
             content.append(" */\n");

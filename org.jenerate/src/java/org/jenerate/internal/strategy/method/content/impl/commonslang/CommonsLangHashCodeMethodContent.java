@@ -71,14 +71,14 @@ public class CommonsLangHashCodeMethodContent extends
         content.append("new HashCodeBuilder(");
         content.append(data.getInitMultNumbers().getValue());
         content.append(")");
-        if (data.getAppendSuper()) {
+        if (data.appendSuper()) {
             content.append(".appendSuper(super.hashCode())");
         }
         IField[] checkedFields = data.getCheckedFields();
         for (int i = 0; i < checkedFields.length; i++) {
             content.append(".append(");
             content.append(MethodContentGenerations.getFieldAccessorString(checkedFields[i],
-                    data.getUseGettersInsteadOfFields()));
+                    data.useGettersInsteadOfFields()));
             content.append(")");
         }
         content.append(".toHashCode();\n");

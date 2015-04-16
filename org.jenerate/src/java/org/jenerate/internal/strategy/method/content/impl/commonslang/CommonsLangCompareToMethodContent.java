@@ -7,9 +7,9 @@ import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
+import org.jenerate.internal.strategy.method.MethodGenerations;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
-import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
 import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
@@ -31,7 +31,7 @@ public class CommonsLangCompareToMethodContent extends
 
     @Override
     public String getMethodContent(IType objectClass, CompareToGenerationData data) throws Exception {
-        boolean generify = MethodContentGenerations.isGenerifyCompareTo(objectClass,
+        boolean generify = MethodGenerations.generifyCompareTo(objectClass,
                 isComparableImplementedOrExtendedInSupertype(objectClass), preferencesManager);
         return createCompareToMethodContent(data, generify, objectClass);
     }
@@ -65,7 +65,7 @@ public class CommonsLangCompareToMethodContent extends
         }
 
         content.append("return new CompareToBuilder()");
-        if (data.getAppendSuper()) {
+        if (data.appendSuper()) {
             content.append(".appendSuper(super.compareTo(other))");
         }
         IField[] checkedFields = data.getCheckedFields();

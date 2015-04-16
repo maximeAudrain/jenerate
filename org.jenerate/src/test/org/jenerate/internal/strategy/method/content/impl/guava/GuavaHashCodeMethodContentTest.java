@@ -58,14 +58,14 @@ public class GuavaHashCodeMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithAppendSuper() throws Exception {
-        when(data.getAppendSuper()).thenReturn(true);
+        when(data.appendSuper()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("return Objects.hashCode(super.hashCode(), field1, field2);\n", content);
     }
 
     @Test
     public void testGetMethodContentWithUseGettersInsteadOfFields() throws Exception {
-        when(data.getUseGettersInsteadOfFields()).thenReturn(true);
+        when(data.useGettersInsteadOfFields()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("return Objects.hashCode(isField1(), getField2());\n", content);
     }

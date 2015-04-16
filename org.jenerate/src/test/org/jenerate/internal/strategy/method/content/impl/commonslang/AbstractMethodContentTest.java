@@ -63,12 +63,12 @@ public abstract class AbstractMethodContentTest<T extends MethodContent<U, V>, U
     }
 
     private void mockData() {
-        when(data.getGenerateComment()).thenReturn(false);
+        when(data.generateComment()).thenReturn(false);
         when(data.getCheckedFields()).thenReturn(fields);
-        when(data.getAppendSuper()).thenReturn(false);
-        when(data.getUseBlockInIfStatements()).thenReturn(false);
+        when(data.appendSuper()).thenReturn(false);
+        when(data.useBlockInIfStatements()).thenReturn(false);
         when(data.getElementPosition()).thenReturn(elementPosition);
-        when(data.getUseGettersInsteadOfFields()).thenReturn(false);
+        when(data.useGettersInsteadOfFields()).thenReturn(false);
     }
 
     private void mockFields() throws Exception {

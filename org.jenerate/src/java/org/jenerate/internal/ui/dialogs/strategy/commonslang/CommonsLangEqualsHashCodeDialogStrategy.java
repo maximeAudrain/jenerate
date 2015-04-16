@@ -30,6 +30,12 @@ import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIden
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
 
+/**
+ * Defines specific dialog behaviors for the equals and hashCode methods generation using the commons-lang[3] method
+ * content strategies.
+ * 
+ * @author maudrain
+ */
 public class CommonsLangEqualsHashCodeDialogStrategy implements DialogStrategy<EqualsHashCodeGenerationData> {
 
     /**
@@ -146,12 +152,12 @@ public class CommonsLangEqualsHashCodeDialogStrategy implements DialogStrategy<E
         //@formatter:off
         return new EqualsHashCodeGenerationDataImpl.Builder()
                 .withCheckedFields(methodGenerationData.getCheckedFields())
-                .withSelectedContentStrategy(methodGenerationData.getSelectedContentStrategy())
+                .withSelectedContentStrategy(methodGenerationData.getSelectedStrategyIdentifier())
                 .withElementPosition(methodGenerationData.getElementPosition())
-                .withAppendSuper(methodGenerationData.getAppendSuper())
-                .withGenerateComment(methodGenerationData.getGenerateComment())
-                .withUseBlockInIfStatements(methodGenerationData.getUseBlockInIfStatements())
-                .withUseGettersInsteadOfFields(methodGenerationData.getUseGettersInsteadOfFields())
+                .withAppendSuper(methodGenerationData.appendSuper())
+                .withGenerateComment(methodGenerationData.generateComment())
+                .withUseBlockInIfStatements(methodGenerationData.useBlockInIfStatements())
+                .withUseGettersInsteadOfFields(methodGenerationData.useGettersInsteadOfFields())
                 .withCompareReferences(compareReferences)
                 .withClassComparison(classComparison)
                 .withInitMultNumbers(imNumbers[initMultType])

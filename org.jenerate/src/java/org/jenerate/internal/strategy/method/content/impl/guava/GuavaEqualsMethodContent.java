@@ -32,9 +32,9 @@ public class GuavaEqualsMethodContent extends AbstractMethodContent<EqualsMethod
     public String getMethodContent(IType objectClass, EqualsHashCodeGenerationData data) throws Exception {
         StringBuffer content = new StringBuffer();
         String elementName = objectClass.getElementName();
-        boolean useBlockInIfStatements = data.getUseBlockInIfStatements();
+        boolean useBlockInIfStatements = data.useBlockInIfStatements();
         content.append(MethodContentGenerations.createEqualsContentPrefix(data, objectClass));
-        if (data.getAppendSuper()) {
+        if (data.appendSuper()) {
             content.append("if (!super.equals(other))");
             content.append(useBlockInIfStatements ? "{\n" : "");
             content.append(" return false;");
@@ -52,7 +52,7 @@ public class GuavaEqualsMethodContent extends AbstractMethodContent<EqualsMethod
             prefix = " && ";
             content.append("Objects.equal(");
             String fieldName = MethodContentGenerations.getFieldAccessorString(checkedField,
-                    data.getUseGettersInsteadOfFields());
+                    data.useGettersInsteadOfFields());
             content.append(fieldName);
             content.append(", castOther.");
             content.append(fieldName);

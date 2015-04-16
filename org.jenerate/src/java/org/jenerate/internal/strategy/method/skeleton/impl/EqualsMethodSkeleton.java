@@ -48,7 +48,7 @@ public class EqualsMethodSkeleton extends AbstractMethodSkeleton<EqualsHashCodeG
     private String createEqualsMethod(EqualsHashCodeGenerationData data, boolean addOverride, String methodContent) {
 
         StringBuffer content = new StringBuffer();
-        if (data.getGenerateComment()) {
+        if (data.generateComment()) {
             content.append("/**\n");
             content.append(" * {@inheritDoc}\n");
             content.append(" */\n");

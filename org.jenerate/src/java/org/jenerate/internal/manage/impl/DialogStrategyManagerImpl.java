@@ -20,7 +20,12 @@ import org.jenerate.internal.ui.dialogs.strategy.commonslang.CommonsLangEqualsHa
 import org.jenerate.internal.ui.dialogs.strategy.commonslang.CommonsLangToStringDialogStrategy;
 import org.jenerate.internal.ui.dialogs.strategy.commonslang.GuavaEqualsHashCodeDialogStrategy;
 
-public class DialogStrategyManagerImpl implements DialogStrategyManager {
+/**
+ * Default implementation of the {@link DialogStrategyManager}
+ * 
+ * @author maudrain
+ */
+public final class DialogStrategyManagerImpl implements DialogStrategyManager {
 
     private final Set<DialogStrategy<? extends MethodGenerationData>> dialogStrategies = new HashSet<>();
 

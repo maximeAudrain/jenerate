@@ -29,7 +29,7 @@ public class CommonsLangEqualsMethodContentTest extends
 
     @Override
     public void callbackAfterSetUp() throws Exception {
-        when(data.getCompareReferences()).thenReturn(false);
+        when(data.compareReferences()).thenReturn(false);
         methodContent = new CommonsLangEqualsMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
                 preferencesManager);
     }
@@ -76,7 +76,7 @@ public class CommonsLangEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithCompareReferences() throws Exception {
-        when(data.getCompareReferences()).thenReturn(true);
+        when(data.compareReferences()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if (this == other) return true;if ( !(other instanceof Test) ) return false;"
                 + "Test castOther = (Test) other;\nreturn new EqualsBuilder()"
@@ -85,7 +85,7 @@ public class CommonsLangEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithClassComparison() throws Exception {
-        when(data.getClassComparison()).thenReturn(true);
+        when(data.useClassComparison()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if (other == null) return false;" + "if ( !getClass().equals(other.getClass())) return false;"
                 + "Test castOther = (Test) other;\nreturn new EqualsBuilder()"
@@ -94,8 +94,8 @@ public class CommonsLangEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithCompareReferencesAndClassComparison() throws Exception {
-        when(data.getCompareReferences()).thenReturn(true);
-        when(data.getClassComparison()).thenReturn(true);
+        when(data.compareReferences()).thenReturn(true);
+        when(data.useClassComparison()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if (this == other) return true;" + "if (other == null) return false;"
                 + "if ( !getClass().equals(other.getClass())) return false;"
@@ -105,7 +105,7 @@ public class CommonsLangEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithAppendSuper() throws Exception {
-        when(data.getAppendSuper()).thenReturn(true);
+        when(data.appendSuper()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if ( !(other instanceof Test) ) return false;Test castOther = (Test) other;\n"
                 + "return new EqualsBuilder().appendSuper(super.equals(other))"
@@ -114,7 +114,7 @@ public class CommonsLangEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithUseBlocksInIfStatements() throws Exception {
-        when(data.getUseBlockInIfStatements()).thenReturn(true);
+        when(data.useBlockInIfStatements()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if ( !(other instanceof Test) ){\n return false;\n}\nTest castOther = (Test) other;\n"
                 + "return new EqualsBuilder().append(field1, castOther.field1)"
@@ -123,8 +123,8 @@ public class CommonsLangEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithCompareReferencesAndUseBlocksInIfStatements() throws Exception {
-        when(data.getCompareReferences()).thenReturn(true);
-        when(data.getUseBlockInIfStatements()).thenReturn(true);
+        when(data.compareReferences()).thenReturn(true);
+        when(data.useBlockInIfStatements()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if (this == other){\n return true;\n}\nif ( !(other instanceof Test) ){"
                 + "\n return false;\n}\nTest castOther = (Test) other;\nreturn new EqualsBuilder()"
@@ -133,8 +133,8 @@ public class CommonsLangEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithClassComparisonAndUseBlocksInIfStatements() throws Exception {
-        when(data.getClassComparison()).thenReturn(true);
-        when(data.getUseBlockInIfStatements()).thenReturn(true);
+        when(data.useClassComparison()).thenReturn(true);
+        when(data.useBlockInIfStatements()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if (other == null){\n return false;\n}\n"
                 + "if ( !getClass().equals(other.getClass())){\n return false;\n}\n"
@@ -144,7 +144,7 @@ public class CommonsLangEqualsMethodContentTest extends
 
     @Test
     public void testGetMethodContentWithUseGettersInsteadOfFields() throws Exception {
-        when(data.getUseGettersInsteadOfFields()).thenReturn(true);
+        when(data.useGettersInsteadOfFields()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
         assertEquals("if ( !(other instanceof Test) ) return false;Test castOther = (Test) other;\n"
                 + "return new EqualsBuilder().append(isField1(), castOther.isField1())"
