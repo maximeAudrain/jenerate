@@ -2,9 +2,7 @@ Manifest-Version: 1.0
 Bundle-Name: Jenerate
 Bundle-SymbolicName: org.jenerate;singleton=true
 Bundle-Version: 1.0.0
-Bundle-ClassPath: jenerate.jar,
- lib/mockito-core-1.10.19.jar,
- lib/objenesis-2.1.jar
+Bundle-ClassPath: jenerate.jar
 Bundle-Activator: org.jenerate.JeneratePlugin
 Bundle-Vendor: Maxime Audrain
 Bundle-Localization: plugin

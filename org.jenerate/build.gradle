@@ -5,5 +5,6 @@ repositories {
 		mavenCentral() 
 }
 dependencies { 
-		testCompile "org.mockito:mockito-core:1.+" 
+		testCompile "org.mockito:mockito-core:+" 
+		testCompile "org.objenesis:objenesis:+"
 }
