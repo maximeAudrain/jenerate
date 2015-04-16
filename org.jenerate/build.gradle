@@ -1,10 +1,19 @@
 apply plugin: 'java'
-apply plugin: 'eclipse'
 
 repositories { 
 		mavenCentral() 
 }
+
 dependencies { 
 		testCompile "org.mockito:mockito-core:+" 
 		testCompile "org.objenesis:objenesis:+"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/java'
+            srcDir 'src/test'
+        }
+    }
 }
