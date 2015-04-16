@@ -7,6 +7,7 @@ import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIden
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.impl.FieldDialogImpl;
 import org.jenerate.internal.ui.dialogs.strategy.commonslang.CommonsLangEqualsHashCodeDialogStrategy;
+import org.jenerate.internal.ui.dialogs.strategy.commonslang.EqualsHashCodeDialogStrategyHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -27,7 +28,7 @@ public class EqualsHashCodeDialogFactoryTest extends AbstractDialogFactoryTest {
 
     @Override
     public void callbackAfterSetUp() throws Exception {
-        when(dialogSettings.getSection(CommonsLangEqualsHashCodeDialogStrategy.EQUALS_SETTINGS_SECTION)).thenReturn(
+        when(dialogSettings.getSection(EqualsHashCodeDialogStrategyHelper.EQUALS_SETTINGS_SECTION)).thenReturn(
                 dialogSettings);
         when(dialogSettings.getSection(CommonsLangEqualsHashCodeDialogStrategy.HASHCODE_SETTINGS_SECTION)).thenReturn(
                 dialogSettings);

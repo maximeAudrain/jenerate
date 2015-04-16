@@ -29,7 +29,7 @@ import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
  * 
  * @author maudrain
  */
-public class CommonsLangToStringDialogStrategy implements DialogStrategy<ToStringGenerationData> {
+public final class CommonsLangToStringDialogStrategy implements DialogStrategy<ToStringGenerationData> {
 
     public static final String SETTINGS_SECTION = "ToStringDialog";
     private static final String SETTINGS_STYLE = "CommonsLangToStringStyle";

@@ -6,20 +6,18 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.data.MethodGenerationData;
-import org.jenerate.internal.domain.data.impl.EqualsHashCodeGenerationDataImpl;
+import org.jenerate.internal.domain.data.impl.EqualsHashCodeGenerationDataImpl.Builder;
 import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersCustom;
 import org.jenerate.internal.domain.hashcode.impl.InitMultNumbersDefault;
@@ -36,22 +34,20 @@ import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
  * 
  * @author maudrain
  */
-public class CommonsLangEqualsHashCodeDialogStrategy implements DialogStrategy<EqualsHashCodeGenerationData> {
+public final class CommonsLangEqualsHashCodeDialogStrategy implements DialogStrategy<EqualsHashCodeGenerationData> {
 
     /**
      * Dialog settings
      */
-    public static final String EQUALS_SETTINGS_SECTION = "EqualsDialog";
     public static final String HASHCODE_SETTINGS_SECTION = "HashCodeDialog";
-    private static final String SETTINGS_COMPARE_REFERENCES = "CompareReferences";
     private static final String SETTINGS_INIT_MULT_TYPE = "InitMultType";
     private static final String SETTINGS_INITIAL_NUMBER = "InitialNumber";
     private static final String SETTINGS_MULTIPLIER_NUMBER = "MultiplierNumber";
-    private static final String SETTINGS_CLASS_COMPARISON = "ClassComparison";
+
+    private final EqualsHashCodeDialogStrategyHelper equalsHashCodeDialogStrategyHelper = new EqualsHashCodeDialogStrategyHelper();
 
     private final StrategyIdentifier strategyIdentifier;
 
-    private IDialogSettings equalsDialogSettings;
     private IDialogSettings hashCodeDialogSettings;
     private final Button imButtons[] = new Button[3];
 
@@ -63,9 +59,6 @@ public class CommonsLangEqualsHashCodeDialogStrategy implements DialogStrategy<E
     private int initialNumber;
     private int multiplierNumber;
 
-    private boolean compareReferences;
-    private boolean classComparison;
-    private Group equalsGroup;
     private Group hashCodeGroup;
 
     public CommonsLangEqualsHashCodeDialogStrategy(StrategyIdentifier strategyIdentifier) {
@@ -84,15 +77,7 @@ public class CommonsLangEqualsHashCodeDialogStrategy implements DialogStrategy<E
 
     @Override
     public void configureSpecificDialogSettings(IDialogSettings dialogSettings) {
-        IDialogSettings equalsSettings = dialogSettings.getSection(EQUALS_SETTINGS_SECTION);
-        if (equalsSettings == null) {
-            equalsSettings = dialogSettings.addNewSection(EQUALS_SETTINGS_SECTION);
-        }
-        this.equalsDialogSettings = equalsSettings;
-
-        compareReferences = equalsSettings.getBoolean(SETTINGS_COMPARE_REFERENCES);
-
-        classComparison = equalsSettings.getBoolean(SETTINGS_CLASS_COMPARISON);
+        equalsHashCodeDialogStrategyHelper.configureSpecificDialogSettings(dialogSettings);
 
         IDialogSettings hashCodeSettings = dialogSettings.getSection(HASHCODE_SETTINGS_SECTION);
         if (hashCodeSettings == null) {
@@ -121,8 +106,7 @@ public class CommonsLangEqualsHashCodeDialogStrategy implements DialogStrategy<E
 
     @Override
     public void callbackBeforeDialogClosing() {
-        equalsDialogSettings.put(SETTINGS_COMPARE_REFERENCES, compareReferences);
-        equalsDialogSettings.put(SETTINGS_CLASS_COMPARISON, classComparison);
+        equalsHashCodeDialogStrategyHelper.callbackBeforeDialogClosing();
         imNumbers[initMultType].setNumbers(initialNumber, multiplierNumber);
         hashCodeDialogSettings.put(SETTINGS_INIT_MULT_TYPE, initMultType);
         hashCodeDialogSettings.put(SETTINGS_INITIAL_NUMBER, initialNumber);
@@ -131,92 +115,25 @@ public class CommonsLangEqualsHashCodeDialogStrategy implements DialogStrategy<E
 
     @Override
     public void createSpecificComponents(FieldDialog<EqualsHashCodeGenerationData> fieldDialog) {
-        if (equalsGroup == null && hashCodeGroup == null) {
-            addEqualsOptions(fieldDialog);
+        equalsHashCodeDialogStrategyHelper.createSpecificComponents(fieldDialog);
+        if (hashCodeGroup == null) {
             addInitialMultiplierOptions(fieldDialog);
         }
     }
 
     @Override
     public void disposeSpecificComponents() {
-        if (equalsGroup != null && hashCodeGroup != null) {
-            equalsGroup.dispose();
+        equalsHashCodeDialogStrategyHelper.disposeSpecificComponents();
+        if (hashCodeGroup != null) {
             hashCodeGroup.dispose();
-            equalsGroup = null;
             hashCodeGroup = null;
         }
     }
 
     @Override
     public EqualsHashCodeGenerationData getData(MethodGenerationData methodGenerationData) {
-        //@formatter:off
-        return new EqualsHashCodeGenerationDataImpl.Builder()
-                .withCheckedFields(methodGenerationData.getCheckedFields())
-                .withSelectedContentStrategy(methodGenerationData.getSelectedStrategyIdentifier())
-                .withElementPosition(methodGenerationData.getElementPosition())
-                .withAppendSuper(methodGenerationData.appendSuper())
-                .withGenerateComment(methodGenerationData.generateComment())
-                .withUseBlockInIfStatements(methodGenerationData.useBlockInIfStatements())
-                .withUseGettersInsteadOfFields(methodGenerationData.useGettersInsteadOfFields())
-                .withCompareReferences(compareReferences)
-                .withClassComparison(classComparison)
-                .withInitMultNumbers(imNumbers[initMultType])
-                .build();
-        //@formatter:on
-    }
-
-    private Composite addEqualsOptions(FieldDialog<EqualsHashCodeGenerationData> fieldDialog) {
-        Composite editableComposite = fieldDialog.getEditableComposite();
-        equalsGroup = new Group(editableComposite, SWT.NONE);
-        equalsGroup.setText("Equals");
-        equalsGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-        GridLayout layout = new GridLayout(1, false);
-        equalsGroup.setLayout(layout);
-
-        createAndAddCompareReferencesButton(equalsGroup);
-        createAndAddClassComparisonButton(equalsGroup);
-
-        return editableComposite;
-    }
-
-    private void createAndAddCompareReferencesButton(Group group) {
-        Button referencesButton = new Button(group, SWT.CHECK);
-        referencesButton.setText("Compare object &references");
-        referencesButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-
-        referencesButton.addSelectionListener(new SelectionListener() {
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                compareReferences = (((Button) e.widget).getSelection());
-            }
-
-            @Override
-            public void widgetDefaultSelected(SelectionEvent e) {
-                widgetSelected(e);
-            }
-        });
-        referencesButton.setSelection(compareReferences);
-    }
-
-    private void createAndAddClassComparisonButton(Group group) {
-        Button comparisonButton = new Button(group, SWT.CHECK);
-        comparisonButton.setText("Use c&lass comparison instead of instanceOf");
-        comparisonButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-
-        comparisonButton.addSelectionListener(new SelectionListener() {
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                classComparison = (((Button) e.widget).getSelection());
-            }
-
-            @Override
-            public void widgetDefaultSelected(SelectionEvent e) {
-                widgetSelected(e);
-            }
-        });
-        comparisonButton.setSelection(classComparison);
+        Builder builder = equalsHashCodeDialogStrategyHelper.getDataBuilder(methodGenerationData);
+        return builder.withInitMultNumbers(imNumbers[initMultType]).build();
     }
 
     private void addInitialMultiplierOptions(final FieldDialog<EqualsHashCodeGenerationData> fieldDialog) {
