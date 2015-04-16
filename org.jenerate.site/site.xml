@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.jenerate.feature" id="org.jenerate.feature" version="1.0.0">
+      <category name="Jenerate"/>
+   </feature>
+   <category-def name="Jenerate" label="Jenerate">
+   	  <description>
+         Jenerate is a Java Generation plugin for Eclipse that provides customizable code generation for Java classes.
+      </description>
+   </category-def>
+</site>
