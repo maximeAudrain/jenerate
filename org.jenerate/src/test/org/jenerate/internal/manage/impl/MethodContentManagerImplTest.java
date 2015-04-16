@@ -87,7 +87,7 @@ public class MethodContentManagerImplTest {
         methodSkeletons.add(new CompareToMethodSkeleton(preferencesManager, javaInterfaceCodeAppender));
         LinkedHashSet<StrategyIdentifier> possibleStrategies = methodContentManager
                 .getStrategiesIntersection(methodSkeletons);
-        assertEquals(2, possibleStrategies.size());
+        assertEquals(3, possibleStrategies.size());
     }
 
     @Test

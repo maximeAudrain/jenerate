@@ -8,7 +8,10 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.data.MethodGenerationData;
+import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
+import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.MethodContent;
+import org.jenerate.internal.util.impl.CompilerSourceUtils;
 
 /**
  * Utility class that contains common methods for the {@link MethodContent} code generation
@@ -19,6 +22,17 @@ public final class MethodContentGenerations {
 
     public MethodContentGenerations() {
         /* Only static helper methods */
+    }
+
+    /**
+     * XXX already there in the skeleton, extract at one point
+     */
+    public static boolean isGenerifyCompareTo(IType objectClass, boolean implementedOrExtendedInSuperType,
+            PreferencesManager preferencesManager) {
+        boolean generifyPreference = preferencesManager.getCurrentPreferenceValue(
+                JeneratePreferences.GENERIFY_COMPARETO).booleanValue();
+        return generifyPreference && CompilerSourceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass)
+                && !implementedOrExtendedInSuperType;
     }
 
     /**

@@ -6,13 +6,12 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
-import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
+import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
 import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
-import org.jenerate.internal.util.impl.CompilerSourceUtils;
 
 /**
  * Specific implementation of the {@link MethodContent} for {@link CompareToMethodSkeleton} using commons-lang[3].
@@ -32,7 +31,8 @@ public class CommonsLangCompareToMethodContent extends
 
     @Override
     public String getMethodContent(IType objectClass, CompareToGenerationData data) throws Exception {
-        boolean generify = isGenerifyCompareTo(objectClass, isComparableImplementedOrExtendedInSupertype(objectClass));
+        boolean generify = MethodContentGenerations.isGenerifyCompareTo(objectClass,
+                isComparableImplementedOrExtendedInSupertype(objectClass), preferencesManager);
         return createCompareToMethodContent(data, generify, objectClass);
     }
 
@@ -48,32 +48,19 @@ public class CommonsLangCompareToMethodContent extends
         return CompareToMethodSkeleton.class;
     }
 
-    /**
-     * XXX already there in the skeleton, extract at one point
-     */
-    private boolean isGenerifyCompareTo(IType objectClass, boolean implementedOrExtendedInSuperType) {
-        boolean generifyPreference = preferencesManager.getCurrentPreferenceValue(
-                JeneratePreferences.GENERIFY_COMPARETO).booleanValue();
-        return generifyPreference && CompilerSourceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass)
-                && !implementedOrExtendedInSuperType;
-    }
-
     private boolean isComparableImplementedOrExtendedInSupertype(IType objectClass) throws Exception {
         return javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable");
     }
 
     private String createCompareToMethodContent(CompareToGenerationData data, boolean generify, IType objectClass) {
-        String className = objectClass.getElementName();
         StringBuffer content = new StringBuffer();
-        String other;
-        if (generify) {
-            other = "other";
-        } else {
+        String other = "other";
+        if (!generify) {
+            String className = objectClass.getElementName();
             content.append(className);
             content.append(" castOther = (");
             content.append(className);
             content.append(") other;\n");
-
             other = "castOther";
         }
 

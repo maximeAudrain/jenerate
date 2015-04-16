@@ -13,6 +13,7 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLan
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangEqualsMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangHashCodeMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.commonslang.CommonsLangToStringMethodContent;
+import org.jenerate.internal.strategy.method.content.impl.guava.GuavaCompareToMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.guava.GuavaEqualsMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.guava.GuavaHashCodeMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.guava.GuavaToStringMethodContent;
@@ -60,6 +61,7 @@ public final class MethodContentManagerImpl implements MethodContentManager {
         methodContents.add(new GuavaToStringMethodContent(preferencesManager));
         methodContents.add(new GuavaEqualsMethodContent(preferencesManager));
         methodContents.add(new GuavaHashCodeMethodContent(preferencesManager));
+        methodContents.add(new GuavaCompareToMethodContent(preferencesManager, javaInterfaceCodeAppender));
     }
 
     /**
