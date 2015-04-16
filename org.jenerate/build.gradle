@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'eclipse'
 
 repositories { 
 		mavenCentral() 
@@ -14,6 +15,23 @@ sourceSets {
         java {
             srcDir 'src/java'
             srcDir 'src/test'
+        }
+    }
+}
+
+eclipse {
+  project {
+    natures 'org.eclipse.jdt.core.javanature', 'org.eclipse.pde.PluginNature'
+  }
+}
+
+eclipse {
+    classpath {
+        file {
+            withXml {
+                def node = it.asNode()
+                node.appendNode('classpathentry', [kind: 'con', path: 'org.eclipse.pde.core.requiredPlugins', exported: true])
+            }
         }
     }
 }
