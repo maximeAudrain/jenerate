@@ -33,6 +33,7 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
         boolean implementedOrExtendedInSuperType = isComparableImplementedOrExtendedInSupertype(objectClass);
         boolean generify = MethodGenerations.generifyCompareTo(objectClass, implementedOrExtendedInSuperType,
                 preferencesManager);
+        boolean addOverride = addOverride(objectClass);
         if (!implementedOrExtendedInSuperType) {
             String interfaceName = "Comparable";
             if (generify) {
@@ -40,7 +41,7 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
             }
             javaInterfaceCodeAppender.addSuperInterface(objectClass, interfaceName);
         }
-        return createCompareToMethod(objectClass, data, generify, methodContent);
+        return createCompareToMethod(objectClass, data, generify, addOverride, methodContent);
     }
 
     @Override
@@ -55,8 +56,8 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
 
     @Override
     public String[] getMethodArguments(IType objectClass) throws Exception {
-        if (MethodGenerations.generifyCompareTo(objectClass,
-                isComparableImplementedOrExtendedInSupertype(objectClass), preferencesManager)) {
+        if (MethodGenerations.generifyCompareTo(objectClass, isComparableImplementedOrExtendedInSupertype(objectClass),
+                preferencesManager)) {
             String elementName = objectClass.getElementName();
             return new String[] { createArgument(elementName) };
         }
@@ -75,13 +76,17 @@ public class CompareToMethodSkeleton extends AbstractMethodSkeleton<CompareToGen
     }
 
     private String createCompareToMethod(IType objectClass, CompareToGenerationData data, boolean generify,
-            String methodContent) {
+            boolean addOverride, String methodContent) {
 
         StringBuffer content = new StringBuffer();
         if (data.generateComment()) {
             content.append("/**\n");
             content.append(" * {@inheritDoc}\n");
             content.append(" */\n");
+        }
+
+        if (addOverride) {
+            content.append("@Override\n");
         }
 
         String className = objectClass.getElementName();
