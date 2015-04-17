@@ -2,6 +2,7 @@
 
 * [Introduction](#Introduction)
 * [Installation](#Installation)
+* [Changelog](#Changelog)
 * [Copyright](#copyright)
 * [Contributions](#Contributions)
 
@@ -25,6 +26,15 @@ You can install the Jenerate plugin via the [Eclipse Marketplace](http://marketp
 ```
 http://maximeaudrain.github.io/update/
 ```
+
+## <a name="Changelog"/>Changelog
+
+Version 1.0.0:
+- Added Google Guava support for all methods content generation.
+- Add tooltip on the toString dialog that shows how the output of the toString() would look like (based on the javadoc). (Contribution by mwensveen-nl)
+- Add the option to use getClass instead of instanceof in the equals method. (Contribution by mwensveen-nl)
+- Changed javadoc to use @inheritdoc instead of the old style of javadoc. (Contribution by melloware)
+
 ## <a name="Copyright"/>Copyright
 
 Jenerate is a fork of [commons4e](https://github.com/jiayun/commons4e). It was forked to make it alive again and respond to users need for new functionalities. 
