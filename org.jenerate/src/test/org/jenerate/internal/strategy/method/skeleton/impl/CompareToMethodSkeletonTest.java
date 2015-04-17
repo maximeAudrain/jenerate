@@ -31,7 +31,8 @@ public class CompareToMethodSkeletonTest extends
 
     @Override
     public void callbackAfterSetUp() throws Exception {
-        mockSpecificManagers(false);
+        mockAddOverride(false);
+        mockGenerify(false);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class CompareToMethodSkeletonTest extends
 
     @Test
     public void testGetMethodArgumentsGenerify() throws Exception {
-        mockSpecificManagers(true);
+        mockGenerify(true);
         String[] methodArguments = methodSkeleton.getMethodArguments(objectClass);
         assertEquals(1, methodArguments.length);
         assertEquals(methodSkeleton.createArgument(TEST_ELEMENT_NAME), methodArguments[0]);
@@ -89,10 +90,17 @@ public class CompareToMethodSkeletonTest extends
         assertEquals("/**\n * {@inheritDoc}\n */\n" + "public int compareTo(final Object other) {\nCONTENT}\n\n",
                 method);
     }
+    
+    @Test
+    public void testGetMethodAddOverride() throws Exception {
+        mockAddOverride(true);
+        String method = methodSkeleton.getMethod(objectClass, data, METHOD_CONTENT);
+        assertEquals("@Override\npublic int compareTo(final Object other) {\nCONTENT}\n\n", method);
+    }
 
     @Test
     public void testGetMethodGenerify() throws Exception {
-        mockSpecificManagers(true);
+        mockGenerify(true);
         String method = methodSkeleton.getMethod(objectClass, data, METHOD_CONTENT);
         verify(javaInterfaceCodeAppender, times(1)).addSuperInterface(objectClass, "Comparable<Test>");
         assertEquals("public int compareTo(final Test other) {\nCONTENT}\n\n", method);
@@ -106,10 +114,17 @@ public class CompareToMethodSkeletonTest extends
         assertEquals("public int compareTo(final Object other) {\nCONTENT}\n\n", method);
     }
 
-    private void mockSpecificManagers(boolean generify) throws Exception {
+    private void mockGenerify(boolean generify) throws Exception {
         mockIsSourceLevelAbove5(generify);
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.GENERIFY_COMPARETO)).thenReturn(generify);
         when(javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable")).thenReturn(
                 !generify);
     }
+    
+    private void mockAddOverride(boolean addOverride) throws Exception {
+        mockIsSourceLevelAbove5(addOverride);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.ADD_OVERRIDE_ANNOTATION)).thenReturn(
+                addOverride);
+    }
+
 }
