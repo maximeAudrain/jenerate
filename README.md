@@ -11,9 +11,9 @@ Jenerate is a Java Generation plugin for Eclipse that provides customizable code
 
 Jenerate provides code generation for methods like:
 
-* hashCode() and equals()
-* toString()
-* compareTo()
+* hashCode() and equals() (ALT+SHIFT+G then H)
+* toString() (ALT+SHIFT+G then S)
+* compareTo() (ALT+SHIFT+G then C)
 
 The generated methods can use external libraries such as apache commons-lang[3] Builders and Google Guava.
 
