@@ -146,11 +146,11 @@ public final class CommonsLangToStringDialogStrategy implements DialogStrategy<T
     private String[] getStyles() {
         List<String> styles = new ArrayList<String>();
         for (CommonsLangToStringStyle style : CommonsLangToStringStyle.values()) {
-            if (CommonsLangToStringStyle.NO_STYLE.equals(style)) {
-                styles.add(CommonsLangToStringStyle.NO_STYLE.name());
-            } else {
-                styles.add(style.getFullLibraryString(strategyIdentifier));
+            String displayableLibraryString = CommonsLangToStringStyle.NO_STYLE.name();
+            if (!CommonsLangToStringStyle.NO_STYLE.equals(style)) {
+                displayableLibraryString = style.getDisplayableLibraryString();
             }
+            styles.add(displayableLibraryString);
         }
         String[] stylesArray = styles.toArray(new String[styles.size()]);
         return stylesArray;

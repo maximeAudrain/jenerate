@@ -17,7 +17,10 @@ public enum CommonsLangToStringStyle {
     MULTI_LINE_STYLE("Person@182f0db[\n   name=John Doe\n   age=33\n   smoker=false\n ]"),
     NO_FIELD_NAMES_STYLE("Person@182f0db[John Doe,33,false]"),
     SHORT_PREFIX_STYLE("Person[name=John Doe,age=33,smoker=false]"),
-    SIMPLE_STYLE("John Doe,33,false");
+    SIMPLE_STYLE("John Doe,33,false"),
+    NO_CLASS_NAME_STYLE("[name=John Doe,age=33,smoker=false]", " (since Commons Lang 3.4)"),
+    JSON_STYLE("{\"name\": \"John Doe\", \"age\": 33, \"smoker\": true}", " (since Commons Lang 3.4)");
+
     private static final String PREFIX = "Example:\n";
 
     /**
@@ -26,9 +29,19 @@ public enum CommonsLangToStringStyle {
      */
     private final String toolTip;
 
+    /**
+     * Potential suffix to display in the to string generation dialog style list.
+     */
+    private final String displaySuffix;
+
     private CommonsLangToStringStyle(String toolTip) {
         this.toolTip = toolTip;
+        this.displaySuffix = "";
+    }
 
+    private CommonsLangToStringStyle(String toolTip, String displaySuffix) {
+        this.toolTip = toolTip;
+        this.displaySuffix = displaySuffix;
     }
 
     public String getFullStyle() {
@@ -64,4 +77,9 @@ public enum CommonsLangToStringStyle {
     public String getToolTip() {
         return PREFIX + toolTip;
     }
+
+    public String getDisplayableLibraryString() {
+        return getFullStyle() + this.displaySuffix;
+    }
+
 }
