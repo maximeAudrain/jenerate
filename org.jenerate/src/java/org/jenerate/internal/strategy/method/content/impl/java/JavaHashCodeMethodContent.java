@@ -1,6 +1,7 @@
-package org.jenerate.internal.strategy.method.content.impl.guava;
+package org.jenerate.internal.strategy.method.content.impl.java;
 
 import java.util.LinkedHashSet;
+import java.util.Objects;
 
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
@@ -9,31 +10,28 @@ import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
-import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
+import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleton;
 
 /**
- * Specific implementation of the {@link MethodContent} for {@link EqualsMethodSkeleton} using guava.
+ * Specific implementation of the {@link MethodContent} for {@link HashCodeMethodSkeleton} using JDK 7 {@link Objects}.
  * 
  * @author maudrain
  */
-public class GuavaEqualsMethodContent
-        extends AbstractMethodContent<EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
+public class JavaHashCodeMethodContent extends
+        AbstractMethodContent<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
 
     /**
      * Public for testing purpose
      */
-    public static final String LIBRARY_TO_IMPORT = "com.google.common.base.Objects";
+    public static final String LIBRARY_TO_IMPORT = "java.util.Objects";
 
-    public GuavaEqualsMethodContent(PreferencesManager preferencesManager) {
-        super(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager);
+    public JavaHashCodeMethodContent(PreferencesManager preferencesManager) {
+        super(MethodContentStrategyIdentifier.USE_JAVA, preferencesManager);
     }
 
     @Override
     public String getMethodContent(IType objectClass, EqualsHashCodeGenerationData data) throws Exception {
-        StringBuffer content = new StringBuffer();
-        content.append(MethodContentGenerations.createEqualsContentPrefix(data, objectClass));
-        content.append(MethodContentGenerations.createEqualsContent("equal", data, objectClass));
-        return content.toString();
+        return MethodContentGenerations.createHashCodeContent("hash", data);
     }
 
     @Override
@@ -44,8 +42,8 @@ public class GuavaEqualsMethodContent
     }
 
     @Override
-    public Class<EqualsMethodSkeleton> getRelatedMethodSkeletonClass() {
-        return EqualsMethodSkeleton.class;
+    public Class<HashCodeMethodSkeleton> getRelatedMethodSkeletonClass() {
+        return HashCodeMethodSkeleton.class;
     }
 
 }

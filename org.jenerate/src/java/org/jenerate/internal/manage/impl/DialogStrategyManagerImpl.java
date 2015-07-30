@@ -16,9 +16,9 @@ import org.jenerate.internal.manage.DialogStrategyManager;
 import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.ui.dialogs.strategy.DefaultDialogStrategy;
 import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
+import org.jenerate.internal.ui.dialogs.strategy.EqualsHashCodeDialogStrategy;
 import org.jenerate.internal.ui.dialogs.strategy.commonslang.CommonsLangEqualsHashCodeDialogStrategy;
 import org.jenerate.internal.ui.dialogs.strategy.commonslang.CommonsLangToStringDialogStrategy;
-import org.jenerate.internal.ui.dialogs.strategy.commonslang.GuavaEqualsHashCodeDialogStrategy;
 
 /**
  * Default implementation of the {@link DialogStrategyManager}
@@ -42,7 +42,8 @@ public final class DialogStrategyManagerImpl implements DialogStrategyManager {
                 MethodContentStrategyIdentifier.USE_COMMONS_LANG));
         dialogStrategies.add(new CommonsLangEqualsHashCodeDialogStrategy(
                 MethodContentStrategyIdentifier.USE_COMMONS_LANG3));
-        dialogStrategies.add(new GuavaEqualsHashCodeDialogStrategy());
+        dialogStrategies.add(new EqualsHashCodeDialogStrategy(MethodContentStrategyIdentifier.USE_GUAVA));
+        dialogStrategies.add(new EqualsHashCodeDialogStrategy(MethodContentStrategyIdentifier.USE_JAVA));
 
         dialogStrategies.add(new DefaultDialogStrategy<CompareToGenerationData>(
                 new CompareToGenerationDataImpl.Builder(), MethodsGenerationCommandIdentifier.COMPARE_TO,

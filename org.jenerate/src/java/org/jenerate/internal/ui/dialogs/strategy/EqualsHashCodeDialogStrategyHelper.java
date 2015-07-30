@@ -1,4 +1,4 @@
-package org.jenerate.internal.ui.dialogs.strategy.commonslang;
+package org.jenerate.internal.ui.dialogs.strategy;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;

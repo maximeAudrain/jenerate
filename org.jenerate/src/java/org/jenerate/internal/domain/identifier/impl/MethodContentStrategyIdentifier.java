@@ -11,7 +11,8 @@ public enum MethodContentStrategyIdentifier implements StrategyIdentifier {
 
     USE_COMMONS_LANG,
     USE_COMMONS_LANG3,
-    USE_GUAVA;
+    USE_GUAVA,
+    USE_JAVA;
 
     @Override
     public String getName() {

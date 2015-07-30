@@ -59,6 +59,77 @@ public final class MethodContentGenerations {
     }
 
     /**
+     * Creates the equals method content given a certain equals method name for delegation
+     * @param equalsMethodName the equals method name that process the equality
+     * @param data the data to extract configuration from
+     * @param objectClass the class where the equals method is being generated
+     * @return the equals method content
+     * @throws JavaModelException if a problem occurs during the code generation.
+     */
+    public static String createEqualsContent(String equalsMethodName, EqualsHashCodeGenerationData data,
+            IType objectClass) throws JavaModelException {
+        StringBuffer content = new StringBuffer();
+        boolean useBlockInIfStatements = data.useBlockInIfStatements();
+        String elementName = objectClass.getElementName();
+        if (data.appendSuper()) {
+            content.append("if (!super.equals(other))");
+            content.append(useBlockInIfStatements ? "{\n" : "");
+            content.append(" return false;");
+            content.append(useBlockInIfStatements ? "\n}\n" : "");
+        }
+        content.append(elementName);
+        content.append(" castOther = (");
+        content.append(elementName);
+        content.append(") other;\n");
+        content.append("return ");
+        String prefix = "";
+        IField[] checkedFields = data.getCheckedFields();
+        for (IField checkedField : checkedFields) {
+            content.append(prefix);
+            prefix = " && ";
+            content.append("Objects.");
+            content.append(equalsMethodName);
+            content.append("(");
+            String fieldName = MethodContentGenerations.getFieldAccessorString(checkedField,
+                    data.useGettersInsteadOfFields());
+            content.append(fieldName);
+            content.append(", castOther.");
+            content.append(fieldName);
+            content.append(")");
+        }
+        content.append(";\n");
+        return content.toString();
+    }
+
+    /**
+     * Creates the hashCode method content given a certain hashCode method name for delegation
+     * @param hashCodeMethodName the hashCode method name that process the hash
+     * @param data the data to extract configuration from
+     * @return the hashCode method content
+     * @throws JavaModelException if a problem occurs during the code generation.
+     */
+    public static String createHashCodeContent(String hashCodeMethodName, EqualsHashCodeGenerationData data)
+            throws JavaModelException {
+        StringBuffer content = new StringBuffer();
+        content.append("return Objects.");
+        content.append(hashCodeMethodName);
+        content.append("(");
+        if (data.appendSuper()) {
+            content.append("super.hashCode(), ");
+        }
+        IField[] checkedFields = data.getCheckedFields();
+        String prefix = "";
+        for (IField checkedField : checkedFields) {
+            content.append(prefix);
+            prefix = ", ";
+            content.append(
+                    MethodContentGenerations.getFieldAccessorString(checkedField, data.useGettersInsteadOfFields()));
+        }
+        content.append(");\n");
+        return content.toString();
+    }
+
+    /**
      * Create a transient field with a certain name and type in the {@link IType} objectClass. It checks first if the
      * cache property allows this field to be created. If the field with the same name exists, it is deleted prior to
      * the new field creation.
@@ -69,7 +140,7 @@ public final class MethodContentGenerations {
      * @param cachingFieldName the name of the field to be created
      * @param cachingFieldType the type of the field to be created
      * @return {@code true} if the field was created, {@code false} otherwise
-     * @throws JavaModelException if an problem occurs during the code generation.
+     * @throws JavaModelException if a problem occurs during the code generation.
      */
     public static boolean createField(IType objectClass, MethodGenerationData data, boolean cacheProperty,
             String cachingFieldName, Class<?> cachingFieldType) throws JavaModelException {

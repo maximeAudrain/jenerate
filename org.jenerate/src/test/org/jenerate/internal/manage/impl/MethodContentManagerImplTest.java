@@ -99,7 +99,7 @@ public class MethodContentManagerImplTest {
         skeletons.add(skeleton2);
         LinkedHashSet<StrategyIdentifier> possibleStrategies = methodContentManager
                 .getStrategiesIntersection(skeletons);
-        assertEquals(3, possibleStrategies.size());
+        assertEquals(4, possibleStrategies.size());
     }
 
     @Test(expected = IllegalStateException.class)

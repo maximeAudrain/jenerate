@@ -27,6 +27,7 @@ import org.jenerate.internal.domain.identifier.StrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
 import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
+import org.jenerate.internal.ui.dialogs.strategy.EqualsHashCodeDialogStrategyHelper;
 
 /**
  * Defines specific dialog behaviors for the equals and hashCode methods generation using the commons-lang[3] method

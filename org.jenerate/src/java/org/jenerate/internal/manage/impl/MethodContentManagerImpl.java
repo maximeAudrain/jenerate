@@ -17,6 +17,8 @@ import org.jenerate.internal.strategy.method.content.impl.guava.GuavaCompareToMe
 import org.jenerate.internal.strategy.method.content.impl.guava.GuavaEqualsMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.guava.GuavaHashCodeMethodContent;
 import org.jenerate.internal.strategy.method.content.impl.guava.GuavaToStringMethodContent;
+import org.jenerate.internal.strategy.method.content.impl.java.JavaEqualsMethodContent;
+import org.jenerate.internal.strategy.method.content.impl.java.JavaHashCodeMethodContent;
 import org.jenerate.internal.strategy.method.impl.MethodImpl;
 import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
@@ -62,6 +64,9 @@ public final class MethodContentManagerImpl implements MethodContentManager {
         methodContents.add(new GuavaEqualsMethodContent(preferencesManager));
         methodContents.add(new GuavaHashCodeMethodContent(preferencesManager));
         methodContents.add(new GuavaCompareToMethodContent(preferencesManager, javaInterfaceCodeAppender));
+
+        methodContents.add(new JavaHashCodeMethodContent(preferencesManager));
+        methodContents.add(new JavaEqualsMethodContent(preferencesManager));
     }
 
     /**

@@ -2,7 +2,6 @@ package org.jenerate.internal.strategy.method.content.impl.guava;
 
 import java.util.LinkedHashSet;
 
-import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
@@ -31,21 +30,7 @@ public class GuavaHashCodeMethodContent extends
 
     @Override
     public String getMethodContent(IType objectClass, EqualsHashCodeGenerationData data) throws Exception {
-        StringBuffer content = new StringBuffer();
-        content.append("return Objects.hashCode(");
-        if (data.appendSuper()) {
-            content.append("super.hashCode(), ");
-        }
-        IField[] checkedFields = data.getCheckedFields();
-        String prefix = "";
-        for (IField checkedField : checkedFields) {
-            content.append(prefix);
-            prefix = ", ";
-            content.append(MethodContentGenerations.getFieldAccessorString(checkedField,
-                    data.useGettersInsteadOfFields()));
-        }
-        content.append(");\n");
-        return content.toString();
+        return MethodContentGenerations.createHashCodeContent("hashCode", data);
     }
 
     @Override

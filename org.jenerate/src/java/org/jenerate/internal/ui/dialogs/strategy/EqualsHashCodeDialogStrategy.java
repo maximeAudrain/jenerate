@@ -1,4 +1,4 @@
-package org.jenerate.internal.ui.dialogs.strategy.commonslang;
+package org.jenerate.internal.ui.dialogs.strategy;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
@@ -6,10 +6,8 @@ import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.data.impl.EqualsHashCodeGenerationDataImpl.Builder;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
-import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.ui.dialogs.FieldDialog;
-import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
 
 /**
  * Defines specific dialog behaviors for the equals and hashCode methods generation using the guava method content
@@ -17,9 +15,15 @@ import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
  * 
  * @author maudrain
  */
-public final class GuavaEqualsHashCodeDialogStrategy implements DialogStrategy<EqualsHashCodeGenerationData> {
+public final class EqualsHashCodeDialogStrategy implements DialogStrategy<EqualsHashCodeGenerationData> {
 
     private final EqualsHashCodeDialogStrategyHelper equalsHashCodeDialogStrategyHelper = new EqualsHashCodeDialogStrategyHelper();
+
+    private final StrategyIdentifier strategyIdentifier;
+
+    public EqualsHashCodeDialogStrategy(StrategyIdentifier strategyIdentifier) {
+        this.strategyIdentifier = strategyIdentifier;
+    }
 
     @Override
     public CommandIdentifier getCommandIdentifier() {
@@ -28,7 +32,7 @@ public final class GuavaEqualsHashCodeDialogStrategy implements DialogStrategy<E
 
     @Override
     public StrategyIdentifier getStrategyIdentifier() {
-        return MethodContentStrategyIdentifier.USE_GUAVA;
+        return this.strategyIdentifier;
     }
 
     @Override
