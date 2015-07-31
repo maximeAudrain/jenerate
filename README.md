@@ -16,7 +16,7 @@ Jenerate provides code generation for methods like:
 * toString() (ALT+SHIFT+G then S)
 * compareTo() (ALT+SHIFT+G then C)
 
-The generated methods can use external libraries such as apache commons-lang[3] Builders and Google Guava.
+The generated methods can use internal java.util.Objects class or external libraries such as Apache commons-lang[3] Builders and Google Guava.
 
 A certain number of parameters can be customized in the Jenerate preference page in eclipse (Window > Preferences > Java > Jenerate).
 
@@ -28,6 +28,10 @@ http://maximeaudrain.github.io/update/
 ```
 
 ## <a name="Changelog"/>Changelog
+
+Version 1.0.1:
+- Added generation strategies for hashCode() and equals() using the internal java.util.Objects class.
+- Allow use of two new ToString styles provided with the version 3.4 of Apache Commons lang.
 
 Version 1.0.0:
 - Added Google Guava support for all methods content generation.
