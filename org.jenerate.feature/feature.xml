@@ -2,7 +2,7 @@
 <feature
       id="org.jenerate.feature"
       label="Jenerate"
-      version="1.0.0"
+      version="1.0.1"
       provider-name="Maxime Audrain">
 
    <description>
@@ -115,7 +115,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
          id="org.jenerate"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="1.0.1"
          unpack="false"/>
 
 </feature>
