@@ -71,7 +71,8 @@ public class JenerateBasePreferencePage extends FieldEditorPreferencePage implem
             } else if (event.getSource() == getCacheToStringField()) {
                 getToStringCachingField().setEnabled(getCacheToStringField().getBooleanValue(), getFieldEditorParent());
 
-            } else if (event.getSource() == getHashCodeCachingField() || event.getSource() == getToStringCachingField()) {
+            } else
+                if (event.getSource() == getHashCodeCachingField() || event.getSource() == getToStringCachingField()) {
                 checkState();
             }
         }

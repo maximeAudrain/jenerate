@@ -1,5 +1,9 @@
 package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Set;
 
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
@@ -8,10 +12,6 @@ import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Junit test for the {@link CommonsLangEqualsMethodContent}
@@ -48,10 +48,8 @@ public class CommonsLangEqualsMethodContentTest extends
     public void testGetLibrariesToImportWithCommonsLang() {
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
-        assertEquals(
-                CommonsLangMethodContentLibraries
-                        .getEqualsBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG),
-                librariesToImport.iterator().next());
+        assertEquals(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(
+                MethodContentStrategyIdentifier.USE_COMMONS_LANG), librariesToImport.iterator().next());
     }
 
     @Test
@@ -60,10 +58,8 @@ public class CommonsLangEqualsMethodContentTest extends
                 preferencesManager);
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
-        assertEquals(
-                CommonsLangMethodContentLibraries
-                        .getEqualsBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG3),
-                librariesToImport.iterator().next());
+        assertEquals(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(
+                MethodContentStrategyIdentifier.USE_COMMONS_LANG3), librariesToImport.iterator().next());
     }
 
     @Test

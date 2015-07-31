@@ -67,10 +67,11 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
     @Override
     public IField[] getObjectClassFields(IType objectClass, PreferencesManager preferencesManager)
             throws JavaModelException {
-        boolean displayFieldsOfSuperClasses = preferencesManager.getCurrentPreferenceValue(
-                JeneratePreferences.DISPLAY_FIELDS_OF_SUPERCLASSES).booleanValue();
+        boolean displayFieldsOfSuperClasses = preferencesManager
+                .getCurrentPreferenceValue(JeneratePreferences.DISPLAY_FIELDS_OF_SUPERCLASSES).booleanValue();
         if (displayFieldsOfSuperClasses) {
-            return getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass, preferencesManager);
+            return getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
+                    preferencesManager);
         }
         return getNonStaticNonCacheFields(objectClass, preferencesManager);
     }
@@ -135,8 +136,8 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
             throws JavaModelException {
         LinkedHashMap<String, IJavaElement> toReturn = new LinkedHashMap<>();
 
-        IJavaElement[] members = filterOutExcludedElements(objectClass.getChildren(), excludedMethods).toArray(
-                new IJavaElement[0]);
+        IJavaElement[] members = filterOutExcludedElements(objectClass.getChildren(), excludedMethods)
+                .toArray(new IJavaElement[0]);
         IMethod[] methods = filterOutExcludedElements(objectClass.getMethods(), excludedMethods)
                 .toArray(new IMethod[0]);
 

@@ -1,5 +1,8 @@
 package org.jenerate.internal.ui.dialogs.factory.impl;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -25,9 +28,6 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
 
 /**
  * Abstract test for the {@link DialogFactory}

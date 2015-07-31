@@ -1,5 +1,9 @@
 package org.jenerate.internal.ui.dialogs.factory.impl;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.ToStringGenerationData;
@@ -10,10 +14,6 @@ import org.jenerate.internal.ui.dialogs.strategy.commonslang.CommonsLangToString
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for the {@link ToStringDialogFactory}
@@ -54,8 +54,8 @@ public class ToStringDialogFactoryTest extends AbstractDialogFactoryTest {
         validateDialogCreation(createFields(field1, field2), true);
     }
 
-    private void validateDialogCreation(IField[] iFields, boolean disableAppendSuper) throws JavaModelException,
-            Exception {
+    private void validateDialogCreation(IField[] iFields, boolean disableAppendSuper)
+            throws JavaModelException, Exception {
         when(dialogFactoryHelper.getObjectClassFields(objectClass, preferencesManager)).thenReturn(iFields);
         FieldDialog<ToStringGenerationData> toStringDialog = toStringDialogFactory.createDialog(parentShell,
                 objectClass, excludedMethods, possibleStrategyIdentifiers);
@@ -65,7 +65,7 @@ public class ToStringDialogFactoryTest extends AbstractDialogFactoryTest {
     }
 
     private void mockDisableAppendSuper(boolean isDisableAppendSuper) throws JavaModelException {
-        when(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "toString", new String[0], null)).thenReturn(
-                !isDisableAppendSuper);
+        when(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "toString", new String[0], null))
+                .thenReturn(!isDisableAppendSuper);
     }
 }

@@ -1,5 +1,9 @@
 package org.jenerate.internal.ui.dialogs.factory.impl;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jenerate.internal.domain.data.CompareToGenerationData;
@@ -11,10 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for the {@link CompareToDialogFactory}
@@ -57,8 +57,8 @@ public class CompareToDialogFactoryTest extends AbstractDialogFactoryTest {
         validateDialogCreation(createFields(field1, field2), true);
     }
 
-    private void validateDialogCreation(IField[] iFields, boolean disableAppendSuper) throws JavaModelException,
-            Exception {
+    private void validateDialogCreation(IField[] iFields, boolean disableAppendSuper)
+            throws JavaModelException, Exception {
         when(dialogFactoryHelper.getObjectClassFields(objectClass, preferencesManager)).thenReturn(iFields);
         FieldDialog<CompareToGenerationData> compareToDialog = compareToDialogFactory.createDialog(parentShell,
                 objectClass, excludedMethods, possibleStrategyIdentifiers);
@@ -70,7 +70,7 @@ public class CompareToDialogFactoryTest extends AbstractDialogFactoryTest {
     private void mockDisableAppendSuper(boolean isDisableAppendSuper) throws JavaModelException {
         when(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "compareTo", new String[] { "QObject;" }, null))
                 .thenReturn(!isDisableAppendSuper);
-        when(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable")).thenReturn(
-                !isDisableAppendSuper);
+        when(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable"))
+                .thenReturn(!isDisableAppendSuper);
     }
 }

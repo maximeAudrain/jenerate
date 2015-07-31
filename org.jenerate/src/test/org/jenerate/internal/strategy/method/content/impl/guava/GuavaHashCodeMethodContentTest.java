@@ -1,5 +1,9 @@
 package org.jenerate.internal.strategy.method.content.impl.guava;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Set;
 
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
@@ -9,10 +13,6 @@ import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleto
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for the {@link GuavaHashCodeMethodContent}

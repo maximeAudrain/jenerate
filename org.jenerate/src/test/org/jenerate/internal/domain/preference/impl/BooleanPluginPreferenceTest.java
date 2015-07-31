@@ -1,16 +1,16 @@
 package org.jenerate.internal.domain.preference.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.swt.widgets.Display;
 import org.jenerate.internal.domain.preference.PluginPreference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for the {@link BooleanPluginPreference}

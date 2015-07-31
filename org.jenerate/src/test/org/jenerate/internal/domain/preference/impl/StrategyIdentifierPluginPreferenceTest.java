@@ -1,5 +1,10 @@
 package org.jenerate.internal.domain.preference.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.swt.widgets.Display;
 import org.jenerate.internal.domain.identifier.StrategyIdentifier;
@@ -8,11 +13,6 @@ import org.jenerate.internal.domain.preference.PluginPreference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for the {@link StrategyIdentifierPluginPreference}
@@ -29,7 +29,8 @@ public class StrategyIdentifierPluginPreferenceTest extends AbstractPluginPrefer
                     MethodContentStrategyIdentifier.USE_COMMONS_LANG.getName() },
             { MethodContentStrategyIdentifier.USE_COMMONS_LANG3.getName(),
                     MethodContentStrategyIdentifier.USE_COMMONS_LANG3.getName() },
-            { MethodContentStrategyIdentifier.USE_GUAVA.getName(), MethodContentStrategyIdentifier.USE_GUAVA.getName() } };
+            { MethodContentStrategyIdentifier.USE_GUAVA.getName(),
+                    MethodContentStrategyIdentifier.USE_GUAVA.getName() } };
 
     @Test
     public void testGetCurrentPreferenceValue() {

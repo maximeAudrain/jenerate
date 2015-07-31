@@ -1,5 +1,8 @@
 package org.jenerate.internal.manage.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
@@ -23,9 +26,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Unit test for {@link MethodContentManagerImpl}
@@ -139,8 +139,8 @@ public class MethodContentManagerImplTest {
                 .getAllMethods(methodSkeletons, MethodContentStrategyIdentifier.USE_COMMONS_LANG3);
         assertEquals(1, methods.size());
         Method<MethodSkeleton<CompareToGenerationData>, CompareToGenerationData> method = methods.iterator().next();
-        assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG3, method.getMethodContent()
-                .getStrategyIdentifier());
+        assertEquals(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
+                method.getMethodContent().getStrategyIdentifier());
         assertEquals(CompareToMethodSkeleton.class, method.getMethodContent().getRelatedMethodSkeletonClass());
     }
 
@@ -185,7 +185,8 @@ public class MethodContentManagerImplTest {
         }
 
         @Override
-        public String getMethod(IType objectClass, CompareToGenerationData data, String methodContent) throws Exception {
+        public String getMethod(IType objectClass, CompareToGenerationData data, String methodContent)
+                throws Exception {
             return null;
         }
 

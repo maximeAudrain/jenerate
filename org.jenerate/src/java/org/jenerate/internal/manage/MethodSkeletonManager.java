@@ -14,7 +14,7 @@ import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 public interface MethodSkeletonManager {
 
     /**
-     * Get all {@link MethodSkeleton}s for the provided parameter. XXX see if that can be done better: SortedSet, etc...
+     * Get all {@link MethodSkeleton}s for the provided parameter.
      * 
      * @param commandIdentifier the unique identifier of a certain command
      * @return the {@link LinkedHashSet} of {@link MethodSkeleton} for the given {@link CommandIdentifier}, or an empty

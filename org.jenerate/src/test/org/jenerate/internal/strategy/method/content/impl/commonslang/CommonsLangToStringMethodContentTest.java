@@ -1,5 +1,12 @@
 package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.Iterator;
 import java.util.Set;
 
@@ -13,13 +20,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Junit test for the {@link CommonsLangToStringMethodContent}
@@ -47,8 +47,8 @@ public class CommonsLangToStringMethodContentTest extends
         mockFieldsFinal(false);
         when(objectClass.getField(anyString())).thenReturn(cachingField);
         when(cachingField.exists()).thenReturn(false);
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.TOSTRING_CACHING_FIELD)).thenReturn(
-                TO_STRING_CACHING_FIELD);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.TOSTRING_CACHING_FIELD))
+                .thenReturn(TO_STRING_CACHING_FIELD);
         methodContent = new CommonsLangToStringMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
                 preferencesManager);
     }
@@ -67,10 +67,8 @@ public class CommonsLangToStringMethodContentTest extends
     public void testGetLibrariesToImportWithCommonsLangAndNoStyle() {
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
-        assertEquals(
-                CommonsLangMethodContentLibraries
-                        .getToStringBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG),
-                librariesToImport.iterator().next());
+        assertEquals(CommonsLangMethodContentLibraries.getToStringBuilderLibrary(
+                MethodContentStrategyIdentifier.USE_COMMONS_LANG), librariesToImport.iterator().next());
     }
 
     @Test
@@ -79,14 +77,10 @@ public class CommonsLangToStringMethodContentTest extends
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(2, librariesToImport.size());
         Iterator<String> iterator = librariesToImport.iterator();
-        assertEquals(
-                CommonsLangMethodContentLibraries
-                        .getToStringBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG),
-                iterator.next());
-        assertEquals(
-                CommonsLangMethodContentLibraries
-                        .getToStringStyleLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG),
-                iterator.next());
+        assertEquals(CommonsLangMethodContentLibraries
+                .getToStringBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG), iterator.next());
+        assertEquals(CommonsLangMethodContentLibraries
+                .getToStringStyleLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG), iterator.next());
     }
 
     @Test
@@ -95,10 +89,8 @@ public class CommonsLangToStringMethodContentTest extends
                 preferencesManager);
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
-        assertEquals(
-                CommonsLangMethodContentLibraries
-                        .getToStringBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG3),
-                librariesToImport.iterator().next());
+        assertEquals(CommonsLangMethodContentLibraries.getToStringBuilderLibrary(
+                MethodContentStrategyIdentifier.USE_COMMONS_LANG3), librariesToImport.iterator().next());
     }
 
     @Test
@@ -109,14 +101,10 @@ public class CommonsLangToStringMethodContentTest extends
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(2, librariesToImport.size());
         Iterator<String> iterator = librariesToImport.iterator();
-        assertEquals(
-                CommonsLangMethodContentLibraries
-                        .getToStringBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG3),
-                iterator.next());
-        assertEquals(
-                CommonsLangMethodContentLibraries
-                        .getToStringStyleLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG3),
-                iterator.next());
+        assertEquals(CommonsLangMethodContentLibraries
+                .getToStringBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG3), iterator.next());
+        assertEquals(CommonsLangMethodContentLibraries
+                .getToStringStyleLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG3), iterator.next());
     }
 
     @Test

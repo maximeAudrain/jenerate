@@ -1,5 +1,12 @@
 package org.jenerate.internal.strategy.method.skeleton.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.jenerate.internal.domain.data.CompareToGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
@@ -9,22 +16,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 /**
  * Unit test for {@link CompareToMethodSkeleton}
  * 
  * @author maudrain
  */
 @RunWith(MockitoJUnitRunner.class)
-public class CompareToMethodSkeletonTest extends
-        AbstractMethodSkeletonTest<CompareToMethodSkeleton, CompareToGenerationData> {
+public class CompareToMethodSkeletonTest
+        extends AbstractMethodSkeletonTest<CompareToMethodSkeleton, CompareToGenerationData> {
 
     @Mock
     private JavaInterfaceCodeAppender javaInterfaceCodeAppender;
@@ -43,11 +42,6 @@ public class CompareToMethodSkeletonTest extends
     @Override
     public CompareToGenerationData getConcreteData() {
         return mock(CompareToGenerationData.class);
-    }
-
-    @Test
-    public void testLibrariesToImport() {
-        assertTrue(methodSkeleton.getLibrariesToImport().isEmpty());
     }
 
     @Test
@@ -90,7 +84,7 @@ public class CompareToMethodSkeletonTest extends
         assertEquals("/**\n * {@inheritDoc}\n */\n" + "public int compareTo(final Object other) {\nCONTENT}\n\n",
                 method);
     }
-    
+
     @Test
     public void testGetMethodAddOverride() throws Exception {
         mockAddOverride(true);
@@ -117,14 +111,14 @@ public class CompareToMethodSkeletonTest extends
     private void mockGenerify(boolean generify) throws Exception {
         mockIsSourceLevelAbove5(generify);
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.GENERIFY_COMPARETO)).thenReturn(generify);
-        when(javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable")).thenReturn(
-                !generify);
+        when(javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable"))
+                .thenReturn(!generify);
     }
-    
+
     private void mockAddOverride(boolean addOverride) throws Exception {
         mockIsSourceLevelAbove5(addOverride);
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.ADD_OVERRIDE_ANNOTATION)).thenReturn(
-                addOverride);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.ADD_OVERRIDE_ANNOTATION))
+                .thenReturn(addOverride);
     }
 
 }

@@ -1,5 +1,7 @@
 package org.jenerate.internal.strategy.method.skeleton.impl;
 
+import static org.mockito.Mockito.when;
+
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
@@ -11,8 +13,6 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.mockito.Mockito.when;
 
 /**
  * Abstract test for {@link MethodSkeleton}
@@ -63,8 +63,8 @@ public abstract class AbstractMethodSkeletonTest<T extends MethodSkeleton<U>, U 
     }
 
     protected void mockAddOverrideAnnotation(boolean addOverride) throws Exception {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.ADD_OVERRIDE_ANNOTATION)).thenReturn(
-                addOverride);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.ADD_OVERRIDE_ANNOTATION))
+                .thenReturn(addOverride);
     }
 
     /**

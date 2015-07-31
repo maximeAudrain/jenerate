@@ -1,5 +1,7 @@
 package org.jenerate.internal.domain.preference.impl;
 
+import static org.junit.Assert.assertEquals;
+
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
@@ -9,8 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Abstract unit tests for the {@link PluginPreference}s

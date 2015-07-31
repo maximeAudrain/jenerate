@@ -1,5 +1,7 @@
 package org.jenerate.internal.strategy.method.content.impl;
 
+import java.util.LinkedHashSet;
+
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -19,6 +21,18 @@ public final class MethodContentGenerations {
 
     public MethodContentGenerations() {
         /* Only static helper methods */
+    }
+
+    /**
+     * Utility method to create a {@link LinkedHashSet} of a singleton element
+     * 
+     * @param singletonElement the singleton element to add to the hash set
+     * @return the linked hash set containing the singleton element
+     */
+    public static <T> LinkedHashSet<T> createSingletonLinkedHashSet(T singletonElement) {
+        LinkedHashSet<T> toReturn = new LinkedHashSet<>();
+        toReturn.add(singletonElement);
+        return toReturn;
     }
 
     /**
@@ -60,6 +74,7 @@ public final class MethodContentGenerations {
 
     /**
      * Creates the equals method content given a certain equals method name for delegation
+     * 
      * @param equalsMethodName the equals method name that process the equality
      * @param data the data to extract configuration from
      * @param objectClass the class where the equals method is being generated
@@ -103,6 +118,7 @@ public final class MethodContentGenerations {
 
     /**
      * Creates the hashCode method content given a certain hashCode method name for delegation
+     * 
      * @param hashCodeMethodName the hashCode method name that process the hash
      * @param data the data to extract configuration from
      * @return the hashCode method content

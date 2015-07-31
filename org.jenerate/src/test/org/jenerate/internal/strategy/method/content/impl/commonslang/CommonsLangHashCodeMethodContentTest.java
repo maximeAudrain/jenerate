@@ -1,5 +1,12 @@
 package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
@@ -15,21 +22,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 /**
  * Junit test for the {@link CommonsLangHashCodeMethodContent}
  * 
  * @author maudrain
  */
 @RunWith(MockitoJUnitRunner.class)
-public class CommonsLangHashCodeMethodContentTest
-        extends
+public class CommonsLangHashCodeMethodContentTest extends
         AbstractMethodContentTest<CommonsLangHashCodeMethodContent, HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
 
     private static final String HASH_CODE_CACHING_FIELD = "hashCode";
@@ -49,8 +48,8 @@ public class CommonsLangHashCodeMethodContentTest
         when(data.getInitMultNumbers()).thenReturn(new InitMultNumbersDefault());
         when(objectClass.getField(anyString())).thenReturn(cachingField);
         when(cachingField.exists()).thenReturn(false);
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.HASHCODE_CACHING_FIELD)).thenReturn(
-                HASH_CODE_CACHING_FIELD);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.HASHCODE_CACHING_FIELD))
+                .thenReturn(HASH_CODE_CACHING_FIELD);
         methodContent = new CommonsLangHashCodeMethodContent(MethodContentStrategyIdentifier.USE_COMMONS_LANG,
                 preferencesManager);
     }
@@ -69,10 +68,8 @@ public class CommonsLangHashCodeMethodContentTest
     public void testGetLibrariesToImportWithCommonsLang() {
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
-        assertEquals(
-                CommonsLangMethodContentLibraries
-                        .getHashCodeBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG),
-                librariesToImport.iterator().next());
+        assertEquals(CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(
+                MethodContentStrategyIdentifier.USE_COMMONS_LANG), librariesToImport.iterator().next());
     }
 
     @Test
@@ -81,10 +78,8 @@ public class CommonsLangHashCodeMethodContentTest
                 preferencesManager);
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
-        assertEquals(
-                CommonsLangMethodContentLibraries
-                        .getHashCodeBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG3),
-                librariesToImport.iterator().next());
+        assertEquals(CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(
+                MethodContentStrategyIdentifier.USE_COMMONS_LANG3), librariesToImport.iterator().next());
     }
 
     @Test

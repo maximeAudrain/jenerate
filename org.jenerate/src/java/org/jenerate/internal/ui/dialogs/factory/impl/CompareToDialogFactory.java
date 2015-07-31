@@ -61,11 +61,12 @@ public class CompareToDialogFactory extends AbstractDialogFactory<CompareToGener
     }
 
     private boolean getDisableAppendSuper(IType objectClass) throws JavaModelException {
-        return !(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable") && isCompareToImplementedInSuperclass(objectClass));
+        return !(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable")
+                && isCompareToImplementedInSuperclass(objectClass));
     }
 
     private boolean isCompareToImplementedInSuperclass(final IType objectClass) throws JavaModelException {
-        return dialogFactoryHelper
-                .isOverriddenInSuperclass(objectClass, "compareTo", new String[] { "QObject;" }, null);
+        return dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "compareTo", new String[] { "QObject;" },
+                null);
     }
 }

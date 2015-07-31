@@ -31,8 +31,7 @@ public interface MethodContent<T extends MethodSkeleton<U>, U extends MethodGene
     String getMethodContent(IType objectClass, U data) throws Exception;
 
     /**
-     * @return the ordered set of libraries to import for this {@link MethodContent}. XXX see if that can be done
-     *         better: SortedSet, etc...
+     * @return the ordered set of libraries to import for this {@link MethodContent}.
      */
     LinkedHashSet<String> getLibrariesToImport(U data);
 

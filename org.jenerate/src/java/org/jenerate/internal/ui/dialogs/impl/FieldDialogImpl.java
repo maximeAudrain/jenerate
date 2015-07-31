@@ -47,9 +47,9 @@ import org.jenerate.internal.ui.dialogs.factory.impl.DialogFactoryHelperImpl;
 import org.jenerate.internal.ui.dialogs.strategy.DialogStrategy;
 
 /**
- * A {@link Dialog} allowing configuration of the different parameters for the method generation. It contains
- * for example the different fields present in the class where code will be generated. This class contains some code
- * from org.eclipse.jdt.internal.ui.dialogs.SourceActionDialog
+ * A {@link Dialog} allowing configuration of the different parameters for the method generation. It contains for
+ * example the different fields present in the class where code will be generated. This class contains some code from
+ * org.eclipse.jdt.internal.ui.dialogs.SourceActionDialog
  * 
  * @author jiayun, maudrain
  */
@@ -124,9 +124,10 @@ public class FieldDialogImpl<U extends MethodGenerationData> extends Dialog impl
         if (possibleStrategies.contains(preferedStrategy)) {
             currentStrategy = preferedStrategy;
         } else {
-            MessageDialog.openWarning(getParentShell(), "Warning", "The prefered method content strategy '"
-                    + preferedStrategy + "' is not defined for the current method generation. "
-                    + "Setting to the first possible method content strategy.");
+            MessageDialog.openWarning(getParentShell(), "Warning",
+                    "The prefered method content strategy '" + preferedStrategy
+                            + "' is not defined for the current method generation. "
+                            + "Setting to the first possible method content strategy.");
             currentStrategy = possibleStrategies.iterator().next();
         }
         currentDialogStrategy = dialogStrategyManager.getDialogStrategy(commandIdentifier, currentStrategy);
@@ -332,8 +333,8 @@ public class FieldDialogImpl<U extends MethodGenerationData> extends Dialog impl
         label.setLayoutData(data);
 
         final Combo combo = new Combo(composite, SWT.READ_ONLY);
-        final StrategyIdentifier[] identifiers = possibleStrategies.toArray(new StrategyIdentifier[possibleStrategies
-                .size()]);
+        final StrategyIdentifier[] identifiers = possibleStrategies
+                .toArray(new StrategyIdentifier[possibleStrategies.size()]);
         String[] identifierNames = new String[identifiers.length];
         for (int i = 0; i < identifiers.length; i++) {
             identifierNames[i] = identifiers[i].toString();
@@ -478,8 +479,8 @@ public class FieldDialogImpl<U extends MethodGenerationData> extends Dialog impl
                 widgetSelected(e);
             }
         });
-        useGettersInsteadOfFields = preferencesManager.getCurrentPreferenceValue(
-                JeneratePreferences.USE_GETTERS_INSTEAD_OF_FIELDS).booleanValue();
+        useGettersInsteadOfFields = preferencesManager
+                .getCurrentPreferenceValue(JeneratePreferences.USE_GETTERS_INSTEAD_OF_FIELDS).booleanValue();
         gettersButton.setSelection(useGettersInsteadOfFields);
 
         return gettersComposite;
@@ -508,8 +509,8 @@ public class FieldDialogImpl<U extends MethodGenerationData> extends Dialog impl
                 widgetSelected(e);
             }
         });
-        useBlockInIfStatements = preferencesManager.getCurrentPreferenceValue(
-                JeneratePreferences.USE_BLOCKS_IN_IF_STATEMENTS).booleanValue();
+        useBlockInIfStatements = preferencesManager
+                .getCurrentPreferenceValue(JeneratePreferences.USE_BLOCKS_IN_IF_STATEMENTS).booleanValue();
         blocksInIfButton.setSelection(useBlockInIfStatements);
 
         return blocksInIfComposite;

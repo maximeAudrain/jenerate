@@ -1,5 +1,13 @@
 package org.jenerate.internal.generate.method.impl;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -32,14 +40,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
 /**
  * Unit tests for the {@link MethodGeneratorImpl}
  * 
@@ -57,7 +57,6 @@ public class MethodGeneratorImplTest {
     private static final String METHOD_2 = "method2";
     private static final String[] METHOD_2_ARGUMENTS = new String[0];
     private static final String METHOD2_FULL_METHOD = "method2FullMethod";
-    private static final String METHOD2_LIBRARY_1 = "method1Library1";
     private static final String METHOD2_LIBRARY_2 = "method1Library2";
     private static final String METHOD2_CONTENT = "method2Content";
 
@@ -135,7 +134,8 @@ public class MethodGeneratorImplTest {
     @Test
     public void testGenerateWithUnknownIdentifier() throws Exception {
         CommandIdentifier unknownCommandIdentifier = mock(CommandIdentifier.class);
-        LinkedHashSet<MethodSkeleton<MethodGenerationData>> methodSkeletons = mockGetMethodSkeletons(unknownCommandIdentifier);
+        LinkedHashSet<MethodSkeleton<MethodGenerationData>> methodSkeletons = mockGetMethodSkeletons(
+                unknownCommandIdentifier);
         LinkedHashSet<StrategyIdentifier> possibleStrategies = mockGetPossibleStrategies(methodSkeletons);
         mockDialog(Collections.<IMethod> emptySet(), possibleStrategies);
         mockGetMethods(methodSkeletons);
@@ -166,8 +166,8 @@ public class MethodGeneratorImplTest {
         mockDialog(Collections.<IMethod> emptySet(), possibleStrategies);
         mockGetMethods(methodSkeletons, method1);
 
-        when(objectClass.createMethod(METHOD1_FULL_METHOD, elementPosition, true, null)).thenReturn(
-                newPositionAfterMethod1);
+        when(objectClass.createMethod(METHOD1_FULL_METHOD, elementPosition, true, null))
+                .thenReturn(newPositionAfterMethod1);
         methodGenerator.generate(parentShell, objectClass, commandIdentifier);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, newPositionAfterMethod1);
         verifyNoMoreInteractions(compilationUnit);
@@ -182,11 +182,10 @@ public class MethodGeneratorImplTest {
         mockDialog(Collections.<IMethod> emptySet(), possibleStrategies);
         mockGetMethods(methodSkeletons, method2);
 
-        when(objectClass.createMethod(METHOD2_FULL_METHOD, elementPosition, true, null)).thenReturn(
-                newPositionAfterMethod2);
+        when(objectClass.createMethod(METHOD2_FULL_METHOD, elementPosition, true, null))
+                .thenReturn(newPositionAfterMethod2);
         methodGenerator.generate(parentShell, objectClass, commandIdentifier);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, newPositionAfterMethod2);
-        verify(compilationUnit, times(1)).createImport(METHOD2_LIBRARY_1, null, null);
         verify(compilationUnit, times(1)).createImport(METHOD2_LIBRARY_2, null, null);
     }
 
@@ -199,13 +198,12 @@ public class MethodGeneratorImplTest {
         mockDialog(Collections.<IMethod> emptySet(), possibleStrategies);
         mockGetMethods(methodSkeletons, method1, method2);
 
-        when(objectClass.createMethod(METHOD1_FULL_METHOD, elementPosition, true, null)).thenReturn(
-                newPositionAfterMethod1);
-        when(objectClass.createMethod(METHOD2_FULL_METHOD, newPositionAfterMethod1, true, null)).thenReturn(
-                newPositionAfterMethod2);
+        when(objectClass.createMethod(METHOD1_FULL_METHOD, elementPosition, true, null))
+                .thenReturn(newPositionAfterMethod1);
+        when(objectClass.createMethod(METHOD2_FULL_METHOD, newPositionAfterMethod1, true, null))
+                .thenReturn(newPositionAfterMethod2);
         methodGenerator.generate(parentShell, objectClass, commandIdentifier);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, newPositionAfterMethod2);
-        verify(compilationUnit, times(1)).createImport(METHOD2_LIBRARY_1, null, null);
         verify(compilationUnit, times(1)).createImport(METHOD2_LIBRARY_2, null, null);
     }
 
@@ -223,15 +221,14 @@ public class MethodGeneratorImplTest {
         excludedMethods.add(excludedMethod2);
         when(excludedMethod1.exists()).thenReturn(true);
         when(excludedMethod2.exists()).thenReturn(true);
-        when(objectClass.createMethod(METHOD1_FULL_METHOD, elementPosition, true, null)).thenReturn(
-                newPositionAfterMethod1);
-        when(objectClass.createMethod(METHOD2_FULL_METHOD, newPositionAfterMethod1, true, null)).thenReturn(
-                newPositionAfterMethod2);
-        when(dialogFactory.createDialog(parentShell, objectClass, excludedMethods, possibleStrategies)).thenReturn(
-                testDialog);
+        when(objectClass.createMethod(METHOD1_FULL_METHOD, elementPosition, true, null))
+                .thenReturn(newPositionAfterMethod1);
+        when(objectClass.createMethod(METHOD2_FULL_METHOD, newPositionAfterMethod1, true, null))
+                .thenReturn(newPositionAfterMethod2);
+        when(dialogFactory.createDialog(parentShell, objectClass, excludedMethods, possibleStrategies))
+                .thenReturn(testDialog);
         methodGenerator.generate(parentShell, objectClass, commandIdentifier);
         verify(javaUiCodeAppender, times(1)).revealInEditor(objectClass, newPositionAfterMethod2);
-        verify(compilationUnit, times(1)).createImport(METHOD2_LIBRARY_1, null, null);
         verify(compilationUnit, times(1)).createImport(METHOD2_LIBRARY_2, null, null);
         verify(excludedMethod1, times(1)).delete(true, null);
         verify(excludedMethod2, times(1)).delete(true, null);
@@ -273,8 +270,8 @@ public class MethodGeneratorImplTest {
 
     private void mockDialog(Set<IMethod> excludedMethods, LinkedHashSet<StrategyIdentifier> possibleStrategies)
             throws Exception {
-        when(dialogFactory.createDialog(parentShell, objectClass, excludedMethods, possibleStrategies)).thenReturn(
-                testDialog);
+        when(dialogFactory.createDialog(parentShell, objectClass, excludedMethods, possibleStrategies))
+                .thenReturn(testDialog);
         when(dialog.open()).thenReturn(Window.OK);
         when(testDialog.getDialog()).thenReturn(dialog);
         when(testDialog.getData()).thenReturn(data);
@@ -306,7 +303,6 @@ public class MethodGeneratorImplTest {
     private void mockMethod1() throws Exception {
         when(method1Skeleton.getMethodName()).thenReturn(METHOD_1);
         when(method1Skeleton.getMethodArguments(objectClass)).thenReturn(METHOD_1_ARGUMENTS);
-        when(method1Skeleton.getLibrariesToImport()).thenReturn(new LinkedHashSet<String>());
         when(method1Skeleton.getMethod(objectClass, data, METHOD1_CONTENT)).thenReturn(METHOD1_FULL_METHOD);
         when(method1.getMethodSkeleton()).thenReturn(method1Skeleton);
 
@@ -318,9 +314,6 @@ public class MethodGeneratorImplTest {
     private void mockMethod2() throws Exception {
         when(method2Skeleton.getMethodName()).thenReturn(METHOD_2);
         when(method2Skeleton.getMethodArguments(objectClass)).thenReturn(METHOD_2_ARGUMENTS);
-        LinkedHashSet<String> skeletonLibraries = new LinkedHashSet<String>();
-        skeletonLibraries.add(METHOD2_LIBRARY_1);
-        when(method2Skeleton.getLibrariesToImport()).thenReturn(skeletonLibraries);
         when(method2Skeleton.getMethod(objectClass, data, METHOD2_CONTENT)).thenReturn(METHOD2_FULL_METHOD);
         when(method2.getMethodSkeleton()).thenReturn(method2Skeleton);
 

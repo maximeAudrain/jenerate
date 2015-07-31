@@ -31,8 +31,8 @@ import org.jenerate.internal.ui.dialogs.factory.DialogFactory;
  * @param <T> the type of {@link MethodSkeleton} for this method generator
  * @param <V> the type of {@link MethodGenerationData} this generator handles
  */
-public final class MethodGeneratorImpl<T extends MethodSkeleton<U>, U extends MethodGenerationData> implements
-        MethodGenerator<T, U> {
+public final class MethodGeneratorImpl<T extends MethodSkeleton<U>, U extends MethodGenerationData>
+        implements MethodGenerator<T, U> {
 
     private final DialogFactory<U> dialogFactory;
     private final JavaUiCodeAppender javaUiCodeAppender;
@@ -100,10 +100,6 @@ public final class MethodGeneratorImpl<T extends MethodSkeleton<U>, U extends Me
             T methodSkeleton = method.getMethodSkeleton();
             String methodContentString = methodContent.getMethodContent(objectClass, data);
             String source = methodSkeleton.getMethod(objectClass, data, methodContentString);
-
-            for (String libraryToImport : methodSkeleton.getLibrariesToImport()) {
-                objectClass.getCompilationUnit().createImport(libraryToImport, null, null);
-            }
             for (String libraryToImport : methodContent.getLibrariesToImport(data)) {
                 objectClass.getCompilationUnit().createImport(libraryToImport, null, null);
             }

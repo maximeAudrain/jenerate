@@ -1,7 +1,5 @@
 package org.jenerate.internal.strategy.method.skeleton.impl;
 
-import java.util.LinkedHashSet;
-
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
@@ -24,14 +22,8 @@ public abstract class AbstractMethodSkeleton<T extends MethodGenerationData> imp
     }
 
     protected boolean addOverride(IType objectClass) {
-        boolean addOverridePreference = preferencesManager.getCurrentPreferenceValue(
-                JeneratePreferences.ADD_OVERRIDE_ANNOTATION).booleanValue();
+        boolean addOverridePreference = preferencesManager
+                .getCurrentPreferenceValue(JeneratePreferences.ADD_OVERRIDE_ANNOTATION).booleanValue();
         return addOverridePreference && CompilerSourceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass);
     }
-
-    @Override
-    public final LinkedHashSet<String> getLibrariesToImport() {
-        return new LinkedHashSet<String>();
-    }
-
 }

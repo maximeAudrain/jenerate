@@ -1,5 +1,9 @@
 package org.jenerate.internal.strategy.method.skeleton.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
@@ -7,19 +11,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 /**
  * Unit test for {@link HashCodeMethodSkeleton}
  * 
  * @author maudrain
  */
 @RunWith(MockitoJUnitRunner.class)
-public class HashCodeMethodSkeletonTest extends
-        AbstractMethodSkeletonTest<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
+public class HashCodeMethodSkeletonTest
+        extends AbstractMethodSkeletonTest<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
 
     @Override
     public void callbackAfterSetUp() throws Exception {
@@ -34,11 +33,6 @@ public class HashCodeMethodSkeletonTest extends
     @Override
     public EqualsHashCodeGenerationData getConcreteData() {
         return mock(EqualsHashCodeGenerationData.class);
-    }
-
-    @Test
-    public void testLibrariesToImport() {
-        assertTrue(methodSkeleton.getLibrariesToImport().isEmpty());
     }
 
     @Test
@@ -79,8 +73,8 @@ public class HashCodeMethodSkeletonTest extends
 
     private void mockSpecificManagers(boolean addOverride) throws Exception {
         mockIsSourceLevelAbove5(addOverride);
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.ADD_OVERRIDE_ANNOTATION)).thenReturn(
-                addOverride);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.ADD_OVERRIDE_ANNOTATION))
+                .thenReturn(addOverride);
     }
 
 }

@@ -34,14 +34,13 @@ public final class DialogStrategyManagerImpl implements DialogStrategyManager {
                 preferencesManager));
         dialogStrategies.add(new CommonsLangToStringDialogStrategy(MethodContentStrategyIdentifier.USE_COMMONS_LANG3,
                 preferencesManager));
-        dialogStrategies.add(new DefaultDialogStrategy<ToStringGenerationData>(
-                new ToStringGenerationDataImpl.Builder(), MethodsGenerationCommandIdentifier.TO_STRING,
-                MethodContentStrategyIdentifier.USE_GUAVA));
+        dialogStrategies.add(new DefaultDialogStrategy<ToStringGenerationData>(new ToStringGenerationDataImpl.Builder(),
+                MethodsGenerationCommandIdentifier.TO_STRING, MethodContentStrategyIdentifier.USE_GUAVA));
 
-        dialogStrategies.add(new CommonsLangEqualsHashCodeDialogStrategy(
-                MethodContentStrategyIdentifier.USE_COMMONS_LANG));
-        dialogStrategies.add(new CommonsLangEqualsHashCodeDialogStrategy(
-                MethodContentStrategyIdentifier.USE_COMMONS_LANG3));
+        dialogStrategies
+                .add(new CommonsLangEqualsHashCodeDialogStrategy(MethodContentStrategyIdentifier.USE_COMMONS_LANG));
+        dialogStrategies
+                .add(new CommonsLangEqualsHashCodeDialogStrategy(MethodContentStrategyIdentifier.USE_COMMONS_LANG3));
         dialogStrategies.add(new EqualsHashCodeDialogStrategy(MethodContentStrategyIdentifier.USE_GUAVA));
         dialogStrategies.add(new EqualsHashCodeDialogStrategy(MethodContentStrategyIdentifier.USE_JAVA));
 
@@ -51,9 +50,9 @@ public final class DialogStrategyManagerImpl implements DialogStrategyManager {
         dialogStrategies.add(new DefaultDialogStrategy<CompareToGenerationData>(
                 new CompareToGenerationDataImpl.Builder(), MethodsGenerationCommandIdentifier.COMPARE_TO,
                 MethodContentStrategyIdentifier.USE_COMMONS_LANG3));
-        dialogStrategies.add(new DefaultDialogStrategy<CompareToGenerationData>(
-                new CompareToGenerationDataImpl.Builder(), MethodsGenerationCommandIdentifier.COMPARE_TO,
-                MethodContentStrategyIdentifier.USE_GUAVA));
+        dialogStrategies
+                .add(new DefaultDialogStrategy<CompareToGenerationData>(new CompareToGenerationDataImpl.Builder(),
+                        MethodsGenerationCommandIdentifier.COMPARE_TO, MethodContentStrategyIdentifier.USE_GUAVA));
     }
 
     @SuppressWarnings("unchecked")

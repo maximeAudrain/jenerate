@@ -38,8 +38,8 @@ public final class DialogFactoryManagerImpl implements DialogFactoryManager {
     public DialogFactoryManagerImpl(PreferencesManager preferencesManager,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
         dialogStrategyManager = new DialogStrategyManagerImpl(preferencesManager);
-        dialogProviders.add(new EqualsHashCodeDialogFactory(dialogStrategyManager, dialogFactoryHelper,
-                preferencesManager));
+        dialogProviders
+                .add(new EqualsHashCodeDialogFactory(dialogStrategyManager, dialogFactoryHelper, preferencesManager));
         dialogProviders.add(new ToStringDialogFactory(dialogStrategyManager, dialogFactoryHelper, preferencesManager));
         dialogProviders.add(new CompareToDialogFactory(dialogStrategyManager, dialogFactoryHelper, preferencesManager,
                 javaInterfaceCodeAppender));
@@ -53,7 +53,7 @@ public final class DialogFactoryManagerImpl implements DialogFactoryManager {
                 return (DialogFactory<U>) dialogProvider;
             }
         }
-        throw new IllegalStateException("Unable to retrieve a DialogFactory for the given user command '"
-                + commandIdentifier + "'");
+        throw new IllegalStateException(
+                "Unable to retrieve a DialogFactory for the given user command '" + commandIdentifier + "'");
     }
 }

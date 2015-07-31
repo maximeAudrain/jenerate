@@ -16,7 +16,7 @@ public interface JavaInterfaceCodeAppender {
 
     boolean isImplementedInSupertype(final IType objectClass, final String interfaceName) throws JavaModelException;
 
-    void addSuperInterface(final IType objectClass, final String interfaceName) throws JavaModelException,
-            InvalidInputException, MalformedTreeException;
+    void addSuperInterface(final IType objectClass, final String interfaceName)
+            throws JavaModelException, InvalidInputException, MalformedTreeException;
 
 }

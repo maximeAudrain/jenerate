@@ -1,5 +1,7 @@
 package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
+import static org.mockito.Mockito.when;
+
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -15,8 +17,6 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.mockito.Mockito.when;
 
 /**
  * Abstract test for the {@link MethodContent}
@@ -88,8 +88,8 @@ public abstract class AbstractMethodContentTest<T extends MethodContent<U, V>, U
     }
 
     protected void mockAddOverrideAnnotation(boolean addOverride) throws Exception {
-        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.ADD_OVERRIDE_ANNOTATION)).thenReturn(
-                addOverride);
+        when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.ADD_OVERRIDE_ANNOTATION))
+                .thenReturn(addOverride);
     }
 
     /**

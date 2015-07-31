@@ -1,5 +1,7 @@
 package org.jenerate.internal.manage.impl;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
 import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIdentifier;
 import org.jenerate.internal.manage.PreferencesManager;
@@ -9,8 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertNotNull;
 
 /**
  * Unit tests for the {@link DialogFactoryManagerImpl}

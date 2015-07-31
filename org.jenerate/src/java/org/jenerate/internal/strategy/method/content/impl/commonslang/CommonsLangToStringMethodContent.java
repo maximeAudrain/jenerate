@@ -19,18 +19,20 @@ import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleto
  * 
  * @author maudrain
  */
-public class CommonsLangToStringMethodContent extends
-        AbstractMethodContent<ToStringMethodSkeleton, ToStringGenerationData> {
+public class CommonsLangToStringMethodContent
+        extends AbstractMethodContent<ToStringMethodSkeleton, ToStringGenerationData> {
 
-    public CommonsLangToStringMethodContent(StrategyIdentifier strategyIdentifier, PreferencesManager preferencesManager) {
-        super(strategyIdentifier, preferencesManager);
+    public CommonsLangToStringMethodContent(StrategyIdentifier strategyIdentifier,
+            PreferencesManager preferencesManager) {
+        super(ToStringMethodSkeleton.class, strategyIdentifier, preferencesManager);
     }
 
     @Override
     public String getMethodContent(IType objectClass, ToStringGenerationData data) throws JavaModelException {
-        boolean cacheProperty = preferencesManager.getCurrentPreferenceValue(JeneratePreferences.CACHE_TOSTRING)
+        boolean cacheProperty = getPreferencesManager().getCurrentPreferenceValue(JeneratePreferences.CACHE_TOSTRING)
                 .booleanValue();
-        String cachingField = preferencesManager.getCurrentPreferenceValue(JeneratePreferences.TOSTRING_CACHING_FIELD);
+        String cachingField = getPreferencesManager()
+                .getCurrentPreferenceValue(JeneratePreferences.TOSTRING_CACHING_FIELD);
         boolean isCacheable = MethodContentGenerations.createField(objectClass, data, cacheProperty, cachingField,
                 String.class);
         return createToStringMethodContent(data, isCacheable, cachingField);
@@ -47,11 +49,6 @@ public class CommonsLangToStringMethodContent extends
             linkedHashSet.add(styleLibrary);
         }
         return linkedHashSet;
-    }
-
-    @Override
-    public Class<ToStringMethodSkeleton> getRelatedMethodSkeletonClass() {
-        return ToStringMethodSkeleton.class;
     }
 
     private String createToStringMethodContent(ToStringGenerationData data, boolean isCacheable, String cachingField)

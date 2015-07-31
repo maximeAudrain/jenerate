@@ -19,18 +19,20 @@ import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleto
  * 
  * @author maudrain
  */
-public class CommonsLangHashCodeMethodContent extends
-        AbstractMethodContent<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
+public class CommonsLangHashCodeMethodContent
+        extends AbstractMethodContent<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
 
-    public CommonsLangHashCodeMethodContent(StrategyIdentifier strategyIdentifier, PreferencesManager preferencesManager) {
-        super(strategyIdentifier, preferencesManager);
+    public CommonsLangHashCodeMethodContent(StrategyIdentifier strategyIdentifier,
+            PreferencesManager preferencesManager) {
+        super(HashCodeMethodSkeleton.class, strategyIdentifier, preferencesManager);
     }
 
     @Override
     public String getMethodContent(IType objectClass, EqualsHashCodeGenerationData data) throws JavaModelException {
-        boolean cacheProperty = preferencesManager.getCurrentPreferenceValue(JeneratePreferences.CACHE_HASHCODE)
+        boolean cacheProperty = getPreferencesManager().getCurrentPreferenceValue(JeneratePreferences.CACHE_HASHCODE)
                 .booleanValue();
-        String cachingField = preferencesManager.getCurrentPreferenceValue(JeneratePreferences.HASHCODE_CACHING_FIELD);
+        String cachingField = getPreferencesManager()
+                .getCurrentPreferenceValue(JeneratePreferences.HASHCODE_CACHING_FIELD);
         boolean isCacheable = MethodContentGenerations.createField(objectClass, data, cacheProperty, cachingField,
                 int.class);
         return createHashCodeMethodContent(data, isCacheable, cachingField);
@@ -38,14 +40,8 @@ public class CommonsLangHashCodeMethodContent extends
 
     @Override
     public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
-        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
-        linkedHashSet.add(CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(getStrategyIdentifier()));
-        return linkedHashSet;
-    }
-
-    @Override
-    public Class<HashCodeMethodSkeleton> getRelatedMethodSkeletonClass() {
-        return HashCodeMethodSkeleton.class;
+        return MethodContentGenerations.createSingletonLinkedHashSet(
+                CommonsLangMethodContentLibraries.getHashCodeBuilderLibrary(getStrategyIdentifier()));
     }
 
     private String createHashCodeMethodContent(EqualsHashCodeGenerationData data, boolean isCacheable,

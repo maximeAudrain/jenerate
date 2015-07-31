@@ -10,6 +10,7 @@ import org.jenerate.internal.manage.PreferencesManager;
 import org.jenerate.internal.strategy.method.MethodGenerations;
 import org.jenerate.internal.strategy.method.content.MethodContent;
 import org.jenerate.internal.strategy.method.content.impl.AbstractMethodContent;
+import org.jenerate.internal.strategy.method.content.impl.MethodContentGenerations;
 import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkeleton;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
@@ -18,34 +19,28 @@ import org.jenerate.internal.util.JavaInterfaceCodeAppender;
  * 
  * @author maudrain
  */
-public class CommonsLangCompareToMethodContent extends
-        AbstractMethodContent<CompareToMethodSkeleton, CompareToGenerationData> {
+public class CommonsLangCompareToMethodContent
+        extends AbstractMethodContent<CompareToMethodSkeleton, CompareToGenerationData> {
 
     private final JavaInterfaceCodeAppender javaInterfaceCodeAppender;
 
     public CommonsLangCompareToMethodContent(StrategyIdentifier strategyIdentifier,
             PreferencesManager preferencesManager, JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
-        super(strategyIdentifier, preferencesManager);
+        super(CompareToMethodSkeleton.class, strategyIdentifier, preferencesManager);
         this.javaInterfaceCodeAppender = javaInterfaceCodeAppender;
     }
 
     @Override
     public String getMethodContent(IType objectClass, CompareToGenerationData data) throws Exception {
         boolean generify = MethodGenerations.generifyCompareTo(objectClass,
-                isComparableImplementedOrExtendedInSupertype(objectClass), preferencesManager);
+                isComparableImplementedOrExtendedInSupertype(objectClass), getPreferencesManager());
         return createCompareToMethodContent(data, generify, objectClass);
     }
 
     @Override
     public LinkedHashSet<String> getLibrariesToImport(CompareToGenerationData data) {
-        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
-        linkedHashSet.add(CommonsLangMethodContentLibraries.getCompareToBuilderLibrary(getStrategyIdentifier()));
-        return linkedHashSet;
-    }
-
-    @Override
-    public Class<CompareToMethodSkeleton> getRelatedMethodSkeletonClass() {
-        return CompareToMethodSkeleton.class;
+        return MethodContentGenerations.createSingletonLinkedHashSet(
+                CommonsLangMethodContentLibraries.getCompareToBuilderLibrary(getStrategyIdentifier()));
     }
 
     private boolean isComparableImplementedOrExtendedInSupertype(IType objectClass) throws Exception {

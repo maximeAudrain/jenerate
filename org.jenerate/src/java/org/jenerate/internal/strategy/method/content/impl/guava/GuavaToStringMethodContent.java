@@ -25,7 +25,7 @@ public class GuavaToStringMethodContent extends AbstractMethodContent<ToStringMe
     public static final String LIBRARY_TO_IMPORT = "com.google.common.base.MoreObjects";
 
     public GuavaToStringMethodContent(PreferencesManager preferencesManager) {
-        super(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager);
+        super(ToStringMethodSkeleton.class, MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager);
     }
 
     @Override
@@ -40,8 +40,8 @@ public class GuavaToStringMethodContent extends AbstractMethodContent<ToStringMe
             content.append(".add(\"");
             content.append(checkedField.getElementName());
             content.append("\", ");
-            content.append(MethodContentGenerations.getFieldAccessorString(checkedField,
-                    data.useGettersInsteadOfFields()));
+            content.append(
+                    MethodContentGenerations.getFieldAccessorString(checkedField, data.useGettersInsteadOfFields()));
             content.append(")");
         }
         content.append(".toString();\n");
@@ -50,14 +50,6 @@ public class GuavaToStringMethodContent extends AbstractMethodContent<ToStringMe
 
     @Override
     public LinkedHashSet<String> getLibrariesToImport(ToStringGenerationData data) {
-        LinkedHashSet<String> toReturn = new LinkedHashSet<String>();
-        toReturn.add(LIBRARY_TO_IMPORT);
-        return toReturn;
+        return MethodContentGenerations.createSingletonLinkedHashSet(LIBRARY_TO_IMPORT);
     }
-
-    @Override
-    public Class<ToStringMethodSkeleton> getRelatedMethodSkeletonClass() {
-        return ToStringMethodSkeleton.class;
-    }
-
 }

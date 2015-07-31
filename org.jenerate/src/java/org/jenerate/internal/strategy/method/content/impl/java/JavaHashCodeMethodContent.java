@@ -17,8 +17,8 @@ import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleto
  * 
  * @author maudrain
  */
-public class JavaHashCodeMethodContent extends
-        AbstractMethodContent<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
+public class JavaHashCodeMethodContent
+        extends AbstractMethodContent<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
 
     /**
      * Public for testing purpose
@@ -26,7 +26,7 @@ public class JavaHashCodeMethodContent extends
     public static final String LIBRARY_TO_IMPORT = "java.util.Objects";
 
     public JavaHashCodeMethodContent(PreferencesManager preferencesManager) {
-        super(MethodContentStrategyIdentifier.USE_JAVA, preferencesManager);
+        super(HashCodeMethodSkeleton.class, MethodContentStrategyIdentifier.USE_JAVA, preferencesManager);
     }
 
     @Override
@@ -36,14 +36,6 @@ public class JavaHashCodeMethodContent extends
 
     @Override
     public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
-        LinkedHashSet<String> toReturn = new LinkedHashSet<String>();
-        toReturn.add(LIBRARY_TO_IMPORT);
-        return toReturn;
+        return MethodContentGenerations.createSingletonLinkedHashSet(LIBRARY_TO_IMPORT);
     }
-
-    @Override
-    public Class<HashCodeMethodSkeleton> getRelatedMethodSkeletonClass() {
-        return HashCodeMethodSkeleton.class;
-    }
-
 }

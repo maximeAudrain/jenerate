@@ -25,8 +25,8 @@ public final class MethodGenerations {
      */
     public static boolean generifyCompareTo(IType objectClass, boolean implementedOrExtendedInSuperType,
             PreferencesManager preferencesManager) {
-        boolean generifyPreference = preferencesManager.getCurrentPreferenceValue(
-                JeneratePreferences.GENERIFY_COMPARETO).booleanValue();
+        boolean generifyPreference = preferencesManager
+                .getCurrentPreferenceValue(JeneratePreferences.GENERIFY_COMPARETO).booleanValue();
         return generifyPreference && CompilerSourceUtils.isSourceLevelGreaterThanOrEqualTo5(objectClass)
                 && !implementedOrExtendedInSuperType;
     }

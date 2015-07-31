@@ -1,5 +1,9 @@
 package org.jenerate.internal.strategy.method.content.impl.guava;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Set;
 
 import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
@@ -9,10 +13,6 @@ import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Junit tests for the {@link GuavaEqualsMethodContent}
@@ -53,8 +53,9 @@ public class GuavaEqualsMethodContentTest extends
     @Test
     public void testGetMethodContentDefault() throws Exception {
         String content = methodContent.getMethodContent(objectClass, data);
-        assertEquals("if ( !(other instanceof Test) ) return false;Test castOther = (Test) other;\n"
-                + "return Objects.equal(field1, castOther.field1) && Objects.equal(field2, castOther.field2);\n",
+        assertEquals(
+                "if ( !(other instanceof Test) ) return false;Test castOther = (Test) other;\n"
+                        + "return Objects.equal(field1, castOther.field1) && Objects.equal(field2, castOther.field2);\n",
                 content);
     }
 
@@ -62,9 +63,10 @@ public class GuavaEqualsMethodContentTest extends
     public void testGetMethodContentWithAppendSuper() throws Exception {
         when(data.appendSuper()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
-        assertEquals("if ( !(other instanceof Test) ) return false;"
-                + "if (!super.equals(other)) return false;Test castOther = (Test) other;\n"
-                + "return Objects.equal(field1, castOther.field1) && Objects.equal(field2, castOther.field2);\n",
+        assertEquals(
+                "if ( !(other instanceof Test) ) return false;"
+                        + "if (!super.equals(other)) return false;Test castOther = (Test) other;\n"
+                        + "return Objects.equal(field1, castOther.field1) && Objects.equal(field2, castOther.field2);\n",
                 content);
     }
 
@@ -130,9 +132,11 @@ public class GuavaEqualsMethodContentTest extends
         when(data.useClassComparison()).thenReturn(true);
         when(data.useBlockInIfStatements()).thenReturn(true);
         String content = methodContent.getMethodContent(objectClass, data);
-        assertEquals("if (other == null){\n return false;\n}\nif ( !getClass().equals(other.getClass()))"
-                + "{\n return false;\n}\nTest castOther = (Test) other;\nreturn "
-                + "Objects.equal(field1, castOther.field1) && Objects.equal(field2, castOther.field2);\n", content);
+        assertEquals(
+                "if (other == null){\n return false;\n}\nif ( !getClass().equals(other.getClass()))"
+                        + "{\n return false;\n}\nTest castOther = (Test) other;\nreturn "
+                        + "Objects.equal(field1, castOther.field1) && Objects.equal(field2, castOther.field2);\n",
+                content);
     }
 
 }

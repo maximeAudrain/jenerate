@@ -13,19 +13,23 @@ import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
  * @param <T> the type of {@link MethodSkeleton} related to this {@link MethodContent}
  * @param <U> the type of {@link MethodGenerationData} for this {@link MethodContent}
  */
-public abstract class AbstractMethodContent<T extends MethodSkeleton<U>, U extends MethodGenerationData> implements
-        MethodContent<T, U> {
+public abstract class AbstractMethodContent<T extends MethodSkeleton<U>, U extends MethodGenerationData>
+        implements MethodContent<T, U> {
 
     private final StrategyIdentifier strategyIdentifier;
-    protected final PreferencesManager preferencesManager;
+    private final PreferencesManager preferencesManager;
+    private final Class<T> relatedMethodSkeletonClass;
 
     /**
      * Constructor
      * 
+     * @param relatedMethodSkeletonClass the related {@link MethodSkeleton} class
      * @param strategyIdentifier the strategy identifier for this {@link MethodContent}
      * @param preferencesManager the preference manager
      */
-    public AbstractMethodContent(StrategyIdentifier strategyIdentifier, PreferencesManager preferencesManager) {
+    public AbstractMethodContent(Class<T> relatedMethodSkeletonClass, StrategyIdentifier strategyIdentifier,
+            PreferencesManager preferencesManager) {
+        this.relatedMethodSkeletonClass = relatedMethodSkeletonClass;
         this.strategyIdentifier = strategyIdentifier;
         this.preferencesManager = preferencesManager;
     }
@@ -33,6 +37,15 @@ public abstract class AbstractMethodContent<T extends MethodSkeleton<U>, U exten
     @Override
     public final StrategyIdentifier getStrategyIdentifier() {
         return strategyIdentifier;
+    }
+
+    @Override
+    public final Class<T> getRelatedMethodSkeletonClass() {
+        return relatedMethodSkeletonClass;
+    }
+
+    public PreferencesManager getPreferencesManager() {
+        return preferencesManager;
     }
 
 }

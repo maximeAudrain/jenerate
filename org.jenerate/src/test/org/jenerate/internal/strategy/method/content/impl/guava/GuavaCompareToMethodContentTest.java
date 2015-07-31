@@ -1,5 +1,9 @@
 package org.jenerate.internal.strategy.method.content.impl.guava;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Set;
 
 import org.jenerate.internal.domain.data.CompareToGenerationData;
@@ -10,10 +14,6 @@ import org.jenerate.internal.strategy.method.skeleton.impl.CompareToMethodSkelet
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.junit.Test;
 import org.mockito.Mock;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Junit tests for the {@link GuavaCompareToMethodContent}
@@ -81,8 +81,8 @@ public class GuavaCompareToMethodContentTest extends
     private void mockSpecificManagers(boolean generify) throws Exception {
         mockIsSourceLevelAbove5(generify);
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.GENERIFY_COMPARETO)).thenReturn(generify);
-        when(javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable")).thenReturn(
-                !generify);
+        when(javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable"))
+                .thenReturn(!generify);
     }
 
 }

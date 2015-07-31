@@ -1,7 +1,5 @@
 package org.jenerate.internal.strategy.method.skeleton;
 
-import java.util.LinkedHashSet;
-
 import org.eclipse.jdt.core.IType;
 import org.jenerate.internal.domain.data.MethodGenerationData;
 import org.jenerate.internal.domain.identifier.CommandIdentifier;
@@ -28,12 +26,6 @@ public interface MethodSkeleton<T extends MethodGenerationData> {
      * @throws Exception if a problem occurs during the code generation
      */
     String getMethod(IType objectClass, T data, String methodContent) throws Exception;
-
-    /**
-     * @return the ordered set of libraries to import for this {@link MethodSkeleton}. XXX see if that can be done
-     *         better: SortedSet, etc... XXX see if libraries for skeletons are needed.
-     */
-    LinkedHashSet<String> getLibrariesToImport();
 
     /**
      * @return the command identifier for this {@link MethodSkeleton}

@@ -1,5 +1,9 @@
 package org.jenerate.internal.strategy.method.content.impl.commonslang;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Set;
 
 import org.jenerate.internal.domain.data.CompareToGenerationData;
@@ -11,10 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Junit test for the {@link CommonsLangCompareToMethodContent}
@@ -54,10 +54,8 @@ public class CommonsLangCompareToMethodContentTest extends
     public void testGetLibrariesToImportWithCommonsLang() {
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
-        assertEquals(
-                CommonsLangMethodContentLibraries
-                        .getCompareToBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG),
-                librariesToImport.iterator().next());
+        assertEquals(CommonsLangMethodContentLibraries.getCompareToBuilderLibrary(
+                MethodContentStrategyIdentifier.USE_COMMONS_LANG), librariesToImport.iterator().next());
     }
 
     @Test
@@ -66,17 +64,17 @@ public class CommonsLangCompareToMethodContentTest extends
                 preferencesManager, javaInterfaceCodeAppender);
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
         assertEquals(1, librariesToImport.size());
-        assertEquals(
-                CommonsLangMethodContentLibraries
-                        .getCompareToBuilderLibrary(MethodContentStrategyIdentifier.USE_COMMONS_LANG3),
-                librariesToImport.iterator().next());
+        assertEquals(CommonsLangMethodContentLibraries.getCompareToBuilderLibrary(
+                MethodContentStrategyIdentifier.USE_COMMONS_LANG3), librariesToImport.iterator().next());
     }
 
     @Test
     public void testGetMethodContentDefault() throws Exception {
         String content = methodContent.getMethodContent(objectClass, data);
-        assertEquals("Test castOther = (Test) other;\nreturn new CompareToBuilder()"
-                + ".append(field1, castOther.field1).append(field2, castOther.field2).toComparison();\n", content);
+        assertEquals(
+                "Test castOther = (Test) other;\nreturn new CompareToBuilder()"
+                        + ".append(field1, castOther.field1).append(field2, castOther.field2).toComparison();\n",
+                content);
     }
 
     @Test
@@ -99,8 +97,8 @@ public class CommonsLangCompareToMethodContentTest extends
     private void mockSpecificManagers(boolean generify) throws Exception {
         mockIsSourceLevelAbove5(generify);
         when(preferencesManager.getCurrentPreferenceValue(JeneratePreferences.GENERIFY_COMPARETO)).thenReturn(generify);
-        when(javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable")).thenReturn(
-                !generify);
+        when(javaInterfaceCodeAppender.isImplementedOrExtendedInSupertype(objectClass, "Comparable"))
+                .thenReturn(!generify);
     }
 
 }

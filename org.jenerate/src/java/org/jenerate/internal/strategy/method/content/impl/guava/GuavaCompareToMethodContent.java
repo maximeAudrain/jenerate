@@ -19,8 +19,8 @@ import org.jenerate.internal.util.JavaInterfaceCodeAppender;
  * 
  * @author maudrain
  */
-public class GuavaCompareToMethodContent extends
-        AbstractMethodContent<CompareToMethodSkeleton, CompareToGenerationData> {
+public class GuavaCompareToMethodContent
+        extends AbstractMethodContent<CompareToMethodSkeleton, CompareToGenerationData> {
 
     /**
      * Public for testing purpose
@@ -31,14 +31,14 @@ public class GuavaCompareToMethodContent extends
 
     public GuavaCompareToMethodContent(PreferencesManager preferencesManager,
             JavaInterfaceCodeAppender javaInterfaceCodeAppender) {
-        super(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager);
+        super(CompareToMethodSkeleton.class, MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager);
         this.javaInterfaceCodeAppender = javaInterfaceCodeAppender;
     }
 
     @Override
     public String getMethodContent(IType objectClass, CompareToGenerationData data) throws Exception {
         boolean generify = MethodGenerations.generifyCompareTo(objectClass,
-                isComparableImplementedOrExtendedInSupertype(objectClass), preferencesManager);
+                isComparableImplementedOrExtendedInSupertype(objectClass), getPreferencesManager());
         StringBuffer content = new StringBuffer();
         String other = "other";
         if (!generify) {
@@ -69,14 +69,7 @@ public class GuavaCompareToMethodContent extends
 
     @Override
     public LinkedHashSet<String> getLibrariesToImport(CompareToGenerationData data) {
-        LinkedHashSet<String> toReturn = new LinkedHashSet<String>();
-        toReturn.add(LIBRARY_TO_IMPORT);
-        return toReturn;
-    }
-
-    @Override
-    public Class<CompareToMethodSkeleton> getRelatedMethodSkeletonClass() {
-        return CompareToMethodSkeleton.class;
+        return MethodContentGenerations.createSingletonLinkedHashSet(LIBRARY_TO_IMPORT);
     }
 
     private boolean isComparableImplementedOrExtendedInSupertype(IType objectClass) throws Exception {

@@ -16,8 +16,8 @@ import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleto
  * 
  * @author maudrain
  */
-public class GuavaHashCodeMethodContent extends
-        AbstractMethodContent<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
+public class GuavaHashCodeMethodContent
+        extends AbstractMethodContent<HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
 
     /**
      * Public for testing purpose
@@ -25,7 +25,7 @@ public class GuavaHashCodeMethodContent extends
     public static final String LIBRARY_TO_IMPORT = "com.google.common.base.Objects";
 
     public GuavaHashCodeMethodContent(PreferencesManager preferencesManager) {
-        super(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager);
+        super(HashCodeMethodSkeleton.class, MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager);
     }
 
     @Override
@@ -35,14 +35,6 @@ public class GuavaHashCodeMethodContent extends
 
     @Override
     public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
-        LinkedHashSet<String> toReturn = new LinkedHashSet<String>();
-        toReturn.add(LIBRARY_TO_IMPORT);
-        return toReturn;
+        return MethodContentGenerations.createSingletonLinkedHashSet(LIBRARY_TO_IMPORT);
     }
-
-    @Override
-    public Class<HashCodeMethodSkeleton> getRelatedMethodSkeletonClass() {
-        return HashCodeMethodSkeleton.class;
-    }
-
 }

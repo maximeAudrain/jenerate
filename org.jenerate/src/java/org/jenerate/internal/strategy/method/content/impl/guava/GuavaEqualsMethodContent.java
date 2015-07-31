@@ -25,7 +25,7 @@ public class GuavaEqualsMethodContent
     public static final String LIBRARY_TO_IMPORT = "com.google.common.base.Objects";
 
     public GuavaEqualsMethodContent(PreferencesManager preferencesManager) {
-        super(MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager);
+        super(EqualsMethodSkeleton.class, MethodContentStrategyIdentifier.USE_GUAVA, preferencesManager);
     }
 
     @Override
@@ -38,14 +38,6 @@ public class GuavaEqualsMethodContent
 
     @Override
     public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
-        LinkedHashSet<String> toReturn = new LinkedHashSet<String>();
-        toReturn.add(LIBRARY_TO_IMPORT);
-        return toReturn;
+        return MethodContentGenerations.createSingletonLinkedHashSet(LIBRARY_TO_IMPORT);
     }
-
-    @Override
-    public Class<EqualsMethodSkeleton> getRelatedMethodSkeletonClass() {
-        return EqualsMethodSkeleton.class;
-    }
-
 }

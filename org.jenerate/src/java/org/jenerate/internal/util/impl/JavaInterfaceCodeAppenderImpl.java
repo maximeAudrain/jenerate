@@ -77,8 +77,8 @@ public final class JavaInterfaceCodeAppenderImpl implements JavaInterfaceCodeApp
     }
 
     @Override
-    public void addSuperInterface(final IType objectClass, final String interfaceName) throws JavaModelException,
-            InvalidInputException, MalformedTreeException {
+    public void addSuperInterface(final IType objectClass, final String interfaceName)
+            throws JavaModelException, InvalidInputException, MalformedTreeException {
 
         if (isImplementedOrExtendedInSupertype(objectClass, interfaceName)) {
             return;

@@ -18,11 +18,12 @@ import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
  *
  * @author maudrain
  */
-public class CommonsLangEqualsMethodContent extends
-        AbstractMethodContent<EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
+public class CommonsLangEqualsMethodContent
+        extends AbstractMethodContent<EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
 
-    public CommonsLangEqualsMethodContent(StrategyIdentifier strategyIdentifier, PreferencesManager preferencesManager) {
-        super(strategyIdentifier, preferencesManager);
+    public CommonsLangEqualsMethodContent(StrategyIdentifier strategyIdentifier,
+            PreferencesManager preferencesManager) {
+        super(EqualsMethodSkeleton.class, strategyIdentifier, preferencesManager);
     }
 
     @Override
@@ -32,14 +33,8 @@ public class CommonsLangEqualsMethodContent extends
 
     @Override
     public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
-        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
-        linkedHashSet.add(CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(getStrategyIdentifier()));
-        return linkedHashSet;
-    }
-
-    @Override
-    public Class<EqualsMethodSkeleton> getRelatedMethodSkeletonClass() {
-        return EqualsMethodSkeleton.class;
+        return MethodContentGenerations.createSingletonLinkedHashSet(
+                CommonsLangMethodContentLibraries.getEqualsBuilderLibrary(getStrategyIdentifier()));
     }
 
     private String createEqualsMethodContent(EqualsHashCodeGenerationData data, IType objectClass)

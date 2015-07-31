@@ -80,7 +80,8 @@ public class MethodGeneratorHandler extends AbstractHandler {
         return null;
     }
 
-    private void generate(String commandId, ISelection iSelection, ICompilationUnit compilationUnit, Shell parentShell) {
+    private void generate(String commandId, ISelection iSelection, ICompilationUnit compilationUnit,
+            Shell parentShell) {
         IType objectClass = null;
         try {
             ITextSelection selection = (ITextSelection) iSelection;

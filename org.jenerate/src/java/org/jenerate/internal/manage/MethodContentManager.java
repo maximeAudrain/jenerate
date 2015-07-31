@@ -19,7 +19,7 @@ public interface MethodContentManager {
      * Gets all the possible {@link StrategyIdentifier}s for a provided ordered set of {@link MethodSkeleton}s. The
      * returned ordered set of {@link StrategyIdentifier}s contains the INTERSECTION of all found strategies for the
      * provided {@link MethodSkeleton}s, e.g if skeleton1 has strategy1 and skeleton2 has strategy2, the returned set
-     * will be empty. XXX see if that can be done better: SortedSet, etc...
+     * will be empty.
      * 
      * @param methodSkeletons the {@link MethodSkeleton}s
      * @return the intersection of all the strategies for the provided {@link MethodSkeleton}s
@@ -29,7 +29,7 @@ public interface MethodContentManager {
 
     /**
      * Return all fully formed {@link Method}s given their {@link MethodSkeleton}s and the identifier of a strategy for
-     * the method content. XXX see if that can be done better: SortedSet, etc...
+     * the method content.
      * 
      * @param methodSkeletons the {@link MethodSkeleton}s for which one wants the full {@link Method}s
      * @param strategyIdentifier the unique identifier of a method content strategy

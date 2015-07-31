@@ -17,8 +17,8 @@ import org.jenerate.internal.generate.method.util.JavaUiCodeAppender;
 public final class JavaUiCodeAppenderImpl implements JavaUiCodeAppender {
 
     @Override
-    public void revealInEditor(IType objectClass, IJavaElement elementToReveal) throws JavaModelException,
-            PartInitException {
+    public void revealInEditor(IType objectClass, IJavaElement elementToReveal)
+            throws JavaModelException, PartInitException {
         ICompilationUnit compilationUnit = objectClass.getCompilationUnit();
         IEditorPart javaEditor = JavaUI.openInEditor(compilationUnit);
         JavaUI.revealInEditor(javaEditor, elementToReveal);

@@ -26,8 +26,8 @@ import org.jenerate.internal.manage.PreferencesManager;
 
 /**
  * A {@link Dialog} allowing configuration of the different parameters for the method generation. It allows to
- * reorganize the fields present in the {@link FieldDialogImpl} moving them up or down. This class contains some
- * code from org.eclipse.ui.externaltools.internal.ui.BuilderPropertyPage
+ * reorganize the fields present in the {@link FieldDialogImpl} moving them up or down. This class contains some code
+ * from org.eclipse.ui.externaltools.internal.ui.BuilderPropertyPage
  * 
  * @author jiayun
  */

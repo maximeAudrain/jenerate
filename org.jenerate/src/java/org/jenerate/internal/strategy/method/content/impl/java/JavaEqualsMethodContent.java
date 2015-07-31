@@ -25,7 +25,7 @@ public class JavaEqualsMethodContent extends AbstractMethodContent<EqualsMethodS
     public static final String LIBRARY_TO_IMPORT = "java.util.Objects";
 
     public JavaEqualsMethodContent(PreferencesManager preferencesManager) {
-        super(MethodContentStrategyIdentifier.USE_JAVA, preferencesManager);
+        super(EqualsMethodSkeleton.class, MethodContentStrategyIdentifier.USE_JAVA, preferencesManager);
     }
 
     @Override
@@ -38,14 +38,6 @@ public class JavaEqualsMethodContent extends AbstractMethodContent<EqualsMethodS
 
     @Override
     public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
-        LinkedHashSet<String> toReturn = new LinkedHashSet<String>();
-        toReturn.add(LIBRARY_TO_IMPORT);
-        return toReturn;
+        return MethodContentGenerations.createSingletonLinkedHashSet(LIBRARY_TO_IMPORT);
     }
-
-    @Override
-    public Class<EqualsMethodSkeleton> getRelatedMethodSkeletonClass() {
-        return EqualsMethodSkeleton.class;
-    }
-
 }

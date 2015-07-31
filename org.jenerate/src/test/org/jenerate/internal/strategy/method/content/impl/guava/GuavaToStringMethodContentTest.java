@@ -1,5 +1,9 @@
 package org.jenerate.internal.strategy.method.content.impl.guava;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Set;
 
 import org.jenerate.internal.domain.data.ToStringGenerationData;
@@ -10,18 +14,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 /**
  * Unit tests for the {@link GuavaToStringMethodContent}
  * 
  * @author maudrain
  */
 @RunWith(MockitoJUnitRunner.class)
-public class GuavaToStringMethodContentTest extends
-        AbstractMethodContentTest<GuavaToStringMethodContent, ToStringMethodSkeleton, ToStringGenerationData> {
+public class GuavaToStringMethodContentTest
+        extends AbstractMethodContentTest<GuavaToStringMethodContent, ToStringMethodSkeleton, ToStringGenerationData> {
 
     @Override
     public ToStringGenerationData getConcreteData() {

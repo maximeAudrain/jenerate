@@ -4,12 +4,12 @@ import org.jenerate.internal.domain.data.EqualsHashCodeGenerationData;
 import org.jenerate.internal.domain.hashcode.IInitMultNumbers;
 
 /**
- * Specific implementation of the {@link EqualsHashCodeGenerationData}  
+ * Specific implementation of the {@link EqualsHashCodeGenerationData}
  * 
  * @author maudrain
  */
-public class EqualsHashCodeGenerationDataImpl extends AbstractMethodGenerationData implements
-        EqualsHashCodeGenerationData {
+public class EqualsHashCodeGenerationDataImpl extends AbstractMethodGenerationData
+        implements EqualsHashCodeGenerationData {
 
     private final boolean compareReferences;
     private final IInitMultNumbers initMultNumbers;
