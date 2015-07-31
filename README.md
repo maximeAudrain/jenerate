@@ -26,6 +26,7 @@ You can install the Jenerate plugin via the [Eclipse Marketplace](http://marketp
 ```
 http://maximeaudrain.github.io/update/
 ```
+You can access previous versions of the plugin at ```http://maximeaudrain.github.io/update/X.X.X```  where X.X.X is the version you want to retrieve 
 
 ## <a name="Changelog"/>Changelog
 
