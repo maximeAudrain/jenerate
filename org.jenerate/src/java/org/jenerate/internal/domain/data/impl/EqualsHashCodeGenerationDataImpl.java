@@ -14,12 +14,14 @@ public class EqualsHashCodeGenerationDataImpl extends AbstractMethodGenerationDa
     private final boolean compareReferences;
     private final IInitMultNumbers initMultNumbers;
     private final boolean classComparison;
+    private final boolean classCast;
 
     private EqualsHashCodeGenerationDataImpl(Builder builder) {
         super(builder);
         this.compareReferences = builder.builderCompareReferences;
         this.classComparison = builder.builderClassComparison;
         this.initMultNumbers = builder.builderInitMultNumbers;
+        this.classCast = builder.builderClassCast;
     }
 
     @Override
@@ -37,11 +39,17 @@ public class EqualsHashCodeGenerationDataImpl extends AbstractMethodGenerationDa
         return classComparison;
     }
 
+    @Override
+    public boolean useClassCast() {
+        return classCast;
+    }
+
     public static class Builder extends AbstractMethodGenerationData.Builder<Builder> {
 
         private boolean builderCompareReferences;
         private IInitMultNumbers builderInitMultNumbers;
         private boolean builderClassComparison;
+        private boolean builderClassCast;
 
         @Override
         public Builder getThis() {
@@ -60,6 +68,11 @@ public class EqualsHashCodeGenerationDataImpl extends AbstractMethodGenerationDa
 
         public Builder withClassComparison(boolean classComparison) {
             this.builderClassComparison = classComparison;
+            return getThis();
+        }
+
+        public Builder withClassCast(boolean classCast) {
+            this.builderClassCast = classCast;
             return getThis();
         }
 

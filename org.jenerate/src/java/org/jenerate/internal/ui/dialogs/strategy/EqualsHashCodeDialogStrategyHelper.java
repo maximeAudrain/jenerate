@@ -27,12 +27,14 @@ public final class EqualsHashCodeDialogStrategyHelper {
     public static final String EQUALS_SETTINGS_SECTION = "EqualsDialog";
     private static final String SETTINGS_COMPARE_REFERENCES = "CompareReferences";
     private static final String SETTINGS_CLASS_COMPARISON = "ClassComparison";
+    private static final String SETTINGS_CLASS_CAST = "ClassCast";
 
     private IDialogSettings equalsDialogSettings;
 
     private boolean compareReferences;
     private boolean classComparison;
     private Group equalsGroup;
+    private boolean classCast;
 
     public void configureSpecificDialogSettings(IDialogSettings dialogSettings) {
         IDialogSettings equalsSettings = dialogSettings.getSection(EQUALS_SETTINGS_SECTION);
@@ -43,11 +45,13 @@ public final class EqualsHashCodeDialogStrategyHelper {
 
         compareReferences = equalsSettings.getBoolean(SETTINGS_COMPARE_REFERENCES);
         classComparison = equalsSettings.getBoolean(SETTINGS_CLASS_COMPARISON);
+        classCast = equalsSettings.getBoolean(SETTINGS_CLASS_CAST);
     }
 
     public void callbackBeforeDialogClosing() {
         equalsDialogSettings.put(SETTINGS_COMPARE_REFERENCES, compareReferences);
         equalsDialogSettings.put(SETTINGS_CLASS_COMPARISON, classComparison);
+        equalsDialogSettings.put(SETTINGS_CLASS_CAST, classCast);
     }
 
     public void createSpecificComponents(FieldDialog<EqualsHashCodeGenerationData> fieldDialog) {
@@ -74,7 +78,8 @@ public final class EqualsHashCodeDialogStrategyHelper {
                 .withUseBlockInIfStatements(methodGenerationData.useBlockInIfStatements())
                 .withUseGettersInsteadOfFields(methodGenerationData.useGettersInsteadOfFields())
                 .withCompareReferences(compareReferences)
-                .withClassComparison(classComparison);
+                .withClassComparison(classComparison)
+                .withClassCast(classCast);
         //@formatter:on
     }
 
@@ -88,6 +93,7 @@ public final class EqualsHashCodeDialogStrategyHelper {
 
         createAndAddCompareReferencesButton(equalsGroup);
         createAndAddClassComparisonButton(equalsGroup);
+        createAndAddClassCastButton(equalsGroup);
 
         return editableComposite;
     }
@@ -130,5 +136,25 @@ public final class EqualsHashCodeDialogStrategyHelper {
             }
         });
         comparisonButton.setSelection(classComparison);
+    }
+
+    private void createAndAddClassCastButton(Group group) {
+        Button comparisonButton = new Button(group, SWT.CHECK);
+        comparisonButton.setText("Use Class#cast(Object) and Class#isInstance(Object) instead of native cast and instanceOf");
+        comparisonButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+
+        comparisonButton.addSelectionListener(new SelectionListener() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                classCast = (((Button) e.widget).getSelection());
+            }
+
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e) {
+                widgetSelected(e);
+            }
+        });
+        comparisonButton.setSelection(classCast);
     }
 }

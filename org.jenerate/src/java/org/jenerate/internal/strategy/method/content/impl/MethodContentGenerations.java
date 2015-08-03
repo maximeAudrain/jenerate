@@ -61,6 +61,14 @@ public final class MethodContentGenerations {
             content.append(useBlockInIfStatements ? "{\n" : "");
             content.append(" return false;");
             content.append(useBlockInIfStatements ? "\n}\n" : "");
+        } else if (data.useClassCast()) {
+            content.append("if ( !");
+            content.append(objectClass.getElementName());
+            content.append(".class.isInstance(other)");
+            content.append(")");
+            content.append(useBlockInIfStatements ? "{\n" : "");
+            content.append(" return false;");
+            content.append(useBlockInIfStatements ? "\n}\n" : "");
         } else {
             content.append("if ( !(other instanceof ");
             content.append(objectClass.getElementName());
@@ -92,10 +100,17 @@ public final class MethodContentGenerations {
             content.append(" return false;");
             content.append(useBlockInIfStatements ? "\n}\n" : "");
         }
-        content.append(elementName);
-        content.append(" castOther = (");
-        content.append(elementName);
-        content.append(") other;\n");
+        if (data.useClassCast()) {
+            content.append(elementName);
+            content.append(" castOther = ");
+            content.append(elementName);
+            content.append(".class.cast(other);\n");
+        } else {
+            content.append(elementName);
+            content.append(" castOther = (");
+            content.append(elementName);
+            content.append(") other;\n");
+        }
         content.append("return ");
         String prefix = "";
         IField[] checkedFields = data.getCheckedFields();
