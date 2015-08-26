@@ -22,6 +22,12 @@ public interface EqualsHashCodeGenerationData extends MethodGenerationData {
     boolean useClassComparison();
 
     /**
+     * @return {@code true} if {@link Class#cast(Object)} and {@link Class#isInstance(Object)} should be used for the equals method generation,
+     *         {@code false} otherwise.
+     */
+    boolean useClassCast();
+
+    /**
      * @return the odd numbers to be used for the hashCode generation
      */
     IInitMultNumbers getInitMultNumbers();

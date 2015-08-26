@@ -139,4 +139,24 @@ public class JavaEqualsMethodContentTest
                 content);
     }
 
+    @Test
+    public void testGetMethodContentWithClassCast() throws Exception {
+        when(data.useClassCast()).thenReturn(true);
+        String content = methodContent.getMethodContent(objectClass, data);
+        assertEquals("if ( !Test.class.isInstance(other)) return false;"
+                + "Test castOther = Test.class.cast(other);\nreturn Objects.equals(field1, castOther.field1) && "
+                + "Objects.equals(field2, castOther.field2);\n", content);
+    }
+
+    @Test
+    public void testGetMethodContentWithClassCastAndUseBlocksInIfStatements() throws Exception {
+        when(data.useClassCast()).thenReturn(true);
+        when(data.useBlockInIfStatements()).thenReturn(true);
+        String content = methodContent.getMethodContent(objectClass, data);
+        assertEquals(
+                "if ( !Test.class.isInstance(other))"
+                        + "{\n return false;\n}\nTest castOther = Test.class.cast(other);\nreturn "
+                        + "Objects.equals(field1, castOther.field1) && Objects.equals(field2, castOther.field2);\n",
+                content);
+    }
 }
