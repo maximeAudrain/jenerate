@@ -26,13 +26,34 @@ eclipse {
   }
 }
 
+boolean nodeExists(node, name, attributes){
+    for(child in node.children()){
+		def sameName = name.equals(child.name())
+		def sameAttributes = attributes.equals(child.attributes())
+		if(sameName && sameAttributes){
+			return true
+		}
+	}
+	return false
+}
+
+def addNodeIfNecessary(node, name, attributes){
+	if(!nodeExists(node, name, attributes)){
+		node.appendNode(name, attributes)
+	}
+}
+
 eclipse {
     classpath {
+    	//Remove the container since it is added twice
+   		containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
         file {
             withXml {
-                def node = it.asNode()
-                node.appendNode('classpathentry', [kind: 'con', path: 'org.eclipse.pde.core.requiredPlugins', exported: true])
+				addNodeIfNecessary(it.asNode(), 'classpathentry', [kind: 'con', path: 'org.eclipse.pde.core.requiredPlugins', exported: true])
             }
         }
     }
 }
+
+
+
