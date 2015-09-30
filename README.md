@@ -30,6 +30,9 @@ You can access previous versions of the plugin at ```http://maximeaudrain.github
 
 ## <a name="Changelog"/>Changelog
 
+Version 1.0.2:
+- Support for Class#cast(Object) and Class#isInstance(Object) for equals() and hashCode() generation. (Contribution by Martin Filser)
+
 Version 1.0.1:
 - Added generation strategies for hashCode() and equals() using the internal java.util.Objects class.
 - Allow use of two new ToString styles provided with the version 3.4 of Apache Commons lang.
