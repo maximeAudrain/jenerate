@@ -13,9 +13,9 @@ import org.jenerate.internal.domain.identifier.CommandIdentifier;
  */
 public enum MethodsGenerationCommandIdentifier implements CommandIdentifier {
 
-    EQUALS_HASH_CODE("org.jenerate.lang.actions.GenerateEqualsHashCodeAction"),
-    TO_STRING("org.jenerate.lang.actions.GenerateToStringAction"),
-    COMPARE_TO("org.jenerate.lang.actions.GenerateCompareToAction");
+    EQUALS_HASH_CODE("org.jenerate.commands.GenerateEqualsHashCodeCommand"),
+    TO_STRING("org.jenerate.commands.GenerateToStringCommand"),
+    COMPARE_TO("org.jenerate.commands.GenerateCompareToCommand");
 
     private static final Map<String, MethodsGenerationCommandIdentifier> IDENTIFIERS = new HashMap<String, MethodsGenerationCommandIdentifier>();
 

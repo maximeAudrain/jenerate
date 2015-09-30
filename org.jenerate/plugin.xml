@@ -4,19 +4,19 @@
    <extension point="org.eclipse.ui.commands">
 		<command
         categoryId="org.eclipse.jdt.ui.category.source"
-        id="org.jenerate.lang.actions.GenerateEqualsHashCodeAction"
+        id="org.jenerate.commands.GenerateEqualsHashCodeCommand"
         name="Generate Equals and HashCode..."/>
 		<command
         categoryId="org.eclipse.jdt.ui.category.source"
-        id="org.jenerate.lang.actions.GenerateToStringAction"
+        id="org.jenerate.commands.GenerateToStringCommand"
         name="Generate ToString Method..."/>
 		<command
         categoryId="org.eclipse.jdt.ui.category.source"
-        id="org.jenerate.lang.actions.GenerateCompareToAction"
+        id="org.jenerate.commands.GenerateCompareToCommand"
         name="Generate CompareTo Method..."/>
   <command
         categoryId="org.eclipse.jdt.ui.category.source"
-        id="org.jenerate.lang.actions.JenerateLangMenu"
+        id="org.jenerate.commands.JenerateMenu"
         name="Jenerate">
   </command>
    </extension>
@@ -34,24 +34,24 @@
    </extension>
 	<extension point="org.eclipse.ui.bindings">
 		<key
-        commandId="org.jenerate.lang.actions.GenerateEqualsHashCodeAction"
+        commandId="org.jenerate.commands.GenerateEqualsHashCodeCommand"
         contextId="org.eclipse.jdt.ui.javaEditorScope"
         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
         sequence="Alt+Shift+G H"/>
   <key
-        commandId="org.jenerate.lang.actions.GenerateToStringAction"
+        commandId="org.jenerate.commands.GenerateToStringCommand"
         contextId="org.eclipse.jdt.ui.javaEditorScope"
         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
         sequence="Alt+Shift+G S">
   </key>
   <key
-        commandId="org.jenerate.lang.actions.GenerateCompareToAction"
+        commandId="org.jenerate.commands.GenerateCompareToCommand"
         contextId="org.eclipse.jdt.ui.javaEditorScope"
         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
         sequence="Alt+Shift+G C">
   </key>
   <key
-        commandId="org.jenerate.lang.actions.JenerateMenu"
+        commandId="org.jenerate.commands.JenerateMenu"
         contextId="org.eclipse.jdt.ui.javaEditorScope"
         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
         sequence="Alt+Shift+G">
@@ -61,7 +61,7 @@
        point="org.eclipse.ui.handlers">
     <handler
           class="org.jenerate.internal.generate.method.handler.MethodGeneratorHandler"
-          commandId="org.jenerate.lang.actions.GenerateEqualsHashCodeAction">
+          commandId="org.jenerate.commands.GenerateEqualsHashCodeCommand">
        <activeWhen>
           <reference
                 definitionId="org.jenerate.lang.contribution.inEditor">
@@ -69,7 +69,7 @@
     </handler>
     <handler
           class="org.jenerate.internal.generate.method.handler.MethodGeneratorHandler"
-          commandId="org.jenerate.lang.actions.GenerateToStringAction">
+          commandId="org.jenerate.commands.GenerateToStringCommand">
        <activeWhen>
           <reference
                 definitionId="org.jenerate.lang.contribution.inEditor">
@@ -78,7 +78,7 @@
     </handler>
     <handler
           class="org.jenerate.internal.generate.method.handler.MethodGeneratorHandler"
-          commandId="org.jenerate.lang.actions.GenerateCompareToAction">
+          commandId="org.jenerate.commands.GenerateCompareToCommand">
        <activeWhen>
           <reference
                 definitionId="org.jenerate.lang.contribution.inEditor">
@@ -92,21 +92,21 @@
           allPopups="false"
           locationURI="popup:org.eclipse.ui.popup.any?before=additions">
        <menu
-             commandId="org.jenerate.lang.actions.JenerateMenu"
+             commandId="org.jenerate.commands.JenerateMenu"
              id="jenerateMenu"
              label="Jenerate">
           <command
-                commandId="org.jenerate.lang.actions.GenerateEqualsHashCodeAction"
+                commandId="org.jenerate.commands.GenerateEqualsHashCodeCommand"
                 label="Generate Equals and HashCode..."
                 style="push">
           </command>
           <command
-                commandId="org.jenerate.lang.actions.GenerateToStringAction"
+                commandId="org.jenerate.commands.GenerateToStringCommand"
                 label="Generate ToString Method..."
                 style="push">
           </command>
           <command
-                commandId="org.jenerate.lang.actions.GenerateCompareToAction"
+                commandId="org.jenerate.commands.GenerateCompareToCommand"
                 label="Generate CompareTo Method..."
                 style="push">
           </command>
