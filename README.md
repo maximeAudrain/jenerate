@@ -52,5 +52,5 @@ Any contributions are welcome!
 
 The plugin is currently built using Gradle.
 
-Please read the eclipse-config.txt in org.jenerate/setup folder : this is the current configuration I use for eclipse, so if you apply the same configuration, you should be able to commit without changes in terms of formatting/warnings/etc...
+Please read the eclipse-config.txt in org.jenerate/setup folder : this is the current configuration I use for eclipse, so if you apply the same configuration, you should be able to commit without changes in terms of formatting.
 
