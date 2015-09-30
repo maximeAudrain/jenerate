@@ -1,0 +1,11 @@
+Add code-style-formatter to Java > Code style > formatter
+Add editor-templates to Java > editor > templates
+Configure eclipse warnings/errors using the PNGs in the compiler folder
+Download gradle 
+Add plugin "gradle integration for eclipse" to eclipse
+Configure the gradle plugin to link to the gradle executables
+Retrieve jenerate sources with git clone
+Right click on the org.jenerate java project and configure it to be a gradle project
+On the gradle tasks view, build org.jenerate java project with the "eclipse" command
+Run the org.jenerate project tests to verify everything is ok!
+If you encounter a problem running the rcp app and it freezes, add the following to the run config of eclipse : -XX:MaxPermSize=128M
