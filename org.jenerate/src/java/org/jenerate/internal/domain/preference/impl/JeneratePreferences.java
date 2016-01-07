@@ -46,7 +46,7 @@ public final class JeneratePreferences {
             "useGettersInsteadOfFields", "&Use getters instead of fields (for Hibernate)", Boolean.FALSE);
 
     public static final PluginPreference<Boolean> USE_BLOCKS_IN_IF_STATEMENTS = new BooleanPluginPreference(
-            "useBlocksInIfStatements", "&Use blocks in 'if' statments", Boolean.TRUE);
+            "useBlocksInIfStatements", "&Use blocks in 'if' statements", Boolean.TRUE);
 
     /**
      * @return all preferences of the Jenerate plugin. The ordering of the preferences is important because for example
