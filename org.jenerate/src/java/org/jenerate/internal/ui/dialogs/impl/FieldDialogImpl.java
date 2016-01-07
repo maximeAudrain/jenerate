@@ -494,7 +494,7 @@ public class FieldDialogImpl<U extends MethodGenerationData> extends Dialog impl
         blocksInIfComposite.setLayout(layout);
 
         Button blocksInIfButton = new Button(blocksInIfComposite, SWT.CHECK);
-        blocksInIfButton.setText("&Use blocks in 'if' statments");
+        blocksInIfButton.setText("&Use blocks in 'if' statements");
         blocksInIfButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
         blocksInIfButton.addSelectionListener(new SelectionListener() {
