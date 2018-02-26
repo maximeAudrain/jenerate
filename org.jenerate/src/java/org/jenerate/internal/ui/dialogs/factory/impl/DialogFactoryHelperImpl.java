@@ -25,7 +25,7 @@ import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
 
 /**
  * Default implementation of the {@link DialogFactoryHelper}. XXX test me
- * 
+ *
  * @author maudrain
  */
 public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
@@ -55,8 +55,8 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
                 return false;
             }
 
-            IMethod method = superclass.getMethod(methodName, methodParameterTypeSignatures);
-            if (method.exists()) {
+            IMethod method = findMethodInTypeWithSignature(superclass, methodName, methodParameterTypeSignatures);
+            if (method != null) {
                 return !Flags.isAbstract(method.getFlags());
             }
         }
@@ -64,11 +64,56 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
         return false;
     }
 
+    private IMethod findMethodInTypeWithSignature(IType superclass, String methodName, String[] methodParameterTypeSignatures) {
+        IMethod[] methods;
+        try {
+            methods = superclass.getMethods();
+        } catch (JavaModelException e) {
+            return null;
+        }
+        for (int i = 0; i < methods.length; ++i) {
+            IMethod method = methods[i];
+            if (doesMethodNameMatch(method, methodName) && doesSignatureMatch(method, methodParameterTypeSignatures)) {
+                return method;
+            }
+        }
+        return null;
+    }
+
+    private boolean doesSignatureMatch(IMethod method, String[] methodParameterTypeSignatures) {
+        String[] parameters = method.getParameterTypes();
+        if (parameters.length != methodParameterTypeSignatures.length) {
+            return false;
+        }
+        for (int i = 0; i < parameters.length; ++i) {
+            if (!doesSignatureMatch(parameters[i], methodParameterTypeSignatures[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean doesSignatureMatch(String signature, String fqn) {
+        String name = Signature.toString(signature);
+        boolean fullyQualifiedNameMatch = name.equals(fqn);
+        return fullyQualifiedNameMatch || simpleNameMatch(signature, fqn);
+    }
+
+    private boolean simpleNameMatch(String signature, String fqn) {
+        String[] parts = fqn.split("\\.");
+        return signature.equals(parts[parts.length - 1]);
+    }
+
+    private boolean doesMethodNameMatch(IMethod method, String methodName) {
+        return method.getElementName().equals(methodName);
+    }
+
     @Override
     public IField[] getObjectClassFields(IType objectClass, PreferencesManager preferencesManager)
             throws JavaModelException {
         boolean displayFieldsOfSuperClasses = preferencesManager
-                .getCurrentPreferenceValue(JeneratePreferences.DISPLAY_FIELDS_OF_SUPERCLASSES).booleanValue();
+                .getCurrentPreferenceValue(JeneratePreferences.DISPLAY_FIELDS_OF_SUPERCLASSES)
+                .booleanValue();
         if (displayFieldsOfSuperClasses) {
             return getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
                     preferencesManager);
@@ -106,7 +151,8 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
         for (int i = 0; i < superclasses.length; i++) {
             IField[] fields = superclasses[i].getFields();
 
-            boolean samePackage = objectClass.getPackageFragment().getElementName()
+            boolean samePackage = objectClass.getPackageFragment()
+                    .getElementName()
                     .equals(superclasses[i].getPackageFragment().getElementName());
 
             for (int j = 0; j < fields.length; j++) {

@@ -23,14 +23,14 @@ import org.jenerate.internal.ui.dialogs.impl.FieldDialogImpl;
 
 /**
  * {@link DialogFactory} implementation for the {@link EqualsHashCodeDialog}
- * 
+ *
  * @author maudrain
  */
 public class EqualsHashCodeDialogFactory extends AbstractDialogFactory<EqualsHashCodeGenerationData> {
 
     /**
      * Constructor
-     * 
+     *
      * @param dialogFactoryHelper the dialog factory helper
      * @param preferencesManager the preference manager
      */
@@ -78,7 +78,7 @@ public class EqualsHashCodeDialogFactory extends AbstractDialogFactory<EqualsHas
     }
 
     private boolean isEqualsOverriddenInSuperclass(final IType objectClass) throws JavaModelException {
-        return dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "equals", new String[] { "QObject;" },
+        return dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "equals", new String[] { "java.lang.Object" },
                 "java.lang.Object");
     }
 }
