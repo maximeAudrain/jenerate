@@ -16,7 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * Unit tests for the {@link DialogFactoryHelperImpl}
- *
+ * 
  * @author maudrain
  */
 @RunWith(MockitoJUnitRunner.class)
@@ -39,7 +39,7 @@ public class DialogFactoryHelperOverridenInSuperclassMethodTest {
     @Mock
     private IMethod method2;
     @Mock
-    private TypeMethodFinder typeMethodFinder;
+    private MethodFinder methodFinder;
 
     private DialogFactoryHelperImpl dialogFactoryHelper;
 
@@ -47,7 +47,7 @@ public class DialogFactoryHelperOverridenInSuperclassMethodTest {
     public void setUp() {
         mockSuperClass1();
         mockSuperClass2();
-        dialogFactoryHelper = new DialogFactoryHelperImpl(typeMethodFinder);
+        dialogFactoryHelper = new DialogFactoryHelperImpl(methodFinder);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class DialogFactoryHelperOverridenInSuperclassMethodTest {
     @Test
     public void testOneSuperClassMethodDoesNotExist() throws JavaModelException {
         mockObjectClass(superclass1);
-        mockTypeMethodFinder(superclass1, null);
+        mockReturnMethodForType(superclass1, null);
         assertFalse(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, METHOD_1_NAME, new String[] { PARAMETER },
                 null));
     }
@@ -76,7 +76,7 @@ public class DialogFactoryHelperOverridenInSuperclassMethodTest {
     public void testOneSuperClassAbstractMethodExist() throws JavaModelException {
         mockMethod(method1, true);
         mockObjectClass(superclass1);
-        mockTypeMethodFinder(superclass1, method1);
+        mockReturnMethodForType(superclass1, method1);
         assertFalse(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, METHOD_1_NAME, new String[] { PARAMETER },
                 null));
     }
@@ -85,7 +85,7 @@ public class DialogFactoryHelperOverridenInSuperclassMethodTest {
     public void testOneSuperClassMethodExist() throws JavaModelException {
         mockMethod(method1, false);
         mockObjectClass(superclass1);
-        mockTypeMethodFinder(superclass1, method1);
+        mockReturnMethodForType(superclass1, method1);
         assertTrue(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, METHOD_1_NAME, new String[] { PARAMETER },
                 null));
     }
@@ -95,8 +95,8 @@ public class DialogFactoryHelperOverridenInSuperclassMethodTest {
         mockMethod(method1, true);
         mockMethod(method2, false);
         mockObjectClass(superclass1, superclass2);
-        mockTypeMethodFinder(superclass1, method1);
-        mockTypeMethodFinder(superclass2, method2);
+        mockReturnMethodForType(superclass1, method1);
+        mockReturnMethodForType(superclass2, method2);
         assertFalse(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, METHOD_1_NAME, new String[] { PARAMETER },
                 null));
     }
@@ -106,8 +106,8 @@ public class DialogFactoryHelperOverridenInSuperclassMethodTest {
         mockMethod(method1, false);
         mockMethod(method2, false);
         mockObjectClass(superclass1, superclass2);
-        mockTypeMethodFinder(superclass1, null);
-        mockTypeMethodFinder(superclass2, null);
+        mockReturnMethodForType(superclass1, null);
+        mockReturnMethodForType(superclass2, null);
         assertFalse(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, METHOD_1_NAME, new String[] { PARAMETER },
                 null));
     }
@@ -131,8 +131,9 @@ public class DialogFactoryHelperOverridenInSuperclassMethodTest {
         when(method.getFlags()).thenReturn(isAbstract ? 0x400 : 0);
     }
 
-    private void mockTypeMethodFinder(IType superclass12, IMethod object) {
-        when(typeMethodFinder.findMethodWithNameAndParameters(superclass12, METHOD_1_NAME, new String[] { PARAMETER })).thenReturn(object);
+    private void mockReturnMethodForType(IType type, IMethod method) {
+        when(methodFinder.findMethodWithNameAndParameters(type, METHOD_1_NAME, new String[] { PARAMETER }))
+                .thenReturn(method);
     }
 
 }

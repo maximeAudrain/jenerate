@@ -87,7 +87,7 @@ public class EqualsHashCodeDialogFactoryTest extends AbstractDialogFactoryTest {
     }
 
     private void mockDisableAppendSuper(boolean isDisableAppendSuper) throws JavaModelException {
-        when(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "equals", new String[] { "QObject;" },
+        when(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "equals", new String[] { "java.lang.Object" },
                 "java.lang.Object")).thenReturn(!isDisableAppendSuper);
         when(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "hashCode", new String[0], "java.lang.Object"))
                 .thenReturn(!isDisableAppendSuper);

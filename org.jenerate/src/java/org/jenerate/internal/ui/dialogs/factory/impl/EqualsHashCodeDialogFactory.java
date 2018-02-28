@@ -30,7 +30,7 @@ public class EqualsHashCodeDialogFactory extends AbstractDialogFactory<EqualsHas
 
     /**
      * Constructor
-     *
+     * 
      * @param dialogFactoryHelper the dialog factory helper
      * @param preferencesManager the preference manager
      */

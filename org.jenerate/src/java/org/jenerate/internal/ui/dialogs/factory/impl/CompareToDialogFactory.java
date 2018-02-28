@@ -23,7 +23,7 @@ import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 /**
  * {@link DialogFactory} implementation for the {@link CompareToDialog}
- *
+ * 
  * @author maudrain
  */
 public class CompareToDialogFactory extends AbstractDialogFactory<CompareToGenerationData> {
@@ -32,7 +32,7 @@ public class CompareToDialogFactory extends AbstractDialogFactory<CompareToGener
 
     /**
      * Constructor
-     *
+     * 
      * @param dialogFactoryHelper the dialog factory helper
      * @param preferencesManager the preference manager
      * @param javaInterfaceCodeAppender the java interface code appender
@@ -66,7 +66,7 @@ public class CompareToDialogFactory extends AbstractDialogFactory<CompareToGener
     }
 
     private boolean isCompareToImplementedInSuperclass(final IType objectClass) throws JavaModelException {
-        return dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "compareTo", new String[] { "java.lang.Object" },
-                null);
+        return dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "compareTo",
+                new String[] { "java.lang.Object" }, null);
     }
 }

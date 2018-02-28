@@ -25,11 +25,11 @@ import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
 
 /**
  * Default implementation of the {@link DialogFactoryHelper}. XXX test me
- *
+ * 
  * @author maudrain
  */
 public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
-    private TypeMethodFinder typeMethodFinder;
+    private MethodFinder methodFinder;
     /**
      * First method insertion position label
      */
@@ -40,8 +40,8 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
      */
     public static final String LAST_METHOD_POSITION = "Last method";
 
-    public DialogFactoryHelperImpl(TypeMethodFinder typeMethodFinder) {
-        this.typeMethodFinder = typeMethodFinder;
+    public DialogFactoryHelperImpl(MethodFinder methodFinder) {
+        this.methodFinder = methodFinder;
     }
 
     @Override
@@ -59,7 +59,8 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
                 return false;
             }
 
-            IMethod method = typeMethodFinder.findMethodWithNameAndParameters(superclass, methodName, methodParameterTypeSignatures);
+            IMethod method = methodFinder.findMethodWithNameAndParameters(superclass, methodName,
+                    methodParameterTypeSignatures);
             if (method != null) {
                 return !Flags.isAbstract(method.getFlags());
             }
@@ -72,8 +73,7 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
     public IField[] getObjectClassFields(IType objectClass, PreferencesManager preferencesManager)
             throws JavaModelException {
         boolean displayFieldsOfSuperClasses = preferencesManager
-                .getCurrentPreferenceValue(JeneratePreferences.DISPLAY_FIELDS_OF_SUPERCLASSES)
-                .booleanValue();
+                .getCurrentPreferenceValue(JeneratePreferences.DISPLAY_FIELDS_OF_SUPERCLASSES).booleanValue();
         if (displayFieldsOfSuperClasses) {
             return getNonStaticNonCacheFieldsAndAccessibleNonStaticFieldsOfSuperclasses(objectClass,
                     preferencesManager);
@@ -111,8 +111,7 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
         for (int i = 0; i < superclasses.length; i++) {
             IField[] fields = superclasses[i].getFields();
 
-            boolean samePackage = objectClass.getPackageFragment()
-                    .getElementName()
+            boolean samePackage = objectClass.getPackageFragment().getElementName()
                     .equals(superclasses[i].getPackageFragment().getElementName());
 
             for (int j = 0; j < fields.length; j++) {

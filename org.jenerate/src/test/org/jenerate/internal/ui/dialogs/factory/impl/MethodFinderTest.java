@@ -19,7 +19,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @author helospark
  */
 @RunWith(MockitoJUnitRunner.class)
-public class TypeMethodFinderTest {
+public class MethodFinderTest {
     private IMethod nonResolvedSignature;
     private IMethod nonResolvedFullyQualifiedSignature;
     private IMethod resolvedSignature;

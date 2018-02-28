@@ -14,7 +14,7 @@ import org.jenerate.internal.ui.dialogs.factory.impl.CompareToDialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.impl.DialogFactoryHelperImpl;
 import org.jenerate.internal.ui.dialogs.factory.impl.EqualsHashCodeDialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.impl.ToStringDialogFactory;
-import org.jenerate.internal.ui.dialogs.factory.impl.TypeMethodFinder;
+import org.jenerate.internal.ui.dialogs.factory.impl.MethodFinder;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 /**
@@ -24,7 +24,7 @@ import org.jenerate.internal.util.JavaInterfaceCodeAppender;
  */
 public final class DialogFactoryManagerImpl implements DialogFactoryManager {
 
-    private final DialogFactoryHelper dialogFactoryHelper = new DialogFactoryHelperImpl(new TypeMethodFinder());
+    private final DialogFactoryHelper dialogFactoryHelper = new DialogFactoryHelperImpl(new MethodFinder());
 
     private final DialogStrategyManager dialogStrategyManager;
 
@@ -32,7 +32,7 @@ public final class DialogFactoryManagerImpl implements DialogFactoryManager {
 
     /**
      * Caches all the different dialog factories
-     *
+     * 
      * @param preferencesManager the preference manager
      * @param javaInterfaceCodeAppender the java interface code appender
      */
