@@ -33,25 +33,23 @@ public class MethodFinderTest {
     @Before
     public void setUp() throws JavaModelException {
         nonResolvedSignature = createMockMethod("nonResolvedSignature", new String[] { "QObject;" });
-        nonResolvedFullyQualifiedSignature = createMockMethod("nonResolvedFullyQualifiedSignature", new String[] { "Qjava.lang.Object;" });
+        nonResolvedFullyQualifiedSignature = createMockMethod("nonResolvedFullyQualifiedSignature",
+                new String[] { "Qjava.lang.Object;" });
         resolvedSignature = createMockMethod("resolvedSignature", new String[] { "Ljava.lang.Object;" });
 
         overloadedWithObject = createMockMethod("overloaded", new String[] { "Ljava.lang.Object;" });
         overloadedWithString = createMockMethod("overloaded", new String[] { "Ljava.lang.String;" });
 
-        when(type.getMethods()).thenReturn(new IMethod[] {
-                nonResolvedSignature,
-                nonResolvedFullyQualifiedSignature,
-                resolvedSignature,
-                overloadedWithObject,
-                overloadedWithString });
+        when(type.getMethods()).thenReturn(new IMethod[] { nonResolvedSignature, nonResolvedFullyQualifiedSignature,
+                resolvedSignature, overloadedWithObject, overloadedWithString });
 
         methodFinder = new MethodFinder();
     }
 
     @Test
     public void testFindMethodWithNameAndParametersWithNonResolvedSignature() {
-        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "nonResolvedSignature", new String[] { "java.lang.Object" });
+        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "nonResolvedSignature",
+                new String[] { "java.lang.Object" });
 
         assertEquals(result, nonResolvedSignature);
     }
@@ -59,28 +57,32 @@ public class MethodFinderTest {
     @Test
     public void testFindMethodWithNameAndParametersWithNonResolvedFullyQualifiedSignature() {
 
-        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "nonResolvedFullyQualifiedSignature", new String[] { "java.lang.Object" });
+        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "nonResolvedFullyQualifiedSignature",
+                new String[] { "java.lang.Object" });
 
         assertEquals(result, nonResolvedFullyQualifiedSignature);
     }
 
     @Test
     public void testFindMethodWithNameAndParametersWithResolvedSignature() {
-        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "resolvedSignature", new String[] { "java.lang.Object" });
+        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "resolvedSignature",
+                new String[] { "java.lang.Object" });
 
         assertEquals(result, resolvedSignature);
     }
 
     @Test
     public void testFindMethodWithNameAndParametersWithOverloadedObject() {
-        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "overloaded", new String[] { "java.lang.Object" });
+        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "overloaded",
+                new String[] { "java.lang.Object" });
 
         assertEquals(result, overloadedWithObject);
     }
 
     @Test
     public void testFindMethodWithNameAndParametersWithOverloadedString() {
-        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "overloaded", new String[] { "java.lang.String" });
+        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "overloaded",
+                new String[] { "java.lang.String" });
 
         assertEquals(result, overloadedWithString);
     }
@@ -95,7 +97,8 @@ public class MethodFinderTest {
     @Test
     public void testFindMethodWithNameWhenParameterWhenParameterTypesDoNotMatch() {
 
-        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "resolvedSignature", new String[] { "java.lang.String" });
+        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "resolvedSignature",
+                new String[] { "java.lang.String" });
 
         assertEquals(result, null);
     }
@@ -105,7 +108,8 @@ public class MethodFinderTest {
         JavaModelException exception = mock(JavaModelException.class);
         when(type.getMethods()).thenThrow(exception);
 
-        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "resolvedSignature", new String[] { "java.lang.String" });
+        IMethod result = methodFinder.findMethodWithNameAndParameters(type, "resolvedSignature",
+                new String[] { "java.lang.String" });
 
         assertEquals(result, null);
     }
