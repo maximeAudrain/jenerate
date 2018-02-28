@@ -29,7 +29,7 @@ import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
  * @author maudrain
  */
 public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
-
+    private TypeMethodFinder typeMethodFinder;
     /**
      * First method insertion position label
      */
@@ -39,6 +39,10 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
      * Last method insertion position label
      */
     public static final String LAST_METHOD_POSITION = "Last method";
+
+    public DialogFactoryHelperImpl(TypeMethodFinder typeMethodFinder) {
+        this.typeMethodFinder = typeMethodFinder;
+    }
 
     @Override
     public boolean isOverriddenInSuperclass(IType objectClass, String methodName,
@@ -55,57 +59,13 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
                 return false;
             }
 
-            IMethod method = findMethodInTypeWithSignature(superclass, methodName, methodParameterTypeSignatures);
+            IMethod method = typeMethodFinder.findMethodWithNameAndParameters(superclass, methodName, methodParameterTypeSignatures);
             if (method != null) {
                 return !Flags.isAbstract(method.getFlags());
             }
         }
 
         return false;
-    }
-
-    private IMethod findMethodInTypeWithSignature(IType superclass, String methodName, String[] methodParameterTypeSignatures) {
-        IMethod[] methods;
-        try {
-            methods = superclass.getMethods();
-        } catch (JavaModelException e) {
-            return null;
-        }
-        for (int i = 0; i < methods.length; ++i) {
-            IMethod method = methods[i];
-            if (doesMethodNameMatch(method, methodName) && doesSignatureMatch(method, methodParameterTypeSignatures)) {
-                return method;
-            }
-        }
-        return null;
-    }
-
-    private boolean doesSignatureMatch(IMethod method, String[] methodParameterTypeSignatures) {
-        String[] parameters = method.getParameterTypes();
-        if (parameters.length != methodParameterTypeSignatures.length) {
-            return false;
-        }
-        for (int i = 0; i < parameters.length; ++i) {
-            if (!doesSignatureMatch(parameters[i], methodParameterTypeSignatures[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean doesSignatureMatch(String signature, String fqn) {
-        String name = Signature.toString(signature);
-        boolean fullyQualifiedNameMatch = name.equals(fqn);
-        return fullyQualifiedNameMatch || simpleNameMatch(signature, fqn);
-    }
-
-    private boolean simpleNameMatch(String signature, String fqn) {
-        String[] parts = fqn.split("\\.");
-        return signature.equals(parts[parts.length - 1]);
-    }
-
-    private boolean doesMethodNameMatch(IMethod method, String methodName) {
-        return method.getElementName().equals(methodName);
     }
 
     @Override
