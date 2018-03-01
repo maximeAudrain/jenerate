@@ -19,17 +19,17 @@ import org.jenerate.internal.manage.PreferencesManager;
 public interface DialogFactoryHelper {
 
     /**
-     * Check if the method specified with methodName and methodParameterTypeSignatures parameters is overridden and
-     * concrete in a subclass of the original declared class, and that subclass is a superclass of objectClass.
+     * Check if the method specified with methodName and methodParameterType parameters is overridden and concrete in a
+     * subclass of the original declared class, and that subclass is a superclass of objectClass.
      * 
      * @param objectClass the class for which the code generation is in effect
      * @param methodName the name of the method to check
-     * @param methodParameterTypeSignatures the parameters of the method to check
+     * @param methodParameterTypes the fully qualified type parameters of the method to check
      * @param originalClassFullyQualifiedName the name of the original class where the method is implemented
-     * @return {@code true} if the method is overriden in the superclass, {@code false} otherwise
+     * @return {@code true} if the method is overridden in the superclass, {@code false} otherwise
      * @throws JavaModelException if a problem occurs
      */
-    boolean isOverriddenInSuperclass(IType objectClass, String methodName, String[] methodParameterTypeSignatures,
+    boolean isOverriddenInSuperclass(IType objectClass, String methodName, String[] methodParameterTypes,
             String originalClassFullyQualifiedName) throws JavaModelException;
 
     /**

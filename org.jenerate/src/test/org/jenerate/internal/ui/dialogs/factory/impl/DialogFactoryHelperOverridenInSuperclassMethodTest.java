@@ -131,7 +131,7 @@ public class DialogFactoryHelperOverridenInSuperclassMethodTest {
         when(method.getFlags()).thenReturn(isAbstract ? 0x400 : 0);
     }
 
-    private void mockReturnMethodForType(IType type, IMethod method) {
+    private void mockReturnMethodForType(IType type, IMethod method) throws JavaModelException {
         when(methodFinder.findMethodWithNameAndParameters(type, METHOD_1_NAME, new String[] { PARAMETER }))
                 .thenReturn(method);
     }

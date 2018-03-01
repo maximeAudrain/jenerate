@@ -20,13 +20,10 @@ public class MethodFinder {
      * @param methodParameters list of parameters, all parameters should be given using fully qualified name
      * @return found method, or null if it does not exist
      */
-    public IMethod findMethodWithNameAndParameters(IType type, String methodName, String[] methodParameters) {
+    public IMethod findMethodWithNameAndParameters(IType type, String methodName, String[] methodParameters)
+            throws JavaModelException {
         IMethod[] methods;
-        try {
-            methods = type.getMethods();
-        } catch (JavaModelException e) {
-            return null;
-        }
+        methods = type.getMethods();
         for (int i = 0; i < methods.length; ++i) {
             IMethod method = methods[i];
             if (doesMethodNameMatch(method, methodName) && doesMethodParametersMatch(method, methodParameters)) {
