@@ -45,8 +45,8 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
     }
 
     @Override
-    public boolean isOverriddenInSuperclass(IType objectClass, String methodName,
-            String[] methodParameterTypeSignatures, String originalClassFullyQualifiedName) throws JavaModelException {
+    public boolean isOverriddenInSuperclass(IType objectClass, String methodName, String[] methodParameterTypes,
+            String originalClassFullyQualifiedName) throws JavaModelException {
         ITypeHierarchy typeHierarchy = objectClass.newSupertypeHierarchy(null);
         IType[] superclasses = typeHierarchy.getAllSuperclasses(objectClass);
 
@@ -59,8 +59,7 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
                 return false;
             }
 
-            IMethod method = methodFinder.findMethodWithNameAndParameters(superclass, methodName,
-                    methodParameterTypeSignatures);
+            IMethod method = methodFinder.findMethodWithNameAndParameters(superclass, methodName, methodParameterTypes);
             if (method != null) {
                 return !Flags.isAbstract(method.getFlags());
             }

@@ -24,7 +24,7 @@ public interface DialogFactoryHelper {
      * 
      * @param objectClass the class for which the code generation is in effect
      * @param methodName the name of the method to check
-     * @param methodParameterTypes the fully qualified type parameters of the method to check
+     * @param methodParameterTypes the fully qualified typenames of the method parameters to check
      * @param originalClassFullyQualifiedName the name of the original class where the method is implemented
      * @return {@code true} if the method is overridden in the superclass, {@code false} otherwise
      * @throws JavaModelException if a problem occurs

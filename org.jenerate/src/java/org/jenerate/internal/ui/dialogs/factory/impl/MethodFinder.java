@@ -6,27 +6,28 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
 /**
- * Finds a method based on it's signature.
+ * Finds a method based on name and parameters.
  * 
  * @author helospark
  */
 public class MethodFinder {
+    private static final String FULLY_QUALIFIED_NAME_SEPARATOR_PATTERN = "\\.";
+    private static final String FULLY_QUALIFIED_NAME_SEPARATOR = ".";
 
     /**
      * Find a method in the given type using name and parameters.
      * 
      * @param type to find the method in
      * @param methodName name of the method
-     * @param methodParameters list of parameters, all parameters should be given using fully qualified name
+     * @param methodParameterTypes list of parameters, all parameters should be given using fully qualified name
      * @return found method, or null if it does not exist
      */
-    public IMethod findMethodWithNameAndParameters(IType type, String methodName, String[] methodParameters)
+    public IMethod findMethodWithNameAndParameters(IType type, String methodName, String[] methodParameterTypes)
             throws JavaModelException {
-        IMethod[] methods;
-        methods = type.getMethods();
+        IMethod[] methods = type.getMethods();
         for (int i = 0; i < methods.length; ++i) {
             IMethod method = methods[i];
-            if (doesMethodNameMatch(method, methodName) && doesMethodParametersMatch(method, methodParameters)) {
+            if (doesMethodNameMatch(method, methodName) && doesMethodParametersMatch(method, methodParameterTypes)) {
                 return method;
             }
         }
@@ -37,31 +38,38 @@ public class MethodFinder {
         return method.getElementName().equals(methodName);
     }
 
-    private boolean doesMethodParametersMatch(IMethod method, String[] expectedMethodParameters) {
+    private boolean doesMethodParametersMatch(IMethod method, String[] expectedMethodParameterTypes) {
         String[] actualMethodParameters = method.getParameterTypes();
-        if (actualMethodParameters.length != expectedMethodParameters.length) {
+        if (actualMethodParameters.length != expectedMethodParameterTypes.length) {
             return false;
         }
         for (int i = 0; i < actualMethodParameters.length; ++i) {
-            if (!doesParameterMatch(actualMethodParameters[i], expectedMethodParameters[i])) {
+            if (!doesParameterMatch(actualMethodParameters[i], expectedMethodParameterTypes[i])) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean doesParameterMatch(String signature, String fqn) {
-        String parameterType = Signature.toString(signature);
-        return fullyQualifiedNameMatch(parameterType, fqn) || simpleNameMatch(parameterType, fqn);
+    private boolean doesParameterMatch(String signature, String methodTypeFullyQualifiedName) {
+        String actualParameterType = Signature.toString(signature);
+        return isTypeFullyQualified(actualParameterType)
+                ? fullyQualifiedTypeNameMatch(actualParameterType, methodTypeFullyQualifiedName)
+                : simpleTypeNameMatch(actualParameterType, methodTypeFullyQualifiedName);
     }
 
-    private boolean fullyQualifiedNameMatch(String name, String fqn) {
-        return name.equals(fqn);
+    private boolean isTypeFullyQualified(String parameterType) {
+        return parameterType.contains(FULLY_QUALIFIED_NAME_SEPARATOR);
     }
 
-    private boolean simpleNameMatch(String signature, String fqn) {
-        String[] parts = fqn.split("\\.");
-        return signature.equals(parts[parts.length - 1]);
+    private boolean fullyQualifiedTypeNameMatch(String actualTypeName, String expectedTypeName) {
+        return actualTypeName.equals(expectedTypeName);
+    }
+
+    private boolean simpleTypeNameMatch(String actualSimpleTypeName, String expectedFullyQualifiedTypeName) {
+        String[] parts = expectedFullyQualifiedTypeName.split(FULLY_QUALIFIED_NAME_SEPARATOR_PATTERN);
+        String expectedSimpleTypeName = parts[parts.length - 1];
+        return actualSimpleTypeName.equals(expectedSimpleTypeName);
     }
 
 }

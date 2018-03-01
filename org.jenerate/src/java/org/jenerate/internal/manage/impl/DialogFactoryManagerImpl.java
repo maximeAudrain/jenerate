@@ -13,13 +13,13 @@ import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
 import org.jenerate.internal.ui.dialogs.factory.impl.CompareToDialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.impl.DialogFactoryHelperImpl;
 import org.jenerate.internal.ui.dialogs.factory.impl.EqualsHashCodeDialogFactory;
-import org.jenerate.internal.ui.dialogs.factory.impl.ToStringDialogFactory;
 import org.jenerate.internal.ui.dialogs.factory.impl.MethodFinder;
+import org.jenerate.internal.ui.dialogs.factory.impl.ToStringDialogFactory;
 import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 
 /**
  * Default implementation of the {@link DialogFactoryManager}.
- *
+ * 
  * @author maudrain
  */
 public final class DialogFactoryManagerImpl implements DialogFactoryManager {
