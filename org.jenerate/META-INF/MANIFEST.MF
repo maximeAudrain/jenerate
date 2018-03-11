@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-Name: Jenerate
 Bundle-SymbolicName: org.jenerate;singleton=true
-Bundle-Version: 1.0.2
+Bundle-Version: 1.0.3
 Bundle-ClassPath: jenerate.jar
 Bundle-Activator: org.jenerate.JeneratePlugin
 Bundle-Vendor: Maxime Audrain
