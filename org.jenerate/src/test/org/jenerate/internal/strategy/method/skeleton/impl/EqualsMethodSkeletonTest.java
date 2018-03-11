@@ -9,14 +9,14 @@ import org.jenerate.internal.domain.identifier.impl.MethodsGenerationCommandIden
 import org.jenerate.internal.domain.preference.impl.JeneratePreferences;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Unit test for {@link EqualsMethodSkeleton}
  * 
  * @author maudrain
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class EqualsMethodSkeletonTest
         extends AbstractMethodSkeletonTest<EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
 

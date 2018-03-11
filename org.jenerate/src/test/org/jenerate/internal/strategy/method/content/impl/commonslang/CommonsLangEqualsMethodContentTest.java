@@ -11,14 +11,14 @@ import org.jenerate.internal.domain.identifier.impl.MethodContentStrategyIdentif
 import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Junit test for the {@link CommonsLangEqualsMethodContent}
  *
  * @author maudrain
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class CommonsLangEqualsMethodContentTest extends
         AbstractMethodContentTest<CommonsLangEqualsMethodContent, EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
 

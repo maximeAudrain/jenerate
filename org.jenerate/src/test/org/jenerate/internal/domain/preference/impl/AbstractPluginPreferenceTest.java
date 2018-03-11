@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Abstract unit tests for the {@link PluginPreference}s
@@ -18,7 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @author maudrain
  * @param <T> the type handled by the preference
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public abstract class AbstractPluginPreferenceTest<T> {
 
     protected static final String KEY = "KEY";

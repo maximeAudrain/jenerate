@@ -37,7 +37,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -45,7 +45,7 @@ import org.mockito.stubbing.Answer;
  * 
  * @author maudrain
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class MethodGeneratorImplTest {
 
     private static final String METHOD_1_ARGUMENT = "argument1";
@@ -282,7 +282,7 @@ public class MethodGeneratorImplTest {
 
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
-                return invocation.getArgumentAt(1, String.class);
+                return (String) invocation.getArgument(1);
             }
         });
     }

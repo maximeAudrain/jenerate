@@ -12,7 +12,7 @@ import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Abstract test for {@link MethodSkeleton}
@@ -21,7 +21,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @param <T> the type of {@link MethodSkeleton} under test
  * @param <U> the type of {@link MethodGenerationData} attached to this {@link MethodSkeleton}
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public abstract class AbstractMethodSkeletonTest<T extends MethodSkeleton<U>, U extends MethodGenerationData> {
 
     protected static final String METHOD_CONTENT = "CONTENT";

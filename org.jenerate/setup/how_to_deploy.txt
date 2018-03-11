@@ -1,0 +1,10 @@
+How to deploy!!
+- Increment versions of Jenerate plugin, feature and site
+- Opening the feature, click the little "export as a deployable feature" button
+- Choose a directory and finish
+- Clone the github.io project on eclipse (import as general project)
+- Add the previous main in "update" to a new folder corresponding to the version
+- Add the new main to the root of "update"
+- Edit the github.io index.html and the main github page, reflecting the changes
+- commit and verify that it works like a charm
+- Do not forget to update the eclipse market place
