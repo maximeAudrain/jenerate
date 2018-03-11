@@ -30,8 +30,11 @@ You can access previous versions of the plugin at ```http://maximeaudrain.github
 
 ## <a name="Changelog"/>Changelog
 
+Version 1.0.3:
+- Fixed a bug where the "Append super" option is disabled if the superclass is included a jar file (Contribution by [Helospark](https://github.com/helospark))
+
 Version 1.0.2:
-- Support for Class#cast(Object) and Class#isInstance(Object) for equals() and hashCode() generation. (Contribution by Martin Filser)
+- Support for Class#cast(Object) and Class#isInstance(Object) for equals() and hashCode() generation. (Contribution by [Martin Filser](https://github.com/mfilser))
 
 Version 1.0.1:
 - Added generation strategies for hashCode() and equals() using the internal java.util.Objects class.
