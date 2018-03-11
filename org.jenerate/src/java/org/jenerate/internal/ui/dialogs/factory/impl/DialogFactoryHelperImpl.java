@@ -29,7 +29,7 @@ import org.jenerate.internal.ui.dialogs.factory.DialogFactoryHelper;
  * @author maudrain
  */
 public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
-
+    private MethodFinder methodFinder;
     /**
      * First method insertion position label
      */
@@ -40,9 +40,13 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
      */
     public static final String LAST_METHOD_POSITION = "Last method";
 
+    public DialogFactoryHelperImpl(MethodFinder methodFinder) {
+        this.methodFinder = methodFinder;
+    }
+
     @Override
-    public boolean isOverriddenInSuperclass(IType objectClass, String methodName,
-            String[] methodParameterTypeSignatures, String originalClassFullyQualifiedName) throws JavaModelException {
+    public boolean isOverriddenInSuperclass(IType objectClass, String methodName, String[] methodParameterTypes,
+            String originalClassFullyQualifiedName) throws JavaModelException {
         ITypeHierarchy typeHierarchy = objectClass.newSupertypeHierarchy(null);
         IType[] superclasses = typeHierarchy.getAllSuperclasses(objectClass);
 
@@ -55,8 +59,8 @@ public final class DialogFactoryHelperImpl implements DialogFactoryHelper {
                 return false;
             }
 
-            IMethod method = superclass.getMethod(methodName, methodParameterTypeSignatures);
-            if (method.exists()) {
+            IMethod method = methodFinder.findMethodWithNameAndParameters(superclass, methodName, methodParameterTypes);
+            if (method != null) {
                 return !Flags.isAbstract(method.getFlags());
             }
         }

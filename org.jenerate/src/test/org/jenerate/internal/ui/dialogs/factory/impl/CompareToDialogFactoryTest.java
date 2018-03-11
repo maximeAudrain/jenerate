@@ -68,8 +68,8 @@ public class CompareToDialogFactoryTest extends AbstractDialogFactoryTest {
     }
 
     private void mockDisableAppendSuper(boolean isDisableAppendSuper) throws JavaModelException {
-        when(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "compareTo", new String[] { "QObject;" }, null))
-                .thenReturn(!isDisableAppendSuper);
+        when(dialogFactoryHelper.isOverriddenInSuperclass(objectClass, "compareTo", new String[] { "java.lang.Object" },
+                null)).thenReturn(!isDisableAppendSuper);
         when(javaInterfaceCodeAppender.isImplementedInSupertype(objectClass, "Comparable"))
                 .thenReturn(!isDisableAppendSuper);
     }
