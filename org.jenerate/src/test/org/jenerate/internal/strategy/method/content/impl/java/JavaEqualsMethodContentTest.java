@@ -12,14 +12,14 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.AbstractMe
 import org.jenerate.internal.strategy.method.skeleton.impl.EqualsMethodSkeleton;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Junit tests for the {@link JavaEqualsMethodContent}
  * 
  * @author maudrain
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class JavaEqualsMethodContentTest
         extends AbstractMethodContentTest<JavaEqualsMethodContent, EqualsMethodSkeleton, EqualsHashCodeGenerationData> {
 

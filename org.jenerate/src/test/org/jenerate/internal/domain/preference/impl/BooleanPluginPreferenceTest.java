@@ -10,14 +10,14 @@ import org.eclipse.swt.widgets.Display;
 import org.jenerate.internal.domain.preference.PluginPreference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Unit tests for the {@link BooleanPluginPreference}
  * 
  * @author maudrain
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class BooleanPluginPreferenceTest extends AbstractPluginPreferenceTest<Boolean> {
 
     private static final Boolean DEFAULT_VALUE = Boolean.TRUE;

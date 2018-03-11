@@ -14,14 +14,14 @@ import org.jenerate.internal.util.JavaInterfaceCodeAppender;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Junit test for the {@link CommonsLangCompareToMethodContent}
  * 
  * @author maudrain
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class CommonsLangCompareToMethodContentTest extends
         AbstractMethodContentTest<CommonsLangCompareToMethodContent, CompareToMethodSkeleton, CompareToGenerationData> {
 

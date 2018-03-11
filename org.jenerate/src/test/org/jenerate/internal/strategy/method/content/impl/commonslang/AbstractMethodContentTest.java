@@ -16,7 +16,7 @@ import org.jenerate.internal.strategy.method.skeleton.MethodSkeleton;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Abstract test for the {@link MethodContent}
@@ -26,7 +26,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @param <U> the type of {@link MethodSkeleton} related to the {@link MethodContent}
  * @param <V> the type of data for this {@link MethodContent}
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public abstract class AbstractMethodContentTest<T extends MethodContent<U, V>, U extends MethodSkeleton<V>, V extends MethodGenerationData> {
 
     protected static final String TEST_ELEMENT_NAME = "Test";

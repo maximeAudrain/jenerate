@@ -19,14 +19,14 @@ import org.jenerate.internal.strategy.method.skeleton.impl.ToStringMethodSkeleto
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Junit test for the {@link CommonsLangToStringMethodContent}
  * 
  * @author maudrain
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class CommonsLangToStringMethodContentTest extends
         AbstractMethodContentTest<CommonsLangToStringMethodContent, ToStringMethodSkeleton, ToStringGenerationData> {
 

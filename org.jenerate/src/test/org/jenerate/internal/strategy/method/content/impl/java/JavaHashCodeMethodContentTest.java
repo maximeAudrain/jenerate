@@ -12,14 +12,14 @@ import org.jenerate.internal.strategy.method.content.impl.commonslang.AbstractMe
 import org.jenerate.internal.strategy.method.skeleton.impl.HashCodeMethodSkeleton;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Unit tests for the {@link JavaHashCodeMethodContent}
  * 
  * @author maudrain
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class JavaHashCodeMethodContentTest extends
         AbstractMethodContentTest<JavaHashCodeMethodContent, HashCodeMethodSkeleton, EqualsHashCodeGenerationData> {
 
