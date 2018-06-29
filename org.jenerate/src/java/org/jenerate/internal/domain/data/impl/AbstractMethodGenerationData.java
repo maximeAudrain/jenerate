@@ -20,6 +20,8 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
     private final boolean generateComment;
     private final boolean useGettersInsteadOfFields;
     private final boolean useBlockInIfStatements;
+    private final boolean useSimplePrimitiveComparison;
+    private final boolean useDeepArrayComparison;
 
     protected AbstractMethodGenerationData(@SuppressWarnings("rawtypes") Builder builder) {
         this.checkedFields = builder.builderCheckedFields;
@@ -29,6 +31,8 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
         this.generateComment = builder.builderGenerateComment;
         this.useGettersInsteadOfFields = builder.builderUseGettersInsteadOfFields;
         this.useBlockInIfStatements = builder.builderUseBlockInIfStatements;
+        this.useSimplePrimitiveComparison = builder.useSimplePrimitiveComparison;
+        this.useDeepArrayComparison = builder.useDeepArrayComparison;
     }
 
     @Override
@@ -65,6 +69,17 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
     public boolean useBlockInIfStatements() {
         return useBlockInIfStatements;
     }
+    
+    @Override
+    public boolean useSimplePrimitiveComparison() {
+        return useSimplePrimitiveComparison;
+    }
+
+    @Override
+    public boolean useDeepArrayComparison() {
+        return useDeepArrayComparison;
+    }
+
 
     public abstract static class Builder<T extends Builder<T>> {
 
@@ -75,6 +90,8 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
         private boolean builderGenerateComment;
         private boolean builderUseGettersInsteadOfFields;
         private boolean builderUseBlockInIfStatements;
+        private boolean useSimplePrimitiveComparison;
+        private boolean useDeepArrayComparison;
 
         public T withCheckedFields(IField[] checkedFields) {
             this.builderCheckedFields = checkedFields;
@@ -108,6 +125,16 @@ public abstract class AbstractMethodGenerationData implements MethodGenerationDa
 
         public T withUseBlockInIfStatements(boolean useBlockInIfStatements) {
             this.builderUseBlockInIfStatements = useBlockInIfStatements;
+            return getThis();
+        }
+        
+        public T withUseSimplePrimitiveComparison(boolean useSimplePrimitiveComparison) {
+            this.useSimplePrimitiveComparison = useSimplePrimitiveComparison;
+            return getThis();
+        }
+        
+        public T withUseDeepArrayComparison(boolean useDeepArrayComparison) {
+            this.useDeepArrayComparison = useDeepArrayComparison;
             return getThis();
         }
 

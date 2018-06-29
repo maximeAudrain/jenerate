@@ -48,6 +48,12 @@ public final class JeneratePreferences {
     public static final PluginPreference<Boolean> USE_BLOCKS_IN_IF_STATEMENTS = new BooleanPluginPreference(
             "useBlocksInIfStatements", "&Use blocks in 'if' statements", Boolean.TRUE);
 
+    public static final PluginPreference<Boolean> USE_SIMPLE_PRIMITIVE_COMPARISON = new BooleanPluginPreference(
+            "useSimplePrimitiveComparison", "Compare &primitive types using '=='", Boolean.TRUE);
+
+    public static final PluginPreference<Boolean> USE_DEEP_ARRAY_COMPARISON = new BooleanPluginPreference(
+            "useDeepArrayComparison", "Compare &arrays using Arrays.equals", Boolean.FALSE);
+
     /**
      * @return all preferences of the Jenerate plugin. The ordering of the preferences is important because for example
      *         the preference page uses it to generate the preferences fields.
@@ -64,6 +70,8 @@ public final class JeneratePreferences {
         allPreferences.add(DISPLAY_FIELDS_OF_SUPERCLASSES);
         allPreferences.add(USE_GETTERS_INSTEAD_OF_FIELDS);
         allPreferences.add(USE_BLOCKS_IN_IF_STATEMENTS);
+        allPreferences.add(USE_SIMPLE_PRIMITIVE_COMPARISON);
+        allPreferences.add(USE_DEEP_ARRAY_COMPARISON);
         return allPreferences;
     }
 }

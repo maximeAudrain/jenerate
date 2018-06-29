@@ -64,6 +64,9 @@ public final class DefaultDialogStrategy<U extends MethodGenerationData> impleme
                 .withAppendSuper(methodGenerationData.appendSuper())
                 .withGenerateComment(methodGenerationData.generateComment())
                 .withUseBlockInIfStatements(methodGenerationData.useBlockInIfStatements())
-                .withUseGettersInsteadOfFields(methodGenerationData.useGettersInsteadOfFields()).build();
+                .withUseGettersInsteadOfFields(methodGenerationData.useGettersInsteadOfFields())
+                .withUseSimplePrimitiveComparison(methodGenerationData.useSimplePrimitiveComparison())
+                .withUseDeepArrayComparison(methodGenerationData.useDeepArrayComparison())
+                .build();
     }
 }

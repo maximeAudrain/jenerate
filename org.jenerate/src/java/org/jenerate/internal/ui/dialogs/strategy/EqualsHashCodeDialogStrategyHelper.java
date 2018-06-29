@@ -77,6 +77,8 @@ public final class EqualsHashCodeDialogStrategyHelper {
                 .withGenerateComment(methodGenerationData.generateComment())
                 .withUseBlockInIfStatements(methodGenerationData.useBlockInIfStatements())
                 .withUseGettersInsteadOfFields(methodGenerationData.useGettersInsteadOfFields())
+                .withUseSimplePrimitiveComparison(methodGenerationData.useSimplePrimitiveComparison())
+                .withUseDeepArrayComparison(methodGenerationData.useDeepArrayComparison())
                 .withCompareReferences(compareReferences)
                 .withClassComparison(classComparison)
                 .withClassCast(classCast);

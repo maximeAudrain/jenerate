@@ -69,12 +69,15 @@ public abstract class AbstractMethodContentTest<T extends MethodContent<U, V>, U
         when(data.useBlockInIfStatements()).thenReturn(false);
         when(data.getElementPosition()).thenReturn(elementPosition);
         when(data.useGettersInsteadOfFields()).thenReturn(false);
+        when(data.useSimplePrimitiveComparison()).thenReturn(false);
+        when(data.useDeepArrayComparison()).thenReturn(false);
     }
 
     private void mockFields() throws Exception {
         when(field1.getElementName()).thenReturn("field1");
         when(field2.getElementName()).thenReturn("field2");
         when(field1.getTypeSignature()).thenReturn(Signature.SIG_BOOLEAN);
+        when(field2.getTypeSignature()).thenReturn(Signature.createArraySignature(String.class.getName(), 1));
         fields = new IField[] { field1, field2 };
     }
 

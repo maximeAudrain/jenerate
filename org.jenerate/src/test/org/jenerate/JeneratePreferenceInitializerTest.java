@@ -33,7 +33,7 @@ public class JeneratePreferenceInitializerTest {
     @Test
     public void testPreferencesAreFilledUp() {
         jeneratePreferenceInitializer.initializeDefaultValues(iEclipsePreferences);
-        verify(iEclipsePreferences, times(7)).putBoolean(anyString(), anyBoolean());
+        verify(iEclipsePreferences, times(9)).putBoolean(anyString(), anyBoolean());
         verify(iEclipsePreferences, times(3)).put(anyString(), anyString());
     }
 }
