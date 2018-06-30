@@ -170,7 +170,7 @@ public class JavaEqualsMethodContentTest
         assertEquals(
                 "if (other == null){\n return false;\n}\nif ( !getClass().equals(other.getClass()))"
                         + "{\n return false;\n}\nTest castOther = (Test) other;\nreturn "
-                        + "(field1 == castOther.field1) && Objects.equal(field2, castOther.field2);\n",
+                        + "(field1 == castOther.field1) && Objects.equals(field2, castOther.field2);\n",
                 content);
     }
 
@@ -183,7 +183,7 @@ public class JavaEqualsMethodContentTest
         assertEquals(
                 "if (other == null){\n return false;\n}\nif ( !getClass().equals(other.getClass()))"
                         + "{\n return false;\n}\nTest castOther = (Test) other;\nreturn "
-                        + "Objects.equal(field1, castOther.field1) && Arrays.equals(field2, castOther.field2);\n",
+                        + "Objects.equals(field1, castOther.field1) && Arrays.equals(field2, castOther.field2);\n",
                 content);
     }
 }
