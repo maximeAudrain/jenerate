@@ -86,6 +86,8 @@ public class FieldDialogImpl<U extends MethodGenerationData> extends Dialog impl
     private boolean generateComment;
     private boolean useGettersInsteadOfFields;
     private boolean useBlockInIfStatements;
+    private boolean useSimplePrimitiveComparison;
+    private boolean useDeepArrayComparison;
 
     /**
      * GUI components
@@ -235,6 +237,16 @@ public class FieldDialogImpl<U extends MethodGenerationData> extends Dialog impl
         data.horizontalSpan = 2;
         blocksInIfComposite.setLayoutData(data);
 
+        Composite simplePrimitiveComparisonComposite = createSimplePrimitiveComparisonSelection(composite);
+        data = new GridData(GridData.FILL_HORIZONTAL);
+        data.horizontalSpan = 2;
+        simplePrimitiveComparisonComposite.setLayoutData(data);
+        
+        Composite deepArrayComparisonComposite = createDeepArrayComparisonSelection(composite);
+        data = new GridData(GridData.FILL_HORIZONTAL);
+        data.horizontalSpan = 2;
+        deepArrayComparisonComposite.setLayoutData(data);
+        
         messageLabel = new CLabel(composite, SWT.NONE);
         data = new GridData(GridData.FILL_HORIZONTAL);
         data.horizontalSpan = 2;
@@ -516,6 +528,66 @@ public class FieldDialogImpl<U extends MethodGenerationData> extends Dialog impl
         return blocksInIfComposite;
     }
 
+    protected Composite createSimplePrimitiveComparisonSelection(final Composite composite) {
+        Composite simplePrimitiveComparison = new Composite(composite, SWT.NONE);
+        GridLayout layout = new GridLayout();
+        layout.marginHeight = 0;
+        layout.marginWidth = 0;
+        simplePrimitiveComparison.setLayout(layout);
+
+        Button simplePrimitiveComparisonButton = new Button(simplePrimitiveComparison, SWT.CHECK);
+        simplePrimitiveComparisonButton.setText("&Compare primitives using '=='");
+        simplePrimitiveComparisonButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+
+        simplePrimitiveComparisonButton.addSelectionListener(new SelectionListener() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                useSimplePrimitiveComparison = (((Button) e.widget).getSelection());
+            }
+
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e) {
+                widgetSelected(e);
+            }
+        });
+        useSimplePrimitiveComparison = preferencesManager
+                .getCurrentPreferenceValue(JeneratePreferences.USE_SIMPLE_PRIMITIVE_COMPARISON).booleanValue();
+        simplePrimitiveComparisonButton.setSelection(useSimplePrimitiveComparison);
+
+        return simplePrimitiveComparison;
+    }
+    
+    protected Composite createDeepArrayComparisonSelection(final Composite composite) {
+        Composite DeepArrayComparison = new Composite(composite, SWT.NONE);
+        GridLayout layout = new GridLayout();
+        layout.marginHeight = 0;
+        layout.marginWidth = 0;
+        DeepArrayComparison.setLayout(layout);
+
+        Button DeepArrayComparisonButton = new Button(DeepArrayComparison, SWT.CHECK);
+        DeepArrayComparisonButton.setText("Compare &arrays using 'Arrays.equals'");
+        DeepArrayComparisonButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+
+        DeepArrayComparisonButton.addSelectionListener(new SelectionListener() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                useDeepArrayComparison = (((Button) e.widget).getSelection());
+            }
+
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e) {
+                widgetSelected(e);
+            }
+        });
+        useDeepArrayComparison = preferencesManager
+                .getCurrentPreferenceValue(JeneratePreferences.USE_DEEP_ARRAY_COMPARISON).booleanValue();
+        DeepArrayComparisonButton.setSelection(useDeepArrayComparison);
+
+        return DeepArrayComparison;
+    }
+    
     @Override
     public void showErrorMessage(String message) {
         messageLabel.setImage(JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_ERROR));
@@ -543,6 +615,8 @@ public class FieldDialogImpl<U extends MethodGenerationData> extends Dialog impl
                 .withGenerateComment(getGenerateComment())
                 .withUseBlockInIfStatements(getUseBlockInIfStatements())
                 .withUseGettersInsteadOfFields(getUseGettersInsteadOfFields())
+                .withUseSimplePrimitiveComparison(getUseSimplePrimitiveComparison())
+                .withUseDeepArrayComparison(getUseDeepArrayComparison())
                 .build();
         //@formatter:on
         return currentDialogStrategy.getData(methodGenerationData);
@@ -594,6 +668,14 @@ public class FieldDialogImpl<U extends MethodGenerationData> extends Dialog impl
 
     public boolean getUseBlockInIfStatements() {
         return useBlockInIfStatements;
+    }
+
+    public boolean getUseSimplePrimitiveComparison() {
+        return useSimplePrimitiveComparison;
+    }
+
+    public boolean getUseDeepArrayComparison() {
+        return useDeepArrayComparison;
     }
 
     public PreferencesManager getPreferencesManager() {

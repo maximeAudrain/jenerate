@@ -47,4 +47,14 @@ public interface MethodGenerationData {
      * @return {@code true} if block in 'if' statements should be used for the code generation, {@code false} otherwise.
      */
     boolean useBlockInIfStatements();
+    
+    /**
+     * @return {@code true} if primitive types are compared with '==', {@code false} otherwise.
+     */
+    boolean useSimplePrimitiveComparison();
+
+    /**
+     * @return {@code true} if arrays should be compared using deep compare, {@code false} otherwise.
+     */
+    boolean useDeepArrayComparison();
 }

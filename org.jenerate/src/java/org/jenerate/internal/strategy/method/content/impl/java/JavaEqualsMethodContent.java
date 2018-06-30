@@ -1,5 +1,7 @@
 package org.jenerate.internal.strategy.method.content.impl.java;
 
+import static java.util.Arrays.asList;
+
 import java.util.LinkedHashSet;
 import java.util.Objects;
 
@@ -22,7 +24,10 @@ public class JavaEqualsMethodContent extends AbstractMethodContent<EqualsMethodS
     /**
      * Public for testing purpose
      */
-    public static final String LIBRARY_TO_IMPORT = "java.util.Objects";
+    public static final String[] LIBRARIES_TO_IMPORT = {
+    		"java.util.Arrays",
+    		"java.util.Objects",
+    };
 
     public JavaEqualsMethodContent(PreferencesManager preferencesManager) {
         super(EqualsMethodSkeleton.class, MethodContentStrategyIdentifier.USE_JAVA, preferencesManager);
@@ -38,6 +43,6 @@ public class JavaEqualsMethodContent extends AbstractMethodContent<EqualsMethodS
 
     @Override
     public LinkedHashSet<String> getLibrariesToImport(EqualsHashCodeGenerationData data) {
-        return MethodContentGenerations.createSingletonLinkedHashSet(LIBRARY_TO_IMPORT);
+        return new LinkedHashSet<>(asList(LIBRARIES_TO_IMPORT));
     }
 }

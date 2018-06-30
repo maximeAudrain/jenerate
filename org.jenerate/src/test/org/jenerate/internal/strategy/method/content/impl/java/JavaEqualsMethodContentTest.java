@@ -1,5 +1,6 @@
 package org.jenerate.internal.strategy.method.content.impl.java;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -46,8 +47,8 @@ public class JavaEqualsMethodContentTest
     @Test
     public void testGetLibrariesToImport() {
         Set<String> librariesToImport = methodContent.getLibrariesToImport(data);
-        assertEquals(1, librariesToImport.size());
-        assertEquals(JavaEqualsMethodContent.LIBRARY_TO_IMPORT, librariesToImport.iterator().next());
+        assertEquals(2, librariesToImport.size());
+        assertArrayEquals(JavaEqualsMethodContent.LIBRARIES_TO_IMPORT, librariesToImport.toArray());
     }
 
     @Test
@@ -157,6 +158,32 @@ public class JavaEqualsMethodContentTest
                 "if ( !Test.class.isInstance(other))"
                         + "{\n return false;\n}\nTest castOther = Test.class.cast(other);\nreturn "
                         + "Objects.equals(field1, castOther.field1) && Objects.equals(field2, castOther.field2);\n",
+                content);
+    }
+
+    @Test
+    public void testGetMethodContentWithClassComparisonAndUseSimplePrimitiveComparison() throws Exception {
+        when(data.useClassComparison()).thenReturn(true);
+        when(data.useBlockInIfStatements()).thenReturn(true);
+        when(data.useSimplePrimitiveComparison()).thenReturn(true);
+        String content = methodContent.getMethodContent(objectClass, data);
+        assertEquals(
+                "if (other == null){\n return false;\n}\nif ( !getClass().equals(other.getClass()))"
+                        + "{\n return false;\n}\nTest castOther = (Test) other;\nreturn "
+                        + "(field1 == castOther.field1) && Objects.equals(field2, castOther.field2);\n",
+                content);
+    }
+
+    @Test
+    public void testGetMethodContentWithClassComparisonAndUseDeepArrayComparison() throws Exception {
+        when(data.useClassComparison()).thenReturn(true);
+        when(data.useBlockInIfStatements()).thenReturn(true);
+        when(data.useDeepArrayComparison()).thenReturn(true);
+        String content = methodContent.getMethodContent(objectClass, data);
+        assertEquals(
+                "if (other == null){\n return false;\n}\nif ( !getClass().equals(other.getClass()))"
+                        + "{\n return false;\n}\nTest castOther = (Test) other;\nreturn "
+                        + "Objects.equals(field1, castOther.field1) && Arrays.equals(field2, castOther.field2);\n",
                 content);
     }
 }
