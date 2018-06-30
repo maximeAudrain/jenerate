@@ -135,10 +135,6 @@ public final class MethodContentGenerations {
             String fieldName = MethodContentGenerations.getFieldAccessorString(checkedField,
                     data.useGettersInsteadOfFields());
             
-            int[][] data1 = null;
-            int[][] data2 = null;
-            Arrays.deepEquals(data1, data2);
-            
             if(isMultiDimensionalArray(checkedField) && data.useDeepArrayComparison()) {
                 content.append("Arrays.deepEquals(");
                 content.append(fieldName);
